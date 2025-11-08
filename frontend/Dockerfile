@@ -1,14 +1,23 @@
-# frontend/Dockerfile
-FROM node:20-alpine AS builder
+# Development stage
+FROM node:20-alpine as development
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+
+# Build stage
+FROM node:20-alpine as build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:stable-alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-# SPA fallback
-COPY ../infra/nginx/frontend.conf /etc/nginx/conf.d/default.conf
+# Production stage
+FROM nginx:alpine as production
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
