@@ -1,0 +1,153 @@
+import { CoachDetailsResponse } from './coach';
+import { GameDetailsResponse } from './game';
+import { TeamDetailsResponse } from './team';
+
+export type TeamStatsFormData = {
+	gameId: number;
+	teamId: number;
+	coachId: number;
+	assistantCoachId: number | null;
+	firstQuarter: string;
+	secondQuarter: string;
+	thirdQuarter: string;
+	fourthQuarter: string;
+	overtime?: string;
+	fieldGoalsMade: string;
+	fieldGoalsAttempted: string;
+	threePointersMade: string;
+	threePointersAttempted: string;
+	freeThrowsMade: string;
+	freeThrowsAttempted: string;
+	rebounds: string;
+	offensiveRebounds: string;
+	defensiveRebounds: string;
+	assists: string;
+	steals: string;
+	blocks: string;
+	turnovers: string;
+	fouls: string;
+	secondChancePoints: string;
+	fastBreakPoints: string;
+	pointsOffTurnovers: string;
+	benchPoints: string;
+	pointsInPaint: string;
+};
+
+export type TeamStatsResponse = {
+	id: number;
+	documentId: string;
+	game: GameDetailsResponse;
+	team: TeamDetailsResponse;
+	coach: CoachDetailsResponse;
+	assistantCoach: CoachDetailsResponse | null;
+	firstQuarter: string;
+	secondQuarter: string;
+	thirdQuarter: string;
+	fourthQuarter: string;
+	overtime?: string;
+	fieldGoalsMade: string;
+	fieldGoalsAttempted: string;
+	threePointersMade: string;
+	threePointersAttempted: string;
+	freeThrowsMade: string;
+	freeThrowsAttempted: string;
+	rebounds: string;
+	offensiveRebounds: string;
+	defensiveRebounds: string;
+	assists: string;
+	steals: string;
+	blocks: string;
+	turnovers: string;
+	fouls: string;
+	secondChancePoints: string;
+	fastBreakPoints: string;
+	pointsOffTurnovers: string;
+	benchPoints: string;
+	pointsInPaint: string;
+	createdAt: string;
+};
+
+export interface TeamRecord {
+	id: number;
+	game_id: string;
+	season: string;
+	stage: string;
+	round: string;
+	game_date: string;
+	is_nulled: boolean;
+	forfeited: boolean;
+	forfeited_by: string;
+	league_id: string;
+	league_name: string;
+	league_short_name: string;
+	league_slug: string;
+	team_id: string;
+	team_name: string;
+	team_short_name: string;
+	team_slug: string;
+	opponent_team_id: string;
+	opponent_team_name: string;
+	opponent_team_short_name: string;
+	opponent_team_slug: string;
+	is_home_team: string;
+	head_coach_id: string | null;
+	head_coach_first_name: string | null;
+	head_coach_last_name: string | null;
+	assistant_coach_id: string | null;
+	assistant_coach_first_name: string | null;
+	assistant_coach_last_name: string | null;
+
+	first_quarter: number | null;
+	first_quarter_rank: string | null;
+	second_quarter: number | null;
+	second_quarter_rank: string | null;
+	third_quarter: number | null;
+	third_quarter_rank: string | null;
+	fourth_quarter: number | null;
+	fourth_quarter_rank: string | null;
+	overtime: number | null;
+	overtime_rank: string | null;
+
+	score: number | null;
+	score_rank: string | null;
+	opponent_score: number | null;
+	opponent_score_rank: string | null;
+	score_diff: number | null;
+	score_diff_rank: string | null;
+
+	field_goals_made: number | null;
+	field_goals_made_rank: string | null;
+	field_goals_attempted: number | null;
+	field_goals_attempted_rank: string | null;
+	field_goals_percentage: number | null;
+
+	three_pointers_made: number | null;
+	three_pointers_made_rank: string | null;
+	three_pointers_attempted: number | null;
+	three_pointers_attempted_rank: string | null;
+	three_pointers_percentage: number | null;
+
+	free_throws_made: number | null;
+	free_throws_made_rank: string | null;
+	free_throws_attempted: number | null;
+	free_throws_attempted_rank: string | null;
+	free_throws_percentage: number | null;
+
+	offensive_rebounds: number | null;
+	offensive_rebounds_rank: string | null;
+	defensive_rebounds: number | null;
+	defensive_rebounds_rank: string | null;
+	rebounds: number | null;
+	rebounds_rank: string | null;
+
+	assists: number | null;
+	assists_rank: string | null;
+	turnovers: number | null;
+	turnovers_rank: string | null;
+	blocks: number | null;
+	blocks_rank: string | null;
+	steals: number | null;
+	steals_rank: string | null;
+	fouls: number | null;
+	fouls_rank: string | null;
+}

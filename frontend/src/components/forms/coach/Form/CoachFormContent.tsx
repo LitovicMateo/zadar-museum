@@ -1,0 +1,64 @@
+import { useEffect, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+
+import Fieldset from '@/components/ui/fieldset';
+import FormFieldsWrapper from '@/components/ui/form-fields-wrapper';
+import SubmitButton from '@/components/ui/submit-button';
+import ImageUploadSection from '@/pages/Dashboard/Coach/FormSections/ImageUploadSection';
+import { CoachFormData } from '@/schemas/coach-schema';
+
+import DateOfBirth from '../Fields/DateOfBirth';
+import FirstName from '../Fields/FirstName';
+import LastName from '../Fields/LastName';
+import Nationality from '../Fields/Nationality';
+
+const CoachFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
+	const { setValue, setFocus, formState } = useFormContext<CoachFormData>();
+	const [preview, setPreview] = useState<string | null>(null);
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			setValue('image', file);
+			setPreview(URL.createObjectURL(file));
+		}
+	};
+
+	const removeImage = () => {
+		setValue('image', null);
+		setPreview(null);
+		if (fileInputRef.current) fileInputRef.current.value = '';
+	};
+
+	useEffect(() => {
+		if (formState.isSubmitSuccessful) setFocus('first_name');
+	}, [formState.isSubmitSuccessful, setFocus]);
+
+	return (
+		<FormFieldsWrapper>
+			<Fieldset label="Personal Information">
+				<FirstName />
+				<LastName />
+				<DateOfBirth />
+				<Nationality />
+			</Fieldset>
+
+			<ImageUploadSection
+				preview={preview}
+				handleImageChange={handleImageChange}
+				removeImage={removeImage}
+				fileInputRef={fileInputRef}
+			/>
+
+			<div className="w-full flex justify-center">
+				<SubmitButton
+					isSubmitting={formState.isSubmitting}
+					label={mode === 'edit' ? 'Update Coach' : 'Create Coach'}
+				/>
+			</div>
+		</FormFieldsWrapper>
+	);
+};
+
+export default CoachFormContent;

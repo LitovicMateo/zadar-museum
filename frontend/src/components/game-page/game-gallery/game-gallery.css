@@ -1,0 +1,13 @@
+/* Normal (inline) gallery images */
+.image-gallery-content .image-gallery-slide .image-gallery-image {
+	max-height: 300px;
+	/* constrain in normal mode */
+	object-fit: contain;
+}
+
+/* Fullscreen mode — remove the limit */
+.fullscreen .image-gallery-slide-wrapper img {
+	height: 90svh !important;
+	max-height: none !important;
+	width: auto !important;
+}

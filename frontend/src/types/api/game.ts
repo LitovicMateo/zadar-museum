@@ -1,0 +1,38 @@
+import { CompetitionDetailsResponse } from './competition';
+import { RefereeDetailsResponse } from './referee';
+import { TeamDetailsResponse } from './team';
+import { VenueDetailsResponse } from './venue';
+
+export type GameDetailsResponse = {
+	documentId: string;
+	id: number;
+	season: string;
+	round: string;
+	stage: 'league' | 'group' | 'playoff' | null;
+	home_team: TeamDetailsResponse;
+	home_team_name: string;
+	home_team_short_name: string;
+	away_team: TeamDetailsResponse;
+	away_team_name: string;
+	away_team_short_name: string;
+	date: string;
+	venue: VenueDetailsResponse;
+	isNeutral: boolean;
+	isNulled: boolean;
+	forfeited: boolean;
+	forfeited_by: 'home' | 'away' | 'none';
+	competition: CompetitionDetailsResponse;
+	league_name: string;
+	league_short_name: string;
+	createdAt: Date;
+	attendance: string;
+	gallery?: {
+		url: string;
+		width: number;
+		height: number;
+		alt: string;
+	}[];
+	mainReferee: RefereeDetailsResponse;
+	secondReferee: RefereeDetailsResponse;
+	thirdReferee: RefereeDetailsResponse;
+};
