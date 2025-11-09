@@ -1,0 +1,114 @@
+{
+  "kind": "collectionType",
+  "collectionName": "games",
+  "info": {
+    "singularName": "game",
+    "pluralName": "games",
+    "displayName": "Game"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "competition": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::competition.competition"
+    },
+    "league_name": {
+      "type": "string",
+      "required": true
+    },
+    "league_short_name": {
+      "type": "string",
+      "required": true
+    },
+    "season": {
+      "type": "string",
+      "required": true,
+      "regex": "^.{4}$"
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "stage": {
+      "type": "string",
+      "required": true
+    },
+    "round": {
+      "type": "string"
+    },
+    "home_team": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::team.team"
+    },
+    "home_team_name": {
+      "type": "string",
+      "required": true
+    },
+    "home_team_short_name": {
+      "type": "string",
+      "required": true
+    },
+    "away_team": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::team.team"
+    },
+    "away_team_name": {
+      "type": "string",
+      "required": true
+    },
+    "away_team_short_name": {
+      "type": "string",
+      "required": true
+    },
+    "venue": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::venue.venue"
+    },
+    "isNeutral": {
+      "type": "boolean"
+    },
+    "forfeited": {
+      "type": "boolean",
+      "default": false
+    },
+    "forfeited_by": {
+      "type": "enumeration",
+      "enum": ["home", "away", "none"],
+      "default": "none"
+    },
+    "isNulled": {
+      "type": "boolean",
+      "default": false
+    },
+    "mainReferee": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::referee.referee"
+    },
+    "secondReferee": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::referee.referee"
+    },
+    "thirdReferee": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::referee.referee"
+    },
+    "attendance": {
+      "type": "string"
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    }
+  }
+}

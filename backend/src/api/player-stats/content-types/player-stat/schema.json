@@ -1,0 +1,106 @@
+{
+  "kind": "collectionType",
+  "collectionName": "player_stats",
+  "info": {
+    "singularName": "player-stat",
+    "pluralName": "player-stats",
+    "displayName": "Player Stats",
+    "description": "Game-by-game statistics for players"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "status": {
+      "type": "enumeration",
+      "required": true,
+      "default": "bench",
+      "enum": ["starter", "bench", "dnp-cd", "no-data"]
+    },
+    "isCaptain": {
+      "type": "boolean"
+    },
+    "playerNumber": {
+      "type": "string"
+    },
+    "points": {
+      "type": "integer"
+    },
+    "fieldGoalsMade": {
+      "type": "integer"
+    },
+    "fieldGoalsAttempted": {
+      "type": "integer"
+    },
+    "threePointersMade": {
+      "type": "integer"
+    },
+    "threePointersAttempted": {
+      "type": "integer"
+    },
+    "freeThrowsMade": {
+      "type": "integer"
+    },
+    "freeThrowsAttempted": {
+      "type": "integer"
+    },
+    "rebounds": {
+      "type": "integer"
+    },
+    "offensiveRebounds": {
+      "type": "integer"
+    },
+    "defensiveRebounds": {
+      "type": "integer"
+    },
+    "assists": {
+      "type": "integer"
+    },
+    "steals": {
+      "type": "integer"
+    },
+    "blocks": {
+      "type": "integer"
+    },
+    "turnovers": {
+      "type": "integer"
+    },
+    "fouls": {
+      "type": "integer"
+    },
+    "foulsOn": {
+      "type": "integer"
+    },
+    "blocksReceived": {
+      "type": "integer"
+    },
+    "plusMinus": {
+      "type": "integer"
+    },
+    "efficiency": {
+      "type": "integer"
+    },
+    "game": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::game.game"
+    },
+    "player": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::player.player"
+    },
+    "team": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::team.team"
+    },
+    "minutes": {
+      "type": "integer"
+    },
+    "seconds": {
+      "type": "integer"
+    }
+  }
+}

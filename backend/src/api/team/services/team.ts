@@ -1,0 +1,213 @@
+/**
+ * team service
+ */
+
+import { factories } from "@strapi/strapi";
+
+export default factories.createCoreService("api::team.team", ({ strapi }) => ({
+  async getTeamSeasons(teamSlug) {
+    const knex = strapi.db.connection;
+    return knex("schedule")
+      .select("season")
+      .distinct("season")
+      .where("home_team_slug", teamSlug)
+      .orWhere("away_team_slug", teamSlug);
+  },
+
+  async findTeamCompetitions(teamSlug) {
+    const knex = strapi.db.connection;
+    return knex("schedule")
+      .select("league_id", "league_name", "league_slug")
+      .distinct("league_id")
+      .where(function () {
+        this.where("home_team_slug", teamSlug).orWhere(
+          "away_team_slug",
+          teamSlug
+        );
+      });
+  },
+
+  async findTeamSeasonCompetitions(teamName, season) {
+    const knex = strapi.db.connection;
+
+    // find unique competitions team played in during the season
+    const data = await knex("schedule")
+      .select("league_id", "league_name", "league_slug")
+      .distinct("league_id")
+      .where("season", season)
+      .andWhere(function () {
+        this.where("home_team_slug", teamName).orWhere(
+          "away_team_slug",
+          teamName
+        );
+      });
+
+    return data;
+  },
+
+  async getTeamLeagueStats(teamSlug) {
+    const knex = strapi.db.connection;
+
+    const data = await knex("team_league_average_stats_full")
+      .select("*")
+      .where("team_slug", teamSlug);
+
+    if (data.length === 0) {
+      return null;
+    }
+
+    const team = data.map((team) => {
+      const total = JSON.parse(team.total);
+      const home = JSON.parse(team.home);
+      const away = JSON.parse(team.away);
+      return {
+        teamId: team.team_id,
+        teamSlug: team.team_slug,
+        teamName: team.team_name,
+        leagueId: team.league_id,
+        leagueSlug: team.league_slug,
+        total,
+        home,
+        away,
+      };
+    });
+
+    return team;
+  },
+
+  async findTeamDetails(teamSlug) {
+    const knex = strapi.db.connection;
+    const data = await knex("teams").select("*").where("slug", teamSlug);
+    return data;
+  },
+
+  async findTeamAllTimeStats(teamSlug) {
+    const knex = strapi.db.connection;
+    const data = await knex("team_average_stats_full")
+      .select("*")
+      .where("team_slug", teamSlug);
+
+    if (data.length === 0) {
+      return null;
+    }
+
+    const team = data[0];
+
+    const total = JSON.parse(team.total);
+    const home = JSON.parse(team.home);
+    const away = JSON.parse(team.away);
+
+    return {
+      teamId: team.team_id,
+      teamSlug: team.team_slug,
+      teamName: team.team_name,
+      total,
+      home,
+      away,
+      stats: [home, away, total],
+    };
+  },
+
+  async findTeamSchedule(teamSlug, season) {
+    const knex = strapi.db.connection;
+    return knex("schedule")
+      .select("*")
+      .where(function () {
+        this.where("home_team_slug", teamSlug).orWhere(
+          "away_team_slug",
+          teamSlug
+        );
+      })
+      .andWhere("season", season);
+  },
+
+  async findTeamLeaders(
+    teamSlug: string,
+    db: "player" | "coach",
+    statKey: string,
+    competitionSlug?: string
+  ) {
+    const knex = strapi.db.connection;
+    let tableName: string;
+
+    const table = competitionSlug
+      ? `${db}_total_all_time_per_team_per_league`
+      : `${db}_total_all_time_per_team`;
+
+    const id = `${db}_id`;
+
+    try {
+      return knex(table)
+        .select(`${id} as id`, "first_name", "last_name", statKey)
+        .where("team_slug", teamSlug)
+        .modify((qb) => {
+          if (competitionSlug) {
+            qb.where("league_slug", competitionSlug);
+          }
+        })
+        .orderBy(statKey, "desc")
+        .limit(5);
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  },
+
+  async findTeamSeasonStats(teamSlug, season) {
+    const knex = strapi.db.connection;
+    const data = await knex("team_season_average_stats_full")
+      .select("*")
+      .where("team_slug", teamSlug)
+      .andWhere("season", season);
+
+    if (data.length === 0) {
+      return null;
+    }
+
+    const team = data[0];
+
+    const total = JSON.parse(team.total);
+    const home = JSON.parse(team.home);
+    const away = JSON.parse(team.away);
+
+    return {
+      teamId: team.team_id,
+      teamSlug: team.team_slug,
+      teamName: team.team_name,
+      total,
+      home,
+      away,
+      stats: [home, away, total],
+    };
+  },
+
+  async findTeamSeasonLeagueStats(teamSlug, season) {
+    const knex = strapi.db.connection;
+    const data = await knex("team_season_league_average_stats_full")
+      .select("*")
+      .where("team_slug", teamSlug)
+      .andWhere("season", season);
+
+    if (data.length === 0) {
+      return null;
+    }
+
+    const team = data.map((team) => {
+      const total = JSON.parse(team.total);
+      const home = JSON.parse(team.home);
+      const away = JSON.parse(team.away);
+      return {
+        teamId: team.team_id,
+        teamSlug: team.team_slug,
+        teamName: team.team_name,
+        leagueId: team.league_id,
+        leagueSlug: team.league_slug,
+        total,
+        home,
+        away,
+      };
+    });
+
+    return team;
+  },
+}));

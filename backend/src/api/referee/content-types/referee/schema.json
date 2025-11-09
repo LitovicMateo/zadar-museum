@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "referees",
+  "info": {
+    "singularName": "referee",
+    "pluralName": "referees",
+    "displayName": "Referee"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "nationality": {
+      "type": "string"
+    }
+  }
+}

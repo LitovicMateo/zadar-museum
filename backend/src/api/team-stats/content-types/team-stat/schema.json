@@ -1,0 +1,110 @@
+{
+  "kind": "collectionType",
+  "collectionName": "team_stats",
+  "info": {
+    "singularName": "team-stat",
+    "pluralName": "team-stats",
+    "displayName": "Team Stat",
+    "description": "Statistics for a team in a game"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "game": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::game.game",
+      "required": true
+    },
+    "team": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::team.team",
+      "required": true
+    },
+    "coach": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::coach.coach",
+      "required": true
+    },
+    "assistantCoach": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::coach.coach"
+    },
+    "firstQuarter": {
+      "type": "integer"
+    },
+    "secondQuarter": {
+      "type": "integer"
+    },
+    "thirdQuarter": {
+      "type": "integer"
+    },
+    "fourthQuarter": {
+      "type": "integer"
+    },
+    "overtime": {
+      "type": "integer"
+    },
+    "fieldGoalsMade": {
+      "type": "integer"
+    },
+    "fieldGoalsAttempted": {
+      "type": "integer"
+    },
+    "threePointersMade": {
+      "type": "integer"
+    },
+    "threePointersAttempted": {
+      "type": "integer"
+    },
+    "freeThrowsMade": {
+      "type": "integer"
+    },
+    "freeThrowsAttempted": {
+      "type": "integer"
+    },
+    "rebounds": {
+      "type": "integer"
+    },
+    "offensiveRebounds": {
+      "type": "integer"
+    },
+    "defensiveRebounds": {
+      "type": "integer"
+    },
+    "assists": {
+      "type": "integer"
+    },
+    "steals": {
+      "type": "integer"
+    },
+    "blocks": {
+      "type": "integer"
+    },
+    "turnovers": {
+      "type": "integer"
+    },
+    "fouls": {
+      "type": "integer"
+    },
+    "secondChancePoints": {
+      "type": "integer"
+    },
+    "fastBreakPoints": {
+      "type": "integer"
+    },
+    "pointsOffTurnovers": {
+      "type": "integer"
+    },
+    "benchPoints": {
+      "type": "integer"
+    },
+    "pointsInPaint": {
+      "type": "integer"
+    }
+  }
+}
