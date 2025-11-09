@@ -1,12 +1,10 @@
-@import 'tw-animate-css';
-
-@import 'tailwindcss/preflight';
-@tailwind utilities;
-
 @font-face {
 	font-family: 'Abel';
 	src: url('./assets/fonts/Abel-Regular.ttf') format('truetype');
 }
+
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -137,5 +135,7 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+		/* apply the Abel font defined in the theme variables */
+		font-family: var(--font-abel, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial);
 	}
 }
