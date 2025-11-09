@@ -55,12 +55,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check SSH secrets
+        run: |
+          if [ -z "${VPS_HOST}" ]; then echo "::error::VPS_HOST is not set in repository secrets"; exit 1; fi
+          if [ -z "${VPS_USERNAME}" ]; then echo "::error::VPS_USERNAME is not set in repository secrets"; exit 1; fi
+          if [ -z "${VPS_SSH_KEY}" ]; then echo "::error::VPS_SSH_KEY is not set in repository secrets"; exit 1; fi
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+
       - name: Deploy to VPS
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
           script: |
             cd /root/zadar-museum
             docker compose -f docker-compose.vps.yml pull
