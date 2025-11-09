@@ -47,4 +47,6 @@ postgres_data/
 postgres_prod_data/
 
 # SSL
-certbot/
+certbot/nginx/nginx.ssl-init.conf
+nginx/*.vps.bak
+backend/types/
