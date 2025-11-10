@@ -23,8 +23,8 @@ const BoxscoreFilter: React.FC = () => {
 			<div className="flex gap-4">
 				{competitions.map((c) => (
 					<CompetitionSelectItem
-						key={c.league_id}
-						leagueId={c.league_id}
+						key={String(c.league_id)}
+						leagueId={String(c.league_id)}
 						leagueName={c.league_name}
 						onCompetitionChange={toggleCompetition}
 						selectedCompetitions={selectedCompetitions}
@@ -36,7 +36,7 @@ const BoxscoreFilter: React.FC = () => {
 				className="text-sm shadow-sm w-full"
 				value={selectedSeason}
 				options={seasonOptions}
-				onChange={(opt) => setSeason(opt?.value ?? '')}
+				onChange={(opt) => setSeason(String(opt?.value ?? ''))}
 				styles={selectStyle()}
 			/>
 		</div>

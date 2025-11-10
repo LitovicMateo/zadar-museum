@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
+import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import { useParams } from 'react-router-dom';
 
@@ -16,9 +16,9 @@ const GameGallery: React.FC = () => {
 
 	const images = game?.gallery;
 
-	const galleryRef = useRef<ImageGallery>(null);
+	const galleryRef = useRef<any>(null);
 	if (!images) return null;
-	const imagesData: ReactImageGalleryItem[] = transformImages(images!);
+	const imagesData = transformImages(images!);
 
 	if (isLoading) return null;
 
@@ -42,7 +42,7 @@ const GameGallery: React.FC = () => {
 
 export default GameGallery;
 
-function transformImages(images: GameDetailsResponse['gallery']): ReactImageGalleryItem[] {
+function transformImages(images: GameDetailsResponse['gallery']): any[] {
 	if (!images) return [];
 	const gallery = images?.map((image) => {
 		const url = getImageUrl(image.url);

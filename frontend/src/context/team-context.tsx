@@ -31,7 +31,7 @@ export const TeamGamesProvider: React.FC<ProviderProps> = ({ children, defaultSe
 
 	// on season change refresh selected competitions
 	useEffect(() => {
-		const availableCompetitions = competitions?.map((c) => c.competition_slug);
+		const availableCompetitions = competitions?.map((c) => c.league_slug);
 		setSelectedCompetitions(availableCompetitions ?? []);
 	}, [competitions]);
 

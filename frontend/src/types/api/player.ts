@@ -122,6 +122,8 @@ export interface PlayerBoxscoreResponse {
 	season: string;
 	league_id: string;
 	league_name: string;
+	league_slug?: string;
+	league_short_name?: string;
 
 	is_home_team: boolean;
 	game_date: string; // ISO date string

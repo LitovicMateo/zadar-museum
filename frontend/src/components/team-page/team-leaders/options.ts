@@ -48,15 +48,15 @@ export const coachOptions: {
 		label: 'Win %'
 	},
 	{
-		value: 'avg_points_scored',
+		value: 'points_scored',
 		label: 'Avg Points Scored'
 	},
 	{
-		value: 'avg_points_received',
+		value: 'points_received',
 		label: 'Avg Points Received'
 	},
 	{
-		value: 'avg_points_difference',
+		value: 'points_difference',
 		label: 'Avg Points Diff'
 	}
 ];

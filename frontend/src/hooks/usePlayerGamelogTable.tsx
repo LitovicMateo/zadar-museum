@@ -39,7 +39,8 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[]) => {
 				header: 'LEAGUE',
 				accessorKey: 'league_short_name',
 				cell: (info) => {
-					return <Link to={APP_ROUTES.league(info.row.original.league_slug)}>{info.getValue()}</Link>;
+					const slug = info.row.original.league_slug ?? info.row.original.league_id;
+					return <Link to={APP_ROUTES.league(String(slug))}>{info.getValue()}</Link>;
 				}
 			},
 			{

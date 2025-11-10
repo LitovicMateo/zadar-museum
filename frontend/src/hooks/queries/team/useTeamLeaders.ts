@@ -1,6 +1,5 @@
 import { playerKeys, coachKeys } from '@/components/team-page/team-leaders/options';
 import { API_ROUTES } from '@/constants/routes';
-import { CoachRecordResponse } from '@/types/api/coach';
 import { PlayerAllTimeStats } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -21,7 +20,8 @@ export const useTeamLeaders = (
 	const isValidKey =
 		!!stat &&
 		((db === 'player' && playerKeys.includes(stat as keyof PlayerAllTimeStats)) ||
-			(db === 'coach' && coachKeys.includes(stat as keyof CoachRecordResponse)));
+			// coachKeys comes from options and already typed to keys of CoachStatsResponse headCoach/total
+			(db === 'coach' && coachKeys.includes(stat as any)));
 
 	return useQuery({
 		queryKey: ['team', 'leaders', db, stat, teamSlug, competitionSlug],

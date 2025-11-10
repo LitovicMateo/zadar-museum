@@ -15,7 +15,31 @@ const TableFooter: React.FC<TableFooterProps> = ({ view, db }) => {
 
 	const { data, isLoading } = useAllTimeStats(playerId!, db);
 
-	const totalStats = view === 'total' ? data?.total_career_stats : data?.avg_career_stats;
+	// API returns PlayerCareerStats[] (per league). Map it into the shape expected by this footer table
+	const totalStats = ((): any[] | undefined => {
+		if (!data) return undefined;
+		return data.map((d) => {
+			const chosen = view === 'total' ? d.total?.total : d.average?.total;
+
+			return {
+				league_name: (chosen as any)?.league_name ?? 'TOTAL',
+				total_games: chosen?.games ?? null,
+				total_games_started: chosen?.games_started ?? null,
+				total_points: chosen?.points ?? null,
+				total_assists: chosen?.assists ?? null,
+				total_rebounds: chosen?.rebounds ?? null,
+				total_steals: chosen?.steals ?? null,
+				total_blocks: chosen?.blocks ?? null,
+				total_field_goals_made: chosen?.field_goals_made ?? null,
+				total_field_goals_attempted: chosen?.field_goals_attempted ?? null,
+				total_three_pointers_made: chosen?.three_pointers_made ?? null,
+				total_three_pointers_attempted: chosen?.three_pointers_attempted ?? null,
+				total_free_throws_made: chosen?.free_throws_made ?? null,
+				total_free_throws_attempted: chosen?.free_throws_attempted ?? null,
+				total_efficiency: chosen?.efficiency ?? null
+			};
+		});
+	})();
 
 	const table = useReactTable({
 		data: totalStats ?? [],

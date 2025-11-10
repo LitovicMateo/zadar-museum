@@ -77,6 +77,10 @@ export interface CoachStats {
 	points_scored: number | null;
 	points_received: number | null;
 	points_difference: number | null;
+	// some endpoints expose averages with avg_ prefix — accept them as optional to match API shapes
+	avg_points_scored?: number | null;
+	avg_points_received?: number | null;
+	avg_points_difference?: number | null;
 }
 
 // Generic container for home/away/total stats

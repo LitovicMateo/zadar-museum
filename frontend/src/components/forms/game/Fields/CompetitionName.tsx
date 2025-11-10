@@ -39,7 +39,7 @@ const CompetitionName: React.FC = () => {
 			name="league_name"
 			render={({ field }) => {
 				const competitionId = watch('competition');
-				const options = getDisplayNameOptions(+competitionId);
+				const options = getDisplayNameOptions(competitionId ? +competitionId : undefined);
 
 				return (
 					<Select<DisplayNameOption, false>

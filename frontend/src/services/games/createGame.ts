@@ -4,7 +4,7 @@ import { uploadGallery } from '@/utils/uploadGallery';
 import axios from 'axios';
 
 export const createGame = async (data: GameFormData) => {
-	if (data.stage === 'league') {
+	if (data.stage === 'league' && data.competition) {
 		const { season, competition, round, home_team, away_team } = data;
 
 		// Query Strapi for any game in this season+competition+round with either team
@@ -45,7 +45,7 @@ export const createGame = async (data: GameFormData) => {
 			away_team_short_name: data.away_team_short_name,
 			date: data.date,
 			stage: data.stage,
-			competition: +data.competition,
+			competition: data.competition ? +data.competition : undefined,
 			league_name: data.league_name,
 			league_short_name: data.league_short_name,
 			venue: +data.venue,

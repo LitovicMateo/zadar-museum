@@ -20,7 +20,7 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 			away_team_short_name: data.away_team_short_name,
 			date: data.date,
 			stage: data.stage,
-			competition: +data.competition,
+			competition: data.competition ? +data.competition : undefined,
 			league_name: data.league_name,
 			league_short_name: data.league_short_name,
 			venue: +data.venue,

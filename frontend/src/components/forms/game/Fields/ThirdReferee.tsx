@@ -9,15 +9,15 @@ import { GameFormData } from '@/schemas/game-schema';
 const ThirdReferee: React.FC = () => {
 	const { control, watch } = useFormContext<GameFormData>();
 
-	const mainReferee = watch('mainReferee');
-	const secondReferee = watch('secondReferee');
+	const mainReferee = watch('mainReferee') ?? '';
+	const secondReferee = watch('secondReferee') ?? '';
 
 	const { data: referees } = useReferees('last_name', 'asc');
 
 	if (!referees) return null;
 
 	const refereeOptions: OptionType[] = referees
-		.filter((ref) => ref.id !== +mainReferee && ref.id !== +secondReferee!)
+		.filter((ref) => ref.id !== Number(mainReferee) && ref.id !== Number(secondReferee))
 		.map((ref) => ({
 			label: `${ref.first_name} ${ref.last_name}`,
 			value: ref.id.toString()

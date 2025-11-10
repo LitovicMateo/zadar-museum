@@ -1,8 +1,8 @@
 import React from 'react';
 
 type CoachRoleFilterProps = {
-	setCoachRole: (role: 'total' | 'headCoach' | 'assistantCoach') => void;
-	coachRole: 'total' | 'headCoach' | 'assistantCoach';
+	setCoachRole: (role: 'total' | 'allTime' | 'headCoach' | 'assistantCoach') => void;
+	coachRole: 'total' | 'allTime' | 'headCoach' | 'assistantCoach';
 };
 
 const CoachRoleFilter: React.FC<CoachRoleFilterProps> = ({ coachRole, setCoachRole }) => {
