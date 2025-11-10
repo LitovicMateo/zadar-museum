@@ -26,6 +26,8 @@ services:
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
       JWT_SECRET: ${JWT_SECRET}
+      # Allow configuring CORS origins from the .env file on the host (comma-separated)
+      CORS_ORIGINS: ${CORS_ORIGINS}
       NODE_ENV: production
       PUBLIC_URL: ${PUBLIC_URL}
     command: npm run start
