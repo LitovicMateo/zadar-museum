@@ -47,6 +47,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       target: development
+      args:
+        VITE_API_ROOT: ${VITE_API_ROOT}
     container_name: react_dev
     volumes:
       - ./frontend:/app

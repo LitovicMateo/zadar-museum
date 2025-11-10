@@ -13,6 +13,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+ARG VITE_API_ROOT
+ENV VITE_API_ROOT=$VITE_API_ROOT
 RUN npm run build
 
 # Production stage
