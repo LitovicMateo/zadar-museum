@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
+    // Removed 'ignoreDeprecations' because some TypeScript versions used during Docker
+    // builds do not recognize the "6.0" value. If you need to silence deprecation
+    // diagnostics for a specific TS version, set this option to a supported value
+    // or re-add it in your environment where that TS version is available.
     "module": "CommonJS",
     "moduleResolution": "Node",
     "lib": ["ES2020"],
