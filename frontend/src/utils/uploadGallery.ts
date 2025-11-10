@@ -8,7 +8,7 @@ export const uploadGallery = async (files: FileList | null): Promise<number[]> =
 		formData.append('files', file);
 	});
 
-	const res = await axios.post('http://localhost:1337/api/upload', formData, {
+	const res = await axios.post('https://ovdjejekosarkasve.com/api/upload', formData, {
 		headers: { 'Content-Type': 'multipart/form-data' }
 	});
 

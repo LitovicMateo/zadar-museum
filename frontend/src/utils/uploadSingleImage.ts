@@ -8,7 +8,7 @@ export const uploadSingleImage = async (file: File | null): Promise<number | nul
 	const formData = new FormData();
 	formData.append('files', file);
 
-	const res = await axios.post('http://localhost:1337/api/upload', formData);
+	const res = await axios.post('https://ovdjejekosarkasve.com/api/upload', formData);
 
 	if (res.status === 201) {
 		return res.data[0].id;
