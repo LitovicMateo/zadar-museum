@@ -3,7 +3,6 @@ import toast from 'react-hot-toast';
 
 import { Input } from '@/components/ui/input';
 import SubmitButton from '@/components/ui/submit-button';
-import { APP_ROUTES } from '@/constants/routes';
 import { useAuth } from '@/context/auth-context';
 
 export default function Login() {
@@ -23,7 +22,11 @@ export default function Login() {
 
 	return (
 		<main className="flex justify-center items-center h-svh">
-			<form data-route={APP_ROUTES.login} onSubmit={handleSubmit} className="flex flex-col gap-2 ">
+			<form
+				data-route={'https://ovdjejekosarkasve.com/api/auth/local'}
+				onSubmit={handleSubmit}
+				className="flex flex-col gap-2 "
+			>
 				<Input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Email" />
 
 				<Input
