@@ -30,6 +30,7 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS}
       NODE_ENV: production
       PUBLIC_URL: ${PUBLIC_URL}
+      PROXY: ${PROXY}
     command: npm run start
     depends_on:
       - postgres
