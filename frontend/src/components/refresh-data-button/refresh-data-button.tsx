@@ -11,7 +11,7 @@ const RefreshDataButton: React.FC = () => {
 		setLoading(true);
 
 		try {
-			const res = await axios.get('http://localhost:1337/api/refresh/views');
+			const res = await axios.get('https://ovdjejekosarkasve.com/api/refresh/views');
 
 			if (!res.data.ok) {
 				throw new Error(res.data?.message || 'Failed to refresh views');
