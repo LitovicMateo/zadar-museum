@@ -1,1 +1,1 @@
-export const getImageUrl = (url: string) => `http://localhost:1337${url}`;
+export const getImageUrl = (url: string) => `https://www.ovdjejekosarkasve.com${url}`;
