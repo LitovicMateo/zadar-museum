@@ -1,7 +1,6 @@
 import { useEffect, useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { API_ROUTES } from '@/constants/routes';
 import { AuthContext, AuthContextType, StrapiAuthResponse, StrapiUser } from '@/context/auth-context';
 import axios from 'axios';
 
