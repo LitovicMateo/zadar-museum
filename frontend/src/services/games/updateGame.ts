@@ -36,9 +36,11 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 		}
 	});
 
-	const teamStatsRes = await axios.get(`http://localhost:1337/api/team-stats?filters[game][documentId][$eq]=${id}`);
+	const teamStatsRes = await axios.get(
+		`https://ovdjejekosarkasve.com/api/team-stats?filters[game][documentId][$eq]=${id}`
+	);
 	const playerStatsRes = await axios.get(
-		`http://localhost:1337/api/player-stats?filters[game][documentId][$eq]=${id}`
+		`https://ovdjejekosarkasve.com/api/player-stats?filters[game][documentId][$eq]=${id}`
 	);
 
 	const teamStatsArr = teamStatsRes.data.data;
