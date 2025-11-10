@@ -42,6 +42,8 @@ backend/public/uploads/*
 
 # Database
 *.sql
+!sql/
+!sql/**
 *.sqlite
 postgres_data/
 postgres_prod_data/
