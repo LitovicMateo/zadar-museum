@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const login = async (identifier: string, password: string) => {
 		try {
-			const res = await axios.post<StrapiAuthResponse>(API_ROUTES.auth.login, {
+			const res = await axios.post<StrapiAuthResponse>('https://ovdjejekosarkasve.com/api/auth/local', {
 				identifier,
 				password
 			});
