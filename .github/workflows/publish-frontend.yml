@@ -34,3 +34,4 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/zadar-museum-frontend:latest
             ghcr.io/${{ github.repository_owner }}/zadar-museum-frontend:${{ github.sha }}
+# updated: 2025-11-10T10:33:05.1889319+01:00
