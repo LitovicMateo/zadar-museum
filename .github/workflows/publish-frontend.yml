@@ -2,7 +2,7 @@
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   contents: read
@@ -11,6 +11,8 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_OWNER: litovicmateo
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,6 +34,7 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/zadar-museum-frontend:latest
-            ghcr.io/${{ github.repository_owner }}/zadar-museum-frontend:${{ github.sha }}
+            ghcr.io/${{ env.IMAGE_OWNER }}/zadar-museum-frontend:latest
+            ghcr.io/${{ env.IMAGE_OWNER }}/zadar-museum-frontend:${{ github.sha }}
+
 # updated: 2025-11-10T10:33:05.1889319+01:00
