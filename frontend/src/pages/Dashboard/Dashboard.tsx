@@ -12,6 +12,10 @@ const sidebarGroups = [
 				label: 'Player'
 			},
 			{
+				path: 'staff/create',
+				label: 'Staff'
+			},
+			{
 				path: 'referee/create',
 				label: 'Referee'
 			},
@@ -43,6 +47,10 @@ const sidebarGroups = [
 			{
 				path: 'player/edit',
 				label: 'Player'
+			},
+			{
+				path: 'staff/edit',
+				label: 'Staff'
 			},
 			{
 				path: 'referee/edit',

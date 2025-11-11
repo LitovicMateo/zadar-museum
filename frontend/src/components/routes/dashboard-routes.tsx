@@ -13,6 +13,8 @@ import CreatePlayerStats from '@/pages/Dashboard/PlayerStats/CreatePlayerStats';
 import EditPlayerStats from '@/pages/Dashboard/PlayerStats/EditPlayerStats';
 import CreateReferee from '@/pages/Dashboard/Referee/CreateReferee';
 import EditReferee from '@/pages/Dashboard/Referee/EditReferee';
+import CreateStaff from '@/pages/Dashboard/Staff/CreateStaff';
+import EditStaff from '@/pages/Dashboard/Staff/EditStaff';
 import CreateTeam from '@/pages/Dashboard/Team/CreateTeam';
 import EditTeam from '@/pages/Dashboard/Team/EditTeam';
 import CreateTeamStats from '@/pages/Dashboard/TeamStats/CreateTeamStats';
@@ -121,6 +123,17 @@ export const dashboardRoutes: RouteObject = {
 				{ index: true, element: <Navigate to="create" replace /> },
 				{ path: 'create', element: <CreatePlayerStats /> },
 				{ path: 'edit', element: <EditPlayerStats /> }
+			]
+		},
+
+		// ✅ Staff
+		{
+			path: 'staff',
+			element: <Outlet />,
+			children: [
+				{ index: true, element: <Navigate to="create" replace /> },
+				{ path: 'create', element: <CreateStaff /> },
+				{ path: 'edit', element: <EditStaff /> }
 			]
 		},
 

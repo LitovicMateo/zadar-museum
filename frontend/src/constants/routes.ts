@@ -14,6 +14,7 @@ export const API_ROUTES = {
 		referee: (params?: string) => `${root}/referees?${params}`,
 		team: (params?: string) => `${root}/teams?${params}`,
 		coach: (params?: string) => `${root}/coaches?${params}`,
+		staff: (params?: string) => `${root}/staff?${params}`,
 		game: (params?: string) => `${root}/games?${params}`,
 		venue: (params?: string) => `${root}/venues?${params}`,
 		competition: (params?: string) => `${root}/competitions?${params}`,
@@ -26,6 +27,7 @@ export const API_ROUTES = {
 		referee: (id: string) => `${root}/referees/${id}`,
 		team: (id: string) => `${root}/teams/${id}`,
 		coach: (id: string) => `${root}/coaches/${id}`,
+		staff: (id: string) => `${root}/staff/${id}`,
 		game: (id: string) => `${root}/games/${id}`,
 		venue: (id: string) => `${root}/venues/${id}`,
 		competition: (id: string) => `${root}/competitions/${id}`,
@@ -87,6 +89,11 @@ export const API_ROUTES = {
 		seasonTotalStats: (coachId: string, season: string, db: PlayerDB) =>
 			`${root}/coach/stats/total/${coachId}/${season}/${db}`
 	},
+	staff: {
+		details: (id: string) => `${root}/staff/${id}?populate=*`,
+		gamelog: (id: string) => `${root}/staff/gamelog/${id}`,
+		list: (params?: string) => `${root}/staff?${params}`
+	},
 	league: {
 		details: (slug: string) => `${root}/league/${slug}?populate=*`,
 		gamelog: (slug: string, season: string) => `${root}/league/games/${slug}/${season}`,
@@ -139,6 +146,7 @@ export const API_ROUTES = {
 		teamsInGame: (gameId: string) => `${root}/dashboard/game/teams/${gameId}`,
 		players: (params: string) => `${root}/dashboard/players?${params}`,
 		coaches: (params: string) => `${root}/dashboard/coaches?${params}`,
+		staff: (params: string) => `${root}/dashboard/staff?${params}`,
 		referees: (params: string) => `${root}/dashboard/referees?${params}`,
 		venues: (params: string) => `${root}/dashboard/venues?${params}`,
 		teams: (params: string) => `${root}/dashboard/teams?${params}`,
@@ -161,6 +169,10 @@ export const APP_ROUTES = {
 		player: {
 			create: '/dashboard/player/create',
 			edit: (playerId: string) => `/dashboard/player/edit/${playerId}`
+		},
+		staff: {
+			create: '/dashboard/staff/create',
+			edit: (staffId: string) => `/dashboard/staff/edit/${staffId}`
 		},
 		team: {
 			create: '/dashboard/team/create',
