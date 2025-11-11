@@ -2,7 +2,7 @@
   "kind": "collectionType",
   "collectionName": "staff_members",
   "info": {
-    "singularName": "staff-member",
+    "singularName": "staff",
     "pluralName": "staff-members",
     "displayName": "Staff Member"
   },
