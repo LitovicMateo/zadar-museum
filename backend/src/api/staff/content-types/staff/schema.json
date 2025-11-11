@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "staff_members",
+  "collectionName": "staff_old",
   "info": {
-    "singularName": "staff",
-    "pluralName": "staff-members",
-    "displayName": "Staff Member"
+    "singularName": "staff-old",
+    "pluralName": "staff-old",
+    "displayName": "Staff (old)"
   },
   "options": {
     "draftAndPublish": false

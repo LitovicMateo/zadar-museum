@@ -5,7 +5,7 @@
 import { factories } from "@strapi/strapi";
 
 export default factories.createCoreService(
-  "api::staff.staff" as any,
+  "api::staff-old.staff-old" as any,
   ({ strapi }) => ({
     // Return schedule rows for games where the given staff member was involved.
     // Strategy:
@@ -18,7 +18,7 @@ export default factories.createCoreService(
       try {
         // Attempt to find games that have a relation to the staff member.
         // This will work if the game content-type has a relation field named `staffers` or `staff`.
-        let games = [];
+        let games: any[] = [];
 
         try {
           games = await strapi.db.query("api::game.game").findMany({
@@ -41,7 +41,7 @@ export default factories.createCoreService(
         }
 
         const documentIds = (games || [])
-          .map((g: any) => g.documentId)
+          .map((g) => g.documentId)
           .filter(Boolean);
 
         if (documentIds.length === 0) {
