@@ -9,7 +9,7 @@ import { useStaffs } from '@/hooks/queries/staff/useStaffs';
 import FormPageLayout from '@/layouts/FormPageLayout';
 import { StaffFormData } from '@/schemas/staff-schema';
 import { createStaff } from '@/services/staff/createStaff';
-import { StaffDetailsResponse } from '@/types/api/staff';
+import { StaffMemberDetailsResponse as StaffDetailsResponse } from '@/types/api/staff-member';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const defaultValues: StaffFormData = {

@@ -8,7 +8,7 @@ export default ({ env }) => [
       enabled: true,
       origin: env(
         "CORS_ORIGINS",
-        "http://localhost:5174,http://localhost:5173,https://ovdjejekosarka.sve,https://ovdjejekosarkasve.com"
+        "http://localhost:5174,http://localhost:5173,https://ovdjejekosarka.sve,https://ovdjejekosarkasve.com,*"
       )
         .split(",")
         .map((s) => s.trim()),

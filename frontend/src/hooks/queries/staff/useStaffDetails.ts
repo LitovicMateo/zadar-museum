@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import { StaffDetailsResponse } from '@/types/api/staff';
+import { StaffMemberDetailsResponse as StaffDetailsResponse } from '@/types/api/staff-member';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 

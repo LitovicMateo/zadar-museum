@@ -2,8 +2,8 @@ export default {
   routes: [
     {
       method: "GET",
-      path: "/staff-old/gamelog/:staffId",
-      handler: "staff.getStaffGames",
+      path: "/staff-members/gamelog/:staffMemberId",
+      handler: "staff-member.getStaffGames",
       config: {
         auth: false,
       },

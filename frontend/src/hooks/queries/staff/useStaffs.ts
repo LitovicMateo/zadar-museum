@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import { StaffDetailsResponse } from '@/types/api/staff';
+import { StaffMemberDetailsResponse as StaffDetailsResponse } from '@/types/api/staff-member';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -19,7 +19,8 @@ const getAllStaffs = async (sortKey?: StaffKey, direction: 'asc' | 'desc' = 'asc
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.staff(params.toString()));
+	// Dashboard route for staff was not implemented on the backend — use the collection endpoint
+	const res = await axios.get(API_ROUTES.staff.list(params.toString()));
 
 	return res.data;
 };

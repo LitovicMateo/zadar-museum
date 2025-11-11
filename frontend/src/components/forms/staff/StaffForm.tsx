@@ -31,4 +31,3 @@ const StaffForm: React.FC<StaffFormProps> = ({ onSubmit, defaultValues = emptyDe
 };
 
 export default StaffForm;
-<span className="text-sm">First name</span>;

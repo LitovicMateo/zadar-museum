@@ -3,7 +3,7 @@ import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { StaffFormData, staffSchema } from '@/schemas/staff-schema';
-import { StaffDetailsResponse } from '@/types/api/staff';
+import { StaffMemberDetailsResponse as StaffDetailsResponse } from '@/types/api/staff-member';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type StaffFormProviderProps = {
