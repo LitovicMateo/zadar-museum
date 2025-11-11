@@ -5,7 +5,7 @@
 import { factories } from "@strapi/strapi";
 
 export default factories.createCoreService(
-  "api::staff.staff",
+  "api::staff.staff" as any,
   ({ strapi }) => ({
     // Return schedule rows for games where the given staff member was involved.
     // Strategy:

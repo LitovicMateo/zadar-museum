@@ -4,4 +4,4 @@
 
 import { factories } from "@strapi/strapi";
 
-export default factories.createCoreRouter("api::staff.staff");
+export default factories.createCoreRouter("api::staff.staff" as any);

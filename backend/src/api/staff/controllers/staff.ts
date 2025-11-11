@@ -5,7 +5,7 @@
 import { factories } from "@strapi/strapi";
 
 export default factories.createCoreController(
-  "api::staff.staff",
+  "api::staff.staff" as any,
   ({ strapi }) => ({
     async getStaffGames(ctx) {
       const { staffId } = ctx.params;
