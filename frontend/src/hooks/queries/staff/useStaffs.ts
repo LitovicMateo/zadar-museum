@@ -19,8 +19,10 @@ const getAllStaffs = async (sortKey?: StaffKey, direction: 'asc' | 'desc' = 'asc
 		params.append('direction', direction);
 	}
 
-	// Dashboard route for staff was not implemented on the backend — use the collection endpoint
+	console.log(params);
+
+	// Use the collection endpoint for staff list (stable CRUD route)
 	const res = await axios.get(API_ROUTES.staff.list(params.toString()));
 
-	return res.data;
+	return res.data.data;
 };

@@ -174,4 +174,17 @@ export default ({ strapi }: FactoryArgs) => ({
 
     return teams;
   },
+
+  async findStaff(sortKey, direction) {
+    console.log(sortKey);
+
+    const staff = await strapi.db.query("api::staff.staff").findMany({
+      select: ["*"],
+      orderBy: {
+        [sortKey]: direction,
+      },
+    });
+
+    return staff;
+  },
 });

@@ -2,8 +2,8 @@ import { PlayerDB } from '@/pages/Player/Player';
 
 // API root: prefer the Vite environment variable VITE_API_ROOT (set in production).
 // Fallback to the local Strapi dev server used during development.
-const root = (import.meta.env.VITE_API_ROOT as string) || 'https://www.ovdjejekosarkasve.com/api';
-
+// const root = (import.meta.env.VITE_API_ROOT as string) || 'https://www.ovdjejekosarkasve.com/api';
+const root = (import.meta.env.VITE_API_ROOT as string) || 'http://localhost:1337/api';
 export const API_ROUTES = {
 	// auth
 	auth: {
@@ -14,7 +14,7 @@ export const API_ROUTES = {
 		referee: (params?: string) => `${root}/referees?${params}`,
 		team: (params?: string) => `${root}/teams?${params}`,
 		coach: (params?: string) => `${root}/coaches?${params}`,
-		staff: (params?: string) => `${root}/staff?${params}`,
+		staff: (params?: string) => `${root}/staffs?${params}`,
 		game: (params?: string) => `${root}/games?${params}`,
 		venue: (params?: string) => `${root}/venues?${params}`,
 		competition: (params?: string) => `${root}/competitions?${params}`,
@@ -27,7 +27,7 @@ export const API_ROUTES = {
 		referee: (id: string) => `${root}/referees/${id}`,
 		team: (id: string) => `${root}/teams/${id}`,
 		coach: (id: string) => `${root}/coaches/${id}`,
-		staff: (id: string) => `${root}/staff/${id}`,
+		staff: (id: string) => `${root}/staffs/${id}`,
 		game: (id: string) => `${root}/games/${id}`,
 		venue: (id: string) => `${root}/venues/${id}`,
 		competition: (id: string) => `${root}/competitions/${id}`,
@@ -90,9 +90,9 @@ export const API_ROUTES = {
 			`${root}/coach/stats/total/${coachId}/${season}/${db}`
 	},
 	staff: {
-		details: (id: string) => `${root}/staff/${id}?populate=*`,
+		details: (id: string) => `${root}/staffs/${id}?populate=*`,
 		gamelog: (id: string) => `${root}/staff/gamelog/${id}`,
-		list: (params?: string) => `${root}/staff?${params}`
+		list: (params?: string) => `${root}/staffs?${params}`
 	},
 	league: {
 		details: (slug: string) => `${root}/league/${slug}?populate=*`,

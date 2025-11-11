@@ -113,5 +113,14 @@ export default {
         auth: false,
       },
     },
+
+    {
+      method: "GET",
+      path: "/dashboard/staff",
+      handler: "dashboard.getStaff",
+      config: {
+        auth: false,
+      },
+    },
   ],
 };

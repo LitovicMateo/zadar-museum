@@ -1,5 +1,6 @@
 import { CompetitionDetailsResponse } from './competition';
 import { RefereeDetailsResponse } from './referee';
+import { StaffDetailsResponse } from './staff';
 import { TeamDetailsResponse } from './team';
 import { VenueDetailsResponse } from './venue';
 
@@ -35,4 +36,5 @@ export type GameDetailsResponse = {
 	mainReferee: RefereeDetailsResponse;
 	secondReferee: RefereeDetailsResponse;
 	thirdReferee: RefereeDetailsResponse;
+	staffers?: StaffDetailsResponse[];
 };

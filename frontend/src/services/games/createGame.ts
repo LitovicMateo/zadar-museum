@@ -57,6 +57,7 @@ export const createGame = async (data: GameFormData) => {
 			mainReferee: data.mainReferee ? +data.mainReferee : undefined,
 			secondReferee: data.secondReferee ? +data.secondReferee : undefined,
 			thirdReferee: data.thirdReferee ? +data.thirdReferee : undefined,
+			staffers: data.staffers && data.staffers.length > 0 ? data.staffers.map((s) => +s) : [],
 			gallery: galleryIds.length > 0 ? galleryIds : []
 		}
 	});

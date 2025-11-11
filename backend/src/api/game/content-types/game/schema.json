@@ -102,6 +102,11 @@
       "relation": "oneToOne",
       "target": "api::referee.referee"
     },
+    "staffers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::staff.staff"
+    },
     "attendance": {
       "type": "string"
     },

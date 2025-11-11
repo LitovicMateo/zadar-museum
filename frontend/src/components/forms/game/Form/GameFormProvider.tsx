@@ -53,7 +53,9 @@ const GameFormProvider: React.FC<GameFormProviderProps> = ({ children, onSubmit,
 				attendance: game.attendance,
 				mainReferee: game.mainReferee ? game.mainReferee.id.toString() : undefined,
 				secondReferee: game.secondReferee ? game.secondReferee.id.toString() : undefined,
-				thirdReferee: game.thirdReferee ? game.thirdReferee.id.toString() : undefined
+				thirdReferee: game.thirdReferee ? game.thirdReferee.id.toString() : undefined,
+				// map backend staff objects to form values (string ids)
+				staffers: game.staffers ? game.staffers.map((s) => s.id.toString()) : undefined
 			});
 		}
 	}, [game, methods]);

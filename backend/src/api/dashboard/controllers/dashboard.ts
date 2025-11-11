@@ -98,4 +98,13 @@ export default ({ strapi }: FactoryArgs) => ({
     const data = await service.findTeamStats(sort, direction);
     ctx.body = data;
   },
+
+  async getStaff(ctx: Context) {
+    const { sort, direction } = ctx.query;
+    console.log(sort, direction);
+
+    const service = strapi.service("api::dashboard.dashboard");
+    const data = await service.findStaff(sort, direction);
+    ctx.body = data;
+  },
 });
