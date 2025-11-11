@@ -14,7 +14,7 @@ export const API_ROUTES = {
 		referee: (params?: string) => `${root}/referees?${params}`,
 		team: (params?: string) => `${root}/teams?${params}`,
 		coach: (params?: string) => `${root}/coaches?${params}`,
-		staff: (params?: string) => `${root}/staff?${params}`,
+		staff: (params?: string) => `${root}/staff-members?${params}`,
 		game: (params?: string) => `${root}/games?${params}`,
 		venue: (params?: string) => `${root}/venues?${params}`,
 		competition: (params?: string) => `${root}/competitions?${params}`,
@@ -27,7 +27,7 @@ export const API_ROUTES = {
 		referee: (id: string) => `${root}/referees/${id}`,
 		team: (id: string) => `${root}/teams/${id}`,
 		coach: (id: string) => `${root}/coaches/${id}`,
-		staff: (id: string) => `${root}/staff/${id}`,
+		staff: (id: string) => `${root}/staff-members/${id}`,
 		game: (id: string) => `${root}/games/${id}`,
 		venue: (id: string) => `${root}/venues/${id}`,
 		competition: (id: string) => `${root}/competitions/${id}`,
@@ -90,9 +90,9 @@ export const API_ROUTES = {
 			`${root}/coach/stats/total/${coachId}/${season}/${db}`
 	},
 	staff: {
-		details: (id: string) => `${root}/staff/${id}?populate=*`,
-		gamelog: (id: string) => `${root}/staff/gamelog/${id}`,
-		list: (params?: string) => `${root}/staff?${params}`
+		details: (id: string) => `${root}/staff-members/${id}?populate=*`,
+		gamelog: (id: string) => `${root}/staff-members/gamelog/${id}`,
+		list: (params?: string) => `${root}/staff-members?${params}`
 	},
 	league: {
 		details: (slug: string) => `${root}/league/${slug}?populate=*`,
