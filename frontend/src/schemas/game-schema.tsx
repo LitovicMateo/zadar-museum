@@ -23,6 +23,8 @@ export const gameSchema = z.object({
 	mainReferee: z.string().optional(),
 	secondReferee: z.string().optional(),
 	thirdReferee: z.string().optional(),
+	// array of staff member IDs involved in the game
+	staffers: z.array(z.string()).optional(),
 	gallery: z.any().nullable()
 });
 

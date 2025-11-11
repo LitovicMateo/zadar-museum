@@ -24,6 +24,7 @@ import Nulled from '../Fields/Nulled';
 import Round from '../Fields/Round';
 import Season from '../Fields/Season';
 import SecondReferee from '../Fields/SecondReferee';
+import Staffers from '../Fields/Staffers';
 import Stage from '../Fields/Stage';
 import ThirdReferee from '../Fields/ThirdReferee';
 import Venue from '../Fields/Venue';
@@ -65,6 +66,9 @@ const GameFormContent: React.FC<GameFormContentProps> = ({ mode }) => {
 				<MainReferee />
 				<SecondReferee />
 				<ThirdReferee />
+			</Fieldset>
+			<Fieldset label="Staff">
+				<Staffers />
 			</Fieldset>
 			<Fieldset label="Gallery">
 				<Gallery ref={fileInputRef} previews={previews} setPreviews={setPreviews} />

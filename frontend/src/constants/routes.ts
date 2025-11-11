@@ -229,6 +229,10 @@ export const APP_ROUTES = {
 	referees: '/referees',
 	referee: (refeereId: string) => `/referee/${refeereId}`,
 
+	// staff
+	staffs: '/staffs',
+	staff: (staffId: string) => `/staff/${staffId}`,
+
 	// teams
 	teams: '/teams',
 	team: (id: string) => `/team/${id}`,

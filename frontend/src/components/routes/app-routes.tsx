@@ -15,6 +15,8 @@ import Player from '@/pages/Player/Player';
 import PlayersPage from '@/pages/Players/PlayersPage';
 import Referee from '@/pages/Referee/Referee';
 import RefereesPage from '@/pages/Referees/RefereesPage';
+import Staff from '@/pages/Staff/Staff';
+import StaffsPage from '@/pages/Staffs/StaffsPage';
 import TeamPage from '@/pages/Team/TeamPage';
 import TeamsPage from '@/pages/Teams/TeamsPage';
 import Venue from '@/pages/Venue/Venue';
@@ -69,6 +71,16 @@ const AppRoutes: React.FC = () => {
 		{
 			path: '/referee/:refereeId',
 			element: protect(<Referee />)
+		},
+
+		// Staff
+		{
+			path: '/staffs',
+			element: protect(<StaffsPage />)
+		},
+		{
+			path: '/staff/:staffId',
+			element: protect(<Staff />)
 		},
 
 		// Teams
