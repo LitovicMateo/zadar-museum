@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "staffs",
+  "info": {
+    "singularName": "staff",
+    "pluralName": "staffs",
+    "displayName": "staff"
+  },
+  "options": {
+    "comment": ""
+  },
+  "attributes": {
+    "first_name": {
+      "type": "string",
+      "required": true
+    },
+    "last_name": {
+      "type": "string",
+      "required": true
+    },
+    "role": {
+      "type": "enumeration",
+      "enum": ["Assistant coach", "Fitness coach", "Doctor", "Physio"],
+      "required": true
+    }
+  }
+}
