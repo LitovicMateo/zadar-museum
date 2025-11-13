@@ -16,8 +16,12 @@ const PlayerContent: React.FC = () => {
 	const { playerId } = useParams();
 	const { selectedDatabase } = useBoxscore();
 
+	console.log(selectedDatabase);
+
 	const data = usePlayerProfileDatabase(playerId!);
 	const { data: stats } = useAllTimeStats(playerId!, selectedDatabase!);
+
+	console.log(stats);
 
 	if (stats?.length === 0) {
 		return (

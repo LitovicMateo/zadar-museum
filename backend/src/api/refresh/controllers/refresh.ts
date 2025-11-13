@@ -464,6 +464,8 @@ export default {
       // player
       "zadar_player_record_full",
       "zadar_player_league_record_full",
+      "opponent_player_record_full",
+      "opponent_player_league_record_full",
 
       // referee
       "referee_all_time_record",
