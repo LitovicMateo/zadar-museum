@@ -1,3 +1,4 @@
+import { API_ROUTES } from '@/constants/routes';
 import axios from 'axios';
 
 export const uploadGallery = async (files: FileList | null): Promise<number[]> => {
@@ -8,7 +9,7 @@ export const uploadGallery = async (files: FileList | null): Promise<number[]> =
 		formData.append('files', file);
 	});
 
-	const res = await axios.post('https://ovdjejekosarkasve.com/api/upload', formData, {
+	const res = await axios.post(API_ROUTES.uploadImage, formData, {
 		headers: { 'Content-Type': 'multipart/form-data' }
 	});
 

@@ -38,13 +38,9 @@ const CoachSeasonStats: React.FC<CoachSeasonStatsProps> = ({ season }) => {
 		return [coachTotalStats![coachRole]?.[location]];
 	}, [coachTotalStats, coachRole, location, season]);
 
-	console.log('LEAGUE STATS', leagueStats);
-	console.log('PRE TOTAL STATS', coachTotalStats);
-	console.log('TOTAL STATS', totalStats);
-
 	// create table
-	const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats);
-	const { TableFoot } = useCoachSeasonStatsTable(totalStats);
+	const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats, 'league');
+	const { TableFoot } = useCoachSeasonStatsTable(totalStats, 'total');
 
 	return (
 		<div className="flex flex-col gap-4">

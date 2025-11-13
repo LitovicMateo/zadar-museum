@@ -1,8 +1,9 @@
+import { API_ROUTES } from '@/constants/routes';
 import axios from 'axios';
 
 export const refreshSchedule = async () => {
 	try {
-		const res = await axios.get('https://ovdjejekosarkasve.com/api/refresh/schedule');
+		const res = await axios.get(API_ROUTES.refresh.schedule);
 
 		if (!res.data.success) {
 			throw new Error(res.data?.message || 'Failed to refresh views');

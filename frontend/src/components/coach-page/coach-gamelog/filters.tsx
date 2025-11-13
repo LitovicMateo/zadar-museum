@@ -33,7 +33,6 @@ const Filters: React.FC<FilterProps> = ({
 	const { coachId } = useParams();
 
 	const { data: seasons } = useCoachSeasons(coachId!);
-	console.log(seasons);
 
 	const { data: competitions } = useCoachSeasonCompetitions(coachId!, selectedSeason);
 

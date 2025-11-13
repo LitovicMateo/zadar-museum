@@ -6,55 +6,51 @@ import { useLeagueDetails } from '@/hooks/queries/league/useLeagueDetails';
 import { CoachStats } from '@/types/api/coach';
 import { CellContext, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined) => {
-	console.log('TABLE', data);
-
+export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined, type: 'league' | 'total') => {
 	const table = useReactTable({
 		data: data || [],
 		columns: [
 			{
 				header: 'League',
-				accessorKey: 'league_slug',
+				accessorFn: (row: any) => row?.league_slug,
 				cell: (info) => {
-					console.log('SLUG', info.getValue());
-
 					if (info.getValue() === undefined) return <p>Total</p>;
-					return <LeagueCell leagueSlug={info.getValue()} />;
+					return <LeagueCell leagueSlug={info.getValue() as string | undefined} />;
 				}
 			},
 			{
 				header: 'G',
-				accessorKey: 'games',
+				accessorFn: (row: any) => row?.games,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'W',
-				accessorKey: 'wins',
+				accessorFn: (row: any) => row?.wins,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'L',
-				accessorKey: 'losses',
+				accessorFn: (row: any) => row?.losses,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'Win %',
-				accessorKey: 'win_percentage',
+				accessorFn: (row: any) => row?.win_percentage,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'PTS A',
-				accessorKey: 'avg_points_scored',
+				accessorFn: (row: any) => row?.avg_points_scored,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'PTS D',
-				accessorKey: 'avg_points_received',
+				accessorFn: (row: any) => row?.avg_points_received,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'PTS D',
-				accessorKey: 'avg_points_difference',
+				accessorFn: (row: any) => row?.avg_points_difference,
 				cell: (info) => <Cell info={info} />
 			}
 		],
@@ -132,9 +128,9 @@ export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined) => {
 
 	const LeagueCell: React.FC<{ leagueSlug?: string }> = ({ leagueSlug }) => {
 		const { data: league } = useLeagueDetails(leagueSlug || '');
-		if (!leagueSlug) return <p>Total</p>;
+		if (!leagueSlug && type === 'league') return <p>No games</p>;
 		const leagueName = league?.name || '';
-		return <Link to={APP_ROUTES.league(leagueSlug)}>{leagueName}</Link>;
+		return <Link to={APP_ROUTES.league(leagueSlug!)}>{leagueName}</Link>;
 	};
 
 	const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData, TValue> }) => {

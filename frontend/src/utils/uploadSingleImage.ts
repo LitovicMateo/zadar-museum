@@ -1,3 +1,4 @@
+import { API_ROUTES } from '@/constants/routes';
 import axios from 'axios';
 
 export const uploadSingleImage = async (file: File | null): Promise<number | null> => {
@@ -8,7 +9,7 @@ export const uploadSingleImage = async (file: File | null): Promise<number | nul
 	const formData = new FormData();
 	formData.append('files', file);
 
-	const res = await axios.post('https://ovdjejekosarkasve.com/api/upload', formData);
+	const res = await axios.post(API_ROUTES.uploadImage, formData);
 
 	if (res.status === 201) {
 		return res.data[0].id;
