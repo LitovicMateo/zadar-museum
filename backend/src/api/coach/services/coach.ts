@@ -168,6 +168,8 @@ export default factories.createCoreService(
         return null;
       }
 
+      console.log("DATA LEAGUE SEASON", data);
+
       const coach = data.map((coach) => {
         return {
           coachId: coach.coach_id,
@@ -195,6 +197,8 @@ export default factories.createCoreService(
         if (data.length === 0) {
           return null;
         }
+
+        console.log("DATA TOTAL SEASON", data);
 
         const coach = data[0];
 
