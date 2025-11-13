@@ -7,6 +7,8 @@ import { CoachStats } from '@/types/api/coach';
 import { CellContext, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined) => {
+	console.log(data);
+
 	const table = useReactTable({
 		data: data || [],
 		columns: [
