@@ -32,17 +32,17 @@ export const useRefereeStatsTable = (data: RefereeStats[] | undefined) => {
 			},
 			{
 				header: 'For',
-				accessorKey: 'avg_fouls_for_zadar',
+				accessorKey: 'fouls_for',
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'Ag.',
-				accessorKey: 'avg_fouls_against_zadar',
+				accessorKey: 'fouls_against',
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: '+/-',
-				accessorKey: 'avg_foul_difference',
+				accessorKey: 'foul_difference',
 				cell: (info) => <Cell info={info} />
 			}
 		],

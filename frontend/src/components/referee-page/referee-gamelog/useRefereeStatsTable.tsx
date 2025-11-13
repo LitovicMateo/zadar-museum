@@ -31,22 +31,38 @@ export const useRefereeStatsTable = (data: RefereeStats[] | undefined) => {
 			{
 				header: 'Win %',
 				accessorKey: 'win_percentage',
-				cell: (info) => `${info.getValue().toFixed(1)}`
+				cell: (info) => {
+					const raw = info.getValue();
+					const num = raw === null || raw === undefined ? null : Number(raw);
+					return num === null || Number.isNaN(num) ? '-' : `${num.toFixed(1)}`;
+				}
 			},
 			{
 				header: 'For',
-				accessorKey: 'avg_fouls_for_zadar',
-				cell: (info) => `${info.getValue().toFixed(1)}`
+				accessorKey: 'fouls_for',
+				cell: (info) => {
+					const raw = info.getValue();
+					const num = raw === null || raw === undefined ? null : Number(raw);
+					return num === null || Number.isNaN(num) ? '-' : `${num.toFixed(1)}`;
+				}
 			},
 			{
 				header: 'Ag.',
-				accessorKey: 'avg_fouls_against_zadar',
-				cell: (info) => `${info.getValue().toFixed(1)}`
+				accessorKey: 'fouls_against',
+				cell: (info) => {
+					const raw = info.getValue();
+					const num = raw === null || raw === undefined ? null : Number(raw);
+					return num === null || Number.isNaN(num) ? '-' : `${num.toFixed(1)}`;
+				}
 			},
 			{
 				header: '+/-',
-				accessorKey: 'avg_foul_difference',
-				cell: (info) => `${info.getValue().toFixed(1)}`
+				accessorKey: 'foul_difference',
+				cell: (info) => {
+					const raw = info.getValue();
+					const num = raw === null || raw === undefined ? null : Number(raw);
+					return num === null || Number.isNaN(num) ? '-' : `${num.toFixed(1)}`;
+				}
 			}
 		],
 		getCoreRowModel: getCoreRowModel()

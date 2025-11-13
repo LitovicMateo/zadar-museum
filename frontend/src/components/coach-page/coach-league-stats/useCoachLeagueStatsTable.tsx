@@ -25,14 +25,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.getValue() === 0) {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -44,14 +44,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -63,14 +63,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -82,14 +82,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -101,14 +101,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -120,14 +120,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -139,14 +139,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -163,14 +163,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.getValue() === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -182,14 +182,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_head === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -201,14 +201,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_head === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -220,14 +220,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_head === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -239,14 +239,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_head === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -258,14 +258,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_head === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -277,14 +277,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_head === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -301,14 +301,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.getValue() === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -320,14 +320,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_assistant === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -339,14 +339,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_assistant === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -358,14 +358,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_assistant === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -377,14 +377,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_assistant === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -396,14 +396,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_assistant === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -415,14 +415,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.games_assistant === '0') {
 								return (
-									<div className="min-w-[24px]">
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-[24px]">
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
