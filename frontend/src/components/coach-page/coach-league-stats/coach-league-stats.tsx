@@ -40,8 +40,8 @@ const CoachLeagueStats: React.FC = () => {
 		return [(coachRecord as any)[keyForRecord]?.[location]];
 	}, [coachRecord, coachRole, location]);
 
-	const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats);
-	const { TableFoot } = useCoachSeasonStatsTable(totalStats);
+	const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats, 'league');
+	const { TableFoot } = useCoachSeasonStatsTable(totalStats, 'total');
 
 	return (
 		<section className="flex flex-col gap-4">

@@ -40,8 +40,8 @@ const PlayerFormProvider: React.FC<PlayerFormProviderProps> = ({
 			methods.reset({
 				first_name: player.first_name,
 				last_name: player.last_name,
-				date_of_birth: player.date_of_birth || null,
-				date_of_death: player.date_of_death || null,
+				date_of_birth: player.date_of_birth || undefined,
+				date_of_death: player.date_of_death || undefined,
 				active_player: player.isActivePlayer,
 				image: player.image || null,
 				nationality: player.nationality,
