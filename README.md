@@ -50,3 +50,25 @@ docker-compose -f docker-compose.vps.yml pull frontend backend
  docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate frontend backend
 
 ```
+
+## Execute MVs
+
+```
+POSTGRES_CTR=$(docker-compose -f docker-compose.vps.yml ps -q postgres)
+NET=$(docker inspect -f '{{range $k,$v := .NetworkSettings.Networks}}{{$k}}{{end}}' "$POSTGRES_CTR" | awk '{print $1}')
+echo "postgres container: $POSTGRES_CTR"
+echo "compose network: $NET"
+
+docker run --rm \
+  -v "$(pwd)":/app \
+  -w /app/backend \
+  --network "$NET" \
+  node:20 bash -lc "npm ci --production && \
+    export DATABASE_HOST=postgres && \
+    export DATABASE_PORT=5432 && \
+    export DATABASE_USERNAME=strapi_prod && \
+    export DATABASE_PASSWORD='STRONG_PASSWORD_HERE' && \
+    export DATABASE_NAME=strapi_prod && \
+    node ./scripts/apply-mvs.js"
+
+```
