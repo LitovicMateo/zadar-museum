@@ -13,7 +13,7 @@ const CoachGamelog: React.FC = () => {
 	const { coachId } = useParams();
 
 	const [selectedCompetitions, setSelectedCompetitions] = useState<string[]>([]);
-	const [selectedSeason, setSelectedSeason] = useState('2025');
+	const [selectedSeason, setSelectedSeason] = useState('2026');
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const { db } = useCoachProfileDatabase(coachId!);
