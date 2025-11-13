@@ -38,9 +38,6 @@ const CoachSeasonStats: React.FC<CoachSeasonStatsProps> = ({ season }) => {
 		return [coachTotalStats![coachRole]?.[location]];
 	}, [coachTotalStats, coachRole, location]);
 
-	console.log('LEAGUE STATS', leagueStats);
-	console.log('TOTAL STATS', totalStats);
-
 	// create table
 	const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats);
 	const { TableFoot } = useCoachSeasonStatsTable(totalStats);

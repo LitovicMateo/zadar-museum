@@ -15,7 +15,5 @@ export const useSeasonLeagueStats = (coachId: string, season: string, db: Player
 const getSeasonLeagueStats = async (coachId: string, season: string, db: PlayerDB): Promise<CoachStatsResponse[]> => {
 	const res = await axios.get(API_ROUTES.coach.seasonLeagueStats(coachId, season, db));
 
-	console.log('RESPONSE LEAGUE', res.data);
-
 	return res.data;
 };
