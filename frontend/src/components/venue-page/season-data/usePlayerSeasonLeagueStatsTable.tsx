@@ -14,7 +14,10 @@ export const usePlayerSeasonLeagueStatsTable = (data: PlayerAllTimeStats[] | und
 				accessorFn: (row) => row.first_name + ' ' + row.last_name,
 				cell: (info) => {
 					if (info.getValue() === undefined) return <p>Total</p>;
-					return <Link to={APP_ROUTES.league(info.row.original.league_slug)}>{info.getValue()}</Link>;
+					const orig = info.row.original as Partial<PlayerAllTimeStats> | undefined;
+					const slug = orig?.league_slug;
+					if (!slug) return <>{info.getValue()}</>;
+					return <Link to={APP_ROUTES.league(slug)}>{info.getValue()}</Link>;
 				},
 				enableSorting: false
 			},

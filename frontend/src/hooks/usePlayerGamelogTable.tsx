@@ -39,7 +39,10 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[]) => {
 				header: 'LEAGUE',
 				accessorKey: 'league_short_name',
 				cell: (info) => {
-					const slug = info.row.original.league_slug ?? info.row.original.league_id;
+					// protect against rows without an "original" (group/total rows)
+					const orig = info.row.original as Partial<PlayerBoxscoreResponse> | undefined;
+					const slug = orig?.league_slug ?? orig?.league_id;
+					if (!slug) return info.getValue();
 					return <Link to={APP_ROUTES.league(String(slug))}>{info.getValue()}</Link>;
 				}
 			},

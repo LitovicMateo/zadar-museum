@@ -14,8 +14,11 @@ export const useVenueSeasonStatsTable = (seasonStats: VenueSeasonStats[] | undef
 				accessorKey: 'league_name',
 				cell: (info) => {
 					if (info.getValue() === undefined) return <p>Total</p>;
+					const orig = info.row.original as Partial<VenueSeasonStats> | undefined;
+					const slug = orig?.league_slug;
+					if (!slug) return <span className="font-semibold">{info.getValue()}</span>;
 					return (
-						<Link to={APP_ROUTES.league(info.row.original.league_slug)} className="font-semibold">
+						<Link to={APP_ROUTES.league(slug)} className="font-semibold">
 							{info.getValue()}
 						</Link>
 					);
