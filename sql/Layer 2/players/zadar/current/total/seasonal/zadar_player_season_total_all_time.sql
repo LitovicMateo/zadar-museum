@@ -1,4 +1,4 @@
- --CREATE MATERIALIZED VIEW public.zadar_player_season_total_all_time AS
+ CREATE MATERIALIZED VIEW public.zadar_player_season_total_all_time AS
  
  SELECT b.player_id,
     b.first_name,
