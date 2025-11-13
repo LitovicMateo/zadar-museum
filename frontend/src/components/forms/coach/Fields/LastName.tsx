@@ -9,8 +9,8 @@ const LastName: React.FC = () => {
 	return (
 		<Input
 			type="text"
-			placeholder="First Name"
-			{...register('last_name', { required: 'First name is required' })}
+			placeholder="Last Name"
+			{...register('last_name', { required: 'Last name is required' })}
 			className="placeholder:text-xs"
 		/>
 	);

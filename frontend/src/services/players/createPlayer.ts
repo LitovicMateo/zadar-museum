@@ -8,8 +8,7 @@ export const createPlayer = async (data: PlayerFormData) => {
 
 	const params = new URLSearchParams({
 		'filters[first_name][$eq]': data.first_name,
-		'filters[last_name][$eq]': data.last_name,
-		'filters[date_of_birth][$eq]': data.date_of_birth || ''
+		'filters[last_name][$eq]': data.last_name
 	});
 
 	const existingPlayer = await axios.get(API_ROUTES.create.player(params.toString()));

@@ -10,8 +10,9 @@ export const updatePlayer = async ({ id, ...data }: { id: string } & PlayerFormD
 		data: {
 			first_name: data.first_name,
 			last_name: data.last_name,
-			date_of_birth: data.date_of_birth || null,
-			date_of_death: data.date_of_death || null,
+			// ensure empty strings are converted to null
+			date_of_birth: data.date_of_birth && data.date_of_birth !== '' ? data.date_of_birth : null,
+			date_of_death: data.date_of_death && data.date_of_death !== '' ? data.date_of_death : null,
 			is_active_player: data.active_player,
 			primary_position: data.primary_position || null,
 			secondary_position: data.secondary_position || null,

@@ -20,10 +20,14 @@
       "required": true
     },
     "date_of_birth": {
-      "type": "date"
+      "type": "date",
+      "required": false,
+      "default": null
     },
     "date_of_death": {
-      "type": "date"
+      "type": "date",
+      "required": false,
+      "default": null
     },
     "is_active_player": {
       "type": "boolean",
