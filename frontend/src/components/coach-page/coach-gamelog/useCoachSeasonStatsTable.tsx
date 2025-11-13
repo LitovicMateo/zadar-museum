@@ -16,6 +16,8 @@ export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined) => {
 				header: 'League',
 				accessorKey: 'league_slug',
 				cell: (info) => {
+					console.log('SLUG', info.getValue());
+
 					if (info.getValue() === undefined) return <p>Total</p>;
 					return <LeagueCell leagueSlug={info.getValue()} />;
 				}

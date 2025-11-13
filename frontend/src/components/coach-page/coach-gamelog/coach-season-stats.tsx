@@ -30,15 +30,16 @@ const CoachSeasonStats: React.FC<CoachSeasonStatsProps> = ({ season }) => {
 		return coachLeagueStats.map((row: CoachStatsResponse) => {
 			return row[coachRole]?.[location];
 		});
-	}, [coachLeagueStats, coachRole, location]);
+	}, [coachLeagueStats, coachRole, location, season]);
 
 	const totalStats: CoachStats[] = useMemo(() => {
 		if (!coachTotalStats) return [];
 
 		return [coachTotalStats![coachRole]?.[location]];
-	}, [coachTotalStats, coachRole, location]);
+	}, [coachTotalStats, coachRole, location, season]);
 
 	console.log('LEAGUE STATS', leagueStats);
+	console.log('PRE TOTAL STATS', coachTotalStats);
 	console.log('TOTAL STATS', totalStats);
 
 	// create table
