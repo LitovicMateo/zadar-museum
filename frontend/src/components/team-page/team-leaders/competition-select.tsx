@@ -31,13 +31,17 @@ const CompetitionSelect: React.FC<CompetitionSelectProps> = ({ selectedCompetiti
 		}
 	];
 
-	teamCompetitions.map((c) => {
-		const obj = {
-			label: competitions.find((comp) => comp.slug === c.league_slug)!.name,
-			value: c.league_slug
-		};
+	// teamCompetitions may contain null/undefined entries; guard and resolve labels safely
+	teamCompetitions.forEach((c) => {
+		if (!c) return;
+		const slug = c.league_slug ?? '';
+		const comp = competitions.find((comp) => comp.slug === slug);
+		const label = (comp?.name ?? slug) || 'Unknown';
 
-		competitionOptions.push(obj);
+		competitionOptions.push({
+			label,
+			value: slug
+		});
 	});
 
 	return (
