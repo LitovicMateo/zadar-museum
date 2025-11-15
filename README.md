@@ -80,3 +80,23 @@ cd ~/zadar-museum
 git pull origin main
 ./refresh_player_views.sh
 ```
+
+## Clear all MVs in DB
+
+# Connect to the postgres container
+
+```
+docker exec -it  c0090d76677b_postgres_prod psql -U strapi_prod -d strapi_prod
+
+-- Drop all materialized views in the public schema
+DO $$
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (SELECT matviewname FROM pg_matviews WHERE schemaname = 'public')
+    LOOP
+        EXECUTE 'DROP MATERIALIZED VIEW IF EXISTS public.' || quote_ident(r.matviewname) || ' CASCADE';
+        RAISE NOTICE 'Dropped: %', r.matviewname;
+    END LOOP;
+END $$;
+```

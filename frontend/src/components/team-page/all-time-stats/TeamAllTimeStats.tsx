@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import Heading from '@/components/ui/heading';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useTeamTotalStats } from '@/hooks/queries/team/useTeamTotalStats';
 
@@ -15,10 +16,13 @@ const TeamAllTimeStats: React.FC = () => {
 	if (!totalStats) return null;
 
 	return (
-		<TableWrapper>
-			<TableHead />
-			<TableBody />
-		</TableWrapper>
+		<>
+			<Heading title="ALl time stats" />
+			<TableWrapper>
+				<TableHead />
+				<TableBody />
+			</TableWrapper>
+		</>
 	);
 };
 
