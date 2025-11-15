@@ -41,19 +41,19 @@ export const useTeamAllTimeStatsTable = (data: TeamStats[] | undefined) => {
 			},
 			{
 				header: 'PTS S',
-				accessorKey: 'pts_scored',
+				accessorKey: 'points_scored',
 				cell: (info) => <Cell info={info} />,
 				sortingFn: 'alphanumeric'
 			},
 			{
 				header: 'PTS R',
-				accessorKey: 'pts_received',
+				accessorKey: 'points_received',
 				cell: (info) => <Cell info={info} />,
 				sortingFn: 'alphanumeric'
 			},
 			{
 				header: 'Diff',
-				accessorKey: 'pts_diff',
+				accessorKey: 'points_diff',
 				cell: (info) => <Cell info={info} />,
 				sortingFn: 'alphanumeric'
 			},
