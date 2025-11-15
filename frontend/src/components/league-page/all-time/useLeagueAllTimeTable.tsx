@@ -28,23 +28,23 @@ export const useLeagueAllTimeTable = (data: TeamLeagueRecord[] | undefined) => {
 				cell: (info) => <Cell info={info} />
 			},
 			{
-				header: 'Win %',
+				header: 'W%',
 				accessorKey: 'win_percentage',
 				cell: (info) => <Cell info={info} />
 			},
 			{
-				header: 'PTS A',
-				accessorKey: 'pts_scored',
+				header: 'PTS S',
+				accessorKey: 'points_scored',
 				cell: (info) => <Cell info={info} />
 			},
 			{
-				header: 'PTS A',
-				accessorKey: 'pts_received',
+				header: 'PTS R',
+				accessorKey: 'points_received',
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: '+/-',
-				accessorKey: 'pts_diff',
+				accessorKey: 'points_diff',
 				cell: (info) => <Cell info={info} />
 			},
 			{
@@ -56,9 +56,9 @@ export const useLeagueAllTimeTable = (data: TeamLeagueRecord[] | undefined) => {
 		getCoreRowModel: getCoreRowModel()
 	});
 
-	const HeadRows: React.FC = () => {
+	const TableHead: React.FC = () => {
 		return (
-			<>
+			<thead>
 				{table.getHeaderGroups().map((headerGroup) => (
 					<tr key={headerGroup.id} className="border-b border-slate-400">
 						{headerGroup.headers.map((header, index) => {
@@ -84,13 +84,13 @@ export const useLeagueAllTimeTable = (data: TeamLeagueRecord[] | undefined) => {
 						})}
 					</tr>
 				))}
-			</>
+			</thead>
 		);
 	};
 
-	const BodyRows: React.FC = () => {
+	const TableBody: React.FC = () => {
 		return (
-			<>
+			<tbody>
 				{table.getRowModel().rows.map((row) => (
 					<tr key={row.id}>
 						{row.getVisibleCells().map((cell, index) => {
@@ -111,7 +111,7 @@ export const useLeagueAllTimeTable = (data: TeamLeagueRecord[] | undefined) => {
 						})}
 					</tr>
 				))}
-			</>
+			</tbody>
 		);
 	};
 
@@ -121,5 +121,5 @@ export const useLeagueAllTimeTable = (data: TeamLeagueRecord[] | undefined) => {
 		return <p>{value === null || value === undefined ? '-' : String(value)}</p>;
 	};
 
-	return { table, HeadRows, BodyRows };
+	return { table, TableHead, TableBody };
 };

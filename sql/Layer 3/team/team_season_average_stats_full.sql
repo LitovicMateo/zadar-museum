@@ -45,5 +45,5 @@ SELECT
 
 
 FROM public.team_season_average_stats total
-LEFT JOIN public.team_season_average_stats_home home USING (team_id)
-LEFT JOIN public.team_season_average_stats_away away USING (team_id);
+LEFT JOIN public.team_season_average_stats_home home USING (team_id, season)
+LEFT JOIN public.team_season_average_stats_away away USING (team_id, season);

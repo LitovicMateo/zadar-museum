@@ -44,7 +44,7 @@ export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined, type: '
 				cell: (info) => <Cell info={info} />
 			},
 			{
-				header: 'PTS D',
+				header: 'PTS R',
 				accessorFn: (row: any) => row?.points_received,
 				cell: (info) => <Cell info={info} />
 			},

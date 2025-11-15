@@ -12,7 +12,9 @@ const LeagueAllTime: React.FC = () => {
 
 	const { data: leagueRecord } = useLeagueTeamRecord(leagueSlug!);
 
-	const { HeadRows, BodyRows } = useLeagueAllTimeTable(leagueRecord?.stats);
+	console.log(leagueRecord);
+
+	const { TableBody, TableHead } = useLeagueAllTimeTable(leagueRecord?.stats);
 
 	if (leagueRecord === undefined) return null;
 
@@ -20,12 +22,8 @@ const LeagueAllTime: React.FC = () => {
 		<section className={`flex flex-col gap-4`}>
 			<Heading title="All Time Record" />
 			<TableWrapper>
-				<thead>
-					<HeadRows />
-				</thead>
-				<tbody>
-					<BodyRows />
-				</tbody>
+				<TableHead />
+				<TableBody />
 			</TableWrapper>
 		</section>
 	);
