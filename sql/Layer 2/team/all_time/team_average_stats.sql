@@ -95,7 +95,7 @@ agg AS (
         ROUND(AVG(NULLIF(attendance::text, ''::text)::numeric), 0) AS attendance
 
     FROM all_games
-    GROUP BY team_id, team_name, team_slug
+    GROUP BY team_id, team_slug
 ),
 
 -- exclude kk-zadar for ranking calculation

@@ -107,7 +107,7 @@ AS (
            
     FROM all_games
     WHERE all_games.venue = 'away'
-    GROUP BY all_games.season, all_games.team_id, all_games.team_name, all_games.team_slug
+    GROUP BY all_games.season, all_games.team_id, all_games.team_slug
         ),
 
 -- exclude kk-zadar for ranking calculation
