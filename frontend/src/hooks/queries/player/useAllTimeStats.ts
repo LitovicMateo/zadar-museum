@@ -18,7 +18,6 @@ export const getAllTimeTotalStats = async (db: PlayerDB, playerId: string): Prom
 		playerId
 	});
 	const res = await axios.get(API_ROUTES.player.stats.allTime(db, params.toString()));
-	console.log('DATA', res.data);
 
 	return res.data;
 };

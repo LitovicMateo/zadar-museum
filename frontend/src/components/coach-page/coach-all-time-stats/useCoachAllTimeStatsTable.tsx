@@ -16,14 +16,14 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 				cell: (info) => {
 					if (info.getValue() === 0) {
 						return (
-							<div className="min-w-[24px]">
+							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
 					}
 
 					return (
-						<div className="min-w-[24px]">
+						<div className="min-w-6">
 							<p>{info.getValue()}</p>
 						</div>
 					);
@@ -36,14 +36,14 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 					// check total games
 					if (info.row.original.games === 0) {
 						return (
-							<div className="min-w-[24px]">
+							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
 					}
 
 					return (
-						<div className="min-w-[24px]">
+						<div className="min-w-6">
 							<p>{info.getValue()}</p>
 						</div>
 					);
@@ -56,14 +56,14 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 					// check total games
 					if (info.row.original.games === 0) {
 						return (
-							<div className="min-w-[24px]">
+							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
 					}
 
 					return (
-						<div className="min-w-[24px]">
+						<div className="min-w-6">
 							<p>{info.getValue()}</p>
 						</div>
 					);
@@ -71,18 +71,18 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			},
 			{
 				header: 'Win %',
-				accessorKey: 'winPercentage',
+				accessorKey: 'win_percentage',
 				cell: (info) => {
 					if (info.row.original.games === 0) {
 						return (
-							<div className="min-w-[24px]">
+							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
 					}
 
 					return (
-						<div className="min-w-[24px]">
+						<div className="min-w-6">
 							<p>{info.getValue().toFixed(1)}</p>
 						</div>
 					);
@@ -90,18 +90,18 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			},
 			{
 				header: 'Pts For',
-				accessorKey: 'pointsScored',
+				accessorKey: 'points_scored',
 				cell: (info) => {
 					if (info.row.original.games === 0) {
 						return (
-							<div className="min-w-[24px]">
+							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
 					}
 
 					return (
-						<div className="min-w-[24px]">
+						<div className="min-w-6">
 							<p>{info.getValue().toFixed(1)}</p>
 						</div>
 					);
@@ -109,19 +109,19 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			},
 			{
 				header: 'Pts Ag',
-				accessorKey: 'pointsReceived',
+				accessorKey: 'points_received',
 				cell: (info) => {
 					// check total games
 					if (info.row.original.games === 0) {
 						return (
-							<div className="min-w-[24px]">
+							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
 					}
 
 					return (
-						<div className="min-w-[24px]">
+						<div className="min-w-6">
 							<p>{info.getValue().toFixed(1)}</p>
 						</div>
 					);
@@ -134,14 +134,14 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 					// check total games
 					if (info.row.original.games === 0) {
 						return (
-							<div className="min-w-[24px]">
+							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
 					}
 
 					return (
-						<div className="min-w-[24px]">
+						<div className="min-w-6">
 							<p>{info.getValue().toFixed(1)}</p>
 						</div>
 					);

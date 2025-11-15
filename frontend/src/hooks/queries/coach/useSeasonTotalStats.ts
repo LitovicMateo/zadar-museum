@@ -15,7 +15,5 @@ export const useSeasonTotalStats = (coachId: string, season: string, db: PlayerD
 const getSeasonTotalStats = async (coachId: string, season: string, db: PlayerDB): Promise<CoachStatsResponse> => {
 	const res = await axios.get(API_ROUTES.coach.seasonTotalStats(coachId, season, db));
 
-	console.log('SEASON TOTAL STATS', res.data);
-
 	return res.data;
 };

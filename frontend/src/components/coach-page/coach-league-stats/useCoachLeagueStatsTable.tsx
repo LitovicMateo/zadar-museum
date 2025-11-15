@@ -97,7 +97,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 					},
 					{
 						header: 'S',
-						accessorKey: 'avg_points_scored',
+						accessorKey: 'points_scored',
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
@@ -116,7 +116,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 					},
 					{
 						header: 'A',
-						accessorKey: 'avg_points_received',
+						accessorKey: 'points_received',
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
@@ -135,7 +135,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 					},
 					{
 						header: '+/-',
-						accessorKey: 'avg_pts_diff',
+						accessorKey: 'pts_diff',
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
@@ -235,7 +235,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 					},
 					{
 						header: 'S',
-						accessorKey: 'avg_pts_scored_head',
+						accessorKey: 'pts_scored_head',
 						cell: (info) => {
 							if (info.row.original.games_head === '0') {
 								return (
@@ -254,7 +254,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 					},
 					{
 						header: 'A',
-						accessorKey: 'avg_pts_received_head',
+						accessorKey: 'pts_received_head',
 						cell: (info) => {
 							if (info.row.original.games_head === '0') {
 								return (
@@ -273,7 +273,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 					},
 					{
 						header: '+/-',
-						accessorKey: 'avg_diff_head',
+						accessorKey: 'diff_head',
 						cell: (info) => {
 							if (info.row.original.games_head === '0') {
 								return (
@@ -373,7 +373,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 					},
 					{
 						header: 'S',
-						accessorKey: 'avg_pts_scored_assistant',
+						accessorKey: 'pts_scored_assistant',
 						cell: (info) => {
 							if (info.row.original.games_assistant === '0') {
 								return (
@@ -392,7 +392,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 					},
 					{
 						header: 'A',
-						accessorKey: 'avg_pts_received_assistant',
+						accessorKey: 'pts_received_assistant',
 						cell: (info) => {
 							if (info.row.original.games_assistant === '0') {
 								return (

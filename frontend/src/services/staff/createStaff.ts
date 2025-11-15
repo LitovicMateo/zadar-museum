@@ -3,17 +3,12 @@ import { StaffFormData } from '@/schemas/staff-schema';
 import axios from 'axios';
 
 export const createStaff = async (data: StaffFormData) => {
-	// Check for existing staff with same first and last name
-	console.log(data);
-
 	const params = new URLSearchParams({
 		'filters[first_name][$eq]': data.first_name,
 		'filters[last_name][$eq]': data.last_name
 	});
 
 	const existing = await axios.get(API_ROUTES.create.staff(params.toString()));
-	console.log(existing);
-
 	if (existing.data && existing.data.data && existing.data.data.length > 0) {
 		throw new Error('Staff already exists');
 	}

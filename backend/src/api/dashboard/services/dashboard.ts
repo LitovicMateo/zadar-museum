@@ -176,8 +176,6 @@ export default ({ strapi }: FactoryArgs) => ({
   },
 
   async findStaff(sortKey, direction) {
-    console.log(sortKey);
-
     const staff = await strapi.db.query("api::staff.staff").findMany({
       select: ["*"],
       orderBy: {

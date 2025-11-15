@@ -40,17 +40,17 @@ export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined, type: '
 			},
 			{
 				header: 'PTS A',
-				accessorFn: (row: any) => row?.avg_points_scored,
+				accessorFn: (row: any) => row?.points_scored,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'PTS D',
-				accessorFn: (row: any) => row?.avg_points_received,
+				accessorFn: (row: any) => row?.points_received,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'PTS D',
-				accessorFn: (row: any) => row?.avg_points_difference,
+				accessorFn: (row: any) => row?.points_difference,
 				cell: (info) => <Cell info={info} />
 			}
 		],

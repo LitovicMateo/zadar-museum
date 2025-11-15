@@ -26,18 +26,13 @@ const CoachLeagueStats: React.FC = () => {
 		if (!coachLeagueStats) return [];
 
 		return coachLeagueStats.map((row: CoachStatsResponse) => {
-			// coachLeagueStats uses 'total' while coachRecord uses 'allTime'. Map 'allTime' to 'total' for league rows.
-			const keyForRow = coachRole === 'allTime' ? 'total' : coachRole;
-			return (row as any)[keyForRow]?.[location];
+			return (row as any)[coachRole]?.[location];
 		});
 	}, [coachLeagueStats, coachRole, location]);
 
 	const totalStats: CoachStats[] = useMemo(() => {
 		if (!coachRecord) return [];
-
-		// coachRecord uses 'allTime' key for overall stats; map 'total' to 'allTime' when indexing the record
-		const keyForRecord = coachRole === 'total' ? 'allTime' : coachRole;
-		return [(coachRecord as any)[keyForRecord]?.[location]];
+		return [(coachRecord as any)[coachRole]?.[location]];
 	}, [coachRecord, coachRole, location]);
 
 	const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats, 'league');

@@ -9,8 +9,6 @@ import { useGamesContext } from '@/hooks/context/useGamesContext';
 const GamesContent: React.FC = () => {
 	const { selectedCompetitions, schedule } = useGamesContext();
 
-	console.log(schedule);
-
 	if (!schedule) {
 		return (
 			<NoContent>

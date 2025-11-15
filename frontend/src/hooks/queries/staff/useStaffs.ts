@@ -19,8 +19,6 @@ const getAllStaffs = async (sortKey?: StaffKey, direction: 'asc' | 'desc' = 'asc
 		params.append('direction', direction);
 	}
 
-	console.log(params);
-
 	// Use the collection endpoint for staff list (stable CRUD route)
 	const res = await axios.get(API_ROUTES.staff.list(params.toString()));
 
