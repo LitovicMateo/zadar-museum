@@ -10,7 +10,7 @@ import RefereeSeasonStats from './referee-season-stats';
 
 const RefereeGamelog: React.FC = () => {
 	const { refereeId } = useParams();
-	const [selectedSeason, setSelectedSeason] = React.useState('2025');
+	const [selectedSeason, setSelectedSeason] = React.useState('');
 	const [selectedCompetitions, setSelectedCompetitions] = React.useState<string[]>([]);
 
 	const { data: refereeGamelog } = useRefereeGamelog(refereeId!);

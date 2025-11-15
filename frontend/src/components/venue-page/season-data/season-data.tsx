@@ -13,7 +13,7 @@ import PlayerLeagueStats from './player-league-stats';
 const SeasonData = () => {
 	const { leagueSlug } = useParams();
 
-	const [selectedSeason, setSelectedSeason] = React.useState<string>('2025');
+	const [selectedSeason, setSelectedSeason] = React.useState<string>('');
 
 	const { data: seasons } = useLeagueSeasons(leagueSlug!);
 	const { data: leagueGamelog } = useLeagueGames(leagueSlug!, selectedSeason);

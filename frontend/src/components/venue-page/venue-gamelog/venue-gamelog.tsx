@@ -11,7 +11,7 @@ import SeasonStats from './season-stats';
 const VenueGamelog: React.FC = () => {
 	const { venueSlug } = useParams();
 
-	const [selectedSeason, setSelectedSeason] = React.useState('2025');
+	const [selectedSeason, setSelectedSeason] = React.useState('');
 	const [selectedCompetitions, setSelectedCompetitions] = React.useState<string[]>([]);
 
 	const { data: games } = useVenueGamelog(venueSlug!, selectedSeason);

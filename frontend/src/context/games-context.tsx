@@ -32,7 +32,7 @@ const GamesContext = createContext<GamesContextType | undefined>(undefined);
 
 export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	// cookies
-	const initialSeason = Cookies.get('season') || '2025';
+	const initialSeason = Cookies.get('season') || '';
 	const initialCompetitions = Cookies.get('competitions') ? JSON.parse(Cookies.get('competitions')!) : [];
 
 	// params

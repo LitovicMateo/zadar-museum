@@ -11,6 +11,9 @@ export default ({ strapi }) => ({
 
     const table = `${database}_player${seasonString}${statsString}_all_time${leagueString}${locationString}`;
 
+    strapi.log.info(`TABLE: ${table}`);
+    strapi.log.info(`SEASON PARAM: ${season}, Type: ${typeof season}`);
+
     const knex = strapi.db.connection;
     const query = knex(table).select("*").orderBy("points", "desc");
     const prevQuery = knex(`${table}_prev`)
@@ -23,13 +26,20 @@ export default ({ strapi }) => ({
     }
 
     if (season) {
+      strapi.log.info(`Adding WHERE season = ${season}`);
       query.where("season", season);
       prevQuery.where("season", season);
     }
 
-    const data = await query;
+    const querySQL = query.toSQL();
+    strapi.log.info(`Query SQL: ${JSON.stringify(querySQL)}`);
 
+    const data = await query;
     const prevData = await prevQuery;
+
+    strapi.log.info(
+      `Data count: ${data.length}, Prev data count: ${prevData.length}`
+    );
 
     return {
       current: data,

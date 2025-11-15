@@ -35,7 +35,11 @@ const getPlayerAllTimeStats = async (
 		season: season || ''
 	});
 
+	console.log(params);
+
 	const res = await axios.get(API_ROUTES.stats.player.allTime(params.toString()));
+
+	console.log(res.data);
 
 	return res.data;
 };

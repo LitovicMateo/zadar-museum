@@ -14,7 +14,7 @@ CREATE MATERIALIZED VIEW public.opponent_player_season_average_all_time_league_h
         CASE
             WHEN b.status::text = 'starter'::text THEN 1
             ELSE 0
-        END) AS games_started,
+        END) AS games_started,`n    rank() OVER (PARTITION BY b.season ORDER BY (sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END)) DESC NULLS LAST) AS games_started_rank,
 
     round(avg(b.minutes + (b.seconds / 60.0)), 1) AS minutes,
 

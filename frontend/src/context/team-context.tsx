@@ -20,7 +20,7 @@ type ProviderProps = {
 };
 
 export const TeamGamesProvider: React.FC<ProviderProps> = ({ children, defaultSearchTerm = '' }) => {
-	const initialSeason = Cookies.get('season') || '2025';
+	const initialSeason = Cookies.get('season') || '';
 	const initialCompetitions = Cookies.get('competitions') ? JSON.parse(Cookies.get('competitions')!) : [];
 
 	const [season, setSeason] = useState(initialSeason);

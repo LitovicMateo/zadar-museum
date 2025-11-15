@@ -5,7 +5,6 @@ export default ({ env }) => [
   {
     name: "strapi::cors",
     config: {
-      enabled: true,
       // read allowed origins from env and respond with the incoming origin when allowed.
       // This avoids returning '*' when credentials are enabled which browsers reject.
       origin: ((ctx) => {

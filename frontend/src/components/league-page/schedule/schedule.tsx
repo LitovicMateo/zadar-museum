@@ -10,7 +10,7 @@ import { useScheduleTable } from '@/hooks/useScheduleTable';
 const Schedule = () => {
 	const { leagueSlug } = useParams();
 
-	const [selectedSeason, setSelectedSeason] = React.useState<string>('2025');
+	const [selectedSeason, setSelectedSeason] = React.useState<string>('');
 
 	const { data: leagueSeasons } = useLeagueSeasons(leagueSlug!);
 

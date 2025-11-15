@@ -23,7 +23,7 @@ const BoxscoreContext = createContext<BoxscoreContextType | undefined>(undefined
 
 export const BoxscoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const { playerId } = useParams();
-	const [season, setSeason] = useState('2025');
+	const [season, setSeason] = useState('');
 	const [selectedCompetitions, setSelectedCompetitions] = useState<string[]>([]);
 	const [selectedDatabase, setSelectedDatabase] = useState<PlayerDB>('zadar');
 

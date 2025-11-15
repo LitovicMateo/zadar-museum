@@ -17,14 +17,16 @@ const Coaches: React.FC<CoachesProps> = ({ teamSlug }) => {
 
 	return (
 		<div className="flex gap-8">
-			<div className="flex flex-col lg:flex-row lg:gap-2 items-baseline">
-				<span className="text-xs">Head coach: </span>
-				<span>
-					<Link to={APP_ROUTES.coach(coaches.coach.documentId)}>
-						{coaches?.coach.first_name} {coaches?.coach.last_name}
-					</Link>
-				</span>
-			</div>
+			{coaches.coach && (
+				<div className="flex flex-col lg:flex-row lg:gap-2 items-baseline">
+					<span className="text-xs">Head coach: </span>
+					<span>
+						<Link to={APP_ROUTES.coach(coaches.coach.documentId)}>
+							{coaches?.coach.first_name} {coaches?.coach.last_name}
+						</Link>
+					</span>
+				</div>
+			)}
 			{coaches.assistantCoach && (
 				<div className="flex flex-col lg:flex-row lg:gap-2 items-baseline">
 					<span className="text-xs">Assistant coach:</span>{' '}
