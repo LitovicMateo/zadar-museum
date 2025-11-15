@@ -2,7 +2,6 @@ CREATE MATERIALIZED VIEW public.team_season_league_average_stats_full AS
 
 SELECT
     total.team_id,
-    total.team_name,
     total.team_slug,
     total.league_id,
     total.league_slug,
