@@ -11,10 +11,10 @@ CREATE MATERIALIZED VIEW public.opponent_player_total_all_time_prev AS
             WHEN b.status::text = 'starter'::text THEN 1
             ELSE 0
         END) AS games_started,
-    rank() OVER (PARTITION BY b.season ORDER BY (sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END)) DESC NULLS LAST) AS games_started_rank,
+    rank() OVER (ORDER BY (sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END)) DESC NULLS LAST) AS games_started_rank,
 
     sum(b.minutes + (b.seconds / 60.0)) AS minutes,
-    rank() OVER (PARTITION BY b.season ORDER BY (sum(b.minutes + (b.seconds / 60.0))) DESC NULLS LAST) AS minutes_rank,
+    rank() OVER (ORDER BY (sum(b.minutes + (b.seconds / 60.0))) DESC NULLS LAST) AS minutes_rank,
 
     sum(b.points) AS points,
     rank() OVER (ORDER BY (sum(b.points)) DESC NULLS LAST) AS points_rank,
