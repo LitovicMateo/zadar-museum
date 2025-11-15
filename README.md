@@ -72,3 +72,11 @@ docker run --rm \
     node ./scripts/apply-mvs.js"
 
 ```
+
+## Refresh player's views
+
+```
+cd ~/zadar-museum
+git pull origin main
+./refresh_player_views.sh
+```
