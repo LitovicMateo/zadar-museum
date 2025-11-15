@@ -79,7 +79,7 @@ AS (
 
         -- team
         all_games.team_id,
-        all_games.team_name,
+        MAX(all_games.team_name) AS team_name,
         all_games.team_slug,
 
         count(*) AS games,

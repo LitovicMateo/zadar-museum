@@ -52,7 +52,7 @@ WITH all_games AS (
 agg AS (
     SELECT 
         team_id,
-        team_name,
+        MAX(team_name) AS team_name,
         team_slug,
 
         COUNT(*) AS games,
