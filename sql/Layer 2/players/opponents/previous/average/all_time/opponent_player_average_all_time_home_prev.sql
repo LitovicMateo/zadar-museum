@@ -4,7 +4,7 @@ CREATE MATERIALIZED VIEW public.opponent_player_average_all_time_home_prev AS
     b.first_name,
     b.last_name,
     count(b.game_id) AS games,
-    rank() OVER (ORDER BY (count(b.game_id)) DESC) AS games_rank,
+    rank() OVER (ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
     sum(
         CASE
             WHEN b.status::text = 'starter'::text THEN 1
@@ -14,31 +14,31 @@ CREATE MATERIALIZED VIEW public.opponent_player_average_all_time_home_prev AS
     round(avg(b.minutes + (b.seconds / 60.0)), 1) AS minutes,
 
     round(avg(b.points), 1) AS points,
-    rank() OVER (ORDER BY (avg(b.points)) DESC) AS points_rank,
+    rank() OVER (ORDER BY (avg(b.points)) DESC NULLS LAST) AS points_rank,
 
     round(avg(b.assists), 1) AS assists,
-    rank() OVER (ORDER BY (avg(b.assists)) DESC) AS assists_rank,
+    rank() OVER (ORDER BY (avg(b.assists)) DESC NULLS LAST) AS assists_rank,
 
     round(avg(b.offensive_rebounds), 1) AS off_rebounds,
-    rank() OVER (ORDER BY (avg(b.offensive_rebounds)) DESC) AS off_rebounds_rank,
+    rank() OVER (ORDER BY (avg(b.offensive_rebounds)) DESC NULLS LAST) AS off_rebounds_rank,
 
     round(avg(b.defensive_rebounds), 1) AS def_rebounds,
-    rank() OVER (ORDER BY (avg(b.defensive_rebounds)) DESC) AS def_rebounds_rank,
+    rank() OVER (ORDER BY (avg(b.defensive_rebounds)) DESC NULLS LAST) AS def_rebounds_rank,
 
     round(avg(b.rebounds), 1) AS rebounds,
-    rank() OVER (ORDER BY (avg(b.rebounds)) DESC) AS rebounds_rank,
+    rank() OVER (ORDER BY (avg(b.rebounds)) DESC NULLS LAST) AS rebounds_rank,
 
     round(avg(b.steals), 1) AS steals,
-    rank() OVER (ORDER BY (avg(b.steals)) DESC) AS steals_rank,
+    rank() OVER (ORDER BY (avg(b.steals)) DESC NULLS LAST) AS steals_rank,
 
     round(avg(b.blocks), 1) AS blocks,
-    rank() OVER (ORDER BY (avg(b.blocks)) DESC) AS blocks_rank,
+    rank() OVER (ORDER BY (avg(b.blocks)) DESC NULLS LAST) AS blocks_rank,
 
     round(avg(b.field_goals_made), 1) AS field_goals_made,
-    rank() OVER (ORDER BY (avg(b.field_goals_made)) DESC) AS field_goals_made_rank,
+    rank() OVER (ORDER BY (avg(b.field_goals_made)) DESC NULLS LAST) AS field_goals_made_rank,
 
     round(avg(b.field_goals_attempted), 1) AS field_goals_attempted,
-    rank() OVER (ORDER BY (avg(b.field_goals_attempted)) DESC) AS field_goals_attempted_rank,
+    rank() OVER (ORDER BY (avg(b.field_goals_attempted)) DESC NULLS LAST) AS field_goals_attempted_rank,
 
     case 
         when avg(b.field_goals_made) = 0 then 0
@@ -46,10 +46,10 @@ CREATE MATERIALIZED VIEW public.opponent_player_average_all_time_home_prev AS
     end AS field_goal_percentage,
 
     round(avg(b.three_pointers_made), 1) AS three_pointers_made,
-    rank() OVER (ORDER BY (avg(b.three_pointers_made)) DESC) AS three_pointers_made_rank,
+    rank() OVER (ORDER BY (avg(b.three_pointers_made)) DESC NULLS LAST) AS three_pointers_made_rank,
 
     round(avg(b.three_pointers_attempted), 1) AS three_pointers_attempted,
-    rank() OVER (ORDER BY (avg(b.three_pointers_attempted)) DESC) AS three_pointers_attempted_rank,
+    rank() OVER (ORDER BY (avg(b.three_pointers_attempted)) DESC NULLS LAST) AS three_pointers_attempted_rank,
 
     case 
         when avg(b.three_pointers_attempted) = 0 then 0
@@ -57,10 +57,10 @@ CREATE MATERIALIZED VIEW public.opponent_player_average_all_time_home_prev AS
     end AS three_point_percentage,
 
     round(avg(b.free_throws_made), 1) AS free_throws_made,
-    rank() OVER (ORDER BY (avg(b.free_throws_made)) DESC) AS free_throws_made_rank,
+    rank() OVER (ORDER BY (avg(b.free_throws_made)) DESC NULLS LAST) AS free_throws_made_rank,
 
     round(avg(b.free_throws_attempted), 1) AS free_throws_attempted,
-    rank() OVER (ORDER BY (avg(b.free_throws_attempted)) DESC) AS free_throws_attempted_rank,
+    rank() OVER (ORDER BY (avg(b.free_throws_attempted)) DESC NULLS LAST) AS free_throws_attempted_rank,
 
     case 
         when avg(b.free_throws_attempted) = 0 then 0
@@ -68,7 +68,7 @@ CREATE MATERIALIZED VIEW public.opponent_player_average_all_time_home_prev AS
     end AS free_throw_percentage,
 
     round(avg(b.efficiency), 1) AS efficiency,
-    rank() OVER (ORDER BY (avg(b.efficiency)) DESC) AS efficiency_rank
+    rank() OVER (ORDER BY (avg(b.efficiency)) DESC NULLS LAST) AS efficiency_rank
     
    from player_boxscore b
   WHERE 
