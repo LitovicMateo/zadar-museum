@@ -64,7 +64,7 @@ const EditTeamStats = () => {
 						league: teamStats?.game.competition.documentId ?? '',
 						gameId: teamStats?.game.id?.toString() ?? '',
 						teamId: teamStats?.team.id?.toString() ?? '',
-						coachId: teamStats?.coach.id?.toString() ?? '',
+						coachId: teamStats?.coach?.id?.toString() ?? '',
 						assistantCoachId: teamStats?.assistantCoach?.id?.toString() ?? '',
 
 						// score
