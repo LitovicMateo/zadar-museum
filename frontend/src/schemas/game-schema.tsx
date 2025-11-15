@@ -19,7 +19,7 @@ export const gameSchema = z.object({
 	isNulled: z.boolean(),
 	forfeited: z.boolean(),
 	forfeited_by: z.enum(['home', 'away', 'none']),
-	attendance: z.string().min(1),
+	attendance: z.string().optional(),
 	mainReferee: z.string().optional(),
 	secondReferee: z.string().optional(),
 	thirdReferee: z.string().optional(),

@@ -53,7 +53,7 @@ export const createGame = async (data: GameFormData) => {
 			isNulled: data.isNulled,
 			forfeited: data.forfeited,
 			forfeited_by: data.forfeited_by,
-			attendance: data.attendance,
+			attendance: data.attendance ? data.attendance : undefined,
 			mainReferee: data.mainReferee ? +data.mainReferee : undefined,
 			secondReferee: data.secondReferee ? +data.secondReferee : undefined,
 			thirdReferee: data.thirdReferee ? +data.thirdReferee : undefined,

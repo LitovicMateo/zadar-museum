@@ -34,7 +34,7 @@ const emptyDefaults: GameFormData = {
 	isNulled: false,
 	forfeited: false,
 	forfeited_by: 'none',
-	attendance: '',
+	attendance: undefined,
 	mainReferee: undefined,
 	secondReferee: undefined,
 	thirdReferee: undefined,

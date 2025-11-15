@@ -28,7 +28,7 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 			isNulled: data.isNulled,
 			forfeited: data.forfeited,
 			forfeited_by: data.forfeited_by,
-			attendance: data.attendance,
+			attendance: data.attendance ? data.attendance : null,
 			mainReferee: data.mainReferee || null,
 			secondReferee: data.secondReferee ? +data.secondReferee : null,
 			thirdReferee: data.thirdReferee ? +data.thirdReferee : null,
