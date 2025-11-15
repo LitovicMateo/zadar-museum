@@ -212,6 +212,28 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 				}
 			},
 			{
+				id: 'FLS',
+				accessorKey: 'fouls',
+				header: 'PF',
+				cell: (info) => {
+					if (info.row.original.status === 'dnp-cd') {
+						return <p className="text-gray-600">-</p>;
+					}
+					return <p>{info.getValue<number | null>()}</p>;
+				}
+			},
+			{
+				id: 'FLS ON',
+				accessorKey: 'fouls_on',
+				header: 'PF ON',
+				cell: (info) => {
+					if (info.row.original.status === 'dnp-cd') {
+						return <p className="text-gray-600">-</p>;
+					}
+					return <p>{info.getValue<number | null>()}</p>;
+				}
+			},
+			{
 				id: 'plus_minus',
 				accessorKey: 'plus_minus',
 				header: '+/-',

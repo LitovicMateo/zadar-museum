@@ -12,13 +12,15 @@ const Rebounds: React.FC = () => {
 	const offensiveRebounds = watch('offensiveRebounds');
 	const defensiveRebounds = watch('defensiveRebounds');
 
+	// disable total rebounds if offensive or defensive rebounds are filled, but enable if rebounds is filled
+
 	return (
 		<div className="grid grid-cols-3 gap-2">
 			<Input {...register('offensiveRebounds')} disabled={!game || !!rebounds} placeholder="Offensive" />
 			<Input {...register('defensiveRebounds')} disabled={!game || !!rebounds} placeholder="Defensive" />
 			<Input
 				{...register('rebounds')}
-				disabled={!!offensiveRebounds || !!defensiveRebounds}
+				disabled={!rebounds && (!!offensiveRebounds || !!defensiveRebounds)}
 				placeholder="Total"
 			/>
 		</div>

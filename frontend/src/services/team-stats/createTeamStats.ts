@@ -95,7 +95,6 @@ export const createTeamStats = async (data: TeamStatsFormData) => {
 		pointsInPaint: data.pointsInPaint ? +data.pointsInPaint : undefined
 	};
 
-	console.table(payload);
 	const res = await axios.post(API_ROUTES.create.teamStats(), { data: payload });
 	return res;
 };
