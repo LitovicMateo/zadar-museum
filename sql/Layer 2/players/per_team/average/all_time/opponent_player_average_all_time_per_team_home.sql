@@ -11,7 +11,8 @@ CREATE MATERIALIZED VIEW public.opponent_player_average_all_time_per_team_home A
         CASE
             WHEN b.status::text = 'starter'::text THEN 1
             ELSE 0
-        END) AS games_started,`n    rank() OVER (PARTITION BY b.season ORDER BY (sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END)) DESC NULLS LAST) AS games_started_rank,
+        END) AS games_started,
+    rank() OVER (PARTITION BY b.season ORDER BY (sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END)) DESC NULLS LAST) AS games_started_rank,
 
     round(avg(b.points), 1) AS points,
     rank() OVER (ORDER BY (avg(b.points)) DESC NULLS LAST) AS points_rank,
