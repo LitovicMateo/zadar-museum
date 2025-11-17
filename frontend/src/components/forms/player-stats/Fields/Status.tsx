@@ -23,6 +23,10 @@ const statusOptions: StatusOption[] = [
 	{
 		value: 'dnp-cd',
 		label: 'DNP-CD'
+	},
+	{
+		value: 'no-data',
+		label: 'No Data'
 	}
 ];
 

@@ -6,7 +6,7 @@ export const playerStatsSchema = z.object({
 	gameId: z.string(),
 	teamId: z.string(),
 	playerId: z.string(),
-	status: z.enum(['starter', 'bench', 'dnp-cd']),
+	status: z.enum(['starter', 'bench', 'dnp-cd', 'no-data']),
 	isCaptain: z.boolean(),
 	playerNumber: z.string(),
 	minutes: z.string(),
