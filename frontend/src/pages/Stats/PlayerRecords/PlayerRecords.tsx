@@ -15,8 +15,6 @@ const PlayerRecords = () => {
 	const [location, setLocation] = React.useState<'home' | 'away' | null>(null);
 	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'points', desc: true }]);
 
-	console.log(sorting);
-
 	const { data: stats } = usePlayerRecords(database, season, league, location, sorting[0]?.id);
 
 	const handleSetDatabase = React.useCallback((db: PlayerDB) => setDatabase(db), []);

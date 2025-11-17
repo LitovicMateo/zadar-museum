@@ -1,3 +1,5 @@
+import { StrapiImage } from './strapi';
+
 export type CoachFormData = {
 	first_name: string;
 	last_name: string;
@@ -11,7 +13,7 @@ export interface CoachDetailsResponse {
 	first_name: string;
 	last_name: string;
 	date_of_birth?: string | null;
-	image: string;
+	image: StrapiImage;
 	nationality: string;
 	createdAt: string;
 	documentId: string;
