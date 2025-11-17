@@ -12,8 +12,6 @@ const LeagueAllTime: React.FC = () => {
 
 	const { data: leagueRecord } = useLeagueTeamRecord(leagueSlug!);
 
-	console.log(leagueRecord);
-
 	const { TableBody, TableHead } = useLeagueAllTimeTable(leagueRecord?.stats);
 
 	if (leagueRecord === undefined) return null;

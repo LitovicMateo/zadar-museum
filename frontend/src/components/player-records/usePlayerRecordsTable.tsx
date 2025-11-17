@@ -24,6 +24,17 @@ export const usePlayerRecordsTable = (
 	sorting: SortingState,
 	setSorting: React.Dispatch<React.SetStateAction<SortingState>>
 ) => {
+	const handleSortingChange = (updaterOrValue: SortingState | ((old: SortingState) => SortingState)) => {
+		const newSorting = typeof updaterOrValue === 'function' ? updaterOrValue(sorting) : updaterOrValue;
+
+		// If sorting is cleared (empty array), reset to initial state
+		if (newSorting.length === 0) {
+			setSorting([{ id: 'points', desc: true }]);
+		} else {
+			setSorting(newSorting);
+		}
+	};
+
 	const table = useReactTable<PlayerRecords>({
 		data: data || [],
 		columns: [
@@ -37,7 +48,7 @@ export const usePlayerRecordsTable = (
 				header: 'Player',
 				accessorFn: (row) => row.first_name + ' ' + row.last_name,
 				cell: (info) => (
-					<div className="whitespace-nowrap !text-left">
+					<div className="whitespace-nowrap text-left!">
 						<Link to={APP_ROUTES.player(info.row.original.player_id)}>{info.getValue()}</Link>
 					</div>
 				),
@@ -60,17 +71,20 @@ export const usePlayerRecordsTable = (
 							{prefix} {team}
 						</Link>
 					);
-				}
+				},
+				enableSorting: false
 			},
 			{
 				header: 'POS',
 				accessorKey: 'position',
 				cell: (info) => {
 					return <p className="text-center uppercase whitespace-nowrap">{info.getValue()}</p>;
-				}
+				},
+				enableSorting: false
 			},
 			{
-				id: 'MIN',
+				id: 'minutes',
+				header: 'MIN',
 				accessorFn: (row) => row.minutes + ':' + row.seconds,
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
@@ -206,7 +220,7 @@ export const usePlayerRecordsTable = (
 		],
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
-		onSortingChange: setSorting,
+		onSortingChange: handleSortingChange,
 		state: { sorting },
 		initialState: { sorting: [{ id: 'points', desc: true }] }
 	});
