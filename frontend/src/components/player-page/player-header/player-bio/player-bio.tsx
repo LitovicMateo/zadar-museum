@@ -39,6 +39,12 @@ const PlayerBio: React.FC<PlayerBio> = ({ player }) => {
 						{player.primary_position} {player.secondary_position && `/ ${player.secondary_position}`}
 					</span>
 				</label>
+				{player.height && (
+					<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
+						Height:
+						<span className="uppercase">{player.height} cm</span>
+					</label>
+				)}
 				{date && (
 					<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
 						{`Age: ${age}`}

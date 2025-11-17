@@ -24,6 +24,7 @@ export type PlayerResponse = {
 	primary_position: string; // e.g. "pg"
 	secondary_position: string; // e.g. "sg"
 	nationality: string; // ISO country code like "ME"
+	height?: string; // three-digit string (e.g. "185")
 	createdAt: string;
 	updatedAt: string;
 	publishedAt: string;
