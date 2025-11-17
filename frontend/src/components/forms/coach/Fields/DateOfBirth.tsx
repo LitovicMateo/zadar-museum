@@ -8,11 +8,14 @@ const DateOfBirth: React.FC = () => {
 	const { register } = useFormContext<CoachFormData>();
 
 	return (
-		<Input
-			type="date"
-			{...register('date_of_birth', { required: false })}
-			className="text-gray-500 placeholder:text-xs"
-		/>
+		<label>
+			<span className="text-sm  text-gray-700 uppercase">Date of Birth: </span>
+			<Input
+				type="date"
+				{...register('date_of_birth', { required: false })}
+				className="text-gray-500 placeholder:text-xs"
+			/>
+		</label>
 	);
 };
 

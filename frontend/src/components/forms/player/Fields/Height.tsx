@@ -4,21 +4,20 @@ import { useFormContext } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { PlayerFormData } from '@/schemas/player-schema';
 
-const FirstName: React.FC = () => {
+const Height: React.FC = () => {
 	const { register } = useFormContext<PlayerFormData>();
+
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
-				First Name: <span className="text-red-500">*</span>
-			</span>
+			<span className="text-sm  text-gray-700 uppercase">Height: </span>
 			<Input
 				type="text"
-				placeholder="First Name"
-				{...register('first_name', { required: 'First name is required' })}
+				placeholder="e.g. 203 cm"
+				{...register('height')}
 				className="text-gray-500 placeholder:text-xs"
 			/>
 		</label>
 	);
 };
 
-export default FirstName;
+export default Height;

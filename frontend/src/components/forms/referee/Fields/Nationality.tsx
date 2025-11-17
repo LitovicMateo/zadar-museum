@@ -12,19 +12,24 @@ const Nationality: React.FC = () => {
 	}, [register]);
 
 	return (
-		<Controller
-			control={control}
-			name="nationality"
-			render={({ field }) => (
-				<CountrySelect
-					{...field}
-					onChange={(value) => {
-						field.onChange(value);
-					}}
-					selectedValue={field.value}
-				/>
-			)}
-		/>
+		<label>
+			<span className="text-sm  text-gray-700 uppercase">
+				Nationality: <span className="text-red-500">*</span>
+			</span>
+			<Controller
+				control={control}
+				name="nationality"
+				render={({ field }) => (
+					<CountrySelect
+						{...field}
+						onChange={(value) => {
+							field.onChange(value);
+						}}
+						selectedValue={field.value}
+					/>
+				)}
+			/>
+		</label>
 	);
 };
 

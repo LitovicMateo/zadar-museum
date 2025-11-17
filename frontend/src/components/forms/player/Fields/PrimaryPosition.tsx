@@ -10,20 +10,25 @@ import { PositionOption, positionOptions } from '../Constants/player-positions';
 const PrimaryPosition: React.FC = () => {
 	const { control } = useFormContext<PlayerFormData>();
 	return (
-		<Controller
-			control={control}
-			name="primary_position"
-			rules={{ required: 'Position is required' }}
-			render={({ field }) => (
-				<Select<PositionOption, false>
-					options={positionOptions}
-					value={positionOptions.find((opt) => opt.value === field.value) || null}
-					onChange={(selected) => field.onChange(selected?.value || '')}
-					isClearable
-					styles={selectStyle()}
-				/>
-			)}
-		/>
+		<label>
+			<span className="text-sm  text-gray-700 uppercase">
+				Primary Position: <span className="text-red-500">*</span>
+			</span>
+			<Controller
+				control={control}
+				name="primary_position"
+				rules={{ required: 'Position is required' }}
+				render={({ field }) => (
+					<Select<PositionOption, false>
+						options={positionOptions}
+						value={positionOptions.find((opt) => opt.value === field.value) || null}
+						onChange={(selected) => field.onChange(selected?.value || '')}
+						isClearable
+						styles={selectStyle()}
+					/>
+				)}
+			/>
+		</label>
 	);
 };
 

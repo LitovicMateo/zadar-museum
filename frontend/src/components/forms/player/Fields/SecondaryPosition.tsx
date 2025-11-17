@@ -13,19 +13,22 @@ export const SecondaryPosition: React.FC = () => {
 	const primaryPosition = watch('primary_position');
 
 	return (
-		<Controller
-			control={control}
-			name="secondary_position"
-			render={({ field }) => (
-				<Select<PositionOption, false>
-					options={positionOptions}
-					value={positionOptions.find((opt) => opt.value === field.value) || null}
-					onChange={(selected) => field.onChange(selected?.value || '')}
-					isDisabled={!primaryPosition}
-					isClearable
-					styles={selectStyle()}
-				/>
-			)}
-		/>
+		<label>
+			<span className="text-sm  text-gray-700 uppercase">Secondary Position: </span>
+			<Controller
+				control={control}
+				name="secondary_position"
+				render={({ field }) => (
+					<Select<PositionOption, false>
+						options={positionOptions}
+						value={positionOptions.find((opt) => opt.value === field.value) || null}
+						onChange={(selected) => field.onChange(selected?.value || '')}
+						isDisabled={!primaryPosition}
+						isClearable
+						styles={selectStyle()}
+					/>
+				)}
+			/>
+		</label>
 	);
 };

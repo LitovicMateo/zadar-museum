@@ -7,12 +7,17 @@ import { TeamFormData } from '@/schemas/team-schema';
 const Name: React.FC = () => {
 	const { register } = useFormContext<TeamFormData>();
 	return (
-		<Input
-			type="text"
-			placeholder="Team name (e.g. KK Zadar)"
-			className="placeholder:text-xs"
-			{...register('name', { required: 'Team name is required' })}
-		/>
+		<label>
+			<span className="text-sm  text-gray-700 uppercase">
+				Team Name: <span className="text-red-500">*</span>
+			</span>
+			<Input
+				type="text"
+				placeholder="Team name (e.g. KK Zadar)"
+				className="text-gray-500 placeholder:text-xs"
+				{...register('name', { required: 'Team name is required' })}
+			/>
+		</label>
 	);
 };
 

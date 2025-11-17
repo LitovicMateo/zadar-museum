@@ -7,12 +7,17 @@ import { RefereeFormData } from '@/schemas/referee-schema';
 const LastName: React.FC = () => {
 	const { register } = useFormContext<RefereeFormData>();
 	return (
-		<Input
-			type="text"
-			placeholder="Last Name"
-			{...register('last_name', { required: 'Last name is required' })}
-			className="placeholder:text-xs"
-		/>
+		<label>
+			<span className="text-sm  text-gray-700 uppercase">
+				Last Name: <span className="text-red-500">*</span>
+			</span>
+			<Input
+				type="text"
+				placeholder="Last Name"
+				{...register('last_name', { required: 'Last name is required' })}
+				className="text-gray-500 placeholder:text-xs"
+			/>
+		</label>
 	);
 };
 

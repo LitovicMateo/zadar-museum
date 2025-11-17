@@ -10,6 +10,7 @@ export const playerSchema = z.object({
 	active_player: z.boolean(),
 	primary_position: z.string().min(1),
 	secondary_position: z.string().nullable(),
+	height: z.string().optional(),
 	image: z.any().nullable()
 });
 export type PlayerFormData = z.infer<typeof playerSchema>;

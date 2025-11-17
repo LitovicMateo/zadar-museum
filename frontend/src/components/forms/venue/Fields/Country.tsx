@@ -12,17 +12,22 @@ const Country: React.FC = () => {
 	}, [register]);
 
 	return (
-		<Controller
-			control={control}
-			name="country"
-			render={({ field }) => (
-				<CountrySelect
-					{...field}
-					selectedValue={(field.value as string) || ''}
-					onChange={(value) => field.onChange(value)}
-				/>
-			)}
-		/>
+		<label>
+			<span className="text-sm  text-gray-700 uppercase">
+				Country: <span className="text-red-500">*</span>
+			</span>
+			<Controller
+				control={control}
+				name="country"
+				render={({ field }) => (
+					<CountrySelect
+						{...field}
+						selectedValue={(field.value as string) || ''}
+						onChange={(value) => field.onChange(value)}
+					/>
+				)}
+			/>
+		</label>
 	);
 };
 

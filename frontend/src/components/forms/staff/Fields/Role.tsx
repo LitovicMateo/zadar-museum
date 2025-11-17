@@ -16,21 +16,28 @@ const Role: React.FC = () => {
 	const { control } = useFormContext<StaffFormData>();
 
 	return (
-		<Controller
-			name="role"
-			control={control}
-			render={({ field }) => (
-				<Select
-					{...field}
-					styles={selectStyle()}
-					options={options}
-					onChange={(selected) => field.onChange(selected ? (selected.value as StaffFormData['role']) : '')}
-					value={options.find((opt) => opt.value === field.value) || null}
-					isClearable={false}
-					placeholder="Select Role"
-				/>
-			)}
-		/>
+		<label>
+			<span className="text-sm  text-gray-700 uppercase">
+				Role: <span className="text-red-500">*</span>
+			</span>
+			<Controller
+				name="role"
+				control={control}
+				render={({ field }) => (
+					<Select
+						{...field}
+						styles={selectStyle()}
+						options={options}
+						onChange={(selected) =>
+							field.onChange(selected ? (selected.value as StaffFormData['role']) : '')
+						}
+						value={options.find((opt) => opt.value === field.value) || null}
+						isClearable={false}
+						placeholder="Select Role"
+					/>
+				)}
+			/>
+		</label>
 	);
 };
 

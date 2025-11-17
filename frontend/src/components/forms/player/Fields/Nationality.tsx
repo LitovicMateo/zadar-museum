@@ -11,17 +11,22 @@ const Nationality = () => {
 		register('nationality', { required: 'Nationality is required' });
 	}, [setValue, register]);
 	return (
-		<Controller
-			control={control}
-			name="nationality"
-			rules={{ required: 'Nationality is required' }}
-			render={() => (
-				<CountrySelect
-					selectedValue={watch('nationality')}
-					onChange={(value) => setValue('nationality', value)}
-				/>
-			)}
-		/>
+		<label>
+			<span className="text-sm  text-gray-700 uppercase">
+				Nationality: <span className="text-red-500">*</span>
+			</span>
+			<Controller
+				control={control}
+				name="nationality"
+				rules={{ required: 'Nationality is required' }}
+				render={() => (
+					<CountrySelect
+						selectedValue={watch('nationality')}
+						onChange={(value) => setValue('nationality', value)}
+					/>
+				)}
+			/>
+		</label>
 	);
 };
 

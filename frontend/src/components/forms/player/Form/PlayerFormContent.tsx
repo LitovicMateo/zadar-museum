@@ -10,6 +10,7 @@ import ActivePlayer from '../Fields/ActivePlayer';
 import DateOfBirth from '../Fields/DateOfBirth';
 import DateOfDeath from '../Fields/DateOfDeath';
 import FirstName from '../Fields/FirstName';
+import Height from '../Fields/Height';
 import LastName from '../Fields/LastName';
 import Nationality from '../Fields/Nationality';
 import PrimaryPosition from '../Fields/PrimaryPosition';
@@ -32,6 +33,7 @@ const PlayerFormContent: React.FC<PlayerFormContentProps> = ({ mode }) => {
 			<Fieldset label="Player Bio">
 				<FirstName />
 				<LastName />
+				<Height />
 				<DateOfBirth />
 				<DateOfDeath />
 				<Nationality />

@@ -23,6 +23,7 @@ const WinningSeasons: React.FC = () => {
 	});
 	return (
 		<div className="space-y-2">
+			<span className="text-sm  text-gray-700 uppercase">Winning Seasons:</span>
 			{trophies.map((field, index) => (
 				<div key={field.id} className="flex items-center gap-2">
 					<Input

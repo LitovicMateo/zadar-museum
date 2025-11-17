@@ -19,6 +19,10 @@
       "type": "string",
       "required": true
     },
+    "height": {
+      "type": "string",
+      "required": true
+    },
     "date_of_birth": {
       "type": "date",
       "required": false,
