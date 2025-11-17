@@ -28,7 +28,7 @@ export const BoxscoreProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 	const [selectedDatabase, setSelectedDatabase] = useState<PlayerDB>('zadar');
 
 	const { db } = usePlayerProfileDatabase(playerId!);
-	const { data: competitions } = usePlayerCompetitions(playerId!, season);
+	const { data: competitions = [] } = usePlayerCompetitions(playerId!, season);
 	const { data: seasons } = usePlayerSeasons(playerId!, selectedDatabase!);
 
 	useEffect(() => {
@@ -55,7 +55,7 @@ export const BoxscoreProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
 	const toggleDatabase = (db: PlayerDB) => setSelectedDatabase(db);
 
-	if (!playerId || !competitions) return null;
+	if (!playerId) return null;
 
 	return (
 		<BoxscoreContext.Provider
