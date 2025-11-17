@@ -6,6 +6,8 @@ import FormFieldsWrapper from '@/components/ui/form-fields-wrapper';
 import SubmitButton from '@/components/ui/submit-button';
 import { PlayerFormData } from '@/schemas/player-schema';
 
+import ProfileImage from '../../coach/Fields/ProfileImage';
+import ProfileImagePreview from '../../coach/Fields/ProfileImagePreview';
 import ActivePlayer from '../Fields/ActivePlayer';
 import DateOfBirth from '../Fields/DateOfBirth';
 import DateOfDeath from '../Fields/DateOfDeath';
@@ -14,8 +16,6 @@ import Height from '../Fields/Height';
 import LastName from '../Fields/LastName';
 import Nationality from '../Fields/Nationality';
 import PrimaryPosition from '../Fields/PrimaryPosition';
-import ProfileImage from '../Fields/ProfileImage';
-import ProfileImagePreview from '../Fields/ProfileImagePreview';
 import { SecondaryPosition } from '../Fields/SecondaryPosition';
 
 type PlayerFormContentProps = {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import UploadButtonWrapper from '@/components/ui/upload-button-wrapper';
-import { PlayerFormData } from '@/schemas/player-schema';
+import { CoachFormData } from '@/schemas/coach-schema';
 import { getImageUrl } from '@/utils/getImageUrl';
 
 type ProfileImageProps = {
@@ -12,7 +12,7 @@ type ProfileImageProps = {
 };
 
 const ProfileImage: React.FC<ProfileImageProps> = ({ fileInputRef, setPreview, preview }) => {
-	const { register, setValue, watch } = useFormContext<PlayerFormData>();
+	const { register, setValue, watch } = useFormContext<CoachFormData>();
 
 	const image = watch('image');
 

@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 
 import ImagePreview from '@/components/image-preview/image-preview';
 import NoImage from '@/components/image-preview/no-image';
-import { PlayerFormData } from '@/schemas/player-schema';
+import { CoachFormData } from '@/schemas/coach-schema';
 
 type ImagePreviewProps = {
 	preview: string | null;
@@ -12,7 +12,7 @@ type ImagePreviewProps = {
 };
 
 const ProfileImagePreview: React.FC<ImagePreviewProps> = ({ preview, setPreview, fileInputRef }) => {
-	const { setValue } = useFormContext<PlayerFormData>();
+	const { setValue } = useFormContext<CoachFormData>();
 	const removeImage = () => {
 		setPreview(null);
 		setValue('image', null);

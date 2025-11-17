@@ -1,5 +1,5 @@
 import React from 'react';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import Select from 'react-select';
 
 import CoachForm from '@/components/forms/coach/CoachForm';
@@ -18,15 +18,16 @@ const EditCoach = () => {
 	const mutation = useMutation({
 		mutationFn: updateCoach,
 		onError(error) {
-			console.error('Error updating coach', error.message);
+			toast.error(`Error updating coach: ${error.message}`);
+		},
+		onSuccess() {
+			toast.success('Coach updated successfully');
 		}
 	});
 
 	const handleSubmit = (data: CoachFormData) => {
 		mutation.mutate({ ...data, id: coachId });
 	};
-
-	console.table(coach);
 
 	return (
 		<div>

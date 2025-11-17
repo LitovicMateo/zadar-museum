@@ -14,4 +14,4 @@ services:
   backend:
     environment:
       # Allow localhost origin for local testing (comma-separated values supported)
-      CORS_ORIGINS: "http://localhost:8080"
+      CORS_ORIGINS: "http://localhost:8080,http://localhost:1337"

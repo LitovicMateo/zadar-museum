@@ -10,6 +10,7 @@ export default factories.createCoreService(
     async findCoachDetails(coachId) {
       const coach = await strapi.db.query("api::coach.coach").findOne({
         where: { documentId: coachId },
+        populate: ["image"],
       });
 
       return coach;

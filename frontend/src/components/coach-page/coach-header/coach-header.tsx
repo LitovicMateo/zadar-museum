@@ -9,6 +9,8 @@ const CoachHeader: React.FC = () => {
 
 	const { data: coachDetails } = useCoachDetails(coachId!);
 
+	console.log(coachDetails);
+
 	return (
 		<section className={`w-full flex justify-center items-center min-h-[100px] ${zadarBg}`}>
 			<h2 className="text-blue-50 text-2xl font-mono uppercase tracking-widest">

@@ -27,7 +27,7 @@ const GamesContent: React.FC = () => {
 
 	return (
 		<PageContentWrapper>
-			<div className="w-full flex flex-col gap-4 overflow-y-auto">
+			<div className="w-full flex flex-col gap-4 overflow-y-auto min-h-svh">
 				<GamesFilter />
 				{selectedCompetitions.map((slug) => (
 					<GamesList key={slug} competitionSlug={slug} />
