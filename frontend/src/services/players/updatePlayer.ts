@@ -16,6 +16,7 @@ export const updatePlayer = async ({ id, ...data }: { id: string } & PlayerFormD
 			is_active_player: data.active_player,
 			primary_position: data.primary_position || null,
 			secondary_position: data.secondary_position || null,
+			height: data.height || null,
 			image: uploadedImageId,
 			nationality: data.nationality
 		}
