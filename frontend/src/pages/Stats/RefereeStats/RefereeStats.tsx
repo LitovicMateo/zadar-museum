@@ -5,6 +5,7 @@ import RefereeStatsTable from '@/components/referee-stats/table/RefereeStatsTabl
 import { useRefereeAllTimeStats } from '@/hooks/queries/stats/useRefereeAllTimeStats';
 import { useSearch } from '@/hooks/useSearch';
 import { searchRefereeStats } from '@/utils/search-functions';
+import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
 
@@ -12,6 +13,7 @@ const RefereeStats: React.FC = () => {
 	const [location, setLocation] = React.useState<'home' | 'away' | null>(null);
 	const [league, setLeague] = React.useState<string | null>(null);
 	const [season, setSeason] = React.useState<string | null>(null);
+	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'wins', desc: true }]);
 
 	const { data: refereeAllTime, isFetching } = useRefereeAllTimeStats(location, league, season);
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search by referee name' });
@@ -35,7 +37,11 @@ const RefereeStats: React.FC = () => {
 			<div>
 				<div className="py-2">{SearchInput}</div>
 			</div>
-			{isFetching ? <div>Loading...</div> : <RefereeStatsTable stats={filteredReferees} />}
+			{isFetching ? (
+				<div>Loading...</div>
+			) : (
+				<RefereeStatsTable stats={filteredReferees} sorting={sorting} setSorting={setSorting} />
+			)}
 		</PageWrapper>
 	);
 };

@@ -13,8 +13,24 @@ import {
 	useReactTable
 } from '@tanstack/react-table';
 
-export const useRefereeStatsTable = (data: RefereeStatsRanking[] | undefined) => {
-	const [sorting, setSorting] = React.useState<SortingState>([]);
+export const useRefereeStatsTable = (
+	data: RefereeStatsRanking[] | undefined,
+	sorting: SortingState,
+	setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+) => {
+	const handleSortingChange = (updaterOrValue: SortingState | ((old: SortingState) => SortingState)) => {
+		const newSorting = typeof updaterOrValue === 'function' ? updaterOrValue(sorting) : updaterOrValue;
+
+		// If sorting is cleared (empty array), reset to initial state
+		if (newSorting.length === 0) {
+			setSorting([{ id: 'wins', desc: true }]);
+		} else {
+			setSorting(newSorting);
+		}
+	};
+
+	console.log(data);
+
 	const table = useReactTable<RefereeStatsRanking>({
 		data: data || [],
 		columns: [
@@ -65,21 +81,21 @@ export const useRefereeStatsTable = (data: RefereeStatsRanking[] | undefined) =>
 			},
 
 			{
-				id: 'for',
+				id: 'fouls_for',
 				header: 'F',
 				accessorKey: 'fouls_for',
 				sortDescFirst: true,
 				cell: (info) => <Cell info={info} />
 			},
 			{
-				id: 'against',
+				id: 'fouls_against',
 				header: 'A',
 				accessorKey: 'fouls_against',
 				sortDescFirst: true,
 				cell: (info) => <Cell info={info} />
 			},
 			{
-				id: 'foul_diff',
+				id: 'foul_difference',
 				header: 'Diff',
 				accessorKey: 'foul_difference',
 				sortDescFirst: true,
@@ -88,8 +104,9 @@ export const useRefereeStatsTable = (data: RefereeStatsRanking[] | undefined) =>
 		],
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
+		onSortingChange: handleSortingChange,
 		state: { sorting },
-		onSortingChange: setSorting
+		initialState: { sorting: [{ id: 'wins', desc: true }] }
 	});
 
 	const TableHead: React.FC = () => {
@@ -98,16 +115,30 @@ export const useRefereeStatsTable = (data: RefereeStatsRanking[] | undefined) =>
 				{table.getHeaderGroups().map((headerGroup) => (
 					<tr key={headerGroup.id} className="border-b border-slate-400">
 						{headerGroup.headers.map((header, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10' : '';
+							const stickyFirst = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10' : '';
+							const stickySecond =
+								index === 1 ? 'text-left whitespace-nowrap sticky left-[4ch] z-10' : '';
+							// get cell id
+							const cellId = header.column.id as keyof RefereeStatsRanking;
+							const isActive = cellId === sorting[0]?.id;
+
+							const arrow = sorting[0]?.desc ? '▼' : '▲';
+
+							const Arrow: React.FC = () => (
+								<span className="absolute top-[50%] right-0 transform translate-y-[-50%] text-[10px]">
+									{isActive && arrow}
+								</span>
+							);
 
 							return (
 								<th
 									key={header.id}
 									colSpan={header.colSpan}
-									className={`px-4 py-2 text-center whitespace-nowrap ${sticky} bg-slate-50 ${header.column.getCanSort() ? 'select-none cursor-pointer' : ''}`}
+									className={`relative px-4 py-2 text-center whitespace-nowrap ${stickyFirst} ${stickySecond} bg-slate-50 ${header.column.getCanSort() ? 'select-none cursor-pointer' : ''}`}
 									onClick={header.column.getToggleSortingHandler()}
 								>
 									{flexRender(header.column.columnDef.header, header.getContext())}
+									<Arrow />
 								</th>
 							);
 						})}
@@ -123,10 +154,17 @@ export const useRefereeStatsTable = (data: RefereeStatsRanking[] | undefined) =>
 				{table.getRowModel().rows.map((row) => (
 					<tr key={row.id}>
 						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-white' : '';
+							// get cell id
+							const cellId = cell.column.id as keyof RefereeStatsRanking;
+
+							const stickyFirst =
+								index === 0 ? 'text-left whitespace-nowrap bg-white sticky left-0 z-10' : '';
+							const stickySecond =
+								index === 1 ? 'text-left whitespace-nowrap bg-white sticky left-[4ch] z-10' : '';
+							const highlight = cellId === sorting[0]?.id ? 'bg-slate-100' : '';
 
 							return (
-								<TableCell key={cell.id} sticky={sticky}>
+								<TableCell key={cell.id} sticky={`${stickyFirst} ${stickySecond} ${highlight}`}>
 									{flexRender(cell.column.columnDef.cell, cell.getContext())}
 								</TableCell>
 							);

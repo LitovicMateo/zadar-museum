@@ -136,6 +136,17 @@ WITH kk AS (
             WHEN gs.home_team_id = kk.kk_id OR gs.away_team_id = kk.kk_id THEN u.game_id
             ELSE NULL::integer
         END), 0)::numeric, 1) AS win_percentage,
+        rank() OVER (
+            ORDER BY round(100.0 * sum(
+            CASE
+                WHEN gs.home_team_id = kk.kk_id AND gs.home_score > gs.away_score OR gs.away_team_id = kk.kk_id AND gs.away_score > gs.home_score THEN 1
+                ELSE 0
+            END)::numeric / NULLIF(count(DISTINCT
+            CASE
+                WHEN gs.home_team_id = kk.kk_id OR gs.away_team_id = kk.kk_id THEN u.game_id
+                ELSE NULL::integer
+            END), 0)::numeric, 1) DESC NULLS LAST
+        ) AS win_percentage_rank,
 
     round(avg(
         CASE
