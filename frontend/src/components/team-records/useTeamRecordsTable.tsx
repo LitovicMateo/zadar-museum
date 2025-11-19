@@ -20,6 +20,17 @@ export const useTeamRecordsTable = (
 	setSorting: React.Dispatch<React.SetStateAction<SortingState>>,
 	sorting: SortingState
 ) => {
+	const handleSortingChange = (updaterOrValue: SortingState | ((old: SortingState) => SortingState)) => {
+		const newSorting = typeof updaterOrValue === 'function' ? updaterOrValue(sorting) : updaterOrValue;
+
+		// If sorting is cleared (empty array), reset to initial state
+		if (newSorting.length === 0) {
+			setSorting([{ id: 'score', desc: true }]);
+		} else {
+			setSorting(newSorting);
+		}
+	};
+
 	const table = useReactTable<TeamRecord>({
 		data: data || [],
 		columns: [
@@ -70,43 +81,35 @@ export const useTeamRecordsTable = (
 			},
 			{
 				header: 'PTS S',
-				accessorKey: 'score',
-				enableSorting: false
+				accessorKey: 'score'
 			},
 			{
 				header: 'PTS R',
-				accessorKey: 'opponent_score',
-				enableSorting: false
+				accessorKey: 'opponent_score'
 			},
 			{
 				header: 'DIFF',
-				accessorKey: 'score_diff',
-				enableSorting: false
+				accessorKey: 'score_diff'
 			},
 			{
 				header: '1Q',
-				accessorKey: 'first_quarter',
-				enableSorting: false
+				accessorKey: 'first_quarter'
 			},
 			{
 				header: '2Q',
-				accessorKey: 'second_quarter',
-				enableSorting: false
+				accessorKey: 'second_quarter'
 			},
 			{
 				header: '3Q',
-				accessorKey: 'third_quarter',
-				enableSorting: false
+				accessorKey: 'third_quarter'
 			},
 			{
 				header: '4Q',
-				accessorKey: 'fourth_quarter',
-				enableSorting: false
+				accessorKey: 'fourth_quarter'
 			},
 			{
 				header: 'OT',
-				accessorKey: 'overtime',
-				enableSorting: false
+				accessorKey: 'overtime'
 			},
 			{
 				header: 'AST',
@@ -193,8 +196,7 @@ export const useTeamRecordsTable = (
 			{
 				header: 'FT%',
 				accessorKey: 'free_throw_percentage',
-				cell: (info) => <Cell info={info} />,
-				enableSorting: false
+				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'STL',
@@ -227,9 +229,9 @@ export const useTeamRecordsTable = (
 		],
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
-		onSortingChange: setSorting,
+		onSortingChange: handleSortingChange,
 		state: { sorting },
-		initialState: { sorting: [{ id: 'points', desc: true }] }
+		initialState: { sorting: [{ id: 'score', desc: true }] }
 	});
 
 	const TableHead: React.FC = () => {
