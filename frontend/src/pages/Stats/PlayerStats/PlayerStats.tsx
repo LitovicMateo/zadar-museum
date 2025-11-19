@@ -6,6 +6,7 @@ import { usePlayerAllTimeStats } from '@/hooks/queries/stats/usePlayerAllTimeSta
 import { useSearch } from '@/hooks/useSearch';
 import { PlayerDB } from '@/pages/Player/Player';
 import { searchPlayerStats } from '@/utils/search-functions';
+import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
 
@@ -15,6 +16,13 @@ const PlayerStats: React.FC = () => {
 	const [location, setLocation] = React.useState<'home' | 'away' | null>(null);
 	const [league, setLeague] = React.useState<string | null>(null);
 	const [season, setSeason] = React.useState<string | null>(null);
+
+	const [sorting, setSorting] = React.useState<SortingState>([
+		{
+			id: 'points',
+			desc: true
+		}
+	]);
 
 	const { SearchInput, searchTerm } = useSearch({
 		placeholder: 'Search by player name'
@@ -45,7 +53,12 @@ const PlayerStats: React.FC = () => {
 			/>
 			<div className="py-2">{SearchInput}</div>
 
-			<PlayerStatsTable stats={filteredPlayers} prev={players?.previous} />
+			<PlayerStatsTable
+				stats={filteredPlayers}
+				prev={players?.previous}
+				sorting={sorting}
+				setSorting={setSorting}
+			/>
 		</PageWrapper>
 	);
 };
