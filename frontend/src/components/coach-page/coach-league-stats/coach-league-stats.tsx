@@ -22,17 +22,21 @@ const CoachLeagueStats: React.FC = () => {
 	const { data: coachLeagueStats } = useCoachLeagueStats(coachId!, db!);
 	const { data: coachRecord } = useCoachRecord(coachId!, db);
 
+	const extract = (row: CoachStatsResponse) => {
+		const r = row as unknown as Record<string, Record<string, CoachStats | undefined>>;
+		return r[coachRole]?.[location];
+	};
+
 	const leagueStats: CoachStats[] = useMemo(() => {
 		if (!coachLeagueStats) return [];
-
-		return coachLeagueStats.map((row: CoachStatsResponse) => {
-			return (row as any)[coachRole]?.[location];
-		});
+		return coachLeagueStats.map((row) => extract(row)).filter(Boolean) as CoachStats[];
 	}, [coachLeagueStats, coachRole, location]);
 
 	const totalStats: CoachStats[] = useMemo(() => {
 		if (!coachRecord) return [];
-		return [(coachRecord as any)[coachRole]?.[location]];
+		const r = coachRecord as unknown as Record<string, Record<string, CoachStats | undefined>>;
+		const v = r[coachRole]?.[location];
+		return v ? [v] : [];
 	}, [coachRecord, coachRole, location]);
 
 	const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats, 'league');

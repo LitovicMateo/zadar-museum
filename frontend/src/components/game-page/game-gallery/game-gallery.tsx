@@ -16,7 +16,7 @@ const GameGallery: React.FC = () => {
 
 	const images = game?.gallery;
 
-	const galleryRef = useRef<any>(null);
+	const galleryRef = useRef<{ fullScreen?: () => void } | null>(null);
 	if (!images) return null;
 	const imagesData = transformImages(images!);
 
@@ -31,7 +31,7 @@ const GameGallery: React.FC = () => {
 					showPlayButton={false}
 					items={imagesData}
 					onClick={() => {
-						galleryRef.current?.fullScreen();
+						galleryRef.current?.fullScreen?.();
 					}}
 					renderCustomControls={() => null}
 				/>
@@ -42,15 +42,16 @@ const GameGallery: React.FC = () => {
 
 export default GameGallery;
 
-function transformImages(images: GameDetailsResponse['gallery']): any[] {
+type GalleryItem = { original: string; thumbnail: string; originalHeight?: number };
+
+function transformImages(images: GameDetailsResponse['gallery']): GalleryItem[] {
 	if (!images) return [];
-	const gallery = images?.map((image) => {
+	return images.map((image) => {
 		const url = getImageUrl(image.url);
 		return {
 			original: url,
 			thumbnail: url,
 			originalHeight: image.height
-		};
+		} as GalleryItem;
 	});
-	return gallery;
 }

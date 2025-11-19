@@ -12,7 +12,7 @@ export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined, type: '
 		columns: [
 			{
 				header: 'League',
-				accessorFn: (row: any) => row?.league_slug,
+				accessorFn: (row: CoachStats) => row?.league_slug,
 				cell: (info) => {
 					if (info.getValue() === undefined) return <p>Total</p>;
 					return <LeagueCell leagueSlug={info.getValue() as string | undefined} />;
@@ -20,37 +20,37 @@ export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined, type: '
 			},
 			{
 				header: 'G',
-				accessorFn: (row: any) => row?.games,
+				accessorFn: (row: CoachStats) => row?.games,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'W',
-				accessorFn: (row: any) => row?.wins,
+				accessorFn: (row: CoachStats) => row?.wins,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'L',
-				accessorFn: (row: any) => row?.losses,
+				accessorFn: (row: CoachStats) => row?.losses,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'Win %',
-				accessorFn: (row: any) => row?.win_percentage,
+				accessorFn: (row: CoachStats) => row?.win_percentage,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'PTS A',
-				accessorFn: (row: any) => row?.points_scored,
+				accessorFn: (row: CoachStats) => row?.points_scored,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'PTS R',
-				accessorFn: (row: any) => row?.points_received,
+				accessorFn: (row: CoachStats) => row?.points_received,
 				cell: (info) => <Cell info={info} />
 			},
 			{
 				header: 'PTS D',
-				accessorFn: (row: any) => row?.points_difference,
+				accessorFn: (row: CoachStats) => row?.points_difference,
 				cell: (info) => <Cell info={info} />
 			}
 		],

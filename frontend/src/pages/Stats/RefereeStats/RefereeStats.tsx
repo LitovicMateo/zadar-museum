@@ -1,8 +1,10 @@
 import React from 'react';
 
+import PaginationControls from '@/components/pagination/PaginationControls';
 import RefereeStatsFilter from '@/components/referee-stats/filter/RefereeStatsFilter';
 import RefereeStatsTable from '@/components/referee-stats/table/RefereeStatsTable';
 import { useRefereeAllTimeStats } from '@/hooks/queries/stats/useRefereeAllTimeStats';
+import usePagedSortedList from '@/hooks/usePagedSortedList';
 import { useSearch } from '@/hooks/useSearch';
 import { searchRefereeStats } from '@/utils/search-functions';
 import { SortingState } from '@tanstack/react-table';
@@ -24,6 +26,12 @@ const RefereeStats: React.FC = () => {
 
 	const filteredReferees = searchRefereeStats(refereeAllTime, searchTerm);
 
+	const { paginated, total, page, pageSize, setPage, setPageSize } = usePagedSortedList(filteredReferees, sorting, {
+		initialPage: 1,
+		initialPageSize: 10,
+		resetDeps: [searchTerm, location, league, season, JSON.stringify(sorting)]
+	});
+
 	return (
 		<PageWrapper>
 			<RefereeStatsFilter
@@ -34,13 +42,21 @@ const RefereeStats: React.FC = () => {
 				season={season}
 				setSeason={handleSetSeason}
 			/>
-			<div>
-				<div className="py-2">{SearchInput}</div>
-			</div>
+			<div className="py-2">{SearchInput}</div>
+
 			{isFetching ? (
 				<div>Loading...</div>
 			) : (
-				<RefereeStatsTable stats={filteredReferees} sorting={sorting} setSorting={setSorting} />
+				<>
+					<PaginationControls
+						total={total}
+						page={page}
+						pageSize={pageSize}
+						onPageChange={setPage}
+						onPageSizeChange={setPageSize}
+					/>
+					<RefereeStatsTable stats={paginated} sorting={sorting} setSorting={setSorting} />
+				</>
 			)}
 		</PageWrapper>
 	);

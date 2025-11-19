@@ -41,8 +41,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 			navigate('/'); // ✅ redirect on success
 			return data.user;
-		} catch (err) {
-			// Normalize axios/network errors into the same public error
+		} catch (error) {
+			// Log the underlying error for diagnostics and throw a normalized message
+			// (do not leak sensitive internals to callers)
+			console.debug('[AuthProvider] login error', error);
 			throw new Error('Invalid credentials');
 		}
 	};

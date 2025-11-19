@@ -23,14 +23,15 @@ export const updateTeam = async ({ id, ...data }: { id: string } & TeamFormData)
 		// explicit removal requested
 		imagePayload = null;
 	} else if (typeof data.image === 'object' && data.image !== null && 'id' in data.image) {
-		// existing Strapi image object
-		// keep existing image id
-		// @ts-ignore
-		imagePayload = data.image.id;
+		// existing Strapi image object — narrow and read `id` safely
+		const imageObj = data.image as { id?: number };
+		if (typeof imageObj.id === 'number') {
+			imagePayload = imageObj.id;
+		}
 	}
 
 	// build payload, include image only when we have a definitive value (number or null)
-	const payload: any = {
+	const payload: Record<string, unknown> = {
 		name: data.name,
 		alternate_names: data.alternate_names,
 		short_name: data.short_name,

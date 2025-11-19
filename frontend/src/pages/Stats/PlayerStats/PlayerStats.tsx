@@ -1,10 +1,13 @@
 import React from 'react';
 
+import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
 import PlayerStatsTable from '@/components/player-stats/table/PlayerStatsTable';
 import { usePlayerAllTimeStats } from '@/hooks/queries/stats/usePlayerAllTimeStats';
+import usePagedSortedList from '@/hooks/usePagedSortedList';
 import { useSearch } from '@/hooks/useSearch';
 import { PlayerDB } from '@/pages/Player/Player';
+import { PlayerAllTimeStats } from '@/types/api/player';
 import { searchPlayerStats } from '@/utils/search-functions';
 import { SortingState } from '@tanstack/react-table';
 
@@ -31,6 +34,26 @@ const PlayerStats: React.FC = () => {
 	const { data: players } = usePlayerAllTimeStats(database, stats, location, league, season);
 	const filteredPlayers = searchPlayerStats(players?.current, searchTerm);
 
+	const {
+		paginated: paginatedPlayers,
+		total,
+		page,
+		pageSize,
+		setPage,
+		setPageSize
+	} = usePagedSortedList<PlayerAllTimeStats>(filteredPlayers, sorting, {
+		initialPage: 1,
+		initialPageSize: 10,
+		resetDeps: [searchTerm, database, stats, location, league, season, JSON.stringify(sorting)]
+	});
+
+	// Filter previous dataset to only include players visible on current page
+	const paginatedPrev = players?.previous
+		? players.previous.filter((p) =>
+				paginatedPlayers?.some((pp: PlayerAllTimeStats) => pp.player_id === p.player_id)
+			)
+		: undefined;
+
 	const handleSetDatabase = React.useCallback((db: PlayerDB) => setDatabase(db), []);
 	const handleSetStats = React.useCallback((s: 'total' | 'average') => setStats(s), []);
 	const handleSetLocation = React.useCallback((loc: 'home' | 'away' | null) => setLocation(loc), []);
@@ -53,12 +76,15 @@ const PlayerStats: React.FC = () => {
 			/>
 			<div className="py-2">{SearchInput}</div>
 
-			<PlayerStatsTable
-				stats={filteredPlayers}
-				prev={players?.previous}
-				sorting={sorting}
-				setSorting={setSorting}
+			<PaginationControls
+				total={total}
+				page={page}
+				pageSize={pageSize}
+				onPageChange={setPage}
+				onPageSizeChange={setPageSize}
 			/>
+
+			<PlayerStatsTable stats={paginatedPlayers} prev={paginatedPrev} sorting={sorting} setSorting={setSorting} />
 		</PageWrapper>
 	);
 };

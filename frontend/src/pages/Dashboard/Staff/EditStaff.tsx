@@ -47,7 +47,7 @@ const EditStaff: React.FC = () => {
 					defaultValues={{
 						first_name: staff.first_name,
 						last_name: staff.last_name,
-						role: staff.role as any
+						role: staff.role as StaffFormData['role']
 					}}
 				/>
 			)}

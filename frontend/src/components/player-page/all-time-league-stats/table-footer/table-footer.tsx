@@ -16,13 +16,33 @@ const TableFooter: React.FC<TableFooterProps> = ({ view, db }) => {
 	const { data, isLoading } = useAllTimeStats(playerId!, db);
 
 	// API returns PlayerCareerStats[] (per league). Map it into the shape expected by this footer table
-	const totalStats = ((): any[] | undefined => {
+	type TotalRow = {
+		league_name: string;
+		total_games: number | null;
+		total_games_started: number | null;
+		total_points: number | null;
+		total_assists: number | null;
+		total_rebounds: number | null;
+		total_steals: number | null;
+		total_blocks: number | null;
+		total_field_goals_made: number | null;
+		total_field_goals_attempted: number | null;
+		total_three_pointers_made: number | null;
+		total_three_pointers_attempted: number | null;
+		total_free_throws_made: number | null;
+		total_free_throws_attempted: number | null;
+		total_efficiency: number | null;
+	};
+
+	const totalStats: TotalRow[] | undefined = ((): TotalRow[] | undefined => {
 		if (!data) return undefined;
 		return data.map((d) => {
 			const chosen = view === 'total' ? d.total?.total : d.average?.total;
 
+			const leagueName = (chosen as unknown as { league_name?: string })?.league_name ?? 'TOTAL';
+
 			return {
-				league_name: (chosen as any)?.league_name ?? 'TOTAL',
+				league_name: leagueName,
 				total_games: chosen?.games ?? null,
 				total_games_started: chosen?.games_started ?? null,
 				total_points: chosen?.points ?? null,
@@ -37,7 +57,7 @@ const TableFooter: React.FC<TableFooterProps> = ({ view, db }) => {
 				total_free_throws_made: chosen?.free_throws_made ?? null,
 				total_free_throws_attempted: chosen?.free_throws_attempted ?? null,
 				total_efficiency: chosen?.efficiency ?? null
-			};
+			} as TotalRow;
 		});
 	})();
 

@@ -19,9 +19,9 @@ export const useTeamLeaders = (
 ) => {
 	const isValidKey =
 		!!stat &&
-		((db === 'player' && playerKeys.includes(stat as keyof PlayerAllTimeStats)) ||
-			// coachKeys comes from options and already typed to keys of CoachStatsResponse headCoach/total
-			(db === 'coach' && coachKeys.includes(stat as any)));
+		((db === 'player' && stat != null && playerKeys.includes(stat as keyof PlayerAllTimeStats)) ||
+			// coachKeys comes from options and is typed to keys of CoachStatsResponse headCoach/total
+			(db === 'coach' && stat != null && coachKeys.includes(stat as unknown as (typeof coachKeys)[number])));
 
 	return useQuery({
 		queryKey: ['team', 'leaders', db, stat, teamSlug, competitionSlug],

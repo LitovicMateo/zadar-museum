@@ -1,8 +1,10 @@
 import React from 'react';
 
+import PaginationControls from '@/components/pagination/PaginationControls';
 import TeamStatsFilter from '@/components/team-stats/filter/TeamStatsFilter';
 import TeamStatsTable from '@/components/team-stats/table/TeamStatsTable';
 import { useTeamAllTimeStats } from '@/hooks/queries/stats/useTeamAllTimeStats';
+import usePagedSortedList from '@/hooks/usePagedSortedList';
 import { useSearch } from '@/hooks/useSearch';
 import { searchTeamStats } from '@/utils/search-functions';
 import { SortingState } from '@tanstack/react-table';
@@ -21,6 +23,12 @@ const TeamStats: React.FC = () => {
 
 	const filteredTeams = searchTeamStats(allTimeStats, searchTerm);
 
+	const { paginated, total, page, pageSize, setPage, setPageSize } = usePagedSortedList(filteredTeams, sorting, {
+		initialPage: 1,
+		initialPageSize: 10,
+		resetDeps: [searchTerm, location, league, season, JSON.stringify(sorting)]
+	});
+
 	return (
 		<PageWrapper>
 			<TeamStatsFilter
@@ -32,7 +40,16 @@ const TeamStats: React.FC = () => {
 				setSeason={setSeason}
 			/>
 			<div className="py-2">{SearchInput}</div>
-			<TeamStatsTable stats={filteredTeams} isFetching={isFetching} sorting={sorting} setSorting={setSorting} />
+
+			<PaginationControls
+				total={total}
+				page={page}
+				pageSize={pageSize}
+				onPageChange={setPage}
+				onPageSizeChange={setPageSize}
+			/>
+
+			<TeamStatsTable stats={paginated} isFetching={isFetching} sorting={sorting} setSorting={setSorting} />
 		</PageWrapper>
 	);
 };

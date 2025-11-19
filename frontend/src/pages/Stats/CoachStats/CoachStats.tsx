@@ -2,7 +2,9 @@ import React from 'react';
 
 import CoachStatsFilter from '@/components/coach-stats/filter/CoachStatsFilter';
 import CoachStatsTable from '@/components/coach-stats/table/CoachStatsTable';
+import PaginationControls from '@/components/pagination/PaginationControls';
 import { useCoachAllTimeStats } from '@/hooks/queries/stats/useCoachAllTimeStats';
+import usePagedSortedList from '@/hooks/usePagedSortedList';
 import { useSearch } from '@/hooks/useSearch';
 import { PlayerDB } from '@/pages/Player/Player';
 import { searchCoachStats } from '@/utils/search-functions';
@@ -23,6 +25,20 @@ const CoachStats: React.FC = () => {
 
 	const filteredCoaches = searchCoachStats(coachAllTimeStats?.current, searchTerm);
 
+	const { paginated, total, page, pageSize, setPage, setPageSize } = usePagedSortedList(filteredCoaches, sorting, {
+		initialPage: 1,
+		initialPageSize: 10,
+		resetDeps: [searchTerm, database, role, location, league, season, JSON.stringify(sorting)]
+	});
+
+	const paginatedPrev = coachAllTimeStats?.previous
+		? coachAllTimeStats.previous.filter((p) =>
+				paginated?.some(
+					(pp) => (pp as Record<string, unknown>)['player_id'] === (p as Record<string, unknown>)['player_id']
+				)
+			)
+		: undefined;
+
 	return (
 		<PageWrapper>
 			<CoachStatsFilter
@@ -38,12 +54,16 @@ const CoachStats: React.FC = () => {
 				setSeason={setSeason}
 			/>
 			<div className="py-2">{SearchInput}</div>
-			<CoachStatsTable
-				stats={filteredCoaches}
-				prev={coachAllTimeStats?.previous}
-				sorting={sorting}
-				setSorting={setSorting}
+
+			<PaginationControls
+				total={total}
+				page={page}
+				pageSize={pageSize}
+				onPageChange={setPage}
+				onPageSizeChange={setPageSize}
 			/>
+
+			<CoachStatsTable stats={paginated} prev={paginatedPrev} sorting={sorting} setSorting={setSorting} />
 		</PageWrapper>
 	);
 };

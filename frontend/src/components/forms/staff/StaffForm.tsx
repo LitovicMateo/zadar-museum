@@ -2,6 +2,7 @@ import React from 'react';
 
 import FormWrapper from '@/components/ui/form-wrapper';
 import { StaffFormData } from '@/schemas/staff-schema';
+import { StaffDetailsResponse } from '@/types/api/staff';
 
 import StaffFormContent from './Form/StaffFormContent';
 import StaffFormProvider from './Form/StaffFormProvider';
@@ -10,7 +11,7 @@ type StaffFormProps = {
 	onSubmit: (data: StaffFormData) => void;
 	defaultValues?: StaffFormData;
 	mode: 'create' | 'edit';
-	staff?: any;
+	staff?: StaffDetailsResponse;
 	isSuccess?: boolean;
 };
 
