@@ -7,20 +7,50 @@ import { factories } from "@strapi/strapi";
 export default factories.createCoreService("api::game.game", ({ strapi }) => ({
   async findGameDetails(gameId) {
     try {
-      return await strapi.db.query("api::game.game").findOne({
+      // Use an explicit populate object to ensure many-to-many relations
+      // (like `staffers`) are properly expanded. Using a wildcard for each
+      // relation guarantees nested fields are included.
+      strapi.log.info(
+        `[game.service] findGameDetails: fetching game documentId=${gameId}`
+      );
+      const result = await strapi.db.query("api::game.game").findOne({
         where: { documentId: gameId },
-        populate: [
-          "home_team",
-          "away_team",
-          "competition",
-          "venue",
-          "mainReferee",
-          "secondReferee",
-          "thirdReferee",
-          "gallery",
-          "staffers",
-        ],
+        populate: {
+          home_team: true,
+          away_team: true,
+          competition: true,
+          venue: true,
+          mainReferee: true,
+          secondReferee: true,
+          thirdReferee: true,
+          gallery: true,
+          staffers: true,
+        },
       });
+
+      if (!result) {
+        strapi.log.warn(
+          `[game.service] findGameDetails: no game found for documentId=${gameId}`
+        );
+      } else {
+        try {
+          const staffInfo = Array.isArray(result.staffers)
+            ? result.staffers.map((s: any) => ({
+                id: s.id,
+                documentId: s.documentId,
+              }))
+            : result.staffers;
+          strapi.log.info(
+            `[game.service] findGameDetails: staffers=${JSON.stringify(staffInfo)}`
+          );
+        } catch (e) {
+          strapi.log.error(
+            `[game.service] findGameDetails: failed to stringify staffers: ${e}`
+          );
+        }
+      }
+
+      return result;
     } catch (err) {
       throw err;
     }

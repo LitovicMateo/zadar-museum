@@ -1,14 +1,20 @@
 services:
   nginx:
+    image: nginx:alpine
     ports:
       - "8080:80"
     volumes:
       - ./nginx/nginx.local.conf:/etc/nginx/nginx.conf:ro
       # Local nginx config (HTTP only) to avoid requiring real TLS certs during local testing
+    networks:
+      - app_network
   certbot:
+    image: certbot/certbot
     entrypoint:
       ["/bin/sh", "-c", "trap exit TERM; while :; do sleep 3600; done;"]
     restart: "no"
+    networks:
+      - app_network
   # For local testing, ensure Strapi returns correct CORS headers
   # so browser requests from http://localhost:8080 succeed.
   backend:
