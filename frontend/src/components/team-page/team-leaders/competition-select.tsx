@@ -34,7 +34,7 @@ const CompetitionSelect: React.FC<CompetitionSelectProps> = ({ selectedCompetiti
 	// teamCompetitions may contain null/undefined entries; guard and resolve labels safely
 	teamCompetitions.forEach((c) => {
 		if (!c) return;
-		const slug = c.league_slug ?? '';
+		const slug = c.slug ?? '';
 		const comp = competitions.find((comp) => comp.slug === slug);
 		const label = (comp?.name ?? slug) || 'Unknown';
 
