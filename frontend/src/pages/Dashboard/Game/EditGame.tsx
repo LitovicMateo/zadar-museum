@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 import CompetitionFilter from '@/components/forms/game/Filters/CompetitionFilter';
@@ -38,7 +38,13 @@ const EditGame = () => {
 		mutation.mutate({ ...data, id: gameId });
 	};
 
-	console.log(game);
+	useEffect(() => {
+		setLeague('');
+	}, [season]);
+
+	useEffect(() => {
+		setGameId('');
+	}, [season, league]);
 
 	return (
 		<div>

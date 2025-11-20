@@ -105,7 +105,7 @@
     "staffers": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::staffs.staff"
+      "target": "api::staff.staff"
     },
     "attendance": {
       "type": "string"

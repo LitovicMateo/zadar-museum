@@ -26,6 +26,8 @@ const EditPlayerStats = () => {
 	const { data: playerStats } = useGamePlayerStats(game, team);
 	const player = playerStats?.find((player: PlayerStatsResponse) => player.documentId === playerStatsId);
 
+	console.log(playerStats);
+
 	const mutation = useMutation({
 		mutationFn: updatePlayerStats,
 		onError(error) {

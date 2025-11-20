@@ -22,7 +22,7 @@ const GameFilter: React.FC<GameFilterProps> = ({ season, league, selectedGame, s
 
 	return (
 		<Select
-			value={gameOptions?.find((opt) => opt.value === selectedGame)}
+			value={selectedGame ? gameOptions?.find((opt) => opt.value === selectedGame) : null}
 			onChange={(opt) => setSelectedGame(opt?.value as string)}
 			placeholder="Select Game"
 			options={gameOptions}
