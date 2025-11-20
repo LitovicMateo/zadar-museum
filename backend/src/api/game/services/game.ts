@@ -18,6 +18,7 @@ export default factories.createCoreService("api::game.game", ({ strapi }) => ({
           "secondReferee",
           "thirdReferee",
           "gallery",
+          "staffers",
         ],
       });
     } catch (err) {

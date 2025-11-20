@@ -38,6 +38,8 @@ const EditGame = () => {
 		mutation.mutate({ ...data, id: gameId });
 	};
 
+	console.log(game);
+
 	return (
 		<div>
 			<FormWrapper>
