@@ -16,15 +16,17 @@ type LeaguePair = { id: string; slug: string };
 const getTeamCompetitions = async (teamSlug: string): Promise<LeaguePair[]> => {
 	const res = await axios.get(API_ROUTES.team.teamCompetitions(teamSlug));
 
-	const data = res.data as any[];
+	const raw = res.data;
+	if (!Array.isArray(raw)) return [];
+	const data = raw as Array<Record<string, unknown>>;
 
 	const seen = new Set<string>();
 	const uniques: LeaguePair[] = [];
 
 	for (const item of data) {
 		// backend returns snake_case fields like league_id / league_slug
-		const id = String(item.league_id ?? item.leagueId ?? item.id ?? '');
-		const slug = String(item.league_slug ?? item.leagueSlug ?? item.slug ?? '');
+		const id = String(item['league_id'] ?? item['leagueId'] ?? item['id'] ?? '');
+		const slug = String(item['league_slug'] ?? item['leagueSlug'] ?? item['slug'] ?? '');
 		const key = `${id}::${slug}`;
 		if (!id) continue; // skip empty ids
 		if (!seen.has(key)) {

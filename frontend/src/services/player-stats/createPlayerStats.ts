@@ -1,5 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerStatsFormData } from '@/schemas/player-stats';
+import { validateStats } from '@/utils/validateStats';
 import axios from 'axios';
 
 export const createPlayerStats = async (data: PlayerStatsFormData) => {
@@ -24,7 +25,7 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 			team: data.teamId,
 			player: data.playerId,
 			status: data.status,
-			isCaptain: false,
+			isCaptain: data.isCaptain,
 			playerNumber: data.playerNumber || '',
 			minutes: undefined,
 			seconds: undefined,
@@ -52,25 +53,8 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 		return res;
 	}
 
-	// 3️⃣ Normal validation for active players
-	if (+data.fieldGoalsMade > +data.fieldGoalsAttempted) {
-		throw new Error('Field goals made cannot be greater than field goals attempted.');
-	}
-	if (+data.threePointersMade > +data.threePointersAttempted) {
-		throw new Error('Three-pointers made cannot be greater than three-pointers attempted.');
-	}
-	if (+data.freeThrowsMade > +data.freeThrowsAttempted) {
-		throw new Error('Free throws made cannot be greater than free throws attempted.');
-	}
-	if (+data.minutes < 0) {
-		throw new Error('Minutes cannot be negative.');
-	}
-	if (+data.seconds < 0 || +data.seconds >= 60) {
-		throw new Error('Seconds must be between 0 and 59.');
-	}
-	if (+data.points < 0) {
-		throw new Error('Points cannot be negative.');
-	}
+	// 3️⃣ Normal validation for active players — use shared validator
+	validateStats(data, { checkPlayer: true });
 
 	// 4️⃣ Build payload for active players
 	const payload = {

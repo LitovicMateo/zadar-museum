@@ -1,5 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { TeamStatsFormData } from '@/schemas/team-stats-schema';
+import { validateStats } from '@/utils/validateStats';
 import axios from 'axios';
 
 export const createTeamStats = async (data: TeamStatsFormData) => {
@@ -17,35 +18,8 @@ export const createTeamStats = async (data: TeamStatsFormData) => {
 		throw new Error('Team stats for this game and team already exist.');
 	}
 
-	// 🔍 Validation: shooting stats
-	if (data.fieldGoalsMade && data.fieldGoalsAttempted && +data.fieldGoalsMade > +data.fieldGoalsAttempted) {
-		throw new Error('Field goals made cannot be greater than field goals attempted.');
-	}
-	if (
-		data.threePointersMade &&
-		data.threePointersAttempted &&
-		+data.threePointersMade > +data.threePointersAttempted
-	) {
-		throw new Error('Three-pointers made cannot be greater than three-pointers attempted.');
-	}
-	if (data.freeThrowsMade && data.freeThrowsAttempted && +data.freeThrowsMade > +data.freeThrowsAttempted) {
-		throw new Error('Free throws made cannot be greater than free throws attempted.');
-	}
-
-	// 🔍 Validation: quarter scores (if provided, must be >= 0)
-	const quarters = [
-		{ name: 'First quarter', value: data.firstQuarter },
-		{ name: 'Second quarter', value: data.secondQuarter },
-		{ name: 'Third quarter', value: data.thirdQuarter },
-		{ name: 'Fourth quarter', value: data.fourthQuarter },
-		{ name: 'Overtime', value: data.overtime }
-	];
-
-	for (const q of quarters) {
-		if (q.value !== null && q.value !== undefined && +q.value < 0) {
-			throw new Error(`${q.name} score cannot be negative.`);
-		}
-	}
+	// 🔍 Validation: use shared validator for team-specific checks
+	validateStats(data, { checkTeam: true });
 
 	const payload = {
 		// filters
