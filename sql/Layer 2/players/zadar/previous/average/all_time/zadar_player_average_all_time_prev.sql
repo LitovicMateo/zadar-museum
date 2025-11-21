@@ -42,10 +42,18 @@
     round(avg(b.field_goals_attempted), 1) AS field_goals_attempted,
     rank() OVER (ORDER BY (avg(b.field_goals_attempted)) DESC NULLS LAST) AS field_goals_attempted_rank,
 
-    case 
-        when avg(b.field_goals_made) = 0 then 0
-        else round(avg(b.field_goals_made) / avg(b.field_goals_attempted) * 100, 1)
-    end AS field_goal_percentage,
+    COALESCE(
+        round(
+            AVG(
+                CASE
+                    WHEN b.field_goals_attempted IS NULL OR b.field_goals_attempted = 0 THEN NULL
+                    ELSE b.field_goals_made::numeric / b.field_goals_attempted
+                END
+            ) * 100,
+            1
+        ),
+        0
+    ) AS field_goal_percentage,
 
     round(avg(b.three_pointers_made), 1) AS three_pointers_made,
     rank() OVER (ORDER BY (avg(b.three_pointers_made)) DESC NULLS LAST) AS three_pointers_made_rank,

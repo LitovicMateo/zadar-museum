@@ -16,8 +16,10 @@ const TeamLeagueStats: React.FC<TeamLeagueStatsProps> = ({ season }) => {
 
 	const { data: teamStats } = useTeamLeagueSeasonStats(leagueSlug!, season!);
 
+	console.log(teamStats);
+
 	const stats = useMemo(() => {
-		if (!teamStats) return [];
+		if (!teamStats || teamStats.length === 0) return [];
 		const home = teamStats[0].stats.home;
 		const away = teamStats[0].stats.away;
 		const total = teamStats[0].stats.total;
@@ -27,7 +29,7 @@ const TeamLeagueStats: React.FC<TeamLeagueStatsProps> = ({ season }) => {
 
 	const { TableBody, TableHead } = useTeamLeagueStatsTable(stats);
 
-	if (teamStats === undefined) {
+	if (teamStats === undefined || teamStats.length === 0) {
 		return <NoContent>No data available.</NoContent>;
 	}
 
