@@ -11,10 +11,23 @@ const mmss = (m: number | null, s: number | null) => {
 	return `${m}:${sec}`;
 };
 
+const formatMakeAttempt = (made: number | null, attempted: number | null) => {
+	// No made recorded
+	if (made === null || made === undefined) return '—';
+
+	// If attempts missing (null/undefined) or attempts === 0 while there are makes > 0,
+	// show '-' for attempts per user's request (historical data without attempts).
+	const madeNum = Number(made ?? 0);
+	const attMissing = attempted === null || attempted === undefined || (Number(attempted) === 0 && madeNum > 0);
+	const attDisplay = attMissing ? '-' : String(attempted);
+	return `${made}/${attDisplay}`;
+};
+
 export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 	const table = useReactTable<PlayerBoxscoreResponse>({
 		getCoreRowModel: getCoreRowModel<PlayerBoxscoreResponse>(),
 		getSortedRowModel: getSortedRowModel<PlayerBoxscoreResponse>(),
+		initialState: { sorting: [{ id: 'fg', desc: true }] },
 		columns: [
 			{
 				id: 'number',
@@ -70,13 +83,21 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 			},
 			{
 				id: 'fg',
-				accessorFn: (row) => row.field_goals_made + '/' + row.field_goals_attempted,
+				// accessor returns made shots for sorting; cell renders made/attempt display
+				accessorFn: (row) => row.field_goals_made,
 				header: 'FG',
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return (
+						<p>
+							{formatMakeAttempt(
+								info.row.original.field_goals_made,
+								info.row.original.field_goals_attempted
+							)}
+						</p>
+					);
 				}
 			},
 			{
@@ -92,13 +113,20 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 			},
 			{
 				id: 'three_point',
-				accessorFn: (row) => row.three_pointers_made + '/' + row.three_pointers_attempted,
+				accessorFn: (row) => row.three_pointers_made,
 				header: '3PT',
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return (
+						<p>
+							{formatMakeAttempt(
+								info.row.original.three_pointers_made,
+								info.row.original.three_pointers_attempted
+							)}
+						</p>
+					);
 				}
 			},
 			{
@@ -114,13 +142,20 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 			},
 			{
 				id: 'free_throw',
-				accessorFn: (row) => row.free_throws_made + '/' + row.free_throws_attempted,
+				accessorFn: (row) => row.free_throws_made,
 				header: 'FT',
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return (
+						<p>
+							{formatMakeAttempt(
+								info.row.original.free_throws_made,
+								info.row.original.free_throws_attempted
+							)}
+						</p>
+					);
 				}
 			},
 			{

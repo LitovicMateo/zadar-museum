@@ -6,6 +6,14 @@ import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-tabl
 
 const pct = (v: number | null) => (v === null ? '—' : `${v}%`);
 
+const formatMakeAttempt = (made: number | null, attempted: number | null) => {
+	if (made === null || made === undefined) return '—';
+	const madeNum = Number(made ?? 0);
+	const attMissing = attempted === null || attempted === undefined || (Number(attempted) === 0 && madeNum > 0);
+	const attDisplay = attMissing ? '-' : String(attempted);
+	return `${made}/${attDisplay}`;
+};
+
 export const useTeamStatsTable = (data: TeamBoxscoreResponse[]) => {
 	const table = useReactTable<TeamBoxscoreResponse>({
 		getCoreRowModel: getCoreRowModel(),
@@ -66,13 +74,10 @@ export const useTeamStatsTable = (data: TeamBoxscoreResponse[]) => {
 			},
 			{
 				id: 'fg',
-				accessorFn: (row) => row.field_goals_made + '/' + row.field_goals_attempted,
+				accessorFn: (row) => formatMakeAttempt(row.field_goals_made, row.field_goals_attempted),
 				header: 'FG',
 				cell: (info) => {
-					if (info.row.original.field_goals_attempted === null) {
-						return <p className="text-gray-600">-</p>;
-					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{info.getValue<string>()}</p>;
 				}
 			},
 			{
@@ -88,13 +93,10 @@ export const useTeamStatsTable = (data: TeamBoxscoreResponse[]) => {
 			},
 			{
 				id: 'three_point',
-				accessorFn: (row) => row.three_pointers_made + '/' + row.three_pointers_attempted,
+				accessorFn: (row) => formatMakeAttempt(row.three_pointers_made, row.three_pointers_attempted),
 				header: '3PT',
 				cell: (info) => {
-					if (info.row.original.three_pointers_attempted === null) {
-						return <p className="text-gray-600">-</p>;
-					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{info.getValue<string>()}</p>;
 				}
 			},
 			{
@@ -110,13 +112,10 @@ export const useTeamStatsTable = (data: TeamBoxscoreResponse[]) => {
 			},
 			{
 				id: 'free_throw',
-				accessorFn: (row) => row.free_throws_made + '/' + row.free_throws_attempted,
+				accessorFn: (row) => formatMakeAttempt(row.free_throws_made, row.free_throws_attempted),
 				header: 'FT',
 				cell: (info) => {
-					if (info.row.original.free_throws_attempted === null) {
-						return <p className="text-gray-600">-</p>;
-					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{info.getValue<string>()}</p>;
 				}
 			},
 			{
