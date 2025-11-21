@@ -4,6 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import CompetitionFilter from '@/components/forms/game/Filters/CompetitionFilter';
 import GameFilter from '@/components/forms/game/Filters/GameFilter';
 import SeasonFilter from '@/components/forms/game/Filters/SeasonFilter';
+import EditGameWarning from '@/components/forms/game/Form/EditGameWarning';
 import GameForm from '@/components/forms/game/GameForm';
 import Fieldset from '@/components/ui/fieldset';
 import FormWrapper from '@/components/ui/form-wrapper';
@@ -56,37 +57,40 @@ const EditGame = () => {
 				</Fieldset>
 			</FormWrapper>
 			{game && (
-				<GameForm
-					game={game}
-					onSubmit={handleSubmit}
-					mode="edit"
-					defaultValues={{
-						season: game.season,
-						round: game.round,
-						date: game.date,
-						home_team: game.home_team.id.toString(),
-						home_team_name: game.home_team.name,
-						home_team_short_name: game.home_team.short_name,
-						away_team: game.away_team.id.toString(),
-						away_team_name: game.away_team.name,
-						away_team_short_name: game.away_team.short_name,
-						stage: game.stage,
-						competition: game.competition.id.toString(),
-						league_name: game.competition.name,
-						league_short_name: game.competition.short_name,
-						venue: game.venue.id.toString(),
-						isNeutral: game.isNeutral,
-						isNulled: game.isNulled,
-						forfeited: game.forfeited,
-						forfeited_by: game.forfeited_by,
-						attendance: game.attendance,
-						mainReferee: game.mainReferee ? game.mainReferee.id.toString() : undefined,
-						secondReferee: game.secondReferee ? game.secondReferee.id.toString() : undefined,
-						thirdReferee: game.thirdReferee ? game.thirdReferee.id.toString() : undefined,
-						staffers: game.staffers?.map((st) => st.id.toString()),
-						gallery: game.gallery
-					}}
-				/>
+				<>
+					<EditGameWarning />
+					<GameForm
+						game={game}
+						onSubmit={handleSubmit}
+						mode="edit"
+						defaultValues={{
+							season: game.season,
+							round: game.round,
+							date: game.date,
+							home_team: game.home_team.id.toString(),
+							home_team_name: game.home_team.name,
+							home_team_short_name: game.home_team.short_name,
+							away_team: game.away_team.id.toString(),
+							away_team_name: game.away_team.name,
+							away_team_short_name: game.away_team.short_name,
+							stage: game.stage,
+							competition: game.competition.id.toString(),
+							league_name: game.competition.name,
+							league_short_name: game.competition.short_name,
+							venue: game.venue.id.toString(),
+							isNeutral: game.isNeutral,
+							isNulled: game.isNulled,
+							forfeited: game.forfeited,
+							forfeited_by: game.forfeited_by,
+							attendance: game.attendance,
+							mainReferee: game.mainReferee ? game.mainReferee.id.toString() : undefined,
+							secondReferee: game.secondReferee ? game.secondReferee.id.toString() : undefined,
+							thirdReferee: game.thirdReferee ? game.thirdReferee.id.toString() : undefined,
+							staffers: game.staffers?.map((st) => st.id.toString()),
+							gallery: game.gallery
+						}}
+					/>
+				</>
 			)}
 			<Toaster position="bottom-right" />
 		</div>

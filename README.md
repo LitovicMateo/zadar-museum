@@ -242,14 +242,16 @@ docker rm -f <container_id>
 
 # pull new images
 docker-compose -f docker-compose.vps.yml pull frontend
+docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate frontend
+
 docker-compose -f docker-compose.vps.yml pull backend
+docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate backend
+
 docker-compose -f docker-compose.vps.yml pull frontend backend
+docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate frontend backend
 
 
 # recreate images
- docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate frontend
- docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate backend
- docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate frontend backend
 
 ```
 
