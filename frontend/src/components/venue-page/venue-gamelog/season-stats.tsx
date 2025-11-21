@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import Heading from '@/components/ui/heading';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useVenueSeasonLeagueStats } from '@/hooks/queries/venue/useVenueSeasonLeagueStats';
 import { useVenueSeasonStats } from '@/hooks/queries/venue/useVenueSeasonStats';
@@ -20,12 +21,20 @@ const SeasonStats: React.FC<SeasonStatsProps> = ({ season }) => {
 	const { TableHead, TableBody } = useVenueSeasonStatsTable(seasonLeagueStats);
 	const { TableFoot } = useVenueSeasonStatsTable(seasonStats);
 
+	if (!seasonStats || !seasonLeagueStats || seasonStats.length === 0) {
+		return null;
+	}
+
 	return (
-		<TableWrapper>
-			<TableHead />
-			<TableBody />
-			<TableFoot />
-		</TableWrapper>
+		<>
+			<Heading title="Season Stats" type="secondary" />
+
+			<TableWrapper>
+				<TableHead />
+				<TableBody />
+				<TableFoot />
+			</TableWrapper>
+		</>
 	);
 };
 

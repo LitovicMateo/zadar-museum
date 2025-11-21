@@ -22,9 +22,9 @@ const GamesFilter: React.FC = () => {
 	}
 
 	return (
-		<aside className={`block w-full sticky top-0 bg-white z-[1000] py-2`}>
-			<div className="flex justify-between gap-4">
-				<div className="flex gap-4">
+		<aside className="block w-full sticky top-0 bg-white z-1000 py-2 px-3 border-b border-gray-100">
+			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+				<div className="flex gap-2 overflow-x-auto no-scrollbar pr-2 items-center">
 					{competitions?.map((competition) => (
 						<CompetitionSelectItem
 							key={competition.league_id}
@@ -35,14 +35,17 @@ const GamesFilter: React.FC = () => {
 						/>
 					))}
 				</div>
-				{/* Only show search if not the default KK Zadar team */}
-				<div className="flex justify-between gap-4">
+
+				{/* Right controls: season select and optional search */}
+				<div className="flex items-center gap-2">
 					<SeasonSelect
 						seasons={seasons ?? []}
 						selectedSeason={selectedSeason}
 						onSeasonChange={setSelectedSeason}
+						compact
 					/>
-					{teamName === 'KK Zadar' ? <>{SearchInput}</> : null}
+
+					{teamName === 'KK Zadar' ? <div className="ml-1">{SearchInput}</div> : null}
 				</div>
 			</div>
 		</aside>

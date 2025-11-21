@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Heading from '@/components/ui/heading';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useRefereeSeasonLeagueStats } from '@/hooks/queries/referee/useRefereeSeasonLeagueStats';
 import { useRefereeSeasonStats } from '@/hooks/queries/referee/useRefereeSeasonStats';
@@ -25,12 +26,18 @@ const RefereeSeasonStats: React.FC<RefereeSeasonStatsProps> = ({ season }) => {
 	const { TableHead, TableBody } = useRefereeStatsTable(leagueStats);
 	const { TableFoot } = useRefereeStatsTable(seasonStats);
 
+	if (!seasonStats || seasonStats.length === 0) return null;
+
 	return (
-		<TableWrapper>
-			<TableHead />
-			<TableBody />
-			<TableFoot />
-		</TableWrapper>
+		<>
+			<Heading title="Season Stats" type="secondary" />
+
+			<TableWrapper>
+				<TableHead />
+				<TableBody />
+				<TableFoot />
+			</TableWrapper>
+		</>
 	);
 };
 

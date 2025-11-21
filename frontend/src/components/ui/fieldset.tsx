@@ -9,12 +9,9 @@ type FieldsetProps = {
 
 const Fieldset: React.FC<FieldsetProps> = ({ children, label }) => {
 	return (
-		<fieldset className="mb-4 flex flex-col gap-2">
+		<fieldset className="mb-3 bg-white border border-gray-100 rounded-md p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
 			<Heading title={label} type="secondary" />
-			{/* <legend className="text-md font-semibold text-gray-700 py-1 px-2 border-1 border-solid border-gray-500 bg-gray-50 rounded-md">
-				{label}
-			</legend> */}
-			{children}
+			<div className="mt-3 flex flex-col gap-2">{children}</div>
 		</fieldset>
 	);
 };

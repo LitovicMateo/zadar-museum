@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import NoContent from '@/components/no-content/no-content';
 import Heading from '@/components/ui/heading';
 import { useVenueGamelog } from '@/hooks/queries/venue/useVenueGamelog';
 import { useScheduleTable } from '@/hooks/useScheduleTable';
@@ -24,7 +25,11 @@ const VenueGamelog: React.FC = () => {
 
 	const { Schedule } = useScheduleTable(filteredGames!);
 
-	if (!games) return null;
+	console.log(games);
+
+	if (games && games.length === 0 && selectedSeason) {
+		return <NoContent>No games have been played at this venue in the selected season.</NoContent>;
+	}
 
 	return (
 		<section className="flex flex-col gap-4 min-h-[500px]">
@@ -36,7 +41,6 @@ const VenueGamelog: React.FC = () => {
 				selectedCompetitions={selectedCompetitions}
 				setSelectedCompetitions={setSelectedCompetitions}
 			/>
-			<Heading title="Season Stats" type="secondary" />
 			<SeasonStats season={selectedSeason} />
 			<Heading title="Gamelog" type="secondary" />
 			<Schedule />

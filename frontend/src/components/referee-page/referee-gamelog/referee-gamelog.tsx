@@ -34,7 +34,6 @@ const RefereeGamelog: React.FC = () => {
 				selectedCompetitions={selectedCompetitions}
 				setSelectedCompetitions={setSelectedCompetitions}
 			/>
-			<Heading title="Season Stats" type="secondary" />
 			<RefereeSeasonStats season={selectedSeason} />
 			<Heading title="Gamelog" type="secondary" />
 			<Schedule />

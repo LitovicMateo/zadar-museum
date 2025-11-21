@@ -17,7 +17,7 @@ const TeamAllTimeStats: React.FC = () => {
 
 	return (
 		<>
-			<Heading title="ALl time stats" />
+			<Heading title="All Time Stats" />
 			<TableWrapper>
 				<TableHead />
 				<TableBody />

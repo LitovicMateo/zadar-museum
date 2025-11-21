@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import NoContent from '@/components/no-content/no-content';
 import Heading from '@/components/ui/heading';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useRefereeTeamRecord } from '@/hooks/queries/referee/useRefereeTeamRecord';
@@ -13,6 +14,10 @@ const RefereeAllTime: React.FC = () => {
 	const { data: refereeStats } = useRefereeTeamRecord(refereeId!);
 
 	const { TableHead, TableBody } = useRefereeStatsTable(refereeStats?.stats);
+
+	if (!refereeStats || refereeStats.stats.length === 0) {
+		return <NoContent>This referee has no all-time record available.</NoContent>;
+	}
 
 	return (
 		<section className="flex flex-col gap-4">

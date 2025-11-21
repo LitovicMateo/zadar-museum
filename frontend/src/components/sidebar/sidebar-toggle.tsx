@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SidebarOpen } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 
 type SidebarToggleProps = {
 	isOpen: boolean;
@@ -9,11 +9,13 @@ type SidebarToggleProps = {
 
 const SidebarToggle: React.FC<SidebarToggleProps> = ({ isOpen, setIsOpen }) => {
 	return (
-		<div
-			className={`float-right mt-2 p-2 w-fit rounded-full text-gray-500 bg-white ${isOpen ? 'border-2 border-solid border-transparent' : 'border-2 border-solid border-gray-200'} `}
+		<button
+			aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+			onClick={() => setIsOpen(!isOpen)}
+			className="ml-auto inline-flex items-center justify-center p-1 rounded-md bg-transparent text-gray-500 hover:text-gray-700 hover:bg-blue-50/50 transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-blue-100"
 		>
-			<SidebarOpen onClick={() => setIsOpen(!isOpen)} />
-		</div>
+			<ChevronLeft className={`w-3 h-3 transform transition-transform ${isOpen ? '' : 'rotate-180'}`} />
+		</button>
 	);
 };
 

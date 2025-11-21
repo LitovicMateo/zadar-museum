@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import DashboardListItem from './dashboard-list-item';
 
 type DashboardListContentProps = {
 	title: string;
@@ -23,24 +23,8 @@ const DashboardListContent: React.FC<DashboardListContentProps> = ({
 	errorMessage,
 	title
 }) => {
-	const table = useReactTable({
-		data: items ?? [],
-		columns: [
-			{
-				header: header,
-				accessorKey: 'item',
-				cell: (info) => <>{info.getValue()}</>
-			},
-			{
-				header: 'Created At',
-				accessorKey: 'createdAt'
-			}
-		],
-		getCoreRowModel: getCoreRowModel()
-	});
-
 	if (isLoading) {
-		return <p>Loading...</p>;
+		return <p className="text-gray-500">Loading...</p>;
 	}
 	if (isError) {
 		return <p className="text-red-600">{errorMessage}</p>;
@@ -49,33 +33,27 @@ const DashboardListContent: React.FC<DashboardListContentProps> = ({
 	if (!items?.length) {
 		return <p className="text-gray-500">No {title.toLowerCase()} found</p>;
 	}
+
 	return (
-		<table className="w-full">
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id}>
-						{headerGroup.headers.map((header) => (
-							<th
-								key={header.id}
-								colSpan={header.colSpan}
-								className="px-4 py-2 text-left bg-gray-50 text-gray-500 text-sm font-medium uppercase tracking-wider"
-							>
-								{flexRender(header.column.columnDef.header, header.getContext())}
+		<div className="w-full">
+			<div className="overflow-hidden rounded-md">
+				<table className="w-full table-fixed">
+					<thead>
+						<tr>
+							<th className="px-4 py-2 text-left text-xs text-gray-500 uppercase font-medium">
+								{header}
 							</th>
+							<th className="px-4 py-2 text-right text-xs text-gray-500 uppercase font-medium">Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						{items.map((it) => (
+							<DashboardListItem key={it.id} item={it} />
 						))}
-					</tr>
-				))}
-			</thead>
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map((cell) => (
-							<td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-						))}
-					</tr>
-				))}
-			</tbody>
-		</table>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	);
 };
 

@@ -5,14 +5,14 @@ import NoContent from '@/components/no-content/no-content';
 import RefereeAllTime from '@/components/referee-page/referee-all-time/referee-all-time';
 import RefereeGamelog from '@/components/referee-page/referee-gamelog/referee-gamelog';
 import PageContentWrapper from '@/components/ui/page-content-wrapper';
-import { useRefereeTeamRecord } from '@/hooks/queries/referee/useRefereeTeamRecord';
+import { useRefereeGamelog } from '@/hooks/queries/referee/useRefereeGamelog';
 
 const RefereeContent: React.FC = () => {
 	const { refereeId } = useParams();
 
-	const { data: refereeStats } = useRefereeTeamRecord(refereeId!);
+	const { data } = useRefereeGamelog(refereeId!);
 
-	if (!refereeStats) return <NoContent>This referee has not officiated any games yet.</NoContent>;
+	if (!data) return <NoContent>This referee has not officiated any games yet.</NoContent>;
 
 	return (
 		<PageContentWrapper>

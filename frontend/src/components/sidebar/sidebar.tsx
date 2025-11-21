@@ -46,26 +46,32 @@ const Sidebar: React.FC<SidebarProps> = ({ groups, title, basePath }) => {
 	}, [isOpen]);
 
 	return (
-		<SidebarWrapper isOpen={isOpen}>
-			<SidebarToggle isOpen={isOpen} setIsOpen={setIsOpen} />
-			{shouldRenderContent && (
-				<>
-					<SidebarTitle title={title} />
-					<SidebarContent>
-						{groups.map((group) => (
-							<SidebarGroup label={group.label} key={group.label}>
-								<SidebarList>
-									{group.list.map(({ label, path }) => (
-										<SidebarItem key={path} path={`/${basePath}/${path}`} label={label} />
-									))}
-								</SidebarList>
-							</SidebarGroup>
-						))}
-						<RefreshDataButton />
-					</SidebarContent>
-				</>
-			)}
-		</SidebarWrapper>
+		<div className="relative inline-block">
+			<SidebarWrapper isOpen={isOpen}>
+				{shouldRenderContent && (
+					<>
+						<SidebarTitle title={title} />
+						<SidebarContent>
+							{groups.map((group) => (
+								<SidebarGroup label={group.label} key={group.label}>
+									<SidebarList>
+										{group.list.map(({ label, path }) => (
+											<SidebarItem key={path} path={`/${basePath}/${path}`} label={label} />
+										))}
+									</SidebarList>
+								</SidebarGroup>
+							))}
+							<RefreshDataButton />
+						</SidebarContent>
+					</>
+				)}
+			</SidebarWrapper>
+
+			{/* Toggle placed outside the sidebar on the right border */}
+			<div className="absolute top-4 left-full ml-2">
+				<SidebarToggle isOpen={isOpen} setIsOpen={setIsOpen} />
+			</div>
+		</div>
 	);
 };
 
