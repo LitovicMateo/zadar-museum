@@ -13,7 +13,7 @@ const CoachContent: React.FC = () => {
 	const { db } = useCoachProfileDatabase(coachId!);
 	const { data } = useCoachLeagueStats(coachId!, db!);
 
-	if (!data) return <NoContent>This coach did not participate in any games.</NoContent>;
+	if (!data) return <NoContent type="info" description="This coach did not participate in any games." />;
 
 	return (
 		<PageContentWrapper>

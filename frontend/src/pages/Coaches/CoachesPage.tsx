@@ -15,7 +15,7 @@ const CoachesPage: React.FC = () => {
 
 	if (!coaches) return null;
 
-	if (coaches && coaches.length === 0) return <NoContent>No coaches in database.</NoContent>;
+	if (coaches && coaches.length === 0) return <NoContent type="info" description="No coaches in database." />;
 
 	const filteredCoaches = searchCoaches(coaches, searchTerm);
 	return (

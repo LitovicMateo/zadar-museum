@@ -10,19 +10,11 @@ const GamesContent: React.FC = () => {
 	const { selectedCompetitions, schedule } = useGamesContext();
 
 	if (!schedule) {
-		return (
-			<NoContent>
-				<p>No games in database.</p>
-			</NoContent>
-		);
+		return <NoContent type="info" description={<p>No games in database.</p>} />;
 	}
 
 	if (schedule && schedule.length === 0) {
-		return (
-			<NoContent>
-				<p>There are no games in the database.</p>
-			</NoContent>
-		);
+		return <NoContent type="info" description={<p>There are no games in the database.</p>} />;
 	}
 
 	return (

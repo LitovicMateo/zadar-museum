@@ -19,7 +19,7 @@ const PlayerLeagueStats: React.FC<PlayerLeagueStatsProps> = ({ season }) => {
 	const { TableBody, TableHead } = usePlayerSeasonLeagueStatsTable(playerStats!);
 
 	if (playerStats === undefined || playerStats.length === 0) {
-		return <NoContent>No data available.</NoContent>;
+		return <NoContent type="info" description="No data available." />;
 	}
 
 	return (

@@ -14,7 +14,7 @@ const StaffsPage: React.FC = () => {
 	});
 
 	if (!staffs) return null;
-	if (staffs && staffs.length === 0) return <NoContent>No staff in database.</NoContent>;
+	if (staffs && staffs.length === 0) return <NoContent type="info" description="No staff in database." />;
 
 	const filtered = staffs.filter((s) => {
 		const name = slugify(`${s.first_name} ${s.last_name}`, { delimiter: ' ' });

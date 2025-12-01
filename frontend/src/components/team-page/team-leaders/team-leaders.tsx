@@ -42,7 +42,7 @@ const TeamLeaders = () => {
 				setSelectedCompetition={setSelectedCompetition}
 			/>
 			{!teamLeaders?.length ? (
-				<NoContent>No leaders found</NoContent>
+				<NoContent type="info" description="No leaders found" />
 			) : (
 				<div className="font-abel">
 					<ul>

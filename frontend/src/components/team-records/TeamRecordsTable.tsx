@@ -19,11 +19,7 @@ const TeamRecordsTable: React.FC<TeamRecordsTableProps> = ({ database, data, sor
 	const { TableBody, TableHead } = useTeamRecordsTable(database, data, setSorting, sorting);
 
 	if (!data || data.length === 0) {
-		return (
-			<NoContent>
-				<p>There are no team stats in the database.</p>
-			</NoContent>
-		);
+		return <NoContent type="info" description={<p>There are no team stats in the database.</p>} />;
 	}
 	return (
 		<div className="w-full overflow-x-scroll">

@@ -11,7 +11,7 @@ import { useGamesContext } from '@/hooks/context/useGamesContext';
 const TeamContent: React.FC = () => {
 	const { schedule } = useGamesContext();
 
-	if (!schedule) return <NoContent>Team has not played any games yet.</NoContent>;
+	if (!schedule) return <NoContent type="info" description="Team has not played any games yet." />;
 
 	return (
 		<PageContentWrapper>

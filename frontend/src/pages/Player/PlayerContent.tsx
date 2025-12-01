@@ -20,11 +20,7 @@ const PlayerContent: React.FC = () => {
 	const { data: stats } = useAllTimeStats(playerId!, selectedDatabase!);
 
 	if (stats?.length === 0) {
-		return (
-			<NoContent>
-				<p>This player did not participate in any games.</p>
-			</NoContent>
-		);
+		return <NoContent type="info" description={<p>This player did not participate in any games.</p>} />;
 	}
 
 	return (

@@ -28,7 +28,7 @@ const VenueGamelog: React.FC = () => {
 	console.log(games);
 
 	if (games && games.length === 0 && selectedSeason) {
-		return <NoContent>No games have been played at this venue in the selected season.</NoContent>;
+		return <NoContent type="info" description="No games have been played at this venue in the selected season." />;
 	}
 
 	return (

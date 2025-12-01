@@ -16,11 +16,7 @@ type PlayerRecordsTableProps = {
 const PlayerRecordsTable: React.FC<PlayerRecordsTableProps> = ({ data, sorting, setSorting }) => {
 	const { TableBody, TableHead } = usePlayerRecordsTable(data, sorting, setSorting);
 	if (!data || data.length === 0) {
-		return (
-			<NoContent>
-				<p>There are no player stats in the database.</p>
-			</NoContent>
-		);
+		return <NoContent type="info" description={<p>There are no player stats in the database.</p>} />;
 	}
 
 	return (

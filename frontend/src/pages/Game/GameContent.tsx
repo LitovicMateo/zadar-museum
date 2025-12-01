@@ -21,7 +21,7 @@ const GameContent: React.FC = () => {
 
 	if (game?.forfeited) {
 		if (game.forfeited_by === 'home') {
-			return <NoContent>{game.home_team.name} has forfeited the game.</NoContent>;
+			return <NoContent type="info" description={`${game.home_team.name} has forfeited the game.`} />;
 		}
 	}
 
@@ -32,11 +32,11 @@ const GameContent: React.FC = () => {
 		awayBoxscore.length === 0 &&
 		teamStats?.length === 0
 	)
-		return <NoContent>There is no boxscore for this game.</NoContent>;
+		return <NoContent type="info" description="There is no boxscore for this game." />;
 
 	return (
 		<PageContentWrapper width="1100px">
-			{game?.isNulled && <NoContent>Results of this game have been nulled.</NoContent>}
+			{game?.isNulled && <NoContent type="info" description="Results of this game have been nulled." />}
 			<GameReferees />
 			<GameStats />
 			<GameGallery />
