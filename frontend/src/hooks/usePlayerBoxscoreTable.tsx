@@ -27,7 +27,6 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 	const table = useReactTable<PlayerBoxscoreResponse>({
 		getCoreRowModel: getCoreRowModel<PlayerBoxscoreResponse>(),
 		getSortedRowModel: getSortedRowModel<PlayerBoxscoreResponse>(),
-		initialState: { sorting: [{ id: 'fg', desc: true }] },
 		columns: [
 			{
 				id: 'number',
