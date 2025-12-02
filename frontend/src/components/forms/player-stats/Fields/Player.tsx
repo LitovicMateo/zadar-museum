@@ -11,6 +11,9 @@ const Player: React.FC = () => {
 	const { control, watch } = useFormContext<PlayerStatsFormData>();
 
 	const team = watch('teamId');
+
+	// detect edit mode from the URL path (e.g. '/player-stats/edit')
+	const isEdit = typeof window !== 'undefined' && window.location.pathname.includes('/player-stats/edit');
 	const { data: players } = usePlayers('last_name', 'asc');
 
 	if (!players) return null;
@@ -29,7 +32,7 @@ const Player: React.FC = () => {
 					<Select
 						{...field}
 						value={options?.find((opt) => opt.value === field.value) ?? null}
-						isDisabled={!team}
+						isDisabled={!team || isEdit}
 						placeholder="Select Player"
 						options={options}
 						onChange={(option) => field.onChange(option?.value)} // store only the ID in form state

@@ -59,6 +59,14 @@ const EditPlayerStats = () => {
 					defaultValues={(() => {
 						const isDnp = player.status === 'dnp-cd';
 
+						const hasOffAndDef =
+							player.offensiveRebounds !== null &&
+							player.offensiveRebounds !== undefined &&
+							player.defensiveRebounds !== null &&
+							player.defensiveRebounds !== undefined;
+
+						const toStr = (v: any) => (v === null || v === undefined ? '' : String(v));
+
 						return {
 							season,
 							league,
@@ -67,28 +75,28 @@ const EditPlayerStats = () => {
 							playerId: player.player.id.toString(),
 							status: player.status,
 							isCaptain: player.isCaptain,
-							playerNumber: player.playerNumber,
-							minutes: isDnp ? '' : player.minutes,
-							seconds: isDnp ? '' : player.seconds,
-							points: isDnp ? '' : player.points,
-							fieldGoalsMade: isDnp ? '' : player.fieldGoalsMade,
-							fieldGoalsAttempted: isDnp ? '' : player.fieldGoalsAttempted,
-							threePointersMade: isDnp ? '' : player.threePointersMade,
-							threePointersAttempted: isDnp ? '' : player.threePointersAttempted,
-							freeThrowsMade: isDnp ? '' : player.freeThrowsMade,
-							freeThrowsAttempted: isDnp ? '' : player.freeThrowsAttempted,
-							rebounds: isDnp ? '' : player.rebounds,
-							offensiveRebounds: isDnp ? '' : player.offensiveRebounds,
-							defensiveRebounds: isDnp ? '' : player.defensiveRebounds,
-							assists: isDnp ? '' : player.assists,
-							steals: isDnp ? '' : player.steals,
-							blocks: isDnp ? '' : player.blocks,
-							turnovers: isDnp ? '' : player.turnovers,
-							fouls: isDnp ? '' : player.fouls,
-							foulsOn: isDnp ? '' : player.foulsOn,
-							blocksReceived: isDnp ? '' : player.blocksReceived,
-							plusMinus: isDnp ? '' : player.plusMinus,
-							efficiency: isDnp ? '' : player.efficiency
+							playerNumber: isDnp ? '' : toStr(player.playerNumber),
+							minutes: isDnp ? '' : toStr(player.minutes),
+							seconds: isDnp ? '' : toStr(player.seconds),
+							points: isDnp ? '' : toStr(player.points),
+							fieldGoalsMade: isDnp ? '' : toStr(player.fieldGoalsMade),
+							fieldGoalsAttempted: isDnp ? '' : toStr(player.fieldGoalsAttempted),
+							threePointersMade: isDnp ? '' : toStr(player.threePointersMade),
+							threePointersAttempted: isDnp ? '' : toStr(player.threePointersAttempted),
+							freeThrowsMade: isDnp ? '' : toStr(player.freeThrowsMade),
+							freeThrowsAttempted: isDnp ? '' : toStr(player.freeThrowsAttempted),
+							rebounds: isDnp ? '' : hasOffAndDef ? '' : toStr(player.rebounds),
+							offensiveRebounds: isDnp ? '' : toStr(player.offensiveRebounds),
+							defensiveRebounds: isDnp ? '' : toStr(player.defensiveRebounds),
+							assists: isDnp ? '' : toStr(player.assists),
+							steals: isDnp ? '' : toStr(player.steals),
+							blocks: isDnp ? '' : toStr(player.blocks),
+							turnovers: isDnp ? '' : toStr(player.turnovers),
+							fouls: isDnp ? '' : toStr(player.fouls),
+							foulsOn: isDnp ? '' : toStr(player.foulsOn),
+							blocksReceived: isDnp ? '' : toStr(player.blocksReceived),
+							plusMinus: isDnp ? '' : toStr(player.plusMinus),
+							efficiency: isDnp ? '' : toStr(player.efficiency)
 						};
 					})()}
 				/>
