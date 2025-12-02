@@ -52,6 +52,21 @@ export const validateStats = (data: unknown, options: ValidateOptions = {}) => {
 		if (form.points !== undefined && form.points !== null && Number(form.points) < 0) {
 			throw new Error('Points cannot be negative.');
 		}
+
+		// Player number validation: accept either `playerNumber` or `number` field
+		// Player number validation — use schema field `playerNumber` (string)
+		if (form.playerNumber !== undefined && form.playerNumber !== null && String(form.playerNumber).trim() !== '') {
+			const str = String(form.playerNumber).trim();
+			// Accept only 1 or 2 digits (allows "00", "0", "1"-"99"), no decimals or letters
+			if (!/^\d{1,2}$/.test(str)) {
+				throw new Error('Player number must be one or two digits (00, 0, 1-99).');
+			}
+
+			const parsed = Number.parseInt(str, 10);
+			if (parsed < 0 || parsed > 99) {
+				throw new Error('Player number must be between 0 and 99.');
+			}
+		}
 	}
 
 	// Team-specific validations

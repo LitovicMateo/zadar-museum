@@ -7,14 +7,14 @@ import Category from '../../../pages/Stats/Category';
 import Container from '../../../pages/Stats/Container';
 
 type LocationFilterProps = {
-	location: 'home' | 'away' | null;
-	setLocation: (location: 'home' | 'away' | null) => void;
+	location: 'home' | 'away' | 'all';
+	setLocation: (location: 'home' | 'away' | 'all') => void;
 };
 
 const locationOptions: { label: string; value: string }[] = [
 	{
 		label: 'All',
-		value: ''
+		value: 'all'
 	},
 	{
 		label: 'Home',
@@ -33,7 +33,7 @@ const LocationFilter: React.FC<LocationFilterProps> = ({ location, setLocation }
 			<Select
 				styles={selectStyle()}
 				value={locationOptions.find((opt) => opt.value === location)}
-				onChange={(opt) => setLocation((opt?.value as 'home' | 'away' | null) ?? null)}
+				onChange={(opt) => setLocation((opt?.value as 'home' | 'away' | 'all') ?? 'all')}
 				options={locationOptions}
 			/>
 		</Container>

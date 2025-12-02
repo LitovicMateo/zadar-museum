@@ -2,8 +2,8 @@ import { PlayerDB } from '@/pages/Player/Player';
 
 // API root: prefer the Vite environment variable VITE_API_ROOT (set in production).
 // Fallback to the local Strapi dev server used during development.
-const root = (import.meta.env.VITE_API_ROOT as string) || 'https://www.ovdjejekosarkasve.com/api';
-// const root = (import.meta.env.VITE_API_ROOT as string) || 'http://localhost:1337/api';
+// const root = (import.meta.env.VITE_API_ROOT as string) || 'https://www.ovdjejekosarkasve.com/api';
+const root = (import.meta.env.VITE_API_ROOT as string) || 'http://localhost:1337/api';
 export const API_ROUTES = {
 	// auth
 	auth: {
@@ -173,43 +173,43 @@ export const APP_ROUTES = {
 		default: '/dashboard',
 		player: {
 			create: '/dashboard/player/create',
-			edit: (playerId: string) => `/dashboard/player/edit/${playerId}`
+			edit: `/dashboard/player/edit/`
 		},
 		staff: {
 			create: '/dashboard/staff/create',
-			edit: (staffId: string) => `/dashboard/staff/edit/${staffId}`
+			edit: `/dashboard/staff/edit/`
 		},
 		team: {
 			create: '/dashboard/team/create',
-			edit: (teamId: string) => `/dashboard/team/edit/${teamId}`
+			edit: `/dashboard/team/edit/`
 		},
 		referee: {
 			create: '/dashboard/referee/create',
-			edit: (refereeId: string) => `/dashboard/referee/edit/${refereeId}`
+			edit: `/dashboard/referee/edit/`
 		},
 		coach: {
 			create: '/dashboard/coach/create',
-			edit: (coachId: string) => `/dashboard/coach/edit/${coachId}`
+			edit: `/dashboard/coach/edit/`
 		},
 		game: {
 			create: '/dashboard/game/create',
-			edit: (gameId: string) => `/dashboard/game/edit/${gameId}`
+			edit: `/dashboard/game/edit/`
 		},
 		venue: {
 			create: '/dashboard/venue/create',
-			edit: (venueId: string) => `/dashboard/venue/edit/${venueId}`
+			edit: `/dashboard/venue/edit/`
 		},
 		competition: {
 			create: '/dashboard/competition/create',
-			edit: (competitionId: string) => `/dashboard/competition/edit/${competitionId}`
+			edit: `/dashboard/competition/edit/`
 		},
 		playerStats: {
 			create: '/dashboard/player-stats/create',
-			edit: (playerStatsId: string) => `/dashboard/player-stats/edit/${playerStatsId}`
+			edit: `/dashboard/player-stats/edit/`
 		},
 		teamStats: {
 			create: '/dashboard/team-stats/create',
-			edit: (teamStatsId: string) => `/dashboard/team-stats/edit/${teamStatsId}`
+			edit: `/dashboard/team-stats/edit/`
 		}
 	},
 

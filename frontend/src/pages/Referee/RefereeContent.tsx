@@ -12,7 +12,7 @@ const RefereeContent: React.FC = () => {
 
 	const { data } = useRefereeGamelog(refereeId!);
 
-	if (!data) return <NoContent>This referee has not officiated any games yet.</NoContent>;
+	if (!data) return <NoContent type="info" description="This referee has not officiated any games yet." />;
 
 	return (
 		<PageContentWrapper>

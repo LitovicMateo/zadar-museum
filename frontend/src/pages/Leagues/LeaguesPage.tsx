@@ -15,7 +15,7 @@ const LeaguesPage: React.FC = () => {
 
 	if (!leagues) return null;
 
-	if (leagues && leagues.length === 0) return <NoContent>No leagues in database.</NoContent>;
+	if (leagues && leagues.length === 0) return <NoContent type="info" description="No leagues in database." />;
 
 	const filteredLeagues = searchLeagues(leagues, searchTerm);
 

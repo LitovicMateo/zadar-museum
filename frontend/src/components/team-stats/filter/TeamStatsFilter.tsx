@@ -8,12 +8,12 @@ import { useSeasons } from '@/hooks/queries/dasboard/useSeasons';
 import FilterWrapper from '@/pages/Stats/UI/FilterWrapper';
 
 type TeamStatsFilterProps = {
-	location: 'home' | 'away' | null;
-	setLocation: (location: 'home' | 'away' | null) => void;
-	league: string | null;
-	setLeague: (league: string | null) => void;
-	season: string | null;
-	setSeason: (season: string | null) => void;
+	location: 'home' | 'away' | 'all';
+	setLocation: (location: 'home' | 'away' | 'all') => void;
+	league: string;
+	setLeague: (league: string) => void;
+	season: string;
+	setSeason: (season: string) => void;
 };
 
 const TeamStatsFilter: React.FC<TeamStatsFilterProps> = ({

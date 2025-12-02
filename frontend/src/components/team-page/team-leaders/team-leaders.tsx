@@ -42,11 +42,11 @@ const TeamLeaders = () => {
 				setSelectedCompetition={setSelectedCompetition}
 			/>
 			{!teamLeaders?.length ? (
-				<NoContent>No leaders found</NoContent>
+				<NoContent type="info" description="No leaders found" />
 			) : (
 				<div className="font-abel">
 					<ul>
-						<li className="flex justify-between border-b-1 border-solid border-gray-500 px-2 py-2 font-semibold bg-slate-100">
+						<li className="flex justify-between border-b border-solid border-gray-500 px-2 py-2 font-semibold bg-slate-100">
 							<span>Player Name</span>
 							<span>Statistic</span>
 						</li>
@@ -57,7 +57,7 @@ const TeamLeaders = () => {
 								selected === 'player' ? APP_ROUTES.player(leader.id) : APP_ROUTES.coach(leader.id);
 							return (
 								<li
-									className={`flex justify-between  px-2 py-2 ${index === teamLeaders.length - 1 ? '' : 'border-b-1 border-solid border-gray-500'}`}
+									className={`flex justify-between  px-2 py-2 ${index === teamLeaders.length - 1 ? '' : 'border-b border-solid border-gray-500'}`}
 								>
 									<Link to={url}>
 										{leader.first_name} {leader.last_name}

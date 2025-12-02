@@ -12,7 +12,7 @@ const navItems = [
 	{ name: 'Players', link: APP_ROUTES.players },
 	{ name: 'Coaches', link: APP_ROUTES.coaches },
 	{ name: 'Staff', link: APP_ROUTES.staffs },
-	{ name: 'Leagues', link: APP_ROUTES.leagues },
+	{ name: 'Competitions', link: APP_ROUTES.leagues },
 	{ name: 'Venues', link: APP_ROUTES.venues },
 	{ name: 'Referees', link: APP_ROUTES.referees }
 ];

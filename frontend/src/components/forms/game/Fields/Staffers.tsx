@@ -30,7 +30,7 @@ const Staffers: React.FC = () => {
 	const selectedIds = Array.isArray(watchedStaffers) ? watchedStaffers.map((v) => (v ? String(v) : '')) : [];
 
 	if (!staffs) {
-		return <NoContent>Loading staff members...</NoContent>;
+		return <NoContent type="info" description="Loading staff members..." />;
 	}
 
 	return (

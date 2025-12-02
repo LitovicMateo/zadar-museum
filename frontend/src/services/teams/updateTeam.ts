@@ -30,11 +30,18 @@ export const updateTeam = async ({ id, ...data }: { id: string } & TeamFormData)
 		}
 	}
 
+	const filterAlternate = data.alternate_names.filter((t) => t.name !== '');
+
+	const alternate_names = filterAlternate.map((alt) => ({
+		...alt,
+		short_name: alt.short_name.toUpperCase()
+	}));
+
 	// build payload, include image only when we have a definitive value (number or null)
 	const payload: Record<string, unknown> = {
 		name: data.name,
-		alternate_names: data.alternate_names,
-		short_name: data.short_name,
+		alternate_names: alternate_names,
+		short_name: data.short_name.toUpperCase(),
 		slug: slugify(data.name),
 		city: data.city,
 		country: data.country

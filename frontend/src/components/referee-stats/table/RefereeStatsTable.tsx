@@ -17,11 +17,7 @@ const RefereeStatsTable: React.FC<RefereeStatsTableProps> = ({ stats, sorting, s
 	const { TableHead, TableBody } = useRefereeStatsTable(stats, sorting, setSorting);
 
 	if (stats && stats.length === 0) {
-		return (
-			<NoContent>
-				<p>There are no referee stats in the database.</p>
-			</NoContent>
-		);
+		return <NoContent type="info" description={<p>There are no referee stats in the database.</p>} />;
 	}
 
 	return (

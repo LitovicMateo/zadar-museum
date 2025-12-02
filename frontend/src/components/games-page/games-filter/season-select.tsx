@@ -31,7 +31,6 @@ const SeasonSelect: React.FC<SeasonSelectProps> = ({ seasons, selectedSeason, on
 					className="text-sm"
 					classNamePrefix="rs"
 					styles={selectStyle('160px')}
-					isClearable
 					isSearchable={false}
 					menuPlacement="auto"
 				/>
@@ -50,7 +49,6 @@ const SeasonSelect: React.FC<SeasonSelectProps> = ({ seasons, selectedSeason, on
 				className="text-sm"
 				classNamePrefix="rs"
 				styles={selectStyle('180px')}
-				isClearable
 				isSearchable={false}
 				menuPlacement="auto"
 			/>

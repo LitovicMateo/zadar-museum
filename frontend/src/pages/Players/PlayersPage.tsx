@@ -13,7 +13,7 @@ const PlayersPage: React.FC = () => {
 
 	if (!players) return null;
 
-	if (players && players.length === 0) return <NoContent>No players in database.</NoContent>;
+	if (players && players.length === 0) return <NoContent type="info" description="No players in database." />;
 	const filteredPlayers = searchPlayers(players, searchTerm);
 
 	return (

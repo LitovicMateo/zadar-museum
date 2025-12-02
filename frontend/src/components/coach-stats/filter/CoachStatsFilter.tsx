@@ -15,16 +15,16 @@ type CoachStatsFilterProps = {
 	database: PlayerDB;
 	setDatabase: (database: PlayerDB) => void;
 
-	role: null | 'head' | 'assistant';
-	setRole: (role: null | 'head' | 'assistant') => void;
+	role: 'all' | 'head' | 'assistant';
+	setRole: (role: 'all' | 'head' | 'assistant') => void;
 
-	location: 'home' | 'away' | null;
-	setLocation: (location: 'home' | 'away' | null) => void;
+	location: 'home' | 'away' | 'all';
+	setLocation: (location: 'home' | 'away' | 'all') => void;
 
-	league: string | null;
+	league: string;
 	setLeague: (league: string) => void;
 
-	season: string | null;
+	season: string;
 	setSeason: (season: string) => void;
 };
 

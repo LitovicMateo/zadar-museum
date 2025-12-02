@@ -15,7 +15,7 @@ const TeamsPage: React.FC = () => {
 
 	if (!teams) return null;
 
-	if (teams && teams.length === 0) return <NoContent>No teams in database.</NoContent>;
+	if (teams && teams.length === 0) return <NoContent type="info" description="No teams in database." />;
 
 	const filteredTeams = searchTeams(teams, searchTerm);
 

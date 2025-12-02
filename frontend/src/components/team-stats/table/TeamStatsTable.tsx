@@ -17,11 +17,7 @@ type TeamStatsTableProps = {
 const TeamStatsTable: React.FC<TeamStatsTableProps> = ({ stats, isFetching, sorting, setSorting }) => {
 	const { TableHead, TableBody } = useTeamStatsTable(stats, sorting, setSorting);
 	if (!stats || stats.length === 0) {
-		return (
-			<NoContent>
-				<p>There are no team stats in the database.</p>
-			</NoContent>
-		);
+		return <NoContent type="info" description={<p>There are no team stats in the database.</p>} />;
 	}
 
 	if (isFetching) return null;

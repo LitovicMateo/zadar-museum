@@ -16,7 +16,7 @@ const RefereeAllTime: React.FC = () => {
 	const { TableHead, TableBody } = useRefereeStatsTable(refereeStats?.stats);
 
 	if (!refereeStats || refereeStats.stats.length === 0) {
-		return <NoContent>This referee has no all-time record available.</NoContent>;
+		return <NoContent type="info" description="This referee has no all-time record available." />;
 	}
 
 	return (

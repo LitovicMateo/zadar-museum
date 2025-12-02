@@ -14,7 +14,7 @@ const LeagueContent: React.FC = () => {
 	const { data: leagueSeasons } = useLeagueSeasons(leagueSlug!);
 
 	if (leagueSeasons && leagueSeasons.length === 0)
-		return <NoContent>No games have been played in this competition.</NoContent>;
+		return <NoContent type="info" description="No games have been played in this competition." />;
 
 	return (
 		<PageContentWrapper>

@@ -2,41 +2,42 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Sidebar from '@/components/sidebar/sidebar';
+import { APP_ROUTES } from '@/constants/routes';
 
 const sidebarGroups = [
 	{
 		label: 'Create new objects',
 		list: [
 			{
-				path: 'player/create',
+				path: APP_ROUTES.dashboard.player.create,
 				label: 'Player'
 			},
 			{
-				path: 'staff/create',
+				path: APP_ROUTES.dashboard.staff.create,
 				label: 'Staff'
 			},
 			{
-				path: 'referee/create',
+				path: APP_ROUTES.dashboard.referee.create,
 				label: 'Referee'
 			},
 			{
-				path: 'team/create',
+				path: APP_ROUTES.dashboard.team.create,
 				label: 'Team'
 			},
 			{
-				path: 'coach/create',
+				path: APP_ROUTES.dashboard.coach.create,
 				label: 'Coach'
 			},
 			{
-				path: 'game/create',
+				path: APP_ROUTES.dashboard.game.create,
 				label: 'Game'
 			},
 			{
-				path: 'venue/create',
+				path: APP_ROUTES.dashboard.venue.create,
 				label: 'Venue'
 			},
 			{
-				path: 'competition/create',
+				path: APP_ROUTES.dashboard.competition.create,
 				label: 'Competition'
 			}
 		]
@@ -45,35 +46,35 @@ const sidebarGroups = [
 		label: 'Edit objects',
 		list: [
 			{
-				path: 'player/edit',
+				path: APP_ROUTES.dashboard.player.edit,
 				label: 'Player'
 			},
 			{
-				path: 'staff/edit',
+				path: APP_ROUTES.dashboard.staff.edit,
 				label: 'Staff'
 			},
 			{
-				path: 'referee/edit',
+				path: APP_ROUTES.dashboard.referee.edit,
 				label: 'Referee'
 			},
 			{
-				path: 'team/edit',
+				path: APP_ROUTES.dashboard.team.edit,
 				label: 'Team'
 			},
 			{
-				path: 'coach/edit',
+				path: APP_ROUTES.dashboard.coach.edit,
 				label: 'Coach'
 			},
 			{
-				path: 'game/edit',
+				path: APP_ROUTES.dashboard.game.edit,
 				label: 'Game'
 			},
 			{
-				path: 'venue/edit',
+				path: APP_ROUTES.dashboard.venue.edit,
 				label: 'Venue'
 			},
 			{
-				path: 'competition/edit',
+				path: APP_ROUTES.dashboard.competition.edit,
 				label: 'Competition'
 			}
 		]
@@ -82,11 +83,11 @@ const sidebarGroups = [
 		label: 'Import Stats',
 		list: [
 			{
-				path: 'player-stats/create',
+				path: APP_ROUTES.dashboard.playerStats.create,
 				label: 'Player Stats'
 			},
 			{
-				path: 'team-stats/create',
+				path: APP_ROUTES.dashboard.teamStats.create,
 				label: 'Team Stats'
 			}
 		]
@@ -95,11 +96,11 @@ const sidebarGroups = [
 		label: 'Edit Stats',
 		list: [
 			{
-				path: 'player-stats/edit',
+				path: APP_ROUTES.dashboard.playerStats.edit,
 				label: 'Player Stats'
 			},
 			{
-				path: 'team-stats/edit',
+				path: APP_ROUTES.dashboard.teamStats.edit,
 				label: 'Team Stats'
 			}
 		]
