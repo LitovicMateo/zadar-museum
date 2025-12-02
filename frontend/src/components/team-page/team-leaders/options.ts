@@ -24,6 +24,14 @@ export const playerOptions: {
 	{
 		value: 'blocks',
 		label: 'Blocks'
+	},
+	{
+		value: 'three_pointers_made',
+		label: '3PT Made'
+	},
+	{
+		value: 'free_throws_made',
+		label: 'FT Made'
 	}
 ];
 

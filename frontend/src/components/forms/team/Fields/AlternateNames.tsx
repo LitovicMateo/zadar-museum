@@ -58,7 +58,7 @@ const AlternateNames: React.FC = () => {
 				variant="outline"
 				size="sm"
 				onClick={() => append({ name: '', short_name: '' })}
-				className="text-xs !w-full cursor-pointer"
+				className="text-xs w-full! cursor-pointer"
 			>
 				<Plus className="h-3 w-3 mr-1" /> Add Alternate Name
 			</Button>

@@ -10,15 +10,20 @@ export const createTeam = async (data: TeamFormData) => {
 
 	const filterAlternate = data.alternate_names.filter((t) => t.name !== '');
 
+	const alternate_names = filterAlternate.map((alt) => ({
+		...alt,
+		short_name: alt.short_name.toUpperCase()
+	}));
+
 	return axios.post(API_ROUTES.create.team(), {
 		data: {
 			name: data.name,
-			short_name: data.short_name,
+			short_name: data.short_name.toUpperCase(),
 			slug: slugify(data.name),
 			city: data.city,
 			image: uploadedImageId,
 			country: data.country,
-			alternate_names: filterAlternate
+			alternate_names: alternate_names
 		}
 	});
 };
