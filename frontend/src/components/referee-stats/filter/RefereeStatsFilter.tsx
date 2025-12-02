@@ -9,12 +9,12 @@ import LocationFilter from './LocationFilter';
 import SeasonFilter from './SeasonFilter';
 
 type RefereeStatsFilterProps = {
-	location: 'home' | 'away' | null;
-	setLocation: (location: 'home' | 'away' | null) => void;
-	league: string | null;
-	setLeague: (league: string | null) => void;
-	season: string | null;
-	setSeason: (season: string | null) => void;
+	location: 'home' | 'away' | 'all';
+	setLocation: (location: 'home' | 'away' | 'all') => void;
+	league: string;
+	setLeague: (league: string) => void;
+	season: string;
+	setSeason: (season: string) => void;
 };
 
 const RefereeStatsFilter: React.FC<RefereeStatsFilterProps> = ({

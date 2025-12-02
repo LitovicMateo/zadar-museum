@@ -8,14 +8,14 @@ import Container from '../../../pages/Stats/Container';
 
 type SeasonFilterProps = {
 	seasons: string[];
-	selectedSeason: string | null;
+	selectedSeason: string;
 	onSeasonChange: (season: string) => void;
 };
 const SeasonFilter: React.FC<SeasonFilterProps> = ({ onSeasonChange, seasons, selectedSeason }) => {
 	const seasonOptions: { label: string; value: string }[] = [
 		{
 			label: 'All',
-			value: ''
+			value: 'all'
 		},
 		...seasons.map((season) => ({
 			label: season,

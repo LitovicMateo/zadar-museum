@@ -14,15 +14,15 @@ import StatsFilter from './StatsFilter';
 type PlayerStatsFilterProps = {
 	database: PlayerDB;
 	stats?: 'total' | 'average';
-	location: 'home' | 'away' | null;
-	league: string | null;
-	season: string | null;
+	location: 'home' | 'away' | 'all';
+	league: string;
+	season: string;
 
 	setDatabase: (database: PlayerDB) => void;
 	setStats?: (stats: 'total' | 'average') => void;
-	setLocation: (location: 'home' | 'away' | null) => void;
-	setLeague: (league: string | null) => void;
-	setSeason: (season: string | null) => void;
+	setLocation: (location: 'home' | 'away' | 'all') => void;
+	setLeague: (league: string) => void;
+	setSeason: (season: string) => void;
 };
 
 const PlayerStatsFilter: React.FC<PlayerStatsFilterProps> = ({

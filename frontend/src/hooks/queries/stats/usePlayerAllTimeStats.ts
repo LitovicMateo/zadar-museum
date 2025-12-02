@@ -7,9 +7,9 @@ import axios from 'axios';
 export const usePlayerAllTimeStats = (
 	database: PlayerDB,
 	stats: 'total' | 'average',
-	location: 'home' | 'away' | null,
-	league: string | null,
-	season: string | null
+	location: 'home' | 'away' | 'all',
+	league: string,
+	season: string
 ) => {
 	return useQuery({
 		queryKey: ['player-all-time-stats', database, stats, location, league, season],
@@ -20,9 +20,9 @@ export const usePlayerAllTimeStats = (
 const getPlayerAllTimeStats = async (
 	database: PlayerDB,
 	stats: 'total' | 'average',
-	location: 'home' | 'away' | null,
-	league: string | null,
-	season: string | null
+	location: 'home' | 'away' | 'all',
+	league: string,
+	season: string
 ): Promise<{
 	current: PlayerAllTimeStats[];
 	previous: PlayerAllTimeStats[];
@@ -30,9 +30,9 @@ const getPlayerAllTimeStats = async (
 	const params = new URLSearchParams({
 		database,
 		stats,
-		location: location || '',
-		league: league || '',
-		season: season || ''
+		location: location === 'all' ? '' : location,
+		league: league === 'all' ? '' : league,
+		season: season === 'all' ? '' : season
 	});
 
 	const res = await axios.get(API_ROUTES.stats.player.allTime(params.toString()));

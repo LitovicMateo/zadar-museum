@@ -6,10 +6,10 @@ import axios from 'axios';
 
 export const useCoachAllTimeStats = (
 	database: PlayerDB,
-	role: null | 'head' | 'assistant',
-	location: 'home' | 'away' | null,
-	league: string | null,
-	season: string | null
+	role: 'all' | 'head' | 'assistant',
+	location: 'home' | 'away' | 'all',
+	league: string,
+	season: string
 ) => {
 	return useQuery({
 		queryKey: ['coach-all-time-stats', database, role, location, league, season],
@@ -19,20 +19,20 @@ export const useCoachAllTimeStats = (
 
 const getCoachAllTimeStats = async (
 	database: PlayerDB,
-	role: null | 'head' | 'assistant',
-	location: 'home' | 'away' | null,
-	league: string | null,
-	season: string | null
+	role: 'all' | 'head' | 'assistant',
+	location: 'home' | 'away' | 'all',
+	league: string,
+	season: string
 ): Promise<{
 	current: CoachStatsRanking[];
 	previous: CoachStatsRanking[];
 }> => {
 	const params = new URLSearchParams({
 		database,
-		role: role || '',
-		location: location || '',
-		league: league || '',
-		season: season || ''
+		role: role === 'all' ? '' : role,
+		location: location === 'all' ? '' : location,
+		league: league === 'all' ? '' : league,
+		season: season === 'all' ? '' : season
 	});
 	const res = await axios.get(API_ROUTES.stats.coach.allTime(params.toString()));
 

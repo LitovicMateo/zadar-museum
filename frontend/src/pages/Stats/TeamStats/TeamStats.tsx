@@ -12,9 +12,9 @@ import { SortingState } from '@tanstack/react-table';
 import PageWrapper from '../UI/PageWrapper';
 
 const TeamStats: React.FC = () => {
-	const [location, setLocation] = React.useState<'home' | 'away' | null>(null);
-	const [league, setLeague] = React.useState<string | null>(null);
-	const [season, setSeason] = React.useState<string | null>(null);
+	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');
+	const [league, setLeague] = React.useState<string>('all');
+	const [season, setSeason] = React.useState<string>('all');
 	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'games', desc: true }]);
 
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search by team name' });

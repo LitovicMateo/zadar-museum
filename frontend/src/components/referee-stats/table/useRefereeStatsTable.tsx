@@ -29,8 +29,6 @@ export const useRefereeStatsTable = (
 		}
 	};
 
-	console.log(data);
-
 	const table = useReactTable<RefereeStatsRanking>({
 		data: data || [],
 		columns: [

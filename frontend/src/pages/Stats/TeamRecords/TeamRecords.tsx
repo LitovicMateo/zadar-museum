@@ -17,9 +17,9 @@ const TeamRecords: React.FC = () => {
 	// home/away
 
 	const [database, setDatabase] = React.useState<PlayerDB>('zadar');
-	const [season, setSeason] = React.useState<string | null>(null);
-	const [league, setLeague] = React.useState<string | null>(null);
-	const [location, setLocation] = React.useState<'home' | 'away' | null>(null);
+	const [season, setSeason] = React.useState<string>('all');
+	const [league, setLeague] = React.useState<string>('all');
+	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');
 	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'score', desc: true }]);
 
 	const { data: stats, isFetching } = useTeamRecords(database, season, league, location, sorting[0]?.id);
@@ -31,9 +31,9 @@ const TeamRecords: React.FC = () => {
 	});
 
 	const handleSetDatabase = React.useCallback((db: PlayerDB) => setDatabase(db), []);
-	const handleSetLocation = React.useCallback((loc: 'home' | 'away' | null) => setLocation(loc), []);
-	const handleSetLeague = React.useCallback((lg: string | null) => setLeague(lg), []);
-	const handleSetSeason = React.useCallback((ssn: string | null) => setSeason(ssn), []);
+	const handleSetLocation = React.useCallback((loc: 'home' | 'away' | 'all') => setLocation(loc), []);
+	const handleSetLeague = React.useCallback((lg: string) => setLeague(lg), []);
+	const handleSetSeason = React.useCallback((ssn: string) => setSeason(ssn), []);
 
 	return (
 		<PageWrapper>

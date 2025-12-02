@@ -15,7 +15,7 @@ const SeasonFilter: React.FC<SeasonFilterProps> = ({ season, setSeason, seasons 
 	const seasonOptions: { label: string; value: string }[] = [
 		{
 			label: 'All',
-			value: ''
+			value: 'all'
 		},
 		...seasons.map((season) => ({
 			label: season,

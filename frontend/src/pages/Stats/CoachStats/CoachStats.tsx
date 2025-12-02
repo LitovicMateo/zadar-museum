@@ -14,10 +14,10 @@ import PageWrapper from '../UI/PageWrapper';
 
 const CoachStats: React.FC = () => {
 	const [database, setDatabase] = React.useState<PlayerDB>('zadar');
-	const [role, setRole] = React.useState<null | 'head' | 'assistant'>(null);
-	const [location, setLocation] = React.useState<'home' | 'away' | null>(null);
-	const [league, setLeague] = React.useState<string | null>(null);
-	const [season, setSeason] = React.useState<string | null>(null);
+	const [role, setRole] = React.useState<'all' | 'head' | 'assistant'>('all');
+	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');
+	const [league, setLeague] = React.useState<string>('all');
+	const [season, setSeason] = React.useState<string>('all');
 	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'wins', desc: true }]);
 
 	const { data: coachAllTimeStats } = useCoachAllTimeStats(database, role, location, league, season);

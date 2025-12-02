@@ -17,7 +17,7 @@ const LeagueFilter: React.FC<LeagueFilterProps> = ({ league, setLeague, competit
 	const leagueOptions: { label: string; value: string }[] = [
 		{
 			label: 'All',
-			value: ''
+			value: 'all'
 		},
 		...competitions.map((comp) => ({
 			label: comp.name,

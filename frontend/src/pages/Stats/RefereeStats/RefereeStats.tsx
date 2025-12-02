@@ -12,17 +12,17 @@ import { SortingState } from '@tanstack/react-table';
 import PageWrapper from '../UI/PageWrapper';
 
 const RefereeStats: React.FC = () => {
-	const [location, setLocation] = React.useState<'home' | 'away' | null>(null);
-	const [league, setLeague] = React.useState<string | null>(null);
-	const [season, setSeason] = React.useState<string | null>(null);
+	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');
+	const [league, setLeague] = React.useState<string>('all');
+	const [season, setSeason] = React.useState<string>('all');
 	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'wins', desc: true }]);
 
 	const { data: refereeAllTime, isFetching } = useRefereeAllTimeStats(location, league, season);
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search by referee name' });
 
-	const handleSetLocation = React.useCallback((loc: 'home' | 'away' | null) => setLocation(loc), []);
-	const handleSetLeague = React.useCallback((lg: string | null) => setLeague(lg), []);
-	const handleSetSeason = React.useCallback((ssn: string | null) => setSeason(ssn), []);
+	const handleSetLocation = React.useCallback((loc: 'home' | 'away' | 'all') => setLocation(loc), []);
+	const handleSetLeague = React.useCallback((lg: string) => setLeague(lg), []);
+	const handleSetSeason = React.useCallback((ssn: string) => setSeason(ssn), []);
 
 	const filteredReferees = searchRefereeStats(refereeAllTime, searchTerm);
 

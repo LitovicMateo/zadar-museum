@@ -17,11 +17,7 @@ type CoachStatsTableProps = {
 const CoachStatsTable: React.FC<CoachStatsTableProps> = ({ stats, prev, sorting, setSorting }) => {
 	const { TableBody, TableHead } = useCoachStatsTable(stats, prev, sorting, setSorting);
 	if (!stats || stats.length === 0) {
-		return (
-			<NoContent>
-				<p>There are no coach stats in the database.</p>
-			</NoContent>
-		);
+		return <NoContent type="info" description={<p>There are no coach stats in the database.</p>} />;
 	}
 
 	return (
