@@ -55,9 +55,10 @@ const Sidebar: React.FC<SidebarProps> = ({ groups, title, basePath }) => {
 							{groups.map((group) => (
 								<SidebarGroup label={group.label} key={group.label}>
 									<SidebarList>
-										{group.list.map(({ label, path }) => (
-											<SidebarItem key={path} path={`/${basePath}/${path}`} label={label} />
-										))}
+										{group.list.map(({ label, path }) => {
+											const resolvedPath = path.startsWith('/') ? path : `/${basePath}/${path}`;
+											return <SidebarItem key={resolvedPath} path={resolvedPath} label={label} />;
+										})}
 									</SidebarList>
 								</SidebarGroup>
 							))}

@@ -42,7 +42,7 @@ const CreateStaff: React.FC = () => {
 	const itemsArray = staffs?.map((staff: StaffDetailsResponse) => ({
 		id: staff.id,
 		item: (
-			<Link to={APP_ROUTES.dashboard.staff.edit(staff.documentId)}>
+			<Link to={APP_ROUTES.dashboard.staff.edit}>
 				{staff.first_name} {staff.last_name}
 			</Link>
 		),
