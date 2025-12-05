@@ -36,13 +36,18 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 			},
 			{
 				id: 'name',
-				accessorFn: (row) => row.first_name + ' ' + row.last_name,
+				accessorFn: (row) => {
+					const isCaptain = row.captain;
+					return row.first_name + ' ' + row.last_name + (isCaptain ? ' (c)' : '');
+				},
 				header: 'name',
-				cell: (info) => (
-					<Link className=" whitespace-nowrap" to={APP_ROUTES.player(info.row.original.player_id)}>
-						{info.getValue()}
-					</Link>
-				)
+				cell: (info) => {
+					return (
+						<Link className=" whitespace-nowrap" to={APP_ROUTES.player(info.row.original.player_id)}>
+							{info.getValue()}
+						</Link>
+					);
+				}
 			},
 			{
 				id: 'position',

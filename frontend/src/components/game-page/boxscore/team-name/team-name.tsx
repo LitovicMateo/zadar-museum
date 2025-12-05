@@ -14,7 +14,7 @@ const TeamName: React.FC<TeamNameProps> = ({ name, imageUrl, slug }) => {
 	return (
 		<div className="flex gap-4 h-full font-bold items-center">
 			{!imageUrl.includes('undefined') ? (
-				<div className="h-[32px] w-[32px] overflow-hidden">
+				<div className="h-8 w-8 overflow-hidden">
 					<img src={imageUrl} alt="" className="w-full h-full object-cover" />
 				</div>
 			) : (

@@ -12,17 +12,18 @@ import TeamName from './team-name/team-name';
 
 type BoxscoreContainerProps = {
 	teamSlug: string;
+	teamName: string;
 };
 
-const BoxscoreContainer: React.FC<BoxscoreContainerProps> = ({ teamSlug }) => {
+const BoxscoreContainer: React.FC<BoxscoreContainerProps> = ({ teamSlug, teamName }) => {
 	const { gameId } = useParams();
 	const { data: team } = useTeamDetails(teamSlug);
 
-	const { data: boxscore, isLoading: isBoxscoreLoading } = useGameBoxscore(gameId!, team?.slug);
+	const { data: boxscore, isLoading: isBoxscoreLoading } = useGameBoxscore(gameId!, teamSlug);
 
 	if (isBoxscoreLoading || !boxscore) return <p>Loading...</p>;
 
-	if (boxscore.length === 0) return <p className="text-center">{`No ${team?.name} players found`}</p>;
+	if (boxscore.length === 0) return <p className="text-center">{`No ${teamName} players found`}</p>;
 
 	if (!team) return null;
 
@@ -32,8 +33,8 @@ const BoxscoreContainer: React.FC<BoxscoreContainerProps> = ({ teamSlug }) => {
 	return (
 		<section className="py-2 font-abel">
 			<div className="flex justify-between items-center mb-2 pb-2 border-b border-gray-500 uppercase">
-				<TeamName name={team?.name || ''} imageUrl={imageUrl} slug={team?.slug || ''} />
-				<Coaches teamSlug={team.slug} />
+				<TeamName name={teamName} imageUrl={imageUrl} slug={teamSlug || ''} />
+				<Coaches teamSlug={teamSlug} />
 			</div>
 			<Boxscore boxscore={sortTeamBoxscore(boxscore)} />
 		</section>

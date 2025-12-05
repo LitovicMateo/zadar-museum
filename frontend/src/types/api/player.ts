@@ -110,6 +110,7 @@ export interface PlayerBoxscoreResponse {
 	document_id: string;
 	game_id: string;
 	player_id: string;
+	captain: boolean;
 
 	player_team_document_id: string;
 	team_name: string;

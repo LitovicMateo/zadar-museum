@@ -25,8 +25,8 @@ const GameStats: React.FC = () => {
 			{!disableStats && (
 				<div className="flex flex-col gap-2">
 					<Heading title="Boxscore" />
-					<BoxscoreContainer teamSlug={game.home_team.slug} />
-					<BoxscoreContainer teamSlug={game.away_team.slug} />
+					<BoxscoreContainer teamSlug={game.home_team.slug} teamName={game.home_team_name} />
+					<BoxscoreContainer teamSlug={game.away_team.slug} teamName={game.away_team_name} />
 				</div>
 			)}
 		</section>

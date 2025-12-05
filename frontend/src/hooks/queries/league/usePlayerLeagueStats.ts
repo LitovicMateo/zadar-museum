@@ -14,6 +14,8 @@ export const usePlayerLeagueStats = (leagueSlug: string, season: string) => {
 const getSinglePlayerLeagueStats = async (leagueSlug: string, season: string): Promise<PlayerAllTimeStats[]> => {
 	const res = await axios.get(API_ROUTES.league.playerSeasonStats(leagueSlug, season));
 
+	console.log(res);
+
 	const data = res.data;
 
 	return data;

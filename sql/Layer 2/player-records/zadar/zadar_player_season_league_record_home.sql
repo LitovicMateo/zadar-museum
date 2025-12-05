@@ -34,73 +34,85 @@ SELECT
     opponent_team_id,
     opponent_team_document_id,
     opponent_team_name,
-    opponent_team_short_name,
     opponent_team_slug,
 
-    -- stats
-    status,
+    -- stats + partitioned ranks
     minutes,
     seconds,
+    -- minutes as decimal (minutes + seconds/60). NULL if minutes is NULL. NULLs sort last in ranking.
+    CASE WHEN minutes IS NULL THEN NULL ELSE (minutes::numeric + COALESCE(seconds,0)::numeric / 60.0) END AS minutes_decimal,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (CASE WHEN minutes IS NULL THEN NULL ELSE (minutes::numeric + COALESCE(seconds,0)::numeric / 60.0) END) DESC NULLS LAST) AS minutes_rank,
+
     points,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (points) DESC) AS points_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (points) DESC NULLS LAST) AS points_rank,
 
-    -- field goals
     field_goals_made,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (field_goals_made) DESC) AS field_goals_made_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (field_goals_made) DESC NULLS LAST) AS field_goals_made_rank,
+
     field_goals_attempted,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (field_goals_attempted) DESC) AS field_goals_attempted_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (field_goals_attempted) DESC NULLS LAST) AS field_goals_attempted_rank,
+
     field_goals_percentage,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (field_goals_percentage) DESC NULLS LAST) AS field_goals_percentage_rank,
 
-    -- three pointers
     three_pointers_made,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (three_pointers_made) DESC) AS three_pointers_made_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (three_pointers_made) DESC NULLS LAST) AS three_pointers_made_rank,
+
     three_pointers_attempted,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (three_pointers_attempted) DESC) AS three_pointers_attempted_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (three_pointers_attempted) DESC NULLS LAST) AS three_pointers_attempted_rank,
+
     three_point_percentage,
-    
-    -- free throws
+    rank() OVER (PARTITION BY league_id, season ORDER BY (three_point_percentage) DESC NULLS LAST) AS three_point_percentage_rank,
+
     free_throws_made,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (free_throws_made) DESC) AS free_throws_made_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (free_throws_made) DESC NULLS LAST) AS free_throws_made_rank,
+
     free_throws_attempted,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (free_throws_attempted) DESC) AS free_throws_attempted_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (free_throws_attempted) DESC NULLS LAST) AS free_throws_attempted_rank,
+
     free_throws_percentage,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (free_throws_percentage) DESC NULLS LAST) AS free_throws_percentage_rank,
 
-    -- rebounds
     rebounds,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (rebounds) DESC) AS rebounds_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (rebounds) DESC NULLS LAST) AS rebounds_rank,
+
     offensive_rebounds,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (offensive_rebounds) DESC) AS offensive_rebounds_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (offensive_rebounds) DESC NULLS LAST) AS offensive_rebounds_rank,
+
     defensive_rebounds,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (defensive_rebounds) DESC) AS defensive_rebounds_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (defensive_rebounds) DESC NULLS LAST) AS defensive_rebounds_rank,
 
-    -- passing
     assists,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (assists) DESC) AS assists_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (assists) DESC NULLS LAST) AS assists_rank,
+
     turnovers,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (turnovers) DESC) AS turnovers_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (turnovers) DESC NULLS LAST) AS turnovers_rank,
 
-    -- defense
     steals,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (steals) DESC) AS steals_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (steals) DESC NULLS LAST) AS steals_rank,
+
     blocks,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (blocks) DESC) AS blocks_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (blocks) DESC NULLS LAST) AS blocks_rank,
 
-    -- misc
     fouls,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (fouls) DESC) AS fouls_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (fouls) DESC NULLS LAST) AS fouls_rank,
+
     fouls_on,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (fouls_on) DESC) AS fouls_on_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (fouls_on) DESC NULLS LAST) AS fouls_on_rank,
+
     blocks_received,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (blocks_received) DESC) AS blocks_received_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (blocks_received) DESC NULLS LAST) AS blocks_received_rank,
+
     plus_minus,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (plus_minus) DESC) AS plus_minus_rank,
+    rank() OVER (PARTITION BY league_id, season ORDER BY (plus_minus) DESC NULLS LAST) AS plus_minus_rank,
+
     efficiency,
-    rank() OVER (PARTITION BY league_id, season ORDER BY (efficiency) DESC) AS efficiency_rank
+    rank() OVER (PARTITION BY league_id, season ORDER BY (efficiency) DESC NULLS LAST) AS efficiency_rank
 
-
-FROM player_boxscore 
-WHERE 
-    is_nulled = false AND 
-    forfeited = false AND 
-    is_home_team = 'home' AND
-    team_slug = 'kk-zadar'
+FROM player_boxscore
+WHERE
+    is_nulled = false
+    AND forfeited = false
+    AND is_home_team = 'home'
+    AND team_slug = 'kk-zadar'
+    AND status::text <> 'dnp-cd'::text
