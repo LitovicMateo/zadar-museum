@@ -12,6 +12,7 @@ export default ({ strapi }) => ({
     const table = `${database}_player${seasonString}${statsString}_all_time${leagueString}${locationString}`;
 
     strapi.log.info(`TABLE: ${table}`);
+    strapi.log.info(`LEAGUE: ${league}`);
     strapi.log.info(`SEASON PARAM: ${season}, Type: ${typeof season}`);
 
     const knex = strapi.db.connection;

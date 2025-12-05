@@ -113,6 +113,7 @@ export default factories.createCoreService(
     async findPlayerSeasonLeagueStats(leagueSlug, season) {
       const knex = strapi.db.connection;
       try {
+        console.log(leagueSlug, season);
         return await knex("zadar_player_season_average_all_time_league")
           .select("*")
           .where("league_slug", leagueSlug)

@@ -7,7 +7,7 @@ CREATE MATERIALIZED VIEW public.zadar_player_season_average_all_time_league AS
     b.last_name,
     b.season,
     count(b.game_id) AS games,
-    rank() OVER (ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
+    rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
     sum(
         CASE
             WHEN b.status::text = 'starter'::text THEN 1
@@ -18,10 +18,10 @@ CREATE MATERIALIZED VIEW public.zadar_player_season_average_all_time_league AS
     round(avg(b.minutes + (b.seconds / 60.0)), 1) AS minutes,
 
     round(avg(b.points), 1) AS points,
-    rank() OVER (ORDER BY (avg(b.points)) DESC NULLS LAST) AS points_rank,
+    rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (avg(b.points)) DESC NULLS LAST) AS points_rank,
 
     round(avg(b.assists), 1) AS assists,
-    rank() OVER (ORDER BY (avg(b.assists)) DESC NULLS LAST) AS assists_rank,
+    rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (avg(b.assists)) DESC NULLS LAST) AS assists_rank,
 
     round(avg(b.offensive_rebounds), 1) AS off_rebounds,
     rank() OVER (ORDER BY (avg(b.offensive_rebounds)) DESC NULLS LAST) AS off_rebounds_rank,

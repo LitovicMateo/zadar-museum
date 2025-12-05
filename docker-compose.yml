@@ -23,6 +23,8 @@ services:
     volumes:
       - ./backend:/app
       - backend_node_modules:/app/node_modules
+      # Mount top-level SQL directory so backend scripts can access materialized view files
+      - ./sql:/sql:ro
     environment:
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}

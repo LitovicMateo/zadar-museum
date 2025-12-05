@@ -7,7 +7,7 @@ CREATE MATERIALIZED VIEW public.player_total_all_time_per_team_per_league_home A
     b.league_name,
     b.league_slug,
     count(b.game_id) AS games,
-    rank() OVER (ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
+    rank() OVER (PARTITION BY b.league_id ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
     sum(
         CASE
             WHEN b.status::text = 'starter'::text THEN 1
@@ -16,7 +16,7 @@ CREATE MATERIALIZED VIEW public.player_total_all_time_per_team_per_league_home A
     rank() OVER (ORDER BY (sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END)) DESC NULLS LAST) AS games_started_rank,
 
     sum(b.points) AS points,
-    rank() OVER (ORDER BY (sum(b.points)) DESC NULLS LAST) AS points_rank,
+    rank() OVER (PARTITION BY b.league_id ORDER BY (sum(b.points)) DESC NULLS LAST) AS points_rank,
 
     sum(b.assists) AS assists,
     rank() OVER (ORDER BY (sum(b.assists)) DESC NULLS LAST) AS assists_rank,
@@ -77,4 +77,4 @@ CREATE MATERIALIZED VIEW public.player_total_all_time_per_team_per_league_home A
     b.status::text <> 'dnp-cd'::text AND 
     b.is_home_team = 'home' AND
     b.is_nulled = false
-  GROUP BY b.player_id, b.first_name, b.last_name, b.team_slug, b.league_name, b.league_slug;
+    GROUP BY b.player_id, b.first_name, b.last_name, b.team_slug, b.league_id, b.league_name, b.league_slug;
