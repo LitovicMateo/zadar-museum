@@ -51,5 +51,11 @@ SELECT
     ) as away
 
 FROM public.team_season_league_average_stats total
-LEFT JOIN public.team_season_league_average_stats_home home USING (team_id)
-LEFT JOIN public.team_season_league_average_stats_away away USING (team_id);
+LEFT JOIN public.team_season_league_average_stats_home home
+    ON total.team_id = home.team_id
+    AND total.league_id = home.league_id
+    AND total.season = home.season
+LEFT JOIN public.team_season_league_average_stats_away away
+    ON total.team_id = away.team_id
+    AND total.league_id = away.league_id
+    AND total.season = away.season;
