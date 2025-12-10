@@ -10,6 +10,7 @@ import { searchRefereeStats } from '@/utils/search-functions';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 
 const RefereeStats: React.FC = () => {
 	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');
@@ -34,15 +35,16 @@ const RefereeStats: React.FC = () => {
 
 	return (
 		<PageWrapper>
-			<RefereeStatsFilter
-				location={location}
-				setLocation={handleSetLocation}
-				league={league}
-				setLeague={handleSetLeague}
-				season={season}
-				setSeason={handleSetSeason}
-			/>
-			<div className="py-2">{SearchInput}</div>
+			<MobileFilters SearchInput={SearchInput}>
+				<RefereeStatsFilter
+					location={location}
+					setLocation={handleSetLocation}
+					league={league}
+					setLeague={setLeague}
+					season={season}
+					setSeason={setSeason}
+				/>
+			</MobileFilters>
 
 			{isFetching ? (
 				<div>Loading...</div>

@@ -9,6 +9,7 @@ import { PlayerDB } from '@/pages/Player/Player';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 
 const TeamRecords: React.FC = () => {
 	// zadar/opponent
@@ -37,16 +38,18 @@ const TeamRecords: React.FC = () => {
 
 	return (
 		<PageWrapper>
-			<PlayerStatsFilter
-				database={database}
-				setDatabase={handleSetDatabase}
-				location={location}
-				setLocation={handleSetLocation}
-				league={league}
-				setLeague={handleSetLeague}
-				season={season}
-				setSeason={handleSetSeason}
-			/>
+			<MobileFilters>
+				<PlayerStatsFilter
+					database={database}
+					setDatabase={handleSetDatabase}
+					location={location}
+					setLocation={handleSetLocation}
+					league={league}
+					setLeague={handleSetLeague}
+					season={season}
+					setSeason={handleSetSeason}
+				/>
+			</MobileFilters>
 			{isFetching ? (
 				<div>Loading...</div>
 			) : (

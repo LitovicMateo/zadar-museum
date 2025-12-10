@@ -11,6 +11,7 @@ import { searchCoachStats } from '@/utils/search-functions';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 
 const CoachStats: React.FC = () => {
 	const [database, setDatabase] = React.useState<PlayerDB>('zadar');
@@ -41,19 +42,20 @@ const CoachStats: React.FC = () => {
 
 	return (
 		<PageWrapper>
-			<CoachStatsFilter
-				database={database}
-				setDatabase={setDatabase}
-				role={role}
-				setRole={setRole}
-				location={location}
-				setLocation={setLocation}
-				league={league}
-				setLeague={setLeague}
-				season={season}
-				setSeason={setSeason}
-			/>
-			<div className="py-2">{SearchInput}</div>
+			<MobileFilters SearchInput={SearchInput}>
+				<CoachStatsFilter
+					database={database}
+					setDatabase={setDatabase}
+					role={role}
+					setRole={setRole}
+					location={location}
+					setLocation={setLocation}
+					league={league}
+					setLeague={setLeague}
+					season={season}
+					setSeason={setSeason}
+				/>
+			</MobileFilters>
 
 			<PaginationControls
 				total={total}

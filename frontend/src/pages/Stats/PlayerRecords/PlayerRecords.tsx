@@ -9,6 +9,7 @@ import { PlayerDB } from '@/pages/Player/Player';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 
 const PlayerRecords = () => {
 	const [database, setDatabase] = React.useState<PlayerDB>('zadar');
@@ -32,16 +33,18 @@ const PlayerRecords = () => {
 
 	return (
 		<PageWrapper>
-			<PlayerStatsFilter
-				database={database}
-				setDatabase={handleSetDatabase}
-				location={location}
-				setLocation={handleSetLocation}
-				league={league}
-				setLeague={handleSetLeague}
-				season={season}
-				setSeason={handleSetSeason}
-			/>
+			<MobileFilters>
+				<PlayerStatsFilter
+					database={database}
+					setDatabase={handleSetDatabase}
+					location={location}
+					setLocation={handleSetLocation}
+					league={league}
+					setLeague={handleSetLeague}
+					season={season}
+					setSeason={handleSetSeason}
+				/>
+			</MobileFilters>
 			<PaginationControls
 				total={total}
 				page={page}
