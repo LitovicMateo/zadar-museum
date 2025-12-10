@@ -31,5 +31,5 @@ export const usePlayerProfileDatabase = (playerId: string): { db: PlayerDB | nul
 		}
 
 		return { db: null, enableSwitch: false }; // fallback safety
-	}, [teams, playerId]);
+	}, [teams]);
 };

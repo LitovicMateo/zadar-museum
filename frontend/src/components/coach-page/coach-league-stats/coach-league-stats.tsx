@@ -6,7 +6,7 @@ import TableWrapper from '@/components/ui/table-wrapper';
 import { useCoachLeagueStats } from '@/hooks/queries/coach/useCoachLeagueStats';
 import { useCoachRecord } from '@/hooks/queries/coach/useCoachRecord';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/useCoachProfileDatabase';
-import { CoachStatsResponse, CoachStats } from '@/types/api/coach';
+import { CoachStats } from '@/types/api/coach';
 
 import { useCoachSeasonStatsTable } from '../coach-gamelog/useCoachSeasonStatsTable';
 import CoachRoleFilter from './coach-role-filter';
@@ -22,14 +22,14 @@ const CoachLeagueStats: React.FC = () => {
 	const { data: coachLeagueStats } = useCoachLeagueStats(coachId!, db!);
 	const { data: coachRecord } = useCoachRecord(coachId!, db);
 
-	const extract = (row: CoachStatsResponse) => {
-		const r = row as unknown as Record<string, Record<string, CoachStats | undefined>>;
-		return r[coachRole]?.[location];
-	};
-
 	const leagueStats: CoachStats[] = useMemo(() => {
 		if (!coachLeagueStats) return [];
-		return coachLeagueStats.map((row) => extract(row)).filter(Boolean) as CoachStats[];
+		return coachLeagueStats
+			.map((row) => {
+				const r = row as unknown as Record<string, Record<string, CoachStats | undefined>>;
+				return r[coachRole]?.[location];
+			})
+			.filter(Boolean) as CoachStats[];
 	}, [coachLeagueStats, coachRole, location]);
 
 	const totalStats: CoachStats[] = useMemo(() => {

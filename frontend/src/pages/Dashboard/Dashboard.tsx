@@ -120,15 +120,17 @@ const Dashboard: React.FC = () => {
 		return () => window.removeEventListener('resize', onResize);
 	}, []);
 
-	const options = useMemo(() => {
+	type Option = { value: string; label: string };
+
+	const options: Option[] = useMemo(() => {
 		return sidebarGroups.flatMap((group) =>
 			group.list.map((item) => ({ value: item.path, label: `${group.label} ${item.label}` }))
 		);
 	}, []);
 
-	const currentOption = options.find((o) => location.pathname.startsWith(o.value)) || null;
+	const currentOption: Option | null = options.find((o) => location.pathname.startsWith(o.value)) || null;
 
-	const handleChange = (selected: any) => {
+	const handleChange = (selected: Option | null) => {
 		if (selected && selected.value) navigate(selected.value);
 	};
 
@@ -140,9 +142,9 @@ const Dashboard: React.FC = () => {
 			<div className="py-6 w-full">
 				{isMobile && (
 					<div className="px-4 mb-4">
-						<Select
+						<Select<Option, false>
 							options={options}
-							defaultValue={currentOption}
+							defaultValue={currentOption ?? undefined}
 							onChange={handleChange}
 							isSearchable
 							styles={{ container: (provided) => ({ ...provided, width: '100%' }) }}

@@ -22,8 +22,6 @@ const RefereeStats: React.FC = () => {
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search by referee name' });
 
 	const handleSetLocation = React.useCallback((loc: 'home' | 'away' | 'all') => setLocation(loc), []);
-	const handleSetLeague = React.useCallback((lg: string) => setLeague(lg), []);
-	const handleSetSeason = React.useCallback((ssn: string) => setSeason(ssn), []);
 
 	const filteredReferees = searchRefereeStats(refereeAllTime, searchTerm);
 

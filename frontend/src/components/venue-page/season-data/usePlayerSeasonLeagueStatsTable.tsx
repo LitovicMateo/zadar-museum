@@ -8,7 +8,7 @@ import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@
 export const usePlayerSeasonLeagueStatsTable = (data: PlayerAllTimeStats[] | undefined) => {
 	const formatNum = (value: unknown, decimals = 1) => {
 		if (value === null || value === undefined) return '0';
-		const n = Number(value as any);
+		const n = Number(value);
 		if (!Number.isFinite(n)) return '0';
 		return n.toFixed(decimals);
 	};

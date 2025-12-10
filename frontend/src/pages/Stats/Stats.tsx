@@ -49,15 +49,17 @@ const Stats: React.FC = () => {
 		return () => window.removeEventListener('resize', onResize);
 	}, []);
 
-	const options = useMemo(() => {
+	type Option = { value: string; label: string };
+
+	const options: Option[] = useMemo(() => {
 		return sidebarGroups.flatMap((group) =>
 			group.list.map((item) => ({ value: `/stats/${item.path}`, label: item.label }))
 		);
 	}, []);
 
-	const currentOption = options.find((o) => location.pathname.startsWith(o.value)) || null;
+	const currentOption: Option | null = options.find((o) => location.pathname.startsWith(o.value)) || null;
 
-	const handleChange = (selected: any) => {
+	const handleChange = (selected: Option | null) => {
 		if (selected && selected.value) navigate(selected.value);
 	};
 
@@ -69,9 +71,9 @@ const Stats: React.FC = () => {
 			<section className="w-full p-4 overflow-x-scroll">
 				{isMobile && (
 					<div className="px-2 mb-4">
-						<Select
+						<Select<Option, false>
 							options={options}
-							defaultValue={currentOption}
+							defaultValue={currentOption ?? undefined}
 							onChange={handleChange}
 							isSearchable
 							styles={{

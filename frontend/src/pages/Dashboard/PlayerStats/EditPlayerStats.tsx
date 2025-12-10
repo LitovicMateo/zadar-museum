@@ -65,7 +65,7 @@ const EditPlayerStats = () => {
 							player.defensiveRebounds !== null &&
 							player.defensiveRebounds !== undefined;
 
-						const toStr = (v: any) => (v === null || v === undefined ? '' : String(v));
+						const toStr = (v: unknown) => (v === null || v === undefined ? '' : String(v));
 
 						return {
 							season,

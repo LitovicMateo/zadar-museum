@@ -9,7 +9,7 @@ const Forfeited: React.FC = () => {
 
 	useEffect(() => {
 		setValue('forfeited', false);
-	}, []);
+	}, [setValue]);
 	return (
 		<label htmlFor="forfeited" className="w-full flex items-center gap-2">
 			<Input

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import GlobalSearch from '@/components/global-search/global-search';
 import { APP_ROUTES } from '@/constants/routes';
 import { useAuth } from '@/context/auth-context';
-import { motion, AnimatePresence } from 'framer-motion';
+import 'framer-motion';
 import { LogOut } from 'lucide-react';
 
 import MobileInlineSearch from './MobileInlineSearch';
