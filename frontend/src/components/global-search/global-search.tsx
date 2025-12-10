@@ -24,7 +24,7 @@ import ResultContainer from './result-container';
 const GlobalSearch: React.FC = () => {
 	const { SearchInput, searchTerm, showPortal, clearSearch } = useSearch({
 		placeholder: 'Search',
-		className: 'w-[300px] rounded-[6px] !border-[#194F95] border-1 h-[32px] '
+		className: 'w-full max-w-[300px] rounded-[6px] !border-[#194F95] border-1 h-[32px] '
 	});
 
 	const term = slugify(searchTerm, { delimiter: ' ' });
@@ -57,8 +57,8 @@ const GlobalSearch: React.FC = () => {
 		].length === 0;
 
 	return (
-		<div className="flex gap-4 relative">
-			{SearchInput}
+		<div className="flex gap-4 relative justify-center">
+			<div className="w-full flex justify-center">{SearchInput}</div>
 			{showPortal && !noResults && (
 				<Portal>
 					{filteredPlayers && filteredPlayers?.length > 0 && (
