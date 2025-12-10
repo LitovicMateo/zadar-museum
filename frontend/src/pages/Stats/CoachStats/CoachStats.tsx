@@ -2,6 +2,7 @@ import React from 'react';
 
 import CoachStatsFilter from '@/components/coach-stats/filter/CoachStatsFilter';
 import CoachStatsTable from '@/components/coach-stats/table/CoachStatsTable';
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import { useCoachAllTimeStats } from '@/hooks/queries/stats/useCoachAllTimeStats';
 import usePagedSortedList from '@/hooks/usePagedSortedList';
@@ -11,7 +12,6 @@ import { searchCoachStats } from '@/utils/search-functions';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
-import MobileFilters from '@/components/mobile-filters/MobileFilters';
 
 const CoachStats: React.FC = () => {
 	const [database, setDatabase] = React.useState<PlayerDB>('zadar');

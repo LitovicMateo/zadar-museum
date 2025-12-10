@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import TeamStatsFilter from '@/components/team-stats/filter/TeamStatsFilter';
 import TeamStatsTable from '@/components/team-stats/table/TeamStatsTable';
@@ -10,7 +11,6 @@ import { searchTeamStats } from '@/utils/search-functions';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
-import MobileFilters from '@/components/mobile-filters/MobileFilters';
 
 const TeamStats: React.FC = () => {
 	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');

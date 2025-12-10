@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
 import TeamRecordsTable from '@/components/team-records/TeamRecordsTable';
@@ -9,7 +10,6 @@ import { PlayerDB } from '@/pages/Player/Player';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
-import MobileFilters from '@/components/mobile-filters/MobileFilters';
 
 const TeamRecords: React.FC = () => {
 	// zadar/opponent

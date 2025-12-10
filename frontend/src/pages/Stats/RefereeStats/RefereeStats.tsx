@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import RefereeStatsFilter from '@/components/referee-stats/filter/RefereeStatsFilter';
 import RefereeStatsTable from '@/components/referee-stats/table/RefereeStatsTable';
@@ -10,7 +11,6 @@ import { searchRefereeStats } from '@/utils/search-functions';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
-import MobileFilters from '@/components/mobile-filters/MobileFilters';
 
 const RefereeStats: React.FC = () => {
 	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');

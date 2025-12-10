@@ -1,89 +1,85 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 
 import { APP_ROUTES } from '@/constants/routes';
 import { TeamScheduleResponse } from '@/types/api/team';
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-export const useScheduleTable = (schedule: TeamScheduleResponse[]) => {
-	const table = useReactTable({
-		data: schedule || [],
-		columns: [
-			{
-				id: 'round',
-				header: 'R',
-				accessorKey: 'round',
-				cell: (info) => <p className="px-1 max-w-[2ch]">{info.getValue()}</p>
-			},
-			{
-				id: 'date',
-				header: 'Date',
-				accessorKey: 'game_date',
-				cell: (info) => {
-					const date = new Date(info.getValue());
-					const top = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear().toString().slice(2)}`;
-					return (
-						<div className="text-xs flex flex-col justify-center items-center max-w-[8ch]">
-							<span>{top}</span>
-						</div>
-					);
-				}
-			},
-			{
-				id: 'game',
-				header: 'Game',
-				accessorFn: (row) => `${row.home_team_name} vs ${row.away_team_name}`,
-				cell: (info) => {
-					const url = APP_ROUTES.game(info.row.original.game_document_id.toString());
-					return (
-						<>
-							<Link to={url} className="block px-2 min-w-[12ch] sm:hidden">
-								{info.row.original.home_team_short_name} vs {info.row.original.away_team_short_name}
-							</Link>
-							<Link to={url} className="px-2 min-w-[300px] hidden sm:block">
-								{info.getValue()}
-							</Link>
-						</>
-					);
-				}
-			},
-			{
-				id: 'home_score',
-				header: 'H',
-				accessorKey: 'home_score',
-				cell: (info) => <p className="px-2 text-center max-w-[3ch]">{info.getValue() ?? '-'}</p>
-			},
-			{
-				id: 'away_score',
-				header: 'A',
-				accessorKey: 'away_score',
-				cell: (info) => <p className="px-2 text-center max-w-[3ch]">{info.getValue() ?? '-'}</p>,
-				size: 50
-			}
-		],
-		getCoreRowModel: getCoreRowModel()
-	});
-
-	const Schedule: React.FC = () => {
-		if (schedule.length === 0) {
-			return <div className="text-center w-full font-abel text-xl text-gray-400">No competitions selected.</div>;
-		}
-
+export const useScheduleTable = (schedule: TeamScheduleResponse[] = []) => {
+	const Schedule = () => {
 		return (
-			<table className="w-full font-abel">
-				<tbody>
-					{table.getRowModel().rows.map((row) => (
-						<tr key={row.id} className="border-b w-full">
-							{row.getVisibleCells().map((cell) => (
-								<td className="py-2 " key={cell.id}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</td>
-							))}
-						</tr>
-					))}
-				</tbody>
-			</table>
+			<div className="overflow-x-auto">
+				<div className="w-full bg-white divide-y divide-gray-200">
+					{schedule.map((g) => {
+						const url = APP_ROUTES.game(g.game_document_id.toString());
+
+						const home = g.home_score;
+						const away = g.away_score;
+
+						const homeName = g.home_team_name || '';
+						const homeShort = g.home_team_short_name || '';
+						const zadarIsHome = `${homeName} ${homeShort}`.toLowerCase().includes('zadar');
+
+						let scoreCls = 'bg-gray-100 text-sm text-gray-800 px-2 py-1 rounded-[4px] text-center';
+						if (typeof home === 'number' && typeof away === 'number') {
+							if (home === away) {
+								scoreCls = 'bg-yellow-100 text-yellow-700 text-sm px-2 py-1 rounded-[4px] text-center';
+							} else {
+								const homeWon = home > away;
+								const zadarWon = (homeWon && zadarIsHome) || (!homeWon && !zadarIsHome);
+								scoreCls = zadarWon
+									? 'bg-green-100 text-green-700 text-sm px-2 py-1 rounded-[4px] text-center'
+									: 'bg-red-100 text-red-700 text-sm px-2 py-1 rounded-[4px] text-center';
+							}
+						}
+
+						const formattedDate = g.game_date
+							? new Date(g.game_date).toLocaleDateString(undefined, { day: '2-digit', month: 'short' })
+							: '-';
+
+						return (
+							<div key={g.game_document_id} className="flex items-center py-2 px-1">
+								{/* Round - fixed */}
+								<div className="flex-none w-8 text-center text-sm text-gray-500 whitespace-nowrap">
+									{g.round ?? '-'}
+								</div>
+
+								{/* Date - fixed */}
+								<div className="flex-none w-20 text-xs text-gray-500 text-center whitespace-nowrap">
+									{formattedDate}
+								</div>
+
+								{/* Teams - flexible */}
+								<div className="flex-1 min-w-0 px-2">
+									<Link to={url} className="flex items-center gap-2 text-sm text-gray-800 min-w-0">
+										{/* Full names on sm+; short names on mobile to avoid truncation */}
+										<span className="font-medium truncate min-w-0 hidden sm:inline">
+											{g.home_team_name}
+										</span>
+										<span className="font-medium truncate min-w-0 sm:hidden">
+											{g.home_team_short_name ?? g.home_team_name}
+										</span>
+										<span className="text-gray-400 shrink-0">vs</span>
+										<span className="truncate min-w-0 hidden sm:inline">{g.away_team_name}</span>
+										<span className="truncate min-w-0 sm:hidden">
+											{g.away_team_short_name ?? g.away_team_name}
+										</span>
+									</Link>
+								</div>
+
+								{/* Score - fixed */}
+								<div className="flex-none w-16 text-center">
+									<div className={scoreCls}>
+										{typeof home === 'number' || typeof away === 'number'
+											? `${home ?? '-'} - ${away ?? '-'}`
+											: '-'}
+									</div>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			</div>
 		);
 	};
 
-	return { table, Schedule };
+	return { Schedule };
 };

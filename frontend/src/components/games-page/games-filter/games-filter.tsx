@@ -23,7 +23,7 @@ const GamesFilter: React.FC = () => {
 	}
 
 	return (
-		<aside className="block w-full sticky top-0 bg-white z-1000 py-2 px-3 border-b border-gray-100">
+		<aside className="block w-full sticky top-0 bg-white z-10 py-2 px-3 border-b border-gray-100">
 			<MobileFilters SearchInput={teamName === 'KK Zadar' ? SearchInput : undefined} title="Filters">
 				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
 					<div className="flex flex-col sm:flex-row gap-2 overflow-y-auto sm:overflow-x-auto no-scrollbar pr-2 items-start sm:items-center max-h-48 w-full">
