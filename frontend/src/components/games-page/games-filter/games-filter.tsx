@@ -26,7 +26,7 @@ const GamesFilter: React.FC = () => {
 		<aside className="block w-full sticky top-0 bg-white z-1000 py-2 px-3 border-b border-gray-100">
 			<MobileFilters SearchInput={teamName === 'KK Zadar' ? SearchInput : undefined} title="Filters">
 				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
-					<div className="flex gap-2 overflow-x-auto no-scrollbar pr-2 items-center">
+					<div className="flex flex-col sm:flex-row gap-2 overflow-y-auto sm:overflow-x-auto no-scrollbar pr-2 items-start sm:items-center max-h-48 w-full">
 						{competitions?.map((competition) => (
 							<CompetitionSelectItem
 								key={competition.league_id}
