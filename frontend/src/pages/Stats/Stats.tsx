@@ -37,7 +37,7 @@ const sidebarGroups: SidebarGroup[] = [
 	}
 ];
 
-const Stats = () => {
+const Stats: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -74,7 +74,14 @@ const Stats = () => {
 							defaultValue={currentOption}
 							onChange={handleChange}
 							isSearchable
-							styles={{ container: (provided) => ({ ...provided, width: '100%' }) }}
+							styles={{
+								container: (provided) => ({ ...provided, width: '100%' }),
+								menuPortal: (base) => ({ ...base, zIndex: 2147483647 }),
+								menu: (base) => ({ ...base, zIndex: 2147483647 })
+							}}
+							menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+							menuPosition="fixed"
+							menuPlacement="auto"
 							placeholder="Choose stats DB..."
 						/>
 					</div>
