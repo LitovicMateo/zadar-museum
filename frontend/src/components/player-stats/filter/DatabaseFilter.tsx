@@ -32,6 +32,9 @@ const DatabaseFilter: React.FC<DatabaseFilterProps> = ({ database, setDatabase }
 				value={databaseOptions.find((opt) => opt.value === database)}
 				onChange={(opt) => setDatabase((opt?.value as PlayerDB) ?? 'zadar')}
 				options={databaseOptions}
+				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+				menuPosition="fixed"
+				menuPlacement="auto"
 			/>
 		</Container>
 	);
