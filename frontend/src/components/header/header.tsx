@@ -32,7 +32,7 @@ const Header: React.FC = () => {
 	if (!isAuthenticated) return null;
 
 	return (
-		<header className="sticky top-0 z-50 w-screen bg-white border-b border-gray-200 supports-[backdrop-filter]:bg-white/80">
+		<header className="sticky top-0 z-50 w-screen bg-white border-b border-gray-200 supports-backdrop-filter:bg-white/80">
 			<div className="max-w-[900px] w-full mx-auto flex items-center justify-between px-4 py-3">
 				<div className="flex items-center gap-4">
 					<button

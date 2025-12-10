@@ -89,7 +89,7 @@ const PlayerStats: React.FC = () => {
 			) : (
 				<div className="flex items-center gap-2 mb-2">
 					<button
-						className=" !bg-indigo-600 hover:!bg-indigo-700 active:!bg-indigo-800 !text-white px-4 py-1 rounded-[4px] shadow-sm focus:outline-none focus:!ring-2 focus:!ring-indigo-300"
+						className="bg-indigo-600! hover:bg-indigo-700! active:bg-indigo-800! text-white! px-4 py-1 rounded-lg shadow-sm focus:outline-none focus:ring-2! focus:ring-indigo-300!"
 						onClick={() => setShowFilters(true)}
 						aria-expanded={showFilters}
 					>
@@ -140,7 +140,7 @@ const PlayerStats: React.FC = () => {
 							<div className="flex items-center justify-between mb-3">
 								<h3 className="text-lg font-medium">Filters</h3>
 								<button
-									className=" !bg-indigo-600 hover:!bg-indigo-700 active:!bg-indigo-800 !text-white px-3 py-1 rounded-[4px] shadow-sm focus:outline-none focus:!ring-2 focus:!ring-indigo-300"
+									className="bg-indigo-600! hover:bg-indigo-700! active:bg-indigo-800! text-white! px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:ring-2! focus:ring-indigo-300!"
 									onClick={() => setShowFilters(false)}
 									aria-label="Close filters"
 								>

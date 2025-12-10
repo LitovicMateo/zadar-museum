@@ -24,7 +24,7 @@ const MobileFilters: React.FC<Props> = ({ children, SearchInput, title = 'Filter
 		<div>
 			<div className="flex items-center gap-2 mb-2">
 				<button
-					className=" !bg-indigo-600 hover:!bg-indigo-700 active:!bg-indigo-800 !text-white px-4 py-1 rounded-[4px] shadow-sm focus:outline-none focus:!ring-2 focus:!ring-indigo-300"
+					className="bg-indigo-600! hover:bg-indigo-700! active:bg-indigo-800! text-white! px-4 py-1 rounded-lg shadow-sm focus:outline-none focus:ring-2! focus:ring-indigo-300!"
 					onClick={() => setShow(true)}
 					aria-expanded={show}
 				>
@@ -61,7 +61,7 @@ const MobileFilters: React.FC<Props> = ({ children, SearchInput, title = 'Filter
 							<div className="flex items-center justify-between mb-3">
 								<h3 className="text-lg font-medium">{title}</h3>
 								<button
-									className=" !bg-indigo-600 hover:!bg-indigo-700 active:!bg-indigo-800 !text-white px-3 py-1 rounded-[4px] shadow-sm focus:outline-none focus:!ring-2 focus:!ring-indigo-300"
+									className="bg-indigo-600! hover:bg-indigo-700! active:bg-indigo-800! text-white! px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:ring-2! focus:ring-indigo-300!"
 									onClick={() => setShow(false)}
 									aria-label="Close filters"
 								>

@@ -18,16 +18,16 @@ export const useScheduleTable = (schedule: TeamScheduleResponse[] = []) => {
 						const homeShort = g.home_team_short_name || '';
 						const zadarIsHome = `${homeName} ${homeShort}`.toLowerCase().includes('zadar');
 
-						let scoreCls = 'bg-gray-100 text-sm text-gray-800 px-2 py-1 rounded-[4px] text-center';
+						let scoreCls = 'bg-gray-100 text-sm text-gray-800 px-2 py-1 rounded-lg text-center';
 						if (typeof home === 'number' && typeof away === 'number') {
 							if (home === away) {
-								scoreCls = 'bg-yellow-100 text-yellow-700 text-sm px-2 py-1 rounded-[4px] text-center';
+								scoreCls = 'bg-yellow-100 text-yellow-700 text-sm px-2 py-1 rounded-lg text-center';
 							} else {
 								const homeWon = home > away;
 								const zadarWon = (homeWon && zadarIsHome) || (!homeWon && !zadarIsHome);
 								scoreCls = zadarWon
-									? 'bg-green-100 text-green-700 text-sm px-2 py-1 rounded-[4px] text-center'
-									: 'bg-red-100 text-red-700 text-sm px-2 py-1 rounded-[4px] text-center';
+									? 'bg-green-100 text-green-700 text-sm px-2 py-1 rounded-lg text-center'
+									: 'bg-red-100 text-red-700 text-sm px-2 py-1 rounded-lg text-center';
 							}
 						}
 

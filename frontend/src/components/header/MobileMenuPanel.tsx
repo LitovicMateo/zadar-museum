@@ -28,7 +28,7 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 						exit={{ opacity: 0 }}
 						transition={{ duration: 0.2 }}
 						onClick={() => setOpen(false)}
-						className="fixed inset-0 bg-black/30 md:hidden z-[60]"
+						className="fixed inset-0 bg-black/30 md:hidden z-60"
 					/>
 
 					<motion.aside
@@ -38,7 +38,7 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 						animate={{ x: 0 }}
 						exit={{ x: '-100%' }}
 						transition={{ type: 'tween', duration: 0.25 }}
-						className="fixed top-0 left-0 h-full w-[80%] max-w-xs bg-white shadow-lg md:hidden z-[70]"
+						className="fixed top-0 left-0 h-full w-[80%] max-w-xs bg-white shadow-lg md:hidden z-70"
 					>
 						<div className="flex items-center justify-between px-4 py-3 border-b">
 							<h2 className="font-abel uppercase text-base">Menu</h2>

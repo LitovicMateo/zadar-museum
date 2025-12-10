@@ -17,7 +17,7 @@ const Forfeited: React.FC = () => {
 				{...register('forfeited')}
 				placeholder="forfeited"
 				name="forfeited"
-				className="w-[16px] "
+				className="w-4 "
 				defaultChecked={false}
 				onChange={() => setValue('forfeited', !watch('forfeited'))}
 			/>

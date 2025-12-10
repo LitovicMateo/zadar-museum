@@ -13,7 +13,7 @@ const ActivePlayer: React.FC = () => {
 				{...register('active_player')}
 				placeholder="isActivePlayer"
 				name="isActivePlayer"
-				className="w-[16px] "
+				className="w-4 "
 				onChange={() => setValue('active_player', !watch('active_player'))}
 			/>
 			<span className="text-xs whitespace-nowrap">Active Player</span>

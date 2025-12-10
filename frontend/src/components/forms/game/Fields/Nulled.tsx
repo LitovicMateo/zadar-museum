@@ -13,7 +13,7 @@ const Nulled: React.FC = () => {
 				{...register('isNulled')}
 				placeholder="isNulled"
 				name="isNulled"
-				className="w-[16px] "
+				className="w-4 "
 				onChange={() => setValue('isNulled', !watch('isNulled'))}
 			/>
 			<span className="text-xs whitespace-nowrap">Game is nulled</span>
