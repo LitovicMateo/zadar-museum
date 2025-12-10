@@ -31,6 +31,9 @@ const StatsFilter: React.FC<StatsFilterProps> = ({ setStats, stats }) => {
 				value={statsOptions.find((opt) => opt.value === stats)}
 				onChange={(opt) => setStats!((opt?.value as 'total' | 'average') ?? 'total')}
 				options={statsOptions}
+				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+				menuPosition="fixed"
+				menuPlacement="auto"
 			/>
 		</Container>
 	);

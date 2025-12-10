@@ -9,7 +9,7 @@ const Forfeited: React.FC = () => {
 
 	useEffect(() => {
 		setValue('forfeited', false);
-	}, []);
+	}, [setValue]);
 	return (
 		<label htmlFor="forfeited" className="w-full flex items-center gap-2">
 			<Input
@@ -17,7 +17,7 @@ const Forfeited: React.FC = () => {
 				{...register('forfeited')}
 				placeholder="forfeited"
 				name="forfeited"
-				className="w-[16px] "
+				className="w-4 "
 				defaultChecked={false}
 				onChange={() => setValue('forfeited', !watch('forfeited'))}
 			/>

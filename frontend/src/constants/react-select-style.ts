@@ -47,7 +47,7 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 		width: width ? width : '100%'
 		// 🚫 Remove zIndex here
 	}),
-	// ✅ Ensure dropdown always appears on top
-	menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-	menu: (base) => ({ ...base, zIndex: 9999 })
+	// ✅ Ensure dropdown always appears on top (high z-index to beat app stacking contexts)
+	menuPortal: (base) => ({ ...base, zIndex: 2147483647 }),
+	menu: (base) => ({ ...base, zIndex: 2147483647 })
 });

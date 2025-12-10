@@ -32,6 +32,9 @@ const LeagueFilter: React.FC<LeagueFilterProps> = ({ league, setLeague, competit
 				options={leagueOptions}
 				value={leagueOptions.find((opt) => opt.value === league)}
 				onChange={(opt) => setLeague((opt?.value as string) ?? '')}
+				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+				menuPosition="fixed"
+				menuPlacement="auto"
 			/>
 		</Container>
 	);

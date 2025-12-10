@@ -32,7 +32,7 @@ const RefreshDataButton: React.FC = () => {
 			<Button
 				onClick={handleRefresh}
 				disabled={loading}
-				className=" !bg-blue-600 text-white rounded hover:!bg-blue-700 disabled:opacity-50 cursor-pointer w-full"
+				className="bg-blue-600! text-white rounded hover:bg-blue-700! disabled:opacity-50 cursor-pointer w-full"
 			>
 				{loading ? 'Refreshing...' : 'Refresh Materialized Views'}
 			</Button>

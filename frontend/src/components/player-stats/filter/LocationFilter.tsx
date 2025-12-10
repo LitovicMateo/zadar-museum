@@ -35,6 +35,9 @@ const LocationFilter: React.FC<LocationFilterProps> = ({ location, setLocation }
 				value={locationOptions.find((opt) => opt.value === location)}
 				onChange={(opt) => setLocation((opt?.value as 'home' | 'away' | 'all') ?? null)}
 				options={locationOptions}
+				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+				menuPosition="fixed"
+				menuPlacement="auto"
 			/>
 		</Container>
 	);

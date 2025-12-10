@@ -33,6 +33,9 @@ const SeasonFilter: React.FC<SeasonFilterProps> = ({ onSeasonChange, seasons, se
 				value={seasonOptions.find((opt) => opt.value === selectedSeason)}
 				onChange={(opt) => onSeasonChange((opt?.value as string) ?? '')}
 				options={seasonOptions}
+				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+				menuPosition="fixed"
+				menuPlacement="auto"
 			/>
 		</Container>
 	);

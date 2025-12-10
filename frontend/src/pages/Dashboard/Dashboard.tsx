@@ -1,12 +1,13 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import Select from 'react-select';
 
 import Sidebar from '@/components/sidebar/sidebar';
 import { APP_ROUTES } from '@/constants/routes';
 
 const sidebarGroups = [
 	{
-		label: 'Create new objects',
+		label: 'Create ',
 		list: [
 			{
 				path: APP_ROUTES.dashboard.player.create,
@@ -43,7 +44,7 @@ const sidebarGroups = [
 		]
 	},
 	{
-		label: 'Edit objects',
+		label: 'Edit',
 		list: [
 			{
 				path: APP_ROUTES.dashboard.player.edit,
@@ -80,7 +81,7 @@ const sidebarGroups = [
 		]
 	},
 	{
-		label: 'Import Stats',
+		label: 'Import ',
 		list: [
 			{
 				path: APP_ROUTES.dashboard.playerStats.create,
@@ -93,7 +94,7 @@ const sidebarGroups = [
 		]
 	},
 	{
-		label: 'Edit Stats',
+		label: 'Edit ',
 		list: [
 			{
 				path: APP_ROUTES.dashboard.playerStats.edit,
@@ -108,10 +109,49 @@ const sidebarGroups = [
 ];
 
 const Dashboard: React.FC = () => {
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const [isMobile, setIsMobile] = useState<boolean>(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+
+	useEffect(() => {
+		const onResize = () => setIsMobile(window.innerWidth <= 768);
+		window.addEventListener('resize', onResize);
+		return () => window.removeEventListener('resize', onResize);
+	}, []);
+
+	type Option = { value: string; label: string };
+
+	const options: Option[] = useMemo(() => {
+		return sidebarGroups.flatMap((group) =>
+			group.list.map((item) => ({ value: item.path, label: `${group.label} ${item.label}` }))
+		);
+	}, []);
+
+	const currentOption: Option | null = options.find((o) => location.pathname.startsWith(o.value)) || null;
+
+	const handleChange = (selected: Option | null) => {
+		if (selected && selected.value) navigate(selected.value);
+	};
+
 	return (
 		<div className="flex  gap-4 h-full  ">
-			<Sidebar basePath="dashboard" title="Dashboard" groups={sidebarGroups} />
+			<div className="hidden md:block">
+				<Sidebar basePath="dashboard" title="Dashboard" groups={sidebarGroups} />
+			</div>
 			<div className="py-6 w-full">
+				{isMobile && (
+					<div className="px-4 mb-4">
+						<Select<Option, false>
+							options={options}
+							defaultValue={currentOption ?? undefined}
+							onChange={handleChange}
+							isSearchable
+							styles={{ container: (provided) => ({ ...provided, width: '100%' }) }}
+							placeholder="Choose form..."
+						/>
+					</div>
+				)}
 				<Outlet />
 			</div>
 		</div>

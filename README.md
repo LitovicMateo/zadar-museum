@@ -292,7 +292,7 @@ git pull origin main
 # Connect to the postgres container
 
 ```
-docker exec -it  c0090d76677b_postgres_prod psql -U strapi_prod -d strapi_prod
+docker exec -it  postgres_prod psql -U strapi_prod -d strapi_prod
 
 -- Drop all materialized views in the public schema
 DO $$

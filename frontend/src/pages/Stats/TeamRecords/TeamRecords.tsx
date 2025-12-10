@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
 import TeamRecordsTable from '@/components/team-records/TeamRecordsTable';
@@ -37,16 +38,18 @@ const TeamRecords: React.FC = () => {
 
 	return (
 		<PageWrapper>
-			<PlayerStatsFilter
-				database={database}
-				setDatabase={handleSetDatabase}
-				location={location}
-				setLocation={handleSetLocation}
-				league={league}
-				setLeague={handleSetLeague}
-				season={season}
-				setSeason={handleSetSeason}
-			/>
+			<MobileFilters>
+				<PlayerStatsFilter
+					database={database}
+					setDatabase={handleSetDatabase}
+					location={location}
+					setLocation={handleSetLocation}
+					league={league}
+					setLeague={handleSetLeague}
+					season={season}
+					setSeason={handleSetSeason}
+				/>
+			</MobileFilters>
 			{isFetching ? (
 				<div>Loading...</div>
 			) : (

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerRecordsTable from '@/components/player-records/PlayerRecordsTable';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
@@ -32,16 +33,18 @@ const PlayerRecords = () => {
 
 	return (
 		<PageWrapper>
-			<PlayerStatsFilter
-				database={database}
-				setDatabase={handleSetDatabase}
-				location={location}
-				setLocation={handleSetLocation}
-				league={league}
-				setLeague={handleSetLeague}
-				season={season}
-				setSeason={handleSetSeason}
-			/>
+			<MobileFilters>
+				<PlayerStatsFilter
+					database={database}
+					setDatabase={handleSetDatabase}
+					location={location}
+					setLocation={handleSetLocation}
+					league={league}
+					setLeague={handleSetLeague}
+					season={season}
+					setSeason={handleSetSeason}
+				/>
+			</MobileFilters>
 			<PaginationControls
 				total={total}
 				page={page}

@@ -13,7 +13,7 @@ const NeutralVenue: React.FC = () => {
 				{...register('isNeutral')}
 				placeholder="isNeutral"
 				name="isNeutral"
-				className="w-[16px] "
+				className="w-4 "
 				onChange={() => setValue('isNeutral', !watch('isNeutral'))}
 			/>
 			<span className="text-xs whitespace-nowrap">Neutral venue?</span>

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import TeamStatsFilter from '@/components/team-stats/filter/TeamStatsFilter';
 import TeamStatsTable from '@/components/team-stats/table/TeamStatsTable';
@@ -31,15 +32,16 @@ const TeamStats: React.FC = () => {
 
 	return (
 		<PageWrapper>
-			<TeamStatsFilter
-				location={location}
-				setLocation={setLocation}
-				league={league}
-				setLeague={setLeague}
-				season={season}
-				setSeason={setSeason}
-			/>
-			<div className="py-2">{SearchInput}</div>
+			<MobileFilters SearchInput={SearchInput}>
+				<TeamStatsFilter
+					location={location}
+					setLocation={setLocation}
+					league={league}
+					setLeague={setLeague}
+					season={season}
+					setSeason={setSeason}
+				/>
+			</MobileFilters>
 
 			<PaginationControls
 				total={total}

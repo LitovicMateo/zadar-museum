@@ -2,6 +2,7 @@ import React from 'react';
 
 import CoachStatsFilter from '@/components/coach-stats/filter/CoachStatsFilter';
 import CoachStatsTable from '@/components/coach-stats/table/CoachStatsTable';
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import { useCoachAllTimeStats } from '@/hooks/queries/stats/useCoachAllTimeStats';
 import usePagedSortedList from '@/hooks/usePagedSortedList';
@@ -41,19 +42,20 @@ const CoachStats: React.FC = () => {
 
 	return (
 		<PageWrapper>
-			<CoachStatsFilter
-				database={database}
-				setDatabase={setDatabase}
-				role={role}
-				setRole={setRole}
-				location={location}
-				setLocation={setLocation}
-				league={league}
-				setLeague={setLeague}
-				season={season}
-				setSeason={setSeason}
-			/>
-			<div className="py-2">{SearchInput}</div>
+			<MobileFilters SearchInput={SearchInput}>
+				<CoachStatsFilter
+					database={database}
+					setDatabase={setDatabase}
+					role={role}
+					setRole={setRole}
+					location={location}
+					setLocation={setLocation}
+					league={league}
+					setLeague={setLeague}
+					season={season}
+					setSeason={setSeason}
+				/>
+			</MobileFilters>
 
 			<PaginationControls
 				total={total}

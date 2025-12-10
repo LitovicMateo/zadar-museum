@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
@@ -10,6 +10,7 @@ import { PlayerDB } from '@/pages/Player/Player';
 import { PlayerAllTimeStats } from '@/types/api/player';
 import { searchPlayerStats } from '@/utils/search-functions';
 import { SortingState } from '@tanstack/react-table';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import PageWrapper from '../UI/PageWrapper';
 
@@ -60,21 +61,43 @@ const PlayerStats: React.FC = () => {
 	const handleSetLeague = React.useCallback((lg: string) => setLeague(lg), []);
 	const handleSetSeason = React.useCallback((ssn: string) => setSeason(ssn), []);
 
+	const [isMobile, setIsMobile] = useState<boolean>(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+	const [showFilters, setShowFilters] = useState<boolean>(false);
+
+	useEffect(() => {
+		const onResize = () => setIsMobile(window.innerWidth <= 768);
+		window.addEventListener('resize', onResize);
+		return () => window.removeEventListener('resize', onResize);
+	}, []);
+
 	return (
 		<PageWrapper>
-			<PlayerStatsFilter
-				database={database}
-				setDatabase={handleSetDatabase}
-				stats={stats}
-				setStats={handleSetStats}
-				location={location}
-				setLocation={handleSetLocation}
-				league={league}
-				setLeague={handleSetLeague}
-				season={season}
-				setSeason={handleSetSeason}
-			/>
-			<div className="py-2">{SearchInput}</div>
+			{/* On desktop/tablet show inline filter; on mobile show a button that opens a bottom sheet */}
+			{!isMobile ? (
+				<PlayerStatsFilter
+					database={database}
+					setDatabase={handleSetDatabase}
+					stats={stats}
+					setStats={handleSetStats}
+					location={location}
+					setLocation={handleSetLocation}
+					league={league}
+					setLeague={handleSetLeague}
+					season={season}
+					setSeason={handleSetSeason}
+				/>
+			) : (
+				<div className="flex items-center gap-2 mb-2">
+					<button
+						className="bg-indigo-600! hover:bg-indigo-700! active:bg-indigo-800! text-white! px-4 py-1 rounded-lg shadow-sm focus:outline-none focus:ring-2! focus:ring-indigo-300!"
+						onClick={() => setShowFilters(true)}
+						aria-expanded={showFilters}
+					>
+						Filters
+					</button>
+					<div className="flex-1">{SearchInput}</div>
+				</div>
+			)}
 
 			<PaginationControls
 				total={total}
@@ -85,6 +108,61 @@ const PlayerStats: React.FC = () => {
 			/>
 
 			<PlayerStatsTable stats={paginatedPlayers} prev={paginatedPrev} sorting={sorting} setSorting={setSorting} />
+
+			{/* Mobile bottom-sheet modal for filters with framer-motion animations */}
+			<AnimatePresence>
+				{isMobile && showFilters && (
+					<motion.div
+						className="fixed inset-0 z-50 flex items-end"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						key="player-stats-modal-outer"
+					>
+						<motion.div
+							className="absolute inset-0 bg-black/50"
+							onClick={() => setShowFilters(false)}
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							transition={{ duration: 0.18 }}
+						/>
+
+						<motion.div
+							className="relative w-full bg-white rounded-t-xl p-4 max-h-[80vh] overflow-auto player-stats-modal"
+							initial={{ y: '100%' }}
+							animate={{ y: 0 }}
+							exit={{ y: '100%' }}
+							transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+							key="player-stats-modal-sheet"
+						>
+							<style>{`.player-stats-modal button{background-color:#4f46e5 !important;color:#fff !important;border-radius:4px !important}`}</style>
+							<div className="flex items-center justify-between mb-3">
+								<h3 className="text-lg font-medium">Filters</h3>
+								<button
+									className="bg-indigo-600! hover:bg-indigo-700! active:bg-indigo-800! text-white! px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:ring-2! focus:ring-indigo-300!"
+									onClick={() => setShowFilters(false)}
+									aria-label="Close filters"
+								>
+									Close
+								</button>
+							</div>
+							<PlayerStatsFilter
+								database={database}
+								setDatabase={handleSetDatabase}
+								stats={stats}
+								setStats={handleSetStats}
+								location={location}
+								setLocation={handleSetLocation}
+								league={league}
+								setLeague={handleSetLeague}
+								season={season}
+								setSeason={handleSetSeason}
+							/>
+						</motion.div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</PageWrapper>
 	);
 };

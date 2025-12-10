@@ -28,13 +28,13 @@ const Filters: React.FC<FiltersProps> = ({
 		if (seasons && seasons.length > 0) {
 			setSelectedSeason(seasons[0]);
 		}
-	}, [seasons]);
+	}, [seasons, setSelectedSeason]);
 
 	useEffect(() => {
 		if (competitions && competitions.length > 0) {
 			setSelectedCompetitions(competitions.map((c) => c.league_id));
 		}
-	}, [competitions, season]);
+	}, [competitions, season, setSelectedCompetitions]);
 
 	const toggleCompetition = (slug: string) => {
 		setSelectedCompetitions((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));

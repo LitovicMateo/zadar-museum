@@ -13,7 +13,7 @@ const StatBox: React.FC<StatBoxProps> = ({ label, rank, stat }) => {
 				<span className="uppercase font-bold text-base text-white">{label}</span>
 			</div>
 			{rank && (
-				<div className="absolute w-[32px] aspect-square rounded-full flex justify-center items-center top-[-8px] right-[-8px] border-1 border-solid border-gray-500 bg-gradient-to-br from-white to-blue-50 text-md font-bold font-mono">
+				<div className="absolute w-8 aspect-square rounded-full flex justify-center items-center top-[-8px] right-[-8px] border-1 border-solid border-gray-500 bg-linear-to-br from-white to-blue-50 text-md font-bold font-mono">
 					<span>{rank}</span>
 				</div>
 			)}

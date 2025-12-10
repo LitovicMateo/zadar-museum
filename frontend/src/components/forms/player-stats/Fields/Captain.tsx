@@ -14,7 +14,7 @@ const Captain: React.FC = () => {
 				{...register('isCaptain')}
 				placeholder="isNeutral"
 				name="isNeutral"
-				className="w-[16px] "
+				className="w-4 "
 				onChange={() => setValue('isCaptain', !watch('isCaptain'))}
 				disabled={!player}
 			/>

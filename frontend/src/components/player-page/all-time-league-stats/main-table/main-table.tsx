@@ -32,7 +32,7 @@ const MainTable: React.FC<MainTableProps> = ({ view }) => {
 	const { TableFooter } = usePlayerLeagueStatsTable(careerStats);
 
 	const wrapperClass =
-		'max-w-[800px] mx-auto overflow-x-auto rounded-[4px] m-4 drop-shadow-2xl bg-gradient-to-br from-white to-slate-100';
+		'max-w-[800px] mx-auto overflow-x-auto rounded-lg m-4 drop-shadow-2xl bg-linear-to-br from-white to-slate-100';
 
 	if (isLoadingAverage || isLoadingTotal) {
 		return (

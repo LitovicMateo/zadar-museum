@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import RefereeStatsFilter from '@/components/referee-stats/filter/RefereeStatsFilter';
 import RefereeStatsTable from '@/components/referee-stats/table/RefereeStatsTable';
@@ -21,8 +22,6 @@ const RefereeStats: React.FC = () => {
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search by referee name' });
 
 	const handleSetLocation = React.useCallback((loc: 'home' | 'away' | 'all') => setLocation(loc), []);
-	const handleSetLeague = React.useCallback((lg: string) => setLeague(lg), []);
-	const handleSetSeason = React.useCallback((ssn: string) => setSeason(ssn), []);
 
 	const filteredReferees = searchRefereeStats(refereeAllTime, searchTerm);
 
@@ -34,15 +33,16 @@ const RefereeStats: React.FC = () => {
 
 	return (
 		<PageWrapper>
-			<RefereeStatsFilter
-				location={location}
-				setLocation={handleSetLocation}
-				league={league}
-				setLeague={handleSetLeague}
-				season={season}
-				setSeason={handleSetSeason}
-			/>
-			<div className="py-2">{SearchInput}</div>
+			<MobileFilters SearchInput={SearchInput}>
+				<RefereeStatsFilter
+					location={location}
+					setLocation={handleSetLocation}
+					league={league}
+					setLeague={setLeague}
+					season={season}
+					setSeason={setSeason}
+				/>
+			</MobileFilters>
 
 			{isFetching ? (
 				<div>Loading...</div>

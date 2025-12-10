@@ -53,7 +53,7 @@ const CompetitionFormProvider: React.FC<CompetitionFormProviderProps> = ({
 			reset(defaultValues);
 			methods.setFocus('name');
 		}
-	}, [isSuccess, defaultValues, reset]);
+	}, [isSuccess, defaultValues, reset, methods]);
 
 	return (
 		<FormProvider {...methods}>

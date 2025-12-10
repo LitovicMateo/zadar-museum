@@ -31,6 +31,8 @@ const SeasonSelect: React.FC<SeasonSelectProps> = ({ seasons, selectedSeason, on
 					className="text-sm"
 					classNamePrefix="rs"
 					styles={selectStyle('160px')}
+					menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+					menuPosition="fixed"
 					isSearchable={false}
 					menuPlacement="auto"
 				/>
@@ -49,6 +51,8 @@ const SeasonSelect: React.FC<SeasonSelectProps> = ({ seasons, selectedSeason, on
 				className="text-sm"
 				classNamePrefix="rs"
 				styles={selectStyle('180px')}
+				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+				menuPosition="fixed"
 				isSearchable={false}
 				menuPlacement="auto"
 			/>
