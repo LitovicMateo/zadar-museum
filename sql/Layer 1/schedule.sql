@@ -61,8 +61,8 @@ SELECT
     -- away team
     at.id AS away_team_id,
     at.document_id AS away_team_document_id,
-    at.name AS away_team_name,
-    at.short_name AS away_team_short_name,
+    g.away_team_name AS away_team_name,
+    g.away_team_short_name AS away_team_short_name,
     at.slug AS away_team_slug,
 
     -- away team coaches

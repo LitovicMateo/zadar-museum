@@ -119,7 +119,7 @@ If you need to drop all MVs in the `public` schema inside the Postgres container
 
 ```sql
 -- Connect to the postgres container first (example container name shown)
-docker exec -it c0090d76677b_postgres_prod psql -U strapi_prod -d strapi_prod
+docker exec -it postgres_prod psql -U strapi_prod -d strapi_prod
 
 -- Then run:
 DO $$
