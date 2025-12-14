@@ -155,7 +155,7 @@ export const useTeamRecordsTable = (
 			},
 			{
 				header: 'FG%',
-				accessorKey: 'field_goal_percentage',
+				accessorKey: 'field_goals_percentage',
 				cell: (info) => <Cell info={info} />,
 				enableSorting: false
 			},
@@ -175,7 +175,7 @@ export const useTeamRecordsTable = (
 			},
 			{
 				header: '3P%',
-				accessorKey: 'three_point_percentage',
+				accessorKey: 'three_pointers_percentage',
 				cell: (info) => <Cell info={info} />,
 				enableSorting: false
 			},
@@ -195,7 +195,7 @@ export const useTeamRecordsTable = (
 			},
 			{
 				header: 'FT%',
-				accessorKey: 'free_throw_percentage',
+				accessorKey: 'free_throws_percentage',
 				cell: (info) => <Cell info={info} />
 			},
 			{
