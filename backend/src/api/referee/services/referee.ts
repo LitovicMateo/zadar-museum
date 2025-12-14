@@ -19,11 +19,15 @@ export default factories.createCoreService(
 
     async findRefereeGamelog(refereeId) {
       const knex = await strapi.db.connection;
+      const id = String(refereeId);
+
       return knex("schedule")
         .select("*")
-        .where("main_referee_id", refereeId)
-        .orWhere("second_referee_id", refereeId)
-        .orWhere("third_referee_id", refereeId)
+        .where(function () {
+          this.where("main_referee_id", id)
+            .orWhere("second_referee_id", id)
+            .orWhere("third_referee_id", id);
+        })
         .orderBy("game_date", "asc");
     },
 

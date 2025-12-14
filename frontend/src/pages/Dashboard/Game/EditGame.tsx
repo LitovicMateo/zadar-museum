@@ -47,6 +47,8 @@ const EditGame = () => {
 		setGameId('');
 	}, [season, league]);
 
+	console.log(game);
+
 	return (
 		<div>
 			<FormWrapper>
@@ -68,10 +70,10 @@ const EditGame = () => {
 							round: game.round,
 							date: game.date,
 							home_team: game.home_team.id.toString(),
-							home_team_name: game.home_team.name,
+							home_team_name: game.home_team_name,
 							home_team_short_name: game.home_team.short_name,
 							away_team: game.away_team.id.toString(),
-							away_team_name: game.away_team.name,
+							away_team_name: game.away_team_name,
 							away_team_short_name: game.away_team.short_name,
 							stage: game.stage,
 							competition: game.competition.id.toString(),

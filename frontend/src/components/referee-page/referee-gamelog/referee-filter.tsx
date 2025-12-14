@@ -24,9 +24,10 @@ const RefereeFilter: React.FC<RefereeFilterProps> = ({
 	const { refereeId } = useParams();
 
 	const { data: competitions } = useQuery({
-		queryKey: ['referee-competitions', refereeId, '2025'],
+		queryKey: ['referee-competitions', refereeId, season],
+		enabled: !!season,
 		queryFn: async (): Promise<{ league_id: string; league_name: string; competition_slug: string }[]> => {
-			const res = await axios.get(API_ROUTES.referee.competitions(refereeId!, '2025'));
+			const res = await axios.get(API_ROUTES.referee.competitions(refereeId!, season));
 			return res.data;
 		}
 	});
