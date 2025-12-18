@@ -75,10 +75,18 @@ CREATE MATERIALIZED VIEW public.zadar_player_season_average_all_time_league_prev
     round(avg(b.three_pointers_attempted), 1) AS three_pointers_attempted,
     rank() OVER (ORDER BY (avg(b.three_pointers_attempted)) DESC NULLS LAST) AS three_pointers_attempted_rank,
 
-    case 
-        when avg(b.three_pointers_attempted) = 0 then 0
-        else round(avg(b.three_pointers_made) / avg(b.three_pointers_attempted) * 100, 1)
-    end AS three_point_percentage,
+    COALESCE(
+        round(
+            AVG(
+                CASE
+                    WHEN b.three_pointers_attempted IS NULL OR b.three_pointers_attempted = 0 THEN NULL
+                    ELSE b.three_pointers_made::numeric / b.three_pointers_attempted
+                END
+            ) * 100,
+            1
+        ),
+        0
+    ) AS three_point_percentage,
         rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (COALESCE(
                     round(
                         AVG(
@@ -98,10 +106,18 @@ CREATE MATERIALIZED VIEW public.zadar_player_season_average_all_time_league_prev
     round(avg(b.free_throws_attempted), 1) AS free_throws_attempted,
     rank() OVER (ORDER BY (avg(b.free_throws_attempted)) DESC NULLS LAST) AS free_throws_attempted_rank,
 
-    case 
-        when avg(b.free_throws_attempted) = 0 then 0
-        else round(avg(b.free_throws_made) / avg(b.free_throws_attempted) * 100, 1)
-    end AS free_throw_percentage,
+    COALESCE(
+        round(
+            AVG(
+                CASE
+                    WHEN b.free_throws_attempted IS NULL OR b.free_throws_attempted = 0 THEN NULL
+                    ELSE b.free_throws_made::numeric / b.free_throws_attempted
+                END
+            ) * 100,
+            1
+        ),
+        0
+    ) AS free_throw_percentage,
         rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (COALESCE(
                     round(
                         AVG(
