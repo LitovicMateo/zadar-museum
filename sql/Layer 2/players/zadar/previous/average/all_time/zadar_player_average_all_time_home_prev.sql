@@ -45,6 +45,7 @@ CREATE MATERIALIZED VIEW public.zadar_player_average_all_time_home_prev AS
         when avg(b.field_goals_made) = 0 then 0
         else round(avg(b.field_goals_made) / avg(b.field_goals_attempted) * 100, 1)
     end AS field_goal_percentage,
+    rank() OVER (ORDER BY (case when avg(b.field_goals_attempted) = 0 then 0 else round(avg(b.field_goals_made) / avg(b.field_goals_attempted) * 100, 1) end) DESC NULLS LAST) AS field_goal_percentage_rank,
 
     round(avg(b.three_pointers_made), 1) AS three_pointers_made,
     rank() OVER (ORDER BY (avg(b.three_pointers_made)) DESC NULLS LAST) AS three_pointers_made_rank,
@@ -56,6 +57,7 @@ CREATE MATERIALIZED VIEW public.zadar_player_average_all_time_home_prev AS
         when avg(b.three_pointers_attempted) = 0 then 0
         else round(avg(b.three_pointers_made) / avg(b.three_pointers_attempted) * 100, 1)
     end AS three_point_percentage,
+    rank() OVER (ORDER BY (case when avg(b.three_pointers_attempted) = 0 then 0 else round(avg(b.three_pointers_made) / avg(b.three_pointers_attempted) * 100, 1) end) DESC NULLS LAST) AS three_point_percentage_rank,
 
     round(avg(b.free_throws_made), 1) AS free_throws_made,
     rank() OVER (ORDER BY (avg(b.free_throws_made)) DESC NULLS LAST) AS free_throws_made_rank,
@@ -67,6 +69,7 @@ CREATE MATERIALIZED VIEW public.zadar_player_average_all_time_home_prev AS
         when avg(b.free_throws_attempted) = 0 then 0
         else round(avg(b.free_throws_made) / avg(b.free_throws_attempted) * 100, 1)
     end AS free_throw_percentage,
+    rank() OVER (ORDER BY (case when avg(b.free_throws_attempted) = 0 then 0 else round(avg(b.free_throws_made) / avg(b.free_throws_attempted) * 100, 1) end) DESC NULLS LAST) AS free_throw_percentage_rank,
 
     round(avg(b.efficiency), 1) AS efficiency,
     rank() OVER (ORDER BY (avg(b.efficiency)) DESC NULLS LAST) AS efficiency_rank

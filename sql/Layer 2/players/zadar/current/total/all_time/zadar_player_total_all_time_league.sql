@@ -46,6 +46,7 @@ SELECT
     CASE WHEN s.field_goals_attempted = 0 THEN 0
              ELSE round(s.field_goals_made::numeric / s.field_goals_attempted * 100, 1)
     END AS field_goal_percentage,
+    rank() OVER (PARTITION BY s.league_id ORDER BY (CASE WHEN s.field_goals_attempted = 0 THEN 0 ELSE round(s.field_goals_made::numeric / s.field_goals_attempted * 100, 1) END) DESC NULLS LAST) AS field_goal_percentage_rank,
 
     s.three_pointers_made,
     rank() OVER (PARTITION BY s.league_id ORDER BY s.three_pointers_made DESC NULLS LAST) AS three_pointers_made_rank,
@@ -56,6 +57,7 @@ SELECT
     CASE WHEN s.three_pointers_attempted = 0 THEN 0
              ELSE round(s.three_pointers_made::numeric / s.three_pointers_attempted * 100, 1)
     END AS three_point_percentage,
+    rank() OVER (PARTITION BY s.league_id ORDER BY (CASE WHEN s.three_pointers_attempted = 0 THEN 0 ELSE round(s.three_pointers_made::numeric / s.three_pointers_attempted * 100, 1) END) DESC NULLS LAST) AS three_point_percentage_rank,
 
     s.free_throws_made,
     rank() OVER (PARTITION BY s.league_id ORDER BY s.free_throws_made DESC NULLS LAST) AS free_throws_made_rank,
@@ -66,6 +68,7 @@ SELECT
     CASE WHEN s.free_throws_attempted = 0 THEN 0
              ELSE round(s.free_throws_made::numeric / s.free_throws_attempted * 100, 1)
     END AS free_throw_percentage,
+    rank() OVER (PARTITION BY s.league_id ORDER BY (CASE WHEN s.free_throws_attempted = 0 THEN 0 ELSE round(s.free_throws_made::numeric / s.free_throws_attempted * 100, 1) END) DESC NULLS LAST) AS free_throw_percentage_rank,
 
     s.efficiency,
     rank() OVER (PARTITION BY s.league_id ORDER BY s.efficiency DESC NULLS LAST) AS efficiency_rank

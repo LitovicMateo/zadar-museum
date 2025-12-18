@@ -53,6 +53,18 @@ CREATE MATERIALIZED VIEW public.zadar_player_average_all_time_away_prev AS
         ),
         0
     ) AS field_goal_percentage,
+    rank() OVER (ORDER BY (COALESCE(
+                round(
+                    AVG(
+                        CASE
+                            WHEN b.field_goals_attempted IS NULL OR b.field_goals_attempted = 0 THEN NULL
+                            ELSE b.field_goals_made::numeric / b.field_goals_attempted
+                        END
+                    ) * 100,
+                    1
+                ),
+                0
+            )) DESC NULLS LAST) AS field_goal_percentage_rank,
 
     round(avg(b.three_pointers_made), 1) AS three_pointers_made,
     rank() OVER (ORDER BY (avg(b.three_pointers_made)) DESC NULLS LAST) AS three_pointers_made_rank,

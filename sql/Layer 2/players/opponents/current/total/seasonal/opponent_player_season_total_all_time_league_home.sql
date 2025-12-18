@@ -51,6 +51,7 @@
     else
         round(sum(b.field_goals_made)::numeric /sum(b.field_goals_attempted) * 100, 1) 
     end as field_goal_percentage,
+    rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (case when sum(b.field_goals_attempted) = 0 then 0 else round(sum(b.field_goals_made)::numeric /sum(b.field_goals_attempted) * 100, 1) end) DESC NULLS LAST) AS field_goal_percentage_rank,
 
     sum(b.three_pointers_made) AS three_pointers_made,
     rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (sum(b.three_pointers_made)) DESC NULLS LAST) AS three_pointers_made_rank,
@@ -62,6 +63,7 @@
     else
         round(sum(b.three_pointers_made)::numeric /sum(b.three_pointers_attempted) * 100, 1) 
     end as three_point_percentage,
+    rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (case when sum(b.three_pointers_attempted) = 0 then 0 else round(sum(b.three_pointers_made)::numeric /sum(b.three_pointers_attempted) * 100, 1) end) DESC NULLS LAST) AS three_point_percentage_rank,
 
     sum(b.free_throws_made) AS free_throws_made,
     rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (sum(b.free_throws_made)) DESC NULLS LAST) AS free_throws_made_rank,
@@ -73,6 +75,7 @@
     else
         round(sum(b.free_throws_made)::numeric /sum(b.free_throws_attempted) * 100, 1) 
     end as free_throw_percentage,
+    rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (case when sum(b.free_throws_attempted) = 0 then 0 else round(sum(b.free_throws_made)::numeric /sum(b.free_throws_attempted) * 100, 1) end) DESC NULLS LAST) AS free_throw_percentage_rank,
 
     sum(b.efficiency) AS efficiency,
     rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (sum(b.efficiency)) DESC NULLS LAST) AS efficiency_rank
