@@ -22,9 +22,9 @@ export const usePlayerSeasonLeagueStatsTable = (data: PlayerAllTimeStats[] | und
 				cell: (info) => {
 					if (info.getValue() == null) return <p>Total</p>;
 					const orig = info.row.original as Partial<PlayerAllTimeStats> | undefined;
-					const slug = orig?.league_slug;
-					if (!slug) return <>{info.getValue()}</>;
-					return <Link to={APP_ROUTES.league(slug)}>{info.getValue()}</Link>;
+					const playerId = orig?.player_id;
+					if (!playerId) return <>{info.getValue()}</>;
+					return <Link to={APP_ROUTES.player(playerId)}>{info.getValue()}</Link>;
 				},
 				enableSorting: false
 			},
