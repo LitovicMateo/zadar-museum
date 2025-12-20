@@ -47,7 +47,9 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 	playerParams.append('filters[game][documentId][$eq]', id);
 
 	const teamStatsRes = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.teamStats(teamParams.toString()));
-	const playerStatsRes = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.playerStats(playerParams.toString()));
+	const playerStatsRes = await apiClient.get<{ data?: unknown[] }>(
+		API_ROUTES.create.playerStats(playerParams.toString())
+	);
 
 	const teamStatsArr = teamStatsRes.data?.data || [];
 	const playerStatsArr = playerStatsRes.data?.data || [];

@@ -11,7 +11,7 @@ export const useLeagueSeasons = (leagueSlug: string) => {
 };
 
 const getCompetitionSeasons = async (competitionSlug: string): Promise<string[]> => {
-	const res = await apiClient.get(API_ROUTES.league.seasons(competitionSlug));
+	const res = await apiClient.get<string[]>(API_ROUTES.league.seasons(competitionSlug));
 
-	return res.data;
+	return res.data ?? [];
 };

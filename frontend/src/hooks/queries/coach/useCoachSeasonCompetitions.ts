@@ -17,7 +17,7 @@ type Competition = {
 };
 
 const getCoachSeasonCompetitions = async (coachId: string, season: string): Promise<Competition[]> => {
-	const res = await apiClient.get(API_ROUTES.coach.competitions(coachId, season));
+	const res = await apiClient.get<Competition[]>(API_ROUTES.coach.competitions(coachId, season));
 
-	return res.data;
+	return res.data ?? [];
 };

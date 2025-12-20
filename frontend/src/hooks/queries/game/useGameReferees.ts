@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
 import apiClient from '@/services/apiClient';
-import { RefereeDetailsResponse } from '@/types/api/referee';
 import { GameDetailsResponse } from '@/types/api/game';
+import { RefereeDetailsResponse } from '@/types/api/referee';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGameReferees = (gameId: string) => {

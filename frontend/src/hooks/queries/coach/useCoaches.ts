@@ -22,7 +22,9 @@ const getAllCoaches = async (
 		params.append('direction', direction);
 	}
 
-	const res = await apiClient.get(API_ROUTES.dashboard.coaches(params.toString()));
+	const res = await apiClient.get<import('@/types/api/coach').CoachDetailsResponse[]>(
+		API_ROUTES.dashboard.coaches(params.toString())
+	);
 
-	return res.data;
+	return res.data ?? [];
 };

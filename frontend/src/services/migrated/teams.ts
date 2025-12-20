@@ -16,7 +16,7 @@ export async function updateTeam(payload: TeamUpdatePayload) {
 }
 
 export async function listTeams() {
-	const res = await apiClient.get('/teams');
-	if (res.status >= 200 && res.status < 300) return res.data;
+	const res = await apiClient.get<import('../../types/api/team').TeamDetailsResponse[]>('/teams');
+	if (res.status >= 200 && res.status < 300) return res.data ?? [];
 	return [];
 }

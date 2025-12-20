@@ -12,7 +12,7 @@ export const useVenueSeasonStats = (venueSlug: string, season: string) => {
 };
 
 const getVenueSeasonStats = async (venueSlug: string, season: string): Promise<VenueSeasonStats[]> => {
-	const res = await apiClient.get(API_ROUTES.venue.seasonStats(venueSlug, season));
-	const raw = res.data;
+	const res = await apiClient.get<import('@/types/api/venue').VenueSeasonStats[]>(API_ROUTES.venue.seasonStats(venueSlug, season));
+	const raw = res.data ?? [];
 	return raw;
 };

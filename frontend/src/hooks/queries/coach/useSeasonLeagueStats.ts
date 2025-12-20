@@ -13,7 +13,9 @@ export const useSeasonLeagueStats = (coachId: string, season: string, db: Player
 };
 
 const getSeasonLeagueStats = async (coachId: string, season: string, db: PlayerDB): Promise<CoachStatsResponse[]> => {
-	const res = await apiClient.get(API_ROUTES.coach.seasonLeagueStats(coachId, season, db));
+	const res = await apiClient.get<import('@/types/api/coach').CoachStatsResponse[]>(
+		API_ROUTES.coach.seasonLeagueStats(coachId, season, db)
+	);
 
-	return res.data;
+	return res.data ?? [];
 };

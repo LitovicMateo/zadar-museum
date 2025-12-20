@@ -11,10 +11,12 @@ export const useCoachSeasons = (coachId: string) => {
 };
 
 const getCoachSeasons = async (coachId: string): Promise<string[]> => {
-	const res = await apiClient.get(API_ROUTES.coach.seasons(coachId!));
-	const data = res.data;
+	const res = await apiClient.get<string[]>(API_ROUTES.coach.seasons(coachId!));
+	const data = res.data ?? [];
 
-	const seasonArr = data.map((s: { season: string }) => s.season).sort((a: string, b: string) => +b - +a);
+	const seasonArr = data
+		.map((s: { season: string } | string) => (typeof s === 'string' ? s : s.season))
+		.sort((a: string, b: string) => +b - +a);
 
 	return seasonArr;
 };

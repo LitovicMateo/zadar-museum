@@ -12,7 +12,9 @@ export const useVenueTeamRecord = (venueSlug: string) => {
 };
 
 const getVenueTeamRecord = async (venueSlug: string): Promise<VenueTeamRecordResponse> => {
-	const res = await apiClient.get(API_ROUTES.venue.teamRecord(venueSlug));
+	const res = await apiClient.get<import('@/types/api/venue').VenueTeamRecordResponse>(
+		API_ROUTES.venue.teamRecord(venueSlug)
+	);
 
 	const raw = res.data;
 	return raw;

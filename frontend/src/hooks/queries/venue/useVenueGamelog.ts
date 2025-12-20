@@ -12,8 +12,8 @@ export const useVenueGamelog = (venueSlug: string, season: string) => {
 };
 
 const getVenueGamelog = async (venueSlug: string, season: string): Promise<TeamScheduleResponse[]> => {
-	const res = await apiClient.get(API_ROUTES.venue.gamelog(venueSlug, season));
+	const res = await apiClient.get<import('@/types/api/team').TeamScheduleResponse[]>(API_ROUTES.venue.gamelog(venueSlug, season));
 
-	const raw = res.data;
+	const raw = res.data ?? [];
 	return raw;
 };

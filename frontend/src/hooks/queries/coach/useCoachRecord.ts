@@ -13,7 +13,7 @@ export const useCoachRecord = (coachId: string, db: PlayerDB | null) => {
 };
 
 const getCoachRecord = async (coachId: string, db: PlayerDB): Promise<CoachRecordResponse> => {
-	const res = await apiClient.get(API_ROUTES.coach.record(coachId, db));
+	const res = await apiClient.get<CoachRecordResponse>(API_ROUTES.coach.record(coachId, db));
 
 	return res.data;
 };

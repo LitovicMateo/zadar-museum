@@ -11,7 +11,7 @@ export const useVenueSeasons = (venueSlug: string) => {
 };
 
 const getVenueSeasons = async (venueSlug: string): Promise<string[]> => {
-	const res = await apiClient.get(API_ROUTES.venue.seasons(venueSlug));
-	const raw = res.data;
+	const res = await apiClient.get<string[]>(API_ROUTES.venue.seasons(venueSlug));
+	const raw = res.data ?? [];
 	return raw;
 };

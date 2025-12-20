@@ -12,7 +12,7 @@ export const useSeasonSchedule = (season: string, teamSlug: string) => {
 };
 
 const fetchSchedule = async (season: string, teamSlug: string): Promise<TeamScheduleResponse[]> => {
-	const res = await apiClient.get(API_ROUTES.team.schedule(season, teamSlug));
+	const res = await apiClient.get<import('@/types/api/team').TeamScheduleResponse[]>(API_ROUTES.team.schedule(season, teamSlug));
 
-	return res.data;
+	return res.data ?? [];
 };

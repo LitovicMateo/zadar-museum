@@ -12,7 +12,7 @@ export const useCoachTeams = (coachId: string) => {
 };
 
 const getCoachTeams = async (coachId: string): Promise<PlayerTeamResponse[]> => {
-	const res = await apiClient.get(API_ROUTES.coach.teams(coachId));
+	const res = await apiClient.get<import('@/types/api/player').PlayerTeamResponse[]>(API_ROUTES.coach.teams(coachId));
 
-	return res.data;
+	return res.data ?? [];
 };

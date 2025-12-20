@@ -14,7 +14,9 @@ const getVenueCompetitions = async (
 	venueSlug: string,
 	season: string
 ): Promise<{ league_id: string; league_name: string; league_slug: string }[]> => {
-	const res = await apiClient.get(API_ROUTES.venue.competitions(venueSlug, season));
-	const raw = res.data;
+	const res = await apiClient.get<{ league_id: string; league_name: string; league_slug: string }[]>(
+		API_ROUTES.venue.competitions(venueSlug, season)
+	);
+	const raw = res.data ?? [];
 	return raw;
 };

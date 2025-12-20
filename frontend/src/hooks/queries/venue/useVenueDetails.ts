@@ -12,7 +12,7 @@ export const useVenueDetails = (venueSlug: string) => {
 };
 
 const getVenueDetails = async (venueSlug: string): Promise<VenueDetailsResponse> => {
-	const res = await apiClient.get(API_ROUTES.venue.details(venueSlug));
+	const res = await apiClient.get<import('@/types/api/venue').VenueDetailsResponse>(API_ROUTES.venue.details(venueSlug));
 
 	const raw = res.data;
 	return raw;
