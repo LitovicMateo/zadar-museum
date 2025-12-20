@@ -2,8 +2,8 @@ import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
 import { TeamFormData } from '@/schemas/team-schema';
+import apiClient from '@/services/apiClient';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
-import axios from 'axios';
 
 export const updateTeam = async ({ id, ...data }: { id: string } & TeamFormData) => {
 	// Determine image payload:
@@ -51,9 +51,10 @@ export const updateTeam = async ({ id, ...data }: { id: string } & TeamFormData)
 		payload.image = imagePayload;
 	}
 
-	const res = await axios.put(API_ROUTES.edit.team(id), {
+	const res = await apiClient.put(API_ROUTES.edit.team(id), {
 		data: payload
 	});
 
-	return res;
+	if (res.status >= 200 && res.status < 300) return res.data;
+	throw new Error(`updateTeam failed: ${res.status}`);
 };

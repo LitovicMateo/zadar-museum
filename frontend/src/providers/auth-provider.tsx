@@ -2,7 +2,7 @@ import { useEffect, useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext, AuthContextType, StrapiAuthResponse, StrapiUser } from '@/context/auth-context';
-import axios from 'axios';
+import apiClient from '@/services/apiClient';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	console.debug('[AuthProvider] mount');
@@ -26,20 +26,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const login = async (identifier: string, password: string) => {
 		try {
-			const res = await axios.post<StrapiAuthResponse>('https://ovdjejekosarkasve.com/api/auth/local', {
+			const res = await apiClient.post<StrapiAuthResponse>('/api/auth/local', {
 				identifier,
 				password
 			});
 
-			const data = res.data;
+			if (!res || res.status < 200 || res.status >= 300) {
+				throw new Error('Login failed');
+			}
+
+			const data = res.data as StrapiAuthResponse;
 
 			setJwt(data.jwt);
 			setUser(data.user);
 
-			localStorage.setItem('jwt', data.jwt);
+			// persist tokens + user
+			await apiClient.setLocalAccessToken(data.jwt);
 			localStorage.setItem('user', JSON.stringify(data.user));
 
-			navigate('/'); // ✅ redirect on success
+			navigate('/');
 			return data.user;
 		} catch (error) {
 			// Log the underlying error for diagnostics and throw a normalized message

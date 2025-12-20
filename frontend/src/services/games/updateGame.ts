@@ -1,14 +1,14 @@
 import { API_ROUTES } from '@/constants/routes';
 import { GameFormData } from '@/schemas/game-schema';
+import apiClient from '@/services/apiClient';
 import { PlayerStatsResponse } from '@/types/api/player-stats';
 import { TeamStatsResponse } from '@/types/api/team-stats';
 import { uploadGallery } from '@/utils/uploadGallery';
-import axios from 'axios';
 
 export const updateGame = async ({ id, ...data }: { id: string } & GameFormData) => {
 	const galleryIds = await uploadGallery(data.gallery);
 
-	await axios.put(API_ROUTES.edit.game(id), {
+	const putRes = await apiClient.put(API_ROUTES.edit.game(id), {
 		data: {
 			season: data.season,
 			round: data.round,
@@ -37,23 +37,27 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 		}
 	});
 
+	if (!putRes || putRes.status >= 400) {
+		throw new Error(`updateGame failed: ${putRes?.status}`);
+	}
+
 	const teamParams = new URLSearchParams();
 	teamParams.append('filters[game][documentId][$eq]', id);
 	const playerParams = new URLSearchParams();
 	playerParams.append('filters[game][documentId][$eq]', id);
 
-	const teamStatsRes = await axios.get(API_ROUTES.create.teamStats(teamParams.toString()));
-	const playerStatsRes = await axios.get(API_ROUTES.create.playerStats(playerParams.toString()));
+	const teamStatsRes = await apiClient.get(API_ROUTES.create.teamStats(teamParams.toString()));
+	const playerStatsRes = await apiClient.get(API_ROUTES.create.playerStats(playerParams.toString()));
 
-	const teamStatsArr = teamStatsRes.data.data;
-	const playerStatsArr = playerStatsRes.data.data;
+	const teamStatsArr = teamStatsRes.data?.data || [];
+	const playerStatsArr = playerStatsRes.data?.data || [];
 
 	const deletePromises = teamStatsArr.map((teamStat: TeamStatsResponse) =>
-		axios.delete(API_ROUTES.edit.teamStats(teamStat.documentId))
+		apiClient.del(API_ROUTES.edit.teamStats(teamStat.documentId))
 	);
 
 	const deletePlayerStatsPromises = playerStatsArr.map((playerStat: PlayerStatsResponse) =>
-		axios.delete(API_ROUTES.edit.playerStats(playerStat.documentId))
+		apiClient.del(API_ROUTES.edit.playerStats(playerStat.documentId))
 	);
 
 	await Promise.all(deletePromises);

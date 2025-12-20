@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerFormData } from '@/schemas/player-schema';
+import apiClient from '@/services/apiClient';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
-import axios from 'axios';
 
 export const createPlayer = async (data: PlayerFormData) => {
 	const uploadedImageId = await uploadSingleImage(data.image);
@@ -11,9 +11,14 @@ export const createPlayer = async (data: PlayerFormData) => {
 		'filters[last_name][$eq]': data.last_name
 	});
 
-	const existingPlayer = await axios.get(API_ROUTES.create.player(params.toString()));
+	const existingPlayer = await apiClient.get(API_ROUTES.create.player(params.toString()));
 
-	if (existingPlayer.data.data.length > 0) {
+	if (!existingPlayer || existingPlayer.status >= 400) {
+		// if the check failed for some reason, surface an error
+		throw new Error('Failed to validate existing player');
+	}
+
+	if (existingPlayer.data?.data?.length > 0) {
 		throw new Error('Player already exists');
 	}
 
@@ -30,7 +35,10 @@ export const createPlayer = async (data: PlayerFormData) => {
 		nationality: data.nationality
 	};
 
-	return axios.post(API_ROUTES.create.player(), {
+	const res = await apiClient.post(API_ROUTES.create.player(), {
 		data: playerPayload
 	});
+
+	if (res.status >= 200 && res.status < 300) return res.data;
+	throw new Error(`createPlayer failed: ${res.status}`);
 };

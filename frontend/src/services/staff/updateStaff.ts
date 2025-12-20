@@ -1,9 +1,9 @@
 import { API_ROUTES } from '@/constants/routes';
 import { StaffFormData } from '@/schemas/staff-schema';
-import axios from 'axios';
+import apiClient from '@/services/apiClient';
 
 export const updateStaff = async ({ id, ...data }: { id: string } & StaffFormData) => {
-	const res = await axios.put(API_ROUTES.edit.staff(id), {
+	const res = await apiClient.put(API_ROUTES.edit.staff(id), {
 		data: {
 			first_name: data.first_name,
 			last_name: data.last_name,
@@ -11,5 +11,6 @@ export const updateStaff = async ({ id, ...data }: { id: string } & StaffFormDat
 		}
 	});
 
-	return res;
+	if (res.status >= 200 && res.status < 300) return res.data;
+	throw new Error(`updateStaff failed: ${res.status}`);
 };

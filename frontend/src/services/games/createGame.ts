@@ -1,30 +1,29 @@
 import { API_ROUTES } from '@/constants/routes';
 import { GameFormData } from '@/schemas/game-schema';
+import apiClient from '@/services/apiClient';
 import { uploadGallery } from '@/utils/uploadGallery';
-import axios from 'axios';
 
 export const createGame = async (data: GameFormData) => {
 	if (data.stage === 'league' && data.competition) {
 		const { season, competition, round, home_team, away_team } = data;
 
-		// Query Strapi for any game in this season+competition+round with either team
-		const res = await axios.get(API_ROUTES.create.game(), {
-			params: {
-				filters: {
-					season: { $eq: season },
-					competition: { $eq: competition },
-					round: { $eq: round },
-					$or: [
-						{ home_team: { $eq: home_team } },
-						{ away_team: { $eq: home_team } },
-						{ home_team: { $eq: away_team } },
-						{ away_team: { $eq: away_team } }
-					]
-				}
-			}
-		});
+		// Build query string for Strapi filters (avoid complex axios params)
+		const params = new URLSearchParams();
+		params.append('filters[season][$eq]', String(season));
+		params.append('filters[competition][$eq]', String(competition));
+		params.append('filters[round][$eq]', String(round));
+		params.append('filters[$or][0][home_team][$eq]', String(home_team));
+		params.append('filters[$or][1][away_team][$eq]', String(home_team));
+		params.append('filters[$or][2][home_team][$eq]', String(away_team));
+		params.append('filters[$or][3][away_team][$eq]', String(away_team));
 
-		if (res.data.data.length > 0) {
+		const res = await apiClient.get(API_ROUTES.create.game(params.toString()));
+
+		if (!res || res.status >= 400) {
+			throw new Error('Failed to validate duplicate game');
+		}
+
+		if (res.data?.data?.length > 0) {
 			throw new Error(
 				`Duplicate game detected: One of the teams already has a game in round ${round} of competition ${competition}, season ${season}.`
 			);
@@ -33,7 +32,7 @@ export const createGame = async (data: GameFormData) => {
 
 	const galleryIds = await uploadGallery(data.gallery);
 
-	return axios.post(API_ROUTES.create.game(), {
+	const res = await apiClient.post(API_ROUTES.create.game(), {
 		data: {
 			season: data.season,
 			round: data.round,
@@ -61,4 +60,7 @@ export const createGame = async (data: GameFormData) => {
 			gallery: galleryIds.length > 0 ? galleryIds : []
 		}
 	});
+
+	if (res.status >= 200 && res.status < 300) return res.data;
+	throw new Error(`createGame failed: ${res.status}`);
 };
