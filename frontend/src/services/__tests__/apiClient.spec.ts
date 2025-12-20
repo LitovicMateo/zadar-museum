@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import apiClient from '@/services/apiClient';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 describe('apiClient', () => {
 	beforeEach(() => {
@@ -42,7 +42,11 @@ describe('apiClient', () => {
 		global.fetch = vi.fn((input: any, init: any) => {
 			calls.push({ input, init });
 			if (typeof input === 'string' && input.endsWith('/auth/refresh')) {
-				return Promise.resolve({ status: 200, ok: true, text: async () => JSON.stringify({ accessToken: 'newtoken' }) });
+				return Promise.resolve({
+					status: 200,
+					ok: true,
+					text: async () => JSON.stringify({ accessToken: 'newtoken' })
+				});
 			}
 
 			// first call to resource -> 401
