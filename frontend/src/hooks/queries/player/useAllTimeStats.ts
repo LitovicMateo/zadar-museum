@@ -1,7 +1,7 @@
 // hooks/useAllTimeStats.ts
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerDB } from '@/pages/Player/Player';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { PlayerCareerStats } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,5 +19,5 @@ export const getAllTimeTotalStats = async (db: PlayerDB, playerId: string): Prom
 	});
 	const res = await apiClient.get(API_ROUTES.player.stats.allTime(db, params.toString()));
 
-	return res.data;
+	return unwrapCollection<PlayerCareerStats>(res as unknown as { data?: unknown });
 };

@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { CoachFormData } from '@/schemas/coach-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
 
 export const updateCoach = async ({ id, ...data }: { id: string } & CoachFormData) => {
@@ -15,6 +15,8 @@ export const updateCoach = async ({ id, ...data }: { id: string } & CoachFormDat
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300)
+		return unwrapSingle<Record<string, unknown>>(res as unknown as { data?: unknown });
+
 	throw new Error(`updateCoach failed: ${res.status}`);
 };

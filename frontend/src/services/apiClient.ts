@@ -123,3 +123,22 @@ export const apiClient = {
 };
 
 export default apiClient;
+
+// Runtime helpers to normalize Strapi-style responses and provide basic guards.
+export function unwrapCollection<T>(res: { data?: any } | undefined): T[] {
+	if (!res) return [];
+	const d = res.data;
+	if (!d) return [];
+	if (Array.isArray(d)) return d as T[];
+	if (Array.isArray(d.data)) return d.data as T[];
+	return [];
+}
+
+export function unwrapSingle<T>(res: { data?: any } | undefined): T | null {
+	if (!res) return null;
+	const d = res.data;
+	if (!d) return null;
+	if (Array.isArray(d)) return (d[0] as T) ?? null;
+	if (Array.isArray(d.data)) return (d.data[0] as T) ?? null;
+	return d as T;
+}

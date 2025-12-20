@@ -12,7 +12,8 @@ export const uploadSingleImage = async (file: File | null): Promise<number | nul
 	const res = await axios.post(API_ROUTES.uploadImage, formData);
 
 	if (res.status === 201) {
-		return res.data[0].id;
+		const files = res.data as unknown as Array<{ id: number }>;
+		return files[0].id;
 	}
 
 	return null;

@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { StaffFormData } from '@/schemas/staff-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection, unwrapSingle } from '@/services/apiClient';
 
 export const createStaff = async (data: StaffFormData) => {
 	const params = new URLSearchParams({
@@ -9,7 +9,7 @@ export const createStaff = async (data: StaffFormData) => {
 	});
 
 	const existing = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.staff(params.toString()));
-	if (existing.data?.data && existing.data.data.length > 0) {
+	if (unwrapCollection(existing).length > 0) {
 		throw new Error('Staff already exists');
 	}
 
@@ -21,6 +21,6 @@ export const createStaff = async (data: StaffFormData) => {
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`createStaff failed: ${res.status}`);
 };

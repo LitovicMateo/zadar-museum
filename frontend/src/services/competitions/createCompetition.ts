@@ -1,7 +1,7 @@
 import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { CompetitionFormData } from '@/types/api/competition';
 
 export const createCompetiton = async (data: CompetitionFormData) => {
@@ -15,6 +15,8 @@ export const createCompetiton = async (data: CompetitionFormData) => {
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300)
+		return unwrapSingle<Record<string, unknown>>(res as unknown as { data?: unknown });
+
 	throw new Error(`createCompetiton failed: ${res.status}`);
 };

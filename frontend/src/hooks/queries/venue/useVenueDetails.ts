@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { VenueDetailsResponse } from '@/types/api/venue';
 import { useQuery } from '@tanstack/react-query';
 
@@ -12,8 +12,10 @@ export const useVenueDetails = (venueSlug: string) => {
 };
 
 const getVenueDetails = async (venueSlug: string): Promise<VenueDetailsResponse> => {
-	const res = await apiClient.get<import('@/types/api/venue').VenueDetailsResponse>(API_ROUTES.venue.details(venueSlug));
+	const res = await apiClient.get<import('@/types/api/venue').VenueDetailsResponse>(
+		API_ROUTES.venue.details(venueSlug)
+	);
 
-	const raw = res.data;
-	return raw;
+	const raw = unwrapSingle<import('@/types/api/venue').VenueDetailsResponse>(res as unknown as { data?: unknown });
+	return raw as import('@/types/api/venue').VenueDetailsResponse;
 };

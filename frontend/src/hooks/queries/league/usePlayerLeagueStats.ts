@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { PlayerAllTimeStats } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
 
@@ -14,7 +14,5 @@ export const usePlayerLeagueStats = (leagueSlug: string, season: string) => {
 const getSinglePlayerLeagueStats = async (leagueSlug: string, season: string): Promise<PlayerAllTimeStats[]> => {
 	const res = await apiClient.get<PlayerAllTimeStats[]>(API_ROUTES.league.playerSeasonStats(leagueSlug, season));
 
-	const data = res.data ?? [];
-
-	return data;
+	return unwrapCollection<PlayerAllTimeStats>(res as unknown as { data?: unknown });
 };

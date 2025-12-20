@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerStatsFormData } from '@/schemas/player-stats';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { validateStats } from '@/utils/validateStats';
 
 export const updatePlayerStats = async ({ id, ...data }: { id: string } & PlayerStatsFormData) => {
@@ -38,6 +38,6 @@ export const updatePlayerStats = async ({ id, ...data }: { id: string } & Player
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`updatePlayerStats failed: ${res.status}`);
 };

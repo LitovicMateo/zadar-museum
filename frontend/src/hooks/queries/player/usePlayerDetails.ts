@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { PlayerResponse } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,6 +13,6 @@ export const usePlayerDetails = (playerId: string) => {
 
 const fetchSinglePlayer = async (id: string): Promise<PlayerResponse> => {
 	const res = await apiClient.get(API_ROUTES.player.profile.details(id));
-	const raw = res.data.data;
-	return raw;
+	const raw = unwrapSingle<PlayerResponse>(res);
+	return raw as PlayerResponse;
 };

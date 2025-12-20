@@ -14,5 +14,6 @@ export const uploadGallery = async (files: FileList | null): Promise<number[]> =
 	});
 
 	// Strapi returns array of uploaded files with IDs
-	return res.data.map((file: { id: number }) => file.id);
+	const uploaded = res.data as unknown as Array<{ id: number }>;
+	return uploaded.map((file) => file.id);
 };

@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { TeamStatsFormData } from '@/schemas/team-stats-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { validateStats } from '@/utils/validateStats';
 
 export const updateTeamStats = async ({ id, ...data }: { id: string } & TeamStatsFormData) => {
@@ -57,6 +57,6 @@ export const updateTeamStats = async ({ id, ...data }: { id: string } & TeamStat
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`updateTeamStats failed: ${res.status}`);
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { API_ROUTES } from '@/constants/routes';
+import { unwrapSingle } from '@/services/apiClient';
 import axios from 'axios';
 
 import Button from '../ui/button';
@@ -14,11 +15,12 @@ const RefreshDataButton: React.FC = () => {
 		try {
 			const res = await axios.get(API_ROUTES.refresh.views);
 
-			if (!res.data.ok) {
-				throw new Error(res.data?.message || 'Failed to refresh views');
+			const data = unwrapSingle<{ ok: boolean; message?: string }>(res as unknown as { data?: unknown });
+
+			if (!data.ok) {
+				throw new Error(data?.message || 'Failed to refresh views');
 			}
 
-			const data = res.data;
 			return data;
 		} catch (err) {
 			console.error(err);

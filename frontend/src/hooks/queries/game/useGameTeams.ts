@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGameTeams = (gameId: string) => {
@@ -20,5 +20,18 @@ const getGameTeams = async (
 	}[];
 }> => {
 	const res = await apiClient.get(API_ROUTES.dashboard.teamsInGame(gameId));
-	return res.data;
+
+	return unwrapSingle<{
+		gameId: string;
+		teams: {
+			id: string;
+			name: string;
+		}[];
+	}>(res as unknown as { data?: unknown }) as {
+		gameId: string;
+		teams: {
+			id: string;
+			name: string;
+		}[];
+	};
 };

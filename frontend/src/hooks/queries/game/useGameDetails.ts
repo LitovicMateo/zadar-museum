@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { GameDetailsResponse } from '@/types/api/game';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,6 +13,6 @@ export const useGameDetails = (gameId: string) => {
 
 const getGameDetails = async (id: string): Promise<GameDetailsResponse> => {
 	const res = await apiClient.get(API_ROUTES.game.details(id));
-	const raw = res.data;
-	return raw as GameDetailsResponse;
+
+	return unwrapSingle<GameDetailsResponse>(res as unknown as { data?: unknown }) as GameDetailsResponse;
 };

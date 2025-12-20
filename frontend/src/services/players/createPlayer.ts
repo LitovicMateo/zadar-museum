@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerFormData } from '@/schemas/player-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection, unwrapSingle } from '@/services/apiClient';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
 
 export const createPlayer = async (data: PlayerFormData) => {
@@ -18,7 +18,7 @@ export const createPlayer = async (data: PlayerFormData) => {
 		throw new Error('Failed to validate existing player');
 	}
 
-	if (existingPlayer.data?.data?.length > 0) {
+	if (unwrapCollection(existingPlayer as unknown as { data?: unknown }).length > 0) {
 		throw new Error('Player already exists');
 	}
 
@@ -39,6 +39,6 @@ export const createPlayer = async (data: PlayerFormData) => {
 		data: playerPayload
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`createPlayer failed: ${res.status}`);
 };

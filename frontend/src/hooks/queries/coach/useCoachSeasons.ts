@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { useQuery } from '@tanstack/react-query';
 
 export const useCoachSeasons = (coachId: string) => {
@@ -12,7 +12,7 @@ export const useCoachSeasons = (coachId: string) => {
 
 const getCoachSeasons = async (coachId: string): Promise<string[]> => {
 	const res = await apiClient.get<string[]>(API_ROUTES.coach.seasons(coachId!));
-	const data = res.data ?? [];
+	const data = unwrapCollection<string>(res as unknown as { data?: unknown });
 
 	const seasonArr = data
 		.map((s: { season: string } | string) => (typeof s === 'string' ? s : s.season))

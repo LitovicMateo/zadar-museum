@@ -1,7 +1,7 @@
 import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { VenueFormData } from '@/types/api/venue';
 
 export const createVenue = async (data: VenueFormData) => {
@@ -14,6 +14,6 @@ export const createVenue = async (data: VenueFormData) => {
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`createVenue failed: ${res.status}`);
 };

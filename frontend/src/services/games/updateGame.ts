@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { GameFormData } from '@/schemas/game-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { PlayerStatsResponse } from '@/types/api/player-stats';
 import { TeamStatsResponse } from '@/types/api/team-stats';
 import { uploadGallery } from '@/utils/uploadGallery';
@@ -46,13 +46,11 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 	const playerParams = new URLSearchParams();
 	playerParams.append('filters[game][documentId][$eq]', id);
 
-	const teamStatsRes = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.teamStats(teamParams.toString()));
-	const playerStatsRes = await apiClient.get<{ data?: unknown[] }>(
-		API_ROUTES.create.playerStats(playerParams.toString())
-	);
+	const teamStatsRes = await apiClient.get(API_ROUTES.create.teamStats(teamParams.toString()));
+	const playerStatsRes = await apiClient.get(API_ROUTES.create.playerStats(playerParams.toString()));
 
-	const teamStatsArr = teamStatsRes.data?.data || [];
-	const playerStatsArr = playerStatsRes.data?.data || [];
+	const teamStatsArr = unwrapCollection<TeamStatsResponse>(teamStatsRes as unknown as { data?: unknown });
+	const playerStatsArr = unwrapCollection<PlayerStatsResponse>(playerStatsRes as unknown as { data?: unknown });
 
 	const deletePromises = teamStatsArr.map((teamStat: TeamStatsResponse) =>
 		apiClient.del(API_ROUTES.edit.teamStats(teamStat.documentId))

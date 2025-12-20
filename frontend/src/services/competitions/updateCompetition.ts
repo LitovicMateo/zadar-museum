@@ -2,7 +2,7 @@ import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
 import { CompetitionFormData } from '@/schemas/competition-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 
 export const updateCompetition = async ({ id, ...data }: { id: string } & CompetitionFormData) => {
 	const res = await apiClient.put(API_ROUTES.edit.competition(id), {
@@ -15,6 +15,8 @@ export const updateCompetition = async ({ id, ...data }: { id: string } & Compet
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300)
+		return unwrapSingle<Record<string, unknown>>(res as unknown as { data?: unknown });
+
 	throw new Error(`updateCompetition failed: ${res.status}`);
 };

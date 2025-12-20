@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { CoachDetailsResponse } from '@/types/api/coach';
 import { useQuery } from '@tanstack/react-query';
 
@@ -26,5 +26,5 @@ const getAllCoaches = async (
 		API_ROUTES.dashboard.coaches(params.toString())
 	);
 
-	return res.data ?? [];
+	return unwrapCollection<import('@/types/api/coach').CoachDetailsResponse>(res as unknown as { data?: unknown });
 };

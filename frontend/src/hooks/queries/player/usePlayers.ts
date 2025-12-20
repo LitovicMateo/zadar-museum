@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { PlayerResponse } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
 
@@ -20,5 +20,5 @@ const getAllPlayers = async (sortKey?: PlayerKey, direction: 'asc' | 'desc' = 'a
 	}
 
 	const res = await apiClient.get<PlayerResponse[]>(API_ROUTES.dashboard.players(params.toString()));
-	return res.data ?? [];
+	return unwrapCollection<PlayerResponse>(res as unknown as { data?: unknown });
 };

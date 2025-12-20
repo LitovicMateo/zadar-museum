@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { StaffMemberDetailsResponse as StaffDetailsResponse } from '@/types/api/staff-member';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,7 +13,7 @@ export const useStaffDetails = (staffId: string) => {
 
 const getStaffDetails = async (staffId: string): Promise<StaffDetailsResponse> => {
 	const res = await apiClient.get<{ data: StaffDetailsResponse }>(API_ROUTES.staff.details(staffId));
-	const data = res.data.data;
+	const data = unwrapSingle<StaffDetailsResponse>(res);
 
-	return data;
+	return data as StaffDetailsResponse;
 };

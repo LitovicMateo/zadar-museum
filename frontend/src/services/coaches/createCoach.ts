@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { CoachFormData } from '@/schemas/coach-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection, unwrapSingle } from '@/services/apiClient';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
 
 export const createCoach = async (data: CoachFormData) => {
@@ -11,13 +11,15 @@ export const createCoach = async (data: CoachFormData) => {
 		'filters[last_name][$eq]': data.last_name
 	});
 
-	const existingCoach = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.coach(params.toString()));
+	const existingCoach = await apiClient.get(API_ROUTES.create.coach(params.toString()));
 
 	if (!existingCoach || existingCoach.status >= 400) {
 		throw new Error('Failed to validate existing coach');
 	}
 
-	if (existingCoach.data?.data?.length > 0) {
+	const existing = unwrapCollection<{ id: number }>(existingCoach as unknown as { data?: unknown });
+
+	if (existing.length > 0) {
 		throw new Error('Coach already exists');
 	}
 
@@ -33,6 +35,8 @@ export const createCoach = async (data: CoachFormData) => {
 		data: coachPayload
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300)
+		return unwrapSingle<Record<string, unknown>>(res as unknown as { data?: unknown });
+
 	throw new Error(`createCoach failed: ${res.status}`);
 };

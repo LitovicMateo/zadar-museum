@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { PlayerNumberResponse } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,5 +13,5 @@ export const usePlayerNumber = (playerId: string) => {
 const getPlayerNumber = async (playerId: string): Promise<PlayerNumberResponse> => {
 	const res = await apiClient.get(API_ROUTES.player.profile.number(playerId));
 
-	return res.data;
+	return unwrapSingle<PlayerNumberResponse>(res as unknown as { data?: unknown }) as PlayerNumberResponse;
 };

@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { PlayerBoxscoreResponse } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,5 +19,5 @@ const getPlayerBoxscore = async (playerId: string, season: string): Promise<Play
 
 	const res = await apiClient.get(API_ROUTES.player.stats.boxscore(params.toString()));
 
-	return res.data as PlayerBoxscoreResponse[];
+	return unwrapCollection<PlayerBoxscoreResponse>(res as unknown as { data?: unknown });
 };

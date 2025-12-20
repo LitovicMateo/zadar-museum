@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { useQuery } from '@tanstack/react-query';
 
 export const useSeasons = () => {
@@ -11,6 +11,7 @@ export const useSeasons = () => {
 
 const getAllSeasons = async (): Promise<string[]> => {
 	const res = await apiClient.get(API_ROUTES.dashboard.seasons);
+	const raw = unwrapCollection<{ season: string }>(res as unknown as { data?: unknown });
 
-	return res.data.map((s: { season: string }) => s.season).sort((a: string, b: string) => +b - +a);
+	return raw.map((s) => s.season).sort((a: string, b: string) => +b - +a);
 };

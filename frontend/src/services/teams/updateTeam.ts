@@ -2,7 +2,7 @@ import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
 import { TeamFormData } from '@/schemas/team-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
 
 export const updateTeam = async ({ id, ...data }: { id: string } & TeamFormData) => {
@@ -55,6 +55,6 @@ export const updateTeam = async ({ id, ...data }: { id: string } & TeamFormData)
 		data: payload
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`updateTeam failed: ${res.status}`);
 };

@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { VenueTeamRecordResponse } from '@/types/api/venue';
 import { useQuery } from '@tanstack/react-query';
 
@@ -16,6 +16,7 @@ const getVenueTeamRecord = async (venueSlug: string): Promise<VenueTeamRecordRes
 		API_ROUTES.venue.teamRecord(venueSlug)
 	);
 
-	const raw = res.data;
-	return raw;
+	return unwrapSingle<import('@/types/api/venue').VenueTeamRecordResponse>(
+		res as unknown as { data?: unknown }
+	) as import('@/types/api/venue').VenueTeamRecordResponse;
 };

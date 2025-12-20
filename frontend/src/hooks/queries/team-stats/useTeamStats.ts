@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { TeamStatsResponse } from '@/types/api/team-stats';
 import { useQuery } from '@tanstack/react-query';
 
@@ -18,5 +18,5 @@ const getTeamStats = async (key: keyof TeamStatsResponse, sort: 'asc' | 'desc'):
 
 	const res = await apiClient.get(API_ROUTES.dashboard.teamStats(params.toString()));
 
-	return res.data;
+	return unwrapCollection(res as unknown as { data?: unknown });
 };

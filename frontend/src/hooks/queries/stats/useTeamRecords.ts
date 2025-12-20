@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerDB } from '@/pages/Player/Player';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { TeamRecord } from '@/types/api/team-stats';
 import { useQuery } from '@tanstack/react-query';
 
@@ -33,5 +33,5 @@ const getTeamRecords = async (
 	});
 	const res = await apiClient.get(API_ROUTES.stats.team.records(params.toString()));
 
-	return res.data;
+	return unwrapCollection<TeamRecord>(res as unknown as { data?: unknown });
 };

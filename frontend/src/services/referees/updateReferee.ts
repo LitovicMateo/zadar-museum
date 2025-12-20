@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { RefereeFormData } from '@/schemas/referee-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 
 export const updateReferee = async ({ id, ...data }: { id: string } & RefereeFormData) => {
 	const res = await apiClient.put(API_ROUTES.edit.referee(id), {
@@ -11,6 +11,6 @@ export const updateReferee = async ({ id, ...data }: { id: string } & RefereeFor
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`updateReferee failed: ${res.status}`);
 };

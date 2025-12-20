@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { GameDetailsResponse } from '@/types/api/game';
 import { RefereeDetailsResponse } from '@/types/api/referee';
 import { useQuery } from '@tanstack/react-query';
@@ -14,11 +14,10 @@ export const useGameReferees = (gameId: string) => {
 
 const getGameReferees = async (gameId: string): Promise<RefereeDetailsResponse[]> => {
 	const res = await apiClient.get<GameDetailsResponse>(API_ROUTES.game.details(gameId));
-	const game = res.data;
+	const game = unwrapSingle<GameDetailsResponse>(res as unknown as { data?: unknown });
 
+	if (!game) return [];
 	if (!game.mainReferee || !game.secondReferee || !game.thirdReferee) return [];
 
-	const refs = [game.mainReferee, game.secondReferee, game.thirdReferee];
-
-	return refs;
+	return [game.mainReferee, game.secondReferee, game.thirdReferee];
 };

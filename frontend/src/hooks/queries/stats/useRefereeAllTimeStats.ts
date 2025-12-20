@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { RefereeStatsRanking } from '@/types/api/referee';
 import { useQuery } from '@tanstack/react-query';
 
@@ -22,5 +22,5 @@ const getRefereeAllTimeStats = async (
 	});
 	const res = await apiClient.get(API_ROUTES.stats.referee.allTime(params.toString()));
 
-	return res.data;
+	return unwrapCollection<RefereeStatsRanking>(res as unknown as { data?: unknown });
 };

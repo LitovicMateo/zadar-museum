@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { VenueFormData } from '@/schemas/venue-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 
 export const updateVenue = async ({ id, ...data }: { id: string } & VenueFormData) => {
 	const res = await apiClient.put(API_ROUTES.edit.venue(id), {
@@ -11,6 +11,6 @@ export const updateVenue = async ({ id, ...data }: { id: string } & VenueFormDat
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`updateVenue failed: ${res.status}`);
 };

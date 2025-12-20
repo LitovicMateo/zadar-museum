@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerDB } from '@/pages/Player/Player';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { CoachStatsResponse } from '@/types/api/coach';
 import { useQuery } from '@tanstack/react-query';
 
@@ -17,5 +17,5 @@ const getSeasonLeagueStats = async (coachId: string, season: string, db: PlayerD
 		API_ROUTES.coach.seasonLeagueStats(coachId, season, db)
 	);
 
-	return res.data ?? [];
+	return unwrapCollection<import('@/types/api/coach').CoachStatsResponse>(res as unknown as { data?: unknown });
 };

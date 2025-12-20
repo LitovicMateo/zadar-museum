@@ -1,6 +1,6 @@
 import { playerKeys, coachKeys } from '@/components/team-page/team-leaders/options';
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { PlayerAllTimeStats } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
 
@@ -47,5 +47,5 @@ const getTeamLeaders = async (
 
 	const res = await apiClient.get(API_ROUTES.team.stats.leaders(params.toString()));
 
-	return res.data;
+	return unwrapCollection<TeamLeaders>(res as unknown as { data?: unknown });
 };

@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerDB } from '@/pages/Player/Player';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { CoachStatsRanking } from '@/types/api/coach';
 import { useQuery } from '@tanstack/react-query';
 
@@ -36,5 +36,7 @@ const getCoachAllTimeStats = async (
 	});
 	const res = await apiClient.get(API_ROUTES.stats.coach.allTime(params.toString()));
 
-	return res.data;
+	return unwrapSingle<{ current: CoachStatsRanking[]; previous: CoachStatsRanking[] }>(
+		res as unknown as { data?: unknown }
+	);
 };

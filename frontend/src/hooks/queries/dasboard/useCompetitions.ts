@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { CompetitionDetailsResponse } from '@/types/api/competition';
 import { useQuery } from '@tanstack/react-query';
 
@@ -24,5 +24,5 @@ const getAllCompetitions = async (
 
 	const res = await apiClient.get(API_ROUTES.dashboard.competitions(params.toString()));
 
-	return res.data;
+	return unwrapCollection<CompetitionDetailsResponse>(res as unknown as { data?: unknown });
 };

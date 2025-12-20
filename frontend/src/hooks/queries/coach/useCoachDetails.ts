@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { CoachDetailsResponse } from '@/types/api/coach';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useCoachDetails = (coachId: string) => {
 	return useQuery({
@@ -12,7 +12,7 @@ export const useCoachDetails = (coachId: string) => {
 };
 
 const getCoachDetails = async (coachId: string): Promise<CoachDetailsResponse> => {
-	const res = await axios.get(API_ROUTES.coach.details(coachId));
+	const res = await apiClient.get<CoachDetailsResponse>(API_ROUTES.coach.details(coachId));
 
-	return res.data;
+	return unwrapSingle<CoachDetailsResponse>(res as unknown as { data?: unknown }) as CoachDetailsResponse;
 };

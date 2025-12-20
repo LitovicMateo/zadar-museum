@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { VenueDetailsResponse } from '@/types/api/venue';
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,7 +19,9 @@ const getAllVenues = async (sortKey?: VenueKey, direction: 'asc' | 'desc' = 'asc
 		params.append('direction', direction);
 	}
 
-	const res = await apiClient.get<import('@/types/api/venue').VenueDetailsResponse[]>(API_ROUTES.dashboard.venues(params.toString()));
+	const res = await apiClient.get<import('@/types/api/venue').VenueDetailsResponse[]>(
+		API_ROUTES.dashboard.venues(params.toString())
+	);
 
-	return res.data ?? [];
+	return unwrapCollection<import('@/types/api/venue').VenueDetailsResponse>(res as unknown as { data?: unknown });
 };

@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { RefereeStatsResponse } from '@/types/api/referee';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,5 +13,6 @@ export const useRefereeTeamRecord = (refereeId: string) => {
 
 const getRefereeTeamRecord = async (refereeId: string): Promise<RefereeStatsResponse> => {
 	const res = await apiClient.get(API_ROUTES.referee.teamRecord(refereeId));
-	return res.data;
+
+	return unwrapSingle<RefereeStatsResponse>(res as unknown as { data?: unknown }) as RefereeStatsResponse;
 };

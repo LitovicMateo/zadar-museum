@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerStatsFormData } from '@/schemas/player-stats';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection, unwrapSingle } from '@/services/apiClient';
 import { validateStats } from '@/utils/validateStats';
 
 export const createPlayerStats = async (data: PlayerStatsFormData) => {
@@ -14,7 +14,7 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 	// 1️⃣ Check for existing entry
 	const existingRes = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.playerStats(params.toString()));
 
-	if (existingRes.data?.data?.length > 0) {
+	if (unwrapCollection(existingRes as unknown as { data?: unknown }).length > 0) {
 		throw new Error('Player stats for this game, team, and player already exist.');
 	}
 
@@ -50,7 +50,7 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 		};
 
 		const res = await apiClient.post(API_ROUTES.create.playerStats(), { data: payload });
-		if (res.status >= 200 && res.status < 300) return res.data;
+		if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 		throw new Error(`createPlayerStats failed: ${res.status}`);
 	}
 
@@ -88,6 +88,6 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 	};
 
 	const res = await apiClient.post(API_ROUTES.create.playerStats(), { data: payload });
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`createPlayerStats failed: ${res.status}`);
 };

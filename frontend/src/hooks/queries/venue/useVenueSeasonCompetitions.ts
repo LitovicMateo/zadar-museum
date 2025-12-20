@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { useQuery } from '@tanstack/react-query';
 
 export const useVenueSeasonCompetitions = (venueSlug: string, season: string) => {
@@ -17,6 +17,7 @@ const getVenueCompetitions = async (
 	const res = await apiClient.get<{ league_id: string; league_name: string; league_slug: string }[]>(
 		API_ROUTES.venue.competitions(venueSlug, season)
 	);
-	const raw = res.data ?? [];
-	return raw;
+	return unwrapCollection<{ league_id: string; league_name: string; league_slug: string }>(
+		res as unknown as { data?: unknown }
+	);
 };

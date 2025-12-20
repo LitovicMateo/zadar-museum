@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { RefereeDetailsResponse } from '@/types/api/referee';
 import { useQuery } from '@tanstack/react-query';
 
@@ -24,5 +24,5 @@ const getAllReferee = async (
 
 	const res = await apiClient.get(API_ROUTES.dashboard.referees(params.toString()));
 
-	return res.data;
+	return unwrapCollection<RefereeDetailsResponse>(res as unknown as { data?: unknown });
 };

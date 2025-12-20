@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { TeamDetailsResponse } from '@/types/api/team';
 import { useQuery } from '@tanstack/react-query';
 
@@ -21,5 +21,5 @@ const getAllTeams = async (sortKey?: TeamKey, direction: 'asc' | 'desc' = 'asc')
 
 	const res = await apiClient.get(API_ROUTES.dashboard.teams(params.toString()));
 
-	return res.data;
+	return unwrapCollection<TeamDetailsResponse>(res as unknown as { data?: unknown });
 };

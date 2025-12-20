@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { RefereeFormData } from '@/types/api/referee';
 
 export const createReferee = async (data: RefereeFormData) => {
@@ -11,6 +11,6 @@ export const createReferee = async (data: RefereeFormData) => {
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`createReferee failed: ${res.status}`);
 };

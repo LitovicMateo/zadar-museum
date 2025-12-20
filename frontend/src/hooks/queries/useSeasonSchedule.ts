@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { TeamScheduleResponse } from '@/types/api/team';
 import { useQuery } from '@tanstack/react-query';
 
@@ -12,7 +12,9 @@ export const useSeasonSchedule = (season: string, teamSlug: string) => {
 };
 
 const fetchSchedule = async (season: string, teamSlug: string): Promise<TeamScheduleResponse[]> => {
-	const res = await apiClient.get<import('@/types/api/team').TeamScheduleResponse[]>(API_ROUTES.team.schedule(season, teamSlug));
+	const res = await apiClient.get<import('@/types/api/team').TeamScheduleResponse[]>(
+		API_ROUTES.team.schedule(season, teamSlug)
+	);
 
-	return res.data ?? [];
+	return unwrapCollection<import('@/types/api/team').TeamScheduleResponse>(res as unknown as { data?: unknown });
 };

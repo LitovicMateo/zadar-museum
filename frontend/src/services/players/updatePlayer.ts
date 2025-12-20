@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerFormData } from '@/schemas/player-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
 
 export const updatePlayer = async ({ id, ...data }: { id: string } & PlayerFormData) => {
@@ -22,6 +22,6 @@ export const updatePlayer = async ({ id, ...data }: { id: string } & PlayerFormD
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`updatePlayer failed: ${res.status}`);
 };

@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection } from '@/services/apiClient';
 import { useQuery } from '@tanstack/react-query';
 
 export const useVenueSeasons = (venueSlug: string) => {
@@ -12,6 +12,5 @@ export const useVenueSeasons = (venueSlug: string) => {
 
 const getVenueSeasons = async (venueSlug: string): Promise<string[]> => {
 	const res = await apiClient.get<string[]>(API_ROUTES.venue.seasons(venueSlug));
-	const raw = res.data ?? [];
-	return raw;
+	return unwrapCollection<string>(res as unknown as { data?: unknown });
 };

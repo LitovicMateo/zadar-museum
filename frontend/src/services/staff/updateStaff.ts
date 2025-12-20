@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { StaffFormData } from '@/schemas/staff-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapSingle } from '@/services/apiClient';
 
 export const updateStaff = async ({ id, ...data }: { id: string } & StaffFormData) => {
 	const res = await apiClient.put(API_ROUTES.edit.staff(id), {
@@ -11,6 +11,6 @@ export const updateStaff = async ({ id, ...data }: { id: string } & StaffFormDat
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300) return unwrapSingle(res as unknown as { data?: unknown });
 	throw new Error(`updateStaff failed: ${res.status}`);
 };

@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
 import { GameFormData } from '@/schemas/game-schema';
-import apiClient from '@/services/apiClient';
+import apiClient, { unwrapCollection, unwrapSingle } from '@/services/apiClient';
 import { uploadGallery } from '@/utils/uploadGallery';
 
 export const createGame = async (data: GameFormData) => {
@@ -17,13 +17,15 @@ export const createGame = async (data: GameFormData) => {
 		params.append('filters[$or][2][home_team][$eq]', String(away_team));
 		params.append('filters[$or][3][away_team][$eq]', String(away_team));
 
-		const res = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.game(params.toString()));
+		const res = await apiClient.get(API_ROUTES.create.game(params.toString()));
 
 		if (!res || res.status >= 400) {
 			throw new Error('Failed to validate duplicate game');
 		}
 
-		if (res.data?.data?.length > 0) {
+		const existing = unwrapCollection<{ id: number }>(res as unknown as { data?: unknown });
+
+		if (existing.length > 0) {
 			throw new Error(
 				`Duplicate game detected: One of the teams already has a game in round ${round} of competition ${competition}, season ${season}.`
 			);
@@ -61,6 +63,8 @@ export const createGame = async (data: GameFormData) => {
 		}
 	});
 
-	if (res.status >= 200 && res.status < 300) return res.data;
+	if (res.status >= 200 && res.status < 300)
+		return unwrapSingle<Record<string, unknown>>(res as unknown as { data?: unknown });
+
 	throw new Error(`createGame failed: ${res.status}`);
 };
