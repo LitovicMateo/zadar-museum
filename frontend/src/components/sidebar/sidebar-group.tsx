@@ -6,12 +6,18 @@ type SidebarGroupProps = {
 };
 
 const SidebarGroup: React.FC<SidebarGroupProps> = ({ label, children }) => {
+	const headingId = label ? `sidebar-group-${label.replace(/\s+/g, '-').toLowerCase()}` : undefined;
+
 	return (
-		<div id="group" className="px-2 py-1">
-			{label && <div className="text-xs text-gray-400 uppercase mb-2">{label}</div>}
+		<div className="px-2 py-1" role="group" aria-labelledby={headingId}>
+			{label && (
+				<div id={headingId} className="text-xs text-gray-400 uppercase mb-2">
+					{label}
+				</div>
+			)}
 			<div className="space-y-1">{children}</div>
 		</div>
 	);
 };
 
-export default SidebarGroup;
+export default React.memo(SidebarGroup);

@@ -1,3 +1,4 @@
+import React, { useEffect, useId } from 'react';
 import slugify from 'react-slugify';
 
 import { APP_ROUTES } from '@/constants/routes';
@@ -26,6 +27,29 @@ const GlobalSearch: React.FC = () => {
 		placeholder: 'Search',
 		className: 'w-full max-w-[300px] rounded-[6px] !border-[#194F95] border-1 h-[32px] '
 	});
+
+	const portalId = useId();
+
+	// clone the SearchInput to attach ARIA attributes for accessibility
+	const inputWithA11y = React.isValidElement(SearchInput)
+		? React.cloneElement(SearchInput, {
+				'aria-controls': `global-search-results-${portalId}`,
+				'aria-expanded': showPortal,
+				role: 'combobox',
+				'aria-autocomplete': 'list'
+			})
+		: SearchInput;
+
+	useEffect(() => {
+		if (!showPortal) return;
+		const handler = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				clearSearch();
+			}
+		};
+		window.addEventListener('keydown', handler);
+		return () => window.removeEventListener('keydown', handler);
+	}, [showPortal, clearSearch]);
 
 	const term = slugify(searchTerm, { delimiter: ' ' });
 
@@ -58,7 +82,7 @@ const GlobalSearch: React.FC = () => {
 
 	return (
 		<div className="flex gap-4 relative justify-center">
-			<div className="w-full flex justify-center">{SearchInput}</div>
+			<div className="w-full flex justify-center">{inputWithA11y}</div>
 			{showPortal && !noResults && (
 				<Portal>
 					{filteredPlayers && filteredPlayers?.length > 0 && (

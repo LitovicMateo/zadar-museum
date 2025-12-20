@@ -4,7 +4,15 @@ type SidebarListProps = {
 	children: React.ReactNode;
 };
 const SidebarList: React.FC<SidebarListProps> = ({ children }) => {
-	return <ul className="text-gray-700 text-sm flex flex-col divide-y divide-gray-100">{children}</ul>;
+	return (
+		<ul
+			role="list"
+			aria-label="Primary navigation"
+			className="text-gray-700 text-sm flex flex-col divide-y divide-gray-100"
+		>
+			{children}
+		</ul>
+	);
 };
 
-export default SidebarList;
+export default React.memo(SidebarList);

@@ -3,7 +3,10 @@ import React from 'react';
 const SidebarTitle: React.FC<{ title: string }> = ({ title }) => {
 	return (
 		<div className="w-full flex items-center gap-3 px-2">
-			<div className="bg-blue-600 text-white rounded-md w-9 h-9 flex items-center justify-center font-bold">
+			<div
+				className="bg-blue-600 text-white rounded-md w-9 h-9 flex items-center justify-center font-bold"
+				aria-hidden="true"
+			>
 				D
 			</div>
 			<div>
@@ -14,4 +17,4 @@ const SidebarTitle: React.FC<{ title: string }> = ({ title }) => {
 	);
 };
 
-export default SidebarTitle;
+export default React.memo(SidebarTitle);

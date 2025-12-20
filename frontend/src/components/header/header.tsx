@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import GlobalSearch from '@/components/global-search/global-search';
@@ -10,7 +10,7 @@ import { LogOut } from 'lucide-react';
 import MobileInlineSearch from './MobileInlineSearch';
 import MobileMenuPanel from './MobileMenuPanel';
 
-const navItems = [
+const DEFAULT_NAV = [
 	{ name: 'Home', link: APP_ROUTES.home },
 	{ name: 'Dashboard', link: APP_ROUTES.dashboard.default },
 	{ name: 'Stats', link: APP_ROUTES.stats.default },
@@ -29,13 +29,25 @@ const Header: React.FC = () => {
 	const [navOpen, setNavOpen] = useState(false);
 	const [searchInline, setSearchInline] = useState(false);
 
+	const navItems = useMemo(() => DEFAULT_NAV, []);
+
 	if (!isAuthenticated) return null;
+
+	const skipLink = (
+		<a href="#main" className="sr-only sr-only-focusable">
+			Skip to content
+		</a>
+	);
 
 	return (
 		<header className="sticky top-0 z-50 w-screen bg-white border-b border-gray-200 supports-backdrop-filter:bg-white/80">
+			{skipLink}
 			<div className="max-w-[900px] w-full mx-auto flex items-center justify-between px-4 py-3">
 				<div className="flex items-center gap-4">
 					<button
+						aria-controls="mobile-panel"
+						aria-expanded={navOpen}
+						aria-haspopup="menu"
 						aria-label={navOpen ? 'Close menu' : 'Open menu'}
 						onClick={() => {
 							setNavOpen((s) => !s);
@@ -104,22 +116,19 @@ const Header: React.FC = () => {
 
 				<div className="hidden md:flex items-center gap-4">
 					<GlobalSearch />
-					<LogOut size={20} onClick={logout} color="#364153" className="cursor-pointer" />
+					<button aria-label="Logout" onClick={logout} className="p-1">
+						<LogOut aria-hidden="true" size={20} color="#364153" />
+					</button>
 				</div>
 
 				<div className="md:hidden flex items-center">
 					<button
+						aria-controls="mobile-inline-search"
+						aria-expanded={searchInline}
 						aria-label={searchInline ? 'Close search' : 'Open search'}
 						onClick={() => {
 							setSearchInline((s) => !s);
 							if (navOpen) setNavOpen(false);
-							// focus the search input inside the inline container after it opens
-							setTimeout(() => {
-								const input = document.querySelector(
-									'#mobile-inline-search input[placeholder="Search"]'
-								) as HTMLInputElement | null;
-								if (input) input.focus();
-							}, 120);
 						}}
 						className="p-2 rounded hover:bg-gray-100"
 					>
@@ -145,7 +154,7 @@ const Header: React.FC = () => {
 				</div>
 			</div>
 
-			<nav className="border-t border-gray-100">
+			<nav className="border-t border-gray-100" aria-label="Main navigation">
 				<ul className="hidden md:flex justify-between max-w-[900px] mx-auto px-4 py-2 text-base">
 					{navItems.map((item) => (
 						<li key={item.name} className="px-2">
@@ -166,4 +175,4 @@ const Header: React.FC = () => {
 	);
 };
 
-export default Header;
+export default React.memo(Header);

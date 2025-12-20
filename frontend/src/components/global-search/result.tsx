@@ -9,12 +9,12 @@ type ResultProps = {
 
 const Result: React.FC<ResultProps> = ({ item, url, clearSearch }) => {
 	return (
-		<li className="px-2">
-			<Link to={url} onClick={clearSearch}>
+		<li className="px-2" role="option">
+			<Link to={url} onClick={clearSearch} aria-label={`Open ${item}`}>
 				{item}
 			</Link>
 		</li>
 	);
 };
 
-export default Result;
+export default React.memo(Result);

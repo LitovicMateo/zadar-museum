@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AnimatePresence, motion } from 'framer-motion';
@@ -17,6 +17,46 @@ interface Props {
 }
 
 const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) => {
+	const panelRef = useRef<HTMLElement | null>(null);
+	const previouslyFocused = useRef<HTMLElement | null>(null);
+
+	useEffect(() => {
+		if (!open) return;
+		previouslyFocused.current = document.activeElement as HTMLElement | null;
+
+		const focusable = panelRef.current?.querySelectorAll<HTMLElement>(
+			'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+		);
+		const first = focusable && focusable.length ? focusable[0] : null;
+		first?.focus();
+
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				setOpen(false);
+			}
+			if (e.key === 'Tab' && panelRef.current && focusable && focusable.length) {
+				// simple focus trap
+				const firstEl = focusable[0];
+				const lastEl = focusable[focusable.length - 1];
+				if (e.shiftKey && document.activeElement === firstEl) {
+					e.preventDefault();
+					lastEl.focus();
+				} else if (!e.shiftKey && document.activeElement === lastEl) {
+					e.preventDefault();
+					firstEl.focus();
+				}
+			}
+		};
+
+		document.addEventListener('keydown', onKey);
+		return () => {
+			document.removeEventListener('keydown', onKey);
+			previouslyFocused.current?.focus();
+		};
+	}, [open, setOpen]);
+
+	const headingId = 'mobile-menu-heading';
+
 	return (
 		<AnimatePresence>
 			{open && (
@@ -28,20 +68,28 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 						exit={{ opacity: 0 }}
 						transition={{ duration: 0.2 }}
 						onClick={() => setOpen(false)}
+						aria-hidden="true"
 						className="fixed inset-0 bg-black/30 md:hidden z-60"
 					/>
 
 					<motion.aside
 						id="mobile-panel"
 						key="panel"
+						ref={panelRef as any}
 						initial={{ x: '-100%' }}
 						animate={{ x: 0 }}
 						exit={{ x: '-100%' }}
 						transition={{ type: 'tween', duration: 0.25 }}
 						className="fixed top-0 left-0 h-full w-[80%] max-w-xs bg-white shadow-lg md:hidden z-70"
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby={headingId}
+						tabIndex={-1}
 					>
 						<div className="flex items-center justify-between px-4 py-3 border-b">
-							<h2 className="font-abel uppercase text-base">Menu</h2>
+							<h2 id={headingId} className="font-abel uppercase text-base">
+								Menu
+							</h2>
 							<div className="flex items-center gap-2">
 								<button
 									aria-label="Close menu"
@@ -74,12 +122,13 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 							</div>
 						</div>
 
-						<nav className="px-4 py-4">
-							<ul className="flex flex-col gap-3 text-base">
+						<nav className="px-4 py-4" aria-label="Mobile main navigation">
+							<ul className="flex flex-col gap-3 text-base" role="menu">
 								{navItems.map((item) => (
-									<li key={item.name}>
+									<li key={item.name} role="none">
 										<Link
 											to={item.link}
+											role="menuitem"
 											className="block py-2 hover:underline"
 											onClick={() => setOpen(false)}
 										>
@@ -96,9 +145,10 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 									setOpen(false);
 									logout();
 								}}
+								aria-label="Logout"
 								className="w-full flex items-center gap-3 text-left text-base text-gray-700 hover:bg-gray-100 p-2 rounded"
 							>
-								<LogOut size={22} color="#364153" />
+								<LogOut aria-hidden="true" size={22} color="#364153" />
 								<span>Logout</span>
 							</button>
 						</div>

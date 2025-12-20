@@ -18,7 +18,7 @@ type DashboardListProps = {
 	errorMessage: string;
 };
 
-const DasboardList: React.FC<DashboardListProps> = ({ errorMessage, header, isError, isLoading, title, items }) => {
+const DashboardList: React.FC<DashboardListProps> = ({ errorMessage, header, isError, isLoading, title, items }) => {
 	// Ensure we render the most recent 25 entries (by createdAt descending)
 	const latestItems = (items ?? [])
 		.slice()
@@ -39,4 +39,4 @@ const DasboardList: React.FC<DashboardListProps> = ({ errorMessage, header, isEr
 	);
 };
 
-export default DasboardList;
+export default DashboardList;

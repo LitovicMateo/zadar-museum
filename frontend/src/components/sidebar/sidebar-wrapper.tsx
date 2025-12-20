@@ -5,7 +5,12 @@ const SidebarWrapper: React.FC<{ children: React.ReactNode; isOpen: boolean }> =
 
 	return (
 		<aside
+			id="primary-sidebar"
+			role="navigation"
+			aria-label="Primary sidebar"
 			aria-expanded={isOpen}
+			aria-hidden={!isOpen}
+			tabIndex={0}
 			className={`h-screen top-0 left-0 sticky transition-all duration-300 bg-gray-50 px-3 py-4 ${widthClass} border-r border-gray-100 hidden sm:block overflow-y-auto`}
 		>
 			<div className="min-h-full flex flex-col gap-4">{children}</div>
@@ -13,4 +18,4 @@ const SidebarWrapper: React.FC<{ children: React.ReactNode; isOpen: boolean }> =
 	);
 };
 
-export default SidebarWrapper;
+export default React.memo(SidebarWrapper);

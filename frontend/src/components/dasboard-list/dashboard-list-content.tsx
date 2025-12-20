@@ -37,7 +37,8 @@ const DashboardListContent: React.FC<DashboardListContentProps> = ({
 	return (
 		<div className="w-full">
 			<div className="overflow-hidden rounded-md">
-				<table className="w-full table-fixed">
+				<table className="w-full table-fixed" role="table" aria-label={`${title} list`}>
+					<caption className="sr-only">{title}</caption>
 					<thead>
 						<tr>
 							<th className="px-4 py-2 text-left text-xs text-gray-500 uppercase font-medium">
@@ -56,5 +57,4 @@ const DashboardListContent: React.FC<DashboardListContentProps> = ({
 		</div>
 	);
 };
-
-export default DashboardListContent;
+export default React.memo(DashboardListContent);
