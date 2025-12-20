@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useCoachSeasonCompetitions = (coachId: string, season: string) => {
 	return useQuery({
@@ -17,7 +17,7 @@ type Competition = {
 };
 
 const getCoachSeasonCompetitions = async (coachId: string, season: string): Promise<Competition[]> => {
-	const res = await axios.get(API_ROUTES.coach.competitions(coachId, season));
+	const res = await apiClient.get(API_ROUTES.coach.competitions(coachId, season));
 
 	return res.data;
 };

@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { RefereeStatsRanking } from '@/types/api/referee';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useRefereeAllTimeStats = (location: 'home' | 'away' | 'all', league: string, season: string) => {
 	return useQuery({
@@ -20,7 +20,7 @@ const getRefereeAllTimeStats = async (
 		league: league !== 'all' ? league : '',
 		season: season !== 'all' ? season : ''
 	});
-	const res = await axios.get(API_ROUTES.stats.referee.allTime(params.toString()));
+	const res = await apiClient.get(API_ROUTES.stats.referee.allTime(params.toString()));
 
 	return res.data;
 };

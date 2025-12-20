@@ -1,8 +1,8 @@
 import { playerKeys, coachKeys } from '@/components/team-page/team-leaders/options';
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { PlayerAllTimeStats } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export type TeamLeaders = {
 	id: string;
@@ -45,7 +45,7 @@ const getTeamLeaders = async (
 		params.append('competitionSlug', competitionSlug);
 	}
 
-	const res = await axios.get(API_ROUTES.team.stats.leaders(params.toString()));
+	const res = await apiClient.get(API_ROUTES.team.stats.leaders(params.toString()));
 
 	return res.data;
 };

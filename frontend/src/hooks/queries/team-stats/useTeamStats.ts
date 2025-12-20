@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { TeamStatsResponse } from '@/types/api/team-stats';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useTeamStats = (key: keyof TeamStatsResponse, sort: 'asc' | 'desc') => {
 	return useQuery({
@@ -16,7 +16,7 @@ const getTeamStats = async (key: keyof TeamStatsResponse, sort: 'asc' | 'desc'):
 		direction: sort
 	});
 
-	const res = await axios.get(API_ROUTES.dashboard.teamStats(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.teamStats(params.toString()));
 
 	return res.data;
 };

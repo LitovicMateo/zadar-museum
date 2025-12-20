@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { VenueDetailsResponse } from '@/types/api/venue';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type VenueKey = keyof VenueDetailsResponse;
 
@@ -19,7 +19,7 @@ const getAllVenues = async (sortKey?: VenueKey, direction: 'asc' | 'desc' = 'asc
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.venues(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.venues(params.toString()));
 
 	return res.data;
 };

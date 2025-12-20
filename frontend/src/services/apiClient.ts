@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Centralized API client for frontend services
 // - Uses fetch and Vite `VITE_API_ROOT` for base URL
 // - Attaches `Authorization: Bearer <token>` when available
 // - Implements single in-flight refresh flow for 401 -> refresh
 
-type Json = any;
-
-const API_ROOT = (import.meta as any).env?.VITE_API_ROOT || '';
+type ImportMetaWithEnv = ImportMeta & { env?: { VITE_API_ROOT?: string } };
+const API_ROOT = (import.meta as any as ImportMetaWithEnv).env?.VITE_API_ROOT || '';
 
 let refreshingPromise: Promise<string | null> | null = null;
 
@@ -28,7 +28,9 @@ async function setLocalAccessToken(token: string | null) {
 			localStorage.setItem('accessToken', token);
 			localStorage.setItem('jwt', token);
 		}
-	} catch {}
+	} catch {
+		// ignore storage errors
+	}
 }
 
 async function refreshToken(): Promise<string | null> {
@@ -48,10 +50,10 @@ async function refreshToken(): Promise<string | null> {
 				return null;
 			}
 			const data = await res.json();
-			const newToken = data?.accessToken ?? null;
+			const newToken = (data as { accessToken?: string })?.accessToken ?? null;
 			await setLocalAccessToken(newToken);
 			return newToken;
-		} catch (e) {
+		} catch {
 			await setLocalAccessToken(null);
 			return null;
 		} finally {
@@ -62,11 +64,11 @@ async function refreshToken(): Promise<string | null> {
 	return refreshingPromise;
 }
 
-async function request<T = Json>(
+async function request<T = any>(
 	input: string,
 	init: RequestInit = {},
 	tryRefresh = true
-): Promise<{ status: number; data?: T; error?: any }> {
+): Promise<{ status: number; data?: T; error?: unknown }> {
 	const token = await getLocalAccessToken();
 
 	const headers: Record<string, string> = {
@@ -103,18 +105,18 @@ async function request<T = Json>(
 	try {
 		const json = JSON.parse(text);
 		return { status: res.status, data: json as T };
-	} catch (err) {
+	} catch {
 		return { status: res.status, data: text as unknown as T };
 	}
 }
 
 export const apiClient = {
-	get: <T = Json>(path: string) => request<T>(path, { method: 'GET' }),
-	post: <T = Json>(path: string, body?: any) =>
+	get: <T = any>(path: string) => request<T>(path, { method: 'GET' }),
+	post: <T = any>(path: string, body?: any) =>
 		request<T>(path, { method: 'POST', body: body ? JSON.stringify(body) : undefined }),
-	put: <T = Json>(path: string, body?: any) =>
+	put: <T = any>(path: string, body?: any) =>
 		request<T>(path, { method: 'PUT', body: body ? JSON.stringify(body) : undefined }),
-	del: <T = Json>(path: string) => request<T>(path, { method: 'DELETE' }),
+	del: <T = any>(path: string) => request<T>(path, { method: 'DELETE' }),
 	// helpers to manage tokens in storage for now (auth-provider should coordinate)
 	getLocalAccessToken,
 	setLocalAccessToken

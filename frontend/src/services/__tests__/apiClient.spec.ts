@@ -1,17 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import apiClient from '@/services/apiClient';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 describe('apiClient', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();
-		// reset localStorage
-		Object.defineProperty(global, 'localStorage', {
-			value: {
-				getItem: vi.fn(),
-				setItem: vi.fn(),
-				removeItem: vi.fn()
-			}
-		});
+		// reset localStorage - assign a mock object rather than redefining property
+		(global as any).localStorage = {
+			getItem: vi.fn(),
+			setItem: vi.fn(),
+			removeItem: vi.fn()
+		};
 	});
 
 	it('parses JSON responses', async () => {
@@ -45,6 +44,7 @@ describe('apiClient', () => {
 				return Promise.resolve({
 					status: 200,
 					ok: true,
+					json: async () => ({ accessToken: 'newtoken' }),
 					text: async () => JSON.stringify({ accessToken: 'newtoken' })
 				});
 			}
@@ -59,6 +59,11 @@ describe('apiClient', () => {
 		});
 
 		const res = await apiClient.get('/secure');
+		// debug: inspect fetch calls sequence when test fails
+		console.log(
+			'fetch calls:',
+			calls.map((c) => ({ input: c.input, init: c.init && c.init.method }))
+		);
 		expect(res.status).toBe(200);
 		expect(res.data).toEqual({ pong: true });
 		expect((global as any).localStorage.setItem).toHaveBeenCalledWith('accessToken', 'newtoken');

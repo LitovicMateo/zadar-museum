@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { PlayerResponse } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type PlayerKey = keyof PlayerResponse;
 
@@ -19,7 +19,6 @@ const getAllPlayers = async (sortKey?: PlayerKey, direction: 'asc' | 'desc' = 'a
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.players(params.toString()));
-
-	return res.data;
+	const res = await apiClient.get<PlayerResponse[]>(API_ROUTES.dashboard.players(params.toString()));
+	return res.data ?? [];
 };

@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useVenueSeasons = (venueSlug: string) => {
 	return useQuery({
@@ -11,7 +11,7 @@ export const useVenueSeasons = (venueSlug: string) => {
 };
 
 const getVenueSeasons = async (venueSlug: string): Promise<string[]> => {
-	const res = await axios.get(API_ROUTES.venue.seasons(venueSlug));
+	const res = await apiClient.get(API_ROUTES.venue.seasons(venueSlug));
 	const raw = res.data;
 	return raw;
 };

@@ -1,8 +1,8 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerDB } from '@/pages/Player/Player';
+import apiClient from '@/services/apiClient';
 import { PlayerRecords } from '@/types/api/player-stats';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const usePlayerRecords = (
 	database: PlayerDB,
@@ -31,7 +31,7 @@ const getPlayerRecords = async (
 		location: location === 'all' ? '' : location,
 		sortKey
 	});
-	const res = await axios.get(API_ROUTES.stats.player.records(params.toString()));
+	const res = await apiClient.get(API_ROUTES.stats.player.records(params.toString()));
 
 	return res.data;
 };

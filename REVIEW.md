@@ -13,109 +13,128 @@ Priority legend: 🔴 = High, 🟡 = Medium, 🟢 = Low
 Files & proposed changes
 
 - `frontend/.env.example`:
-    - Ensure all required env vars (e.g., `VITE_API_ROOT`, `VITE_PUBLIC_URL`, auth cookie flags) are documented and
-      example values are present.
+
+  - Ensure all required env vars (e.g., `VITE_API_ROOT`, `VITE_PUBLIC_URL`, auth cookie flags) are documented and
+    example values are present.
 
 - `frontend/package.json`:
-    - Add/standardize scripts: `lint`, `format`, `type-check` (tsc --noEmit), `test` (vitest/jest), `analyze` (bundle
-      analyzer).
-    - Lock/add peer/dev dependency versions and remove unused packages.
+
+  - Add/standardize scripts: `lint`, `format`, `type-check` (tsc --noEmit), `test` (vitest/jest), `analyze` (bundle
+    analyzer).
+  - Lock/add peer/dev dependency versions and remove unused packages.
 
 - `frontend/Dockerfile`:
-    - Use multi-stage build with a lightweight final image, set `NODE_ENV=production`, non-root user, and ensure build
-      artifacts are minimal.
+
+  - Use multi-stage build with a lightweight final image, set `NODE_ENV=production`, non-root user, and ensure build
+    artifacts are minimal.
 
 - `frontend/vite.config.ts`:
-    - Ensure `VITE_API_ROOT` is used consistently and document base path behavior. Add build optimizations
-      (esbuild/minify options) and enable dependency pre-bundling where beneficial.
+
+  - Ensure `VITE_API_ROOT` is used consistently and document base path behavior. Add build optimizations
+    (esbuild/minify options) and enable dependency pre-bundling where beneficial.
 
 - `frontend/tailwind.config.ts`:
-    - Verify `content` paths cover all `src/**/*.{ts,tsx}` files. Add safelist for dynamic classes and confirm
-      JIT/optimal config for production purge.
+
+  - Verify `content` paths cover all `src/**/*.{ts,tsx}` files. Add safelist for dynamic classes and confirm
+    JIT/optimal config for production purge.
 
 - `frontend/tsconfig.json` & `tsconfig.*`:
-    - Enable stricter TypeScript options where feasible: `strict`, `noImplicitAny`, `noUncheckedIndexedAccess`. Keep
-      `skipLibCheck` if third-party type issues occur.
 
- - 🔴 `frontend/src/main.tsx` / `frontend/src/App.tsx`:
-  - Add a top-level `ErrorBoundary` (if not already present) and wrap lazy routes with `Suspense`.
-    - Confirm providers order (auth -> router -> app) is correct and minimize work done at mount to improve TTI.
+  - Enable stricter TypeScript options where feasible: `strict`, `noImplicitAny`, `noUncheckedIndexedAccess`. Keep
+    `skipLibCheck` if third-party type issues occur.
+
+- 🔴 `frontend/src/main.tsx` / `frontend/src/App.tsx`:
+- Add a top-level `ErrorBoundary` (if not already present) and wrap lazy routes with `Suspense`.
+
+  - Confirm providers order (auth -> router -> app) is correct and minimize work done at mount to improve TTI.
 
 - `frontend/src/pages/*` and `frontend/src/components/*` (all UI components):
-    - Add or tighten TypeScript interfaces for props (avoid `any`).
-    - Memoize pure presentational components (`React.memo`) and expensive derived values (`useMemo`/`useCallback`) where
-      appropriate.
-    - Improve accessibility: ensure `alt` text for images, keyboard navigability for custom controls, proper use of
-      `aria-*` attributes and semantic HTML.
-    - Add unit/visual tests for complex components (forms, tables, pagination, filters).
+
+  - Add or tighten TypeScript interfaces for props (avoid `any`).
+  - Memoize pure presentational components (`React.memo`) and expensive derived values (`useMemo`/`useCallback`) where
+    appropriate.
+  - Improve accessibility: ensure `alt` text for images, keyboard navigability for custom controls, proper use of
+    `aria-*` attributes and semantic HTML.
+  - Add unit/visual tests for complex components (forms, tables, pagination, filters).
 
 - `frontend/src/hooks/*`:
-    - Add explicit return types and avoid `any`.
-    - Confirm `useEffect` dependency arrays are complete (satisfy `react-hooks/exhaustive-deps`).
-    - Add unit tests for custom hooks (Vitest + React Testing Library / @testing-library/react-hooks).
 
- - 🔴 `frontend/src/services/*` (API clients):
-    - Centralize fetch logic: single API client with exponential backoff/retry, consistent error-shaping, and a clear
-      place to add caching.
-    - Handle 401 refresh flow in one place; avoid duplicating token logic across services.
+  - Add explicit return types and avoid `any`.
+  - Confirm `useEffect` dependency arrays are complete (satisfy `react-hooks/exhaustive-deps`).
+  - Add unit tests for custom hooks (Vitest + React Testing Library / @testing-library/react-hooks).
 
- - 🔴 `frontend/src/providers/auth-provider.tsx`:
-    - Review token storage strategy: prefer Secure, HttpOnly cookies for production where possible (server-side), or
-      secure local storage patterns. Implement refresh token flow and session expiry handling.
-    - Ensure logout clears all auth state and sensitive storage.
+- 🔴 `frontend/src/services/*` (API clients):
+
+  - Centralize fetch logic: single API client with exponential backoff/retry, consistent error-shaping, and a clear
+    place to add caching.
+  - Handle 401 refresh flow in one place; avoid duplicating token logic across services.
+
+- 🔴 `frontend/src/providers/auth-provider.tsx`:
+
+  - Review token storage strategy: prefer Secure, HttpOnly cookies for production where possible (server-side), or
+    secure local storage patterns. Implement refresh token flow and session expiry handling.
+  - Ensure logout clears all auth state and sensitive storage.
 
 - `frontend/src/utils/*`:
-    - Add/verify TS types, remove dead code, and move generic helpers to a small, well-documented utilities module.
+
+  - Add/verify TS types, remove dead code, and move generic helpers to a small, well-documented utilities module.
 
 - `frontend/src/assets/`:
-    - Optimize images (WebP/AVIF), add responsive `srcset`s and lazy-loading for offscreen images.
+
+  - Optimize images (WebP/AVIF), add responsive `srcset`s and lazy-loading for offscreen images.
 
 - `frontend/components.json`:
-    - Confirm purpose (storybook/visual regression). If unused, archive or remove.
+
+  - Confirm purpose (storybook/visual regression). If unused, archive or remove.
 
 - `frontend/index.html` & `public/`:
-    - Ensure meta tags (viewport, description, open graph), theme-color, favicon, and CSP headers (if applicable) are in
-      place.
+
+  - Ensure meta tags (viewport, description, open graph), theme-color, favicon, and CSP headers (if applicable) are in
+    place.
 
 - `frontend/src/schemas/*` and form components:
-    - Validate form schemas and add tests for validation rules (edge cases: empty values, boundary values).
+
+  - Validate form schemas and add tests for validation rules (edge cases: empty values, boundary values).
 
 - `frontend/src/services/*/` (endpoints specific files):
-    - Add typed response shapes using generated types where possible (keep `types/generated` in sync with Strapi types).
 
- - 🟡 Testing & CI:
-    - Add `vitest` (or Jest) with `@testing-library/react` for component tests. Add `type-check`, `lint`, `test`,
-      `build` steps to CI (GitHub Actions).
-    - Add basic E2E or integration tests for critical flows (login, navigating dashboards, key lists) if time allows.
+  - Add typed response shapes using generated types where possible (keep `types/generated` in sync with Strapi types).
 
- - 🟡 Performance & Observability:
-    - Add bundle analysis step (`rollup-plugin-visualizer` or `webpack-bundle-analyzer` equivalent for Vite) and
-      identify large deps.
-    - Add Lighthouse checks or integrate `lighthouse-ci` into CI for baseline performance/accessibility metrics.
+- 🟡 Testing & CI:
 
- - 🟡 Accessibility:
-  - Integrate `axe-core` or `eslint-plugin-jsx-a11y` rules, add automated accessibility checks in PRs.
+  - Add `vitest` (or Jest) with `@testing-library/react` for component tests. Add `type-check`, `lint`, `test`,
+    `build` steps to CI (GitHub Actions).
+  - Add basic E2E or integration tests for critical flows (login, navigating dashboards, key lists) if time allows.
+
+- 🟡 Performance & Observability:
+
+  - Add bundle analysis step (`rollup-plugin-visualizer` or `webpack-bundle-analyzer` equivalent for Vite) and
+    identify large deps.
+  - Add Lighthouse checks or integrate `lighthouse-ci` into CI for baseline performance/accessibility metrics.
+
+- 🟡 Accessibility:
+- Integrate `axe-core` or `eslint-plugin-jsx-a11y` rules, add automated accessibility checks in PRs.
 
 - Developer DX:
-    - Add recommended VSCode settings in `.vscode` (optional) for consistent formatting and TypeScript behaviors.
-    - Ensure `prettier` and `eslint` configs are aligned; add `lint-staged` + `husky` pre-commit hooks to run `format` +
-      `type-check` + `lint`.
+  - Add recommended VSCode settings in `.vscode` (optional) for consistent formatting and TypeScript behaviors.
+  - Ensure `prettier` and `eslint` configs are aligned; add `lint-staged` + `husky` pre-commit hooks to run `format` +
+    `type-check` + `lint`.
 
 Notes / Prioritization suggestions
 
- - 🔴 High priority (should fix before major releases):
-  - Auth storage and refresh flow (`auth-provider.tsx` & API client).
-  - Centralize API error handling and retry logic (`services/`).
-  - Add top-level ErrorBoundary and basic tests for auth and routing.
+- 🔴 High priority (should fix before major releases):
+- Auth storage and refresh flow (`auth-provider.tsx` & API client).
+- Centralize API error handling and retry logic (`services/`).
+- Add top-level ErrorBoundary and basic tests for auth and routing.
 
- - 🟡 Medium priority:
-  - TypeScript strictness improvements and prop typings across components.
-  - Accessibility fixes for interactive components and images.
-  - Dockerfile and build optimizations.
+- 🟡 Medium priority:
+- TypeScript strictness improvements and prop typings across components.
+- Accessibility fixes for interactive components and images.
+- Dockerfile and build optimizations.
 
- - 🟢 Low priority / Nice-to-have:
-  - Storybook for key components and visual regression testing.
-  - Lighthouse CI and bundle analysis additions.
+- 🟢 Low priority / Nice-to-have:
+- Storybook for key components and visual regression testing.
+- Lighthouse CI and bundle analysis additions.
 
 Next steps
 
@@ -159,7 +178,7 @@ Findings & actions:
 
 Findings & actions:
 
- - 🔴 Central API client: these service files appear scattered (createX/updateX). Propose introducing a central HTTP client
+- 🔴 Central API client: these service files appear scattered (createX/updateX). Propose introducing a central HTTP client
   (e.g., `src/services/apiClient.ts`) that handles base URL, headers, JSON parsing, retry/backoff, and auth token
   refresh. Replace duplicated fetch/axios calls with typed wrappers.
 - Auth & 401 handling: implement single interceptor for 401 → attempt refresh once, then logout on failure. Avoid
@@ -1035,9 +1054,9 @@ Types — summary findings
 - `frontend/src/types/generated/components.d.ts` and `contentTypes.d.ts` exist. Keep these generated from Strapi
   content-types and export domain-level types for services and hooks.
 - Actions:
-    - Ensure generation step is documented (where/how to run `strapi-to-typescript` or equivalent).
-    - Re-export selected types from `src/types/index.ts` to avoid importing deep `generated` paths across the codebase.
-    - Replace ad-hoc `any` in services/hooks with generated types.
+  - Ensure generation step is documented (where/how to run `strapi-to-typescript` or equivalent).
+  - Re-export selected types from `src/types/index.ts` to avoid importing deep `generated` paths across the codebase.
+  - Replace ad-hoc `any` in services/hooks with generated types.
 
 Next steps (implementation options)
 

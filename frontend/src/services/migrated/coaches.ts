@@ -1,6 +1,6 @@
 import apiClient from '../apiClient';
 
-export type CoachPayload = { name: string; teamId?: number; [k: string]: any };
+export type CoachPayload = { name: string; teamId?: number; [k: string]: unknown };
 
 export async function createCoach(payload: CoachPayload) {
 	const res = await apiClient.post('/coaches', payload);

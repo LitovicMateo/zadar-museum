@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { RefereeDetailsResponse } from '@/types/api/referee';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useGameReferees = (gameId: string) => {
 	return useQuery({
@@ -12,7 +12,7 @@ export const useGameReferees = (gameId: string) => {
 };
 
 const getGameReferees = async (gameId: string): Promise<RefereeDetailsResponse[]> => {
-	const res = await axios.get(API_ROUTES.game.details(gameId));
+	const res = await apiClient.get(API_ROUTES.game.details(gameId));
 	const game = res.data;
 
 	if (!game.mainReferee || !game.secondReferee || !game.thirdReferee) return [];

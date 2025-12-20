@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useRefereeSeasons = (refereeId: string) => {
 	return useQuery({
@@ -11,7 +11,7 @@ export const useRefereeSeasons = (refereeId: string) => {
 };
 
 const getRefereeSeasons = async (refereeId: string): Promise<string[]> => {
-	const res = await axios.get(API_ROUTES.referee.seasons(refereeId));
+	const res = await apiClient.get(API_ROUTES.referee.seasons(refereeId));
 	const data = res.data;
 
 	return data;

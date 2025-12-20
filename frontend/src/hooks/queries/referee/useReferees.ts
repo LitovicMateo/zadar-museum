@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { RefereeDetailsResponse } from '@/types/api/referee';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type RefereeKey = keyof RefereeDetailsResponse;
 
@@ -22,7 +22,7 @@ const getAllReferee = async (
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.referees(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.referees(params.toString()));
 
 	return res.data;
 };

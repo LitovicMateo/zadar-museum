@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { TeamScheduleResponse } from '@/types/api/team';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useRefereeGamelog = (refereeId: string) => {
 	return useQuery({
@@ -12,7 +12,7 @@ export const useRefereeGamelog = (refereeId: string) => {
 };
 
 const getRefereeGamelog = async (refereeId: string): Promise<TeamScheduleResponse[]> => {
-	const res = await axios.get(API_ROUTES.referee.gamelog(refereeId));
+	const res = await apiClient.get(API_ROUTES.referee.gamelog(refereeId));
 	const data = res.data;
 
 	return data;

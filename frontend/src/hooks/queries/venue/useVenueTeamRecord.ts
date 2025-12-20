@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { VenueTeamRecordResponse } from '@/types/api/venue';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useVenueTeamRecord = (venueSlug: string) => {
 	return useQuery({
@@ -12,7 +12,7 @@ export const useVenueTeamRecord = (venueSlug: string) => {
 };
 
 const getVenueTeamRecord = async (venueSlug: string): Promise<VenueTeamRecordResponse> => {
-	const res = await axios.get(API_ROUTES.venue.teamRecord(venueSlug));
+	const res = await apiClient.get(API_ROUTES.venue.teamRecord(venueSlug));
 
 	const raw = res.data;
 	return raw;

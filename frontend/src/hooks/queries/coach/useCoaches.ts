@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { CoachDetailsResponse } from '@/types/api/coach';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type CoachKey = keyof CoachDetailsResponse;
 
@@ -22,7 +22,7 @@ const getAllCoaches = async (
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.coaches(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.coaches(params.toString()));
 
 	return res.data;
 };

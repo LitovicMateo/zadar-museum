@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { CompetitionDetailsResponse } from '@/types/api/competition';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type CompetitionKey = keyof CompetitionDetailsResponse;
 
@@ -22,7 +22,7 @@ const getAllCompetitions = async (
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.competitions(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.competitions(params.toString()));
 
 	return res.data;
 };

@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
 import { TeamStatsFormData } from '@/schemas/team-stats-schema';
-import { validateStats } from '@/utils/validateStats';
 import apiClient from '@/services/apiClient';
+import { validateStats } from '@/utils/validateStats';
 
 export const updateTeamStats = async ({ id, ...data }: { id: string } & TeamStatsFormData) => {
 	// 🔍 Validation: use shared validator for team-specific checks

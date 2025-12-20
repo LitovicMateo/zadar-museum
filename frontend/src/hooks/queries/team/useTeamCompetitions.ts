@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 // import type removed: we transform backend response to {id, slug}
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useTeamCompetitions = (teamSlug: string) => {
 	return useQuery({
@@ -14,7 +14,7 @@ export const useTeamCompetitions = (teamSlug: string) => {
 type LeaguePair = { id: string; slug: string };
 
 const getTeamCompetitions = async (teamSlug: string): Promise<LeaguePair[]> => {
-	const res = await axios.get(API_ROUTES.team.teamCompetitions(teamSlug));
+	const res = await apiClient.get(API_ROUTES.team.teamCompetitions(teamSlug));
 
 	const raw = res.data;
 	if (!Array.isArray(raw)) return [];

@@ -1,8 +1,8 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerDB } from '@/pages/Player/Player';
+import apiClient from '@/services/apiClient';
 import { CoachStatsResponse } from '@/types/api/coach';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useCoachLeagueStats = (coachId: string, db: PlayerDB) => {
 	return useQuery({
@@ -13,7 +13,7 @@ export const useCoachLeagueStats = (coachId: string, db: PlayerDB) => {
 };
 
 const getCoachLeagueStats = async (coachId: string, db: PlayerDB): Promise<CoachStatsResponse[]> => {
-	const res = await axios.get(API_ROUTES.coach.leagueStats(coachId, db));
+	const res = await apiClient.get(API_ROUTES.coach.leagueStats(coachId, db));
 
 	return res.data;
 };

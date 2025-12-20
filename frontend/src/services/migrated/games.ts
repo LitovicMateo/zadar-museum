@@ -1,6 +1,6 @@
 import apiClient from '../apiClient';
 
-export type GamePayload = { date: string; homeTeamId: number; awayTeamId: number; [k: string]: any };
+export type GamePayload = { date: string; homeTeamId: number; awayTeamId: number; [k: string]: unknown };
 
 export async function createGame(payload: GamePayload) {
 	const res = await apiClient.post('/games', payload);

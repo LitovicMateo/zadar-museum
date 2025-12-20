@@ -1,6 +1,6 @@
 import apiClient from '../apiClient';
 
-export type TeamCreatePayload = { name: string; [k: string]: any };
+export type TeamCreatePayload = { name: string; [k: string]: unknown };
 export type TeamUpdatePayload = Partial<TeamCreatePayload> & { id: number };
 
 export async function createTeam(payload: TeamCreatePayload) {

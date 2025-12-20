@@ -1,8 +1,8 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerDB } from '@/pages/Player/Player';
+import apiClient from '@/services/apiClient';
 import { PlayerAllTimeStats } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const usePlayerAllTimeStats = (
 	database: PlayerDB,
@@ -35,7 +35,7 @@ const getPlayerAllTimeStats = async (
 		season: season === 'all' ? '' : season
 	});
 
-	const res = await axios.get(API_ROUTES.stats.player.allTime(params.toString()));
+	const res = await apiClient.get(API_ROUTES.stats.player.allTime(params.toString()));
 
 	return res.data;
 };

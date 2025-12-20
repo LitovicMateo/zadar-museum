@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { TeamStatsResponse } from '@/types/api/team';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useTeamSeasonLeagueStats = (season: string, teamSlug: string) => {
 	return useQuery({
@@ -12,7 +12,7 @@ export const useTeamSeasonLeagueStats = (season: string, teamSlug: string) => {
 };
 
 const getTeamSeasonLeagueStats = async (season: string, teamSlug: string): Promise<TeamStatsResponse> => {
-	const res = await axios.get(API_ROUTES.team.stats.seasonTotalStats(teamSlug!, season!));
+	const res = await apiClient.get(API_ROUTES.team.stats.seasonTotalStats(teamSlug!, season!));
 
 	return res.data;
 };

@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerStatsFormData } from '@/schemas/player-stats';
-import { validateStats } from '@/utils/validateStats';
 import apiClient from '@/services/apiClient';
+import { validateStats } from '@/utils/validateStats';
 
 export const updatePlayerStats = async ({ id, ...data }: { id: string } & PlayerStatsFormData) => {
 	// Validate player stats using shared validator

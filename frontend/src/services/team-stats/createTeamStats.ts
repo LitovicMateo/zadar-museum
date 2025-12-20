@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
 import { TeamStatsFormData } from '@/schemas/team-stats-schema';
-import { validateStats } from '@/utils/validateStats';
 import apiClient from '@/services/apiClient';
+import { validateStats } from '@/utils/validateStats';
 
 export const createTeamStats = async (data: TeamStatsFormData) => {
 	const { teamId, gameId } = data;

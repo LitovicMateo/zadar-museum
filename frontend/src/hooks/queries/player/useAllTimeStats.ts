@@ -1,9 +1,9 @@
 // hooks/useAllTimeStats.ts
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerDB } from '@/pages/Player/Player';
+import apiClient from '@/services/apiClient';
 import { PlayerCareerStats } from '@/types/api/player';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useAllTimeStats = (playerId: string, db: PlayerDB) => {
 	return useQuery({
@@ -17,7 +17,7 @@ export const getAllTimeTotalStats = async (db: PlayerDB, playerId: string): Prom
 	const params = new URLSearchParams({
 		playerId
 	});
-	const res = await axios.get(API_ROUTES.player.stats.allTime(db, params.toString()));
+	const res = await apiClient.get(API_ROUTES.player.stats.allTime(db, params.toString()));
 
 	return res.data;
 };

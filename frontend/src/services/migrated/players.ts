@@ -3,7 +3,7 @@ import apiClient from '../apiClient';
 export type PlayerCreatePayload = {
 	name: string;
 	teamId?: number;
-	[k: string]: any;
+	[k: string]: unknown;
 };
 
 export type PlayerUpdatePayload = Partial<PlayerCreatePayload> & { id: number };
@@ -26,7 +26,7 @@ export async function getPlayer(id: number) {
 	return null;
 }
 
-export async function listPlayers(query?: Record<string, any>) {
+export async function listPlayers(query?: Record<string, unknown>) {
 	const qs = query ? '?' + new URLSearchParams(Object.entries(query).map(([k, v]) => [k, String(v)])).toString() : '';
 	const res = await apiClient.get(`/players${qs}`);
 	if (res.status >= 200 && res.status < 300) return res.data;

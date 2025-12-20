@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { TeamDetailsResponse } from '@/types/api/team';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type TeamKey = keyof TeamDetailsResponse;
 
@@ -19,7 +19,7 @@ const getAllTeams = async (sortKey?: TeamKey, direction: 'asc' | 'desc' = 'asc')
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.teams(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.teams(params.toString()));
 
 	return res.data;
 };

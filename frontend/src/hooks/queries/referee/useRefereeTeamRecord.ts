@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { RefereeStatsResponse } from '@/types/api/referee';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useRefereeTeamRecord = (refereeId: string) => {
 	return useQuery({
@@ -12,6 +12,6 @@ export const useRefereeTeamRecord = (refereeId: string) => {
 };
 
 const getRefereeTeamRecord = async (refereeId: string): Promise<RefereeStatsResponse> => {
-	const res = await axios.get(API_ROUTES.referee.teamRecord(refereeId));
+	const res = await apiClient.get(API_ROUTES.referee.teamRecord(refereeId));
 	return res.data;
 };

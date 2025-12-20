@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/services/apiClient';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useGameTeams = (gameId: string) => {
 	return useQuery({
@@ -19,7 +19,6 @@ const getGameTeams = async (
 		name: string;
 	}[];
 }> => {
-	const res = await axios.get(API_ROUTES.dashboard.teamsInGame(gameId));
-
+	const res = await apiClient.get(API_ROUTES.dashboard.teamsInGame(gameId));
 	return res.data;
 };
