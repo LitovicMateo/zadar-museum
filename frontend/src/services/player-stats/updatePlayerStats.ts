@@ -1,13 +1,13 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerStatsFormData } from '@/schemas/player-stats';
 import { validateStats } from '@/utils/validateStats';
-import axios from 'axios';
+import apiClient from '@/services/apiClient';
 
 export const updatePlayerStats = async ({ id, ...data }: { id: string } & PlayerStatsFormData) => {
 	// Validate player stats using shared validator
 	validateStats(data, { checkPlayer: true });
 
-	const res = await axios.put(API_ROUTES.edit.playerStats(id), {
+	const res = await apiClient.put(API_ROUTES.edit.playerStats(id), {
 		data: {
 			game: data.gameId,
 			team: data.teamId,
@@ -38,5 +38,6 @@ export const updatePlayerStats = async ({ id, ...data }: { id: string } & Player
 		}
 	});
 
-	return res;
+	if (res.status >= 200 && res.status < 300) return res.data;
+	throw new Error(`updatePlayerStats failed: ${res.status}`);
 };

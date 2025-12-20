@@ -1,13 +1,13 @@
 import { API_ROUTES } from '@/constants/routes';
 import { TeamStatsFormData } from '@/schemas/team-stats-schema';
 import { validateStats } from '@/utils/validateStats';
-import axios from 'axios';
+import apiClient from '@/services/apiClient';
 
 export const updateTeamStats = async ({ id, ...data }: { id: string } & TeamStatsFormData) => {
 	// 🔍 Validation: use shared validator for team-specific checks
 	validateStats(data, { checkTeam: true });
 
-	const res = await axios.put(API_ROUTES.edit.teamStats(id), {
+	const res = await apiClient.put(API_ROUTES.edit.teamStats(id), {
 		data: {
 			// filters
 			game: data.gameId,
@@ -56,5 +56,7 @@ export const updateTeamStats = async ({ id, ...data }: { id: string } & TeamStat
 			pointsInPaint: data.pointsInPaint ? +data.pointsInPaint : undefined
 		}
 	});
-	return res;
+
+	if (res.status >= 200 && res.status < 300) return res.data;
+	throw new Error(`updateTeamStats failed: ${res.status}`);
 };

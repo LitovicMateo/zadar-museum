@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
 import { PlayerStatsFormData } from '@/schemas/player-stats';
+import apiClient from '@/services/apiClient';
 import { validateStats } from '@/utils/validateStats';
-import axios from 'axios';
 
 export const createPlayerStats = async (data: PlayerStatsFormData) => {
 	const { gameId, playerId, status } = data;
@@ -12,9 +12,9 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 	});
 
 	// 1️⃣ Check for existing entry
-	const existingRes = await axios.get(API_ROUTES.create.playerStats(params.toString()));
+	const existingRes = await apiClient.get(API_ROUTES.create.playerStats(params.toString()));
 
-	if (existingRes.data.data.length > 0) {
+	if (existingRes.data?.data?.length > 0) {
 		throw new Error('Player stats for this game, team, and player already exist.');
 	}
 
@@ -49,8 +49,9 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 			plusMinus: undefined
 		};
 
-		const res = await axios.post(API_ROUTES.create.playerStats(), { data: payload });
-		return res;
+		const res = await apiClient.post(API_ROUTES.create.playerStats(), { data: payload });
+		if (res.status >= 200 && res.status < 300) return res.data;
+		throw new Error(`createPlayerStats failed: ${res.status}`);
 	}
 
 	// 3️⃣ Normal validation for active players — use shared validator
@@ -86,6 +87,7 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 		plusMinus: data.plusMinus ? +data.plusMinus : undefined
 	};
 
-	const res = await axios.post(API_ROUTES.create.playerStats(), { data: payload });
-	return res;
+	const res = await apiClient.post(API_ROUTES.create.playerStats(), { data: payload });
+	if (res.status >= 200 && res.status < 300) return res.data;
+	throw new Error(`createPlayerStats failed: ${res.status}`);
 };

@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
 import { TeamStatsFormData } from '@/schemas/team-stats-schema';
 import { validateStats } from '@/utils/validateStats';
-import axios from 'axios';
+import apiClient from '@/services/apiClient';
 
 export const createTeamStats = async (data: TeamStatsFormData) => {
 	const { teamId, gameId } = data;
@@ -12,9 +12,9 @@ export const createTeamStats = async (data: TeamStatsFormData) => {
 	});
 
 	// check if already exists
-	const existingRes = await axios.get(API_ROUTES.create.teamStats(params.toString()));
+	const existingRes = await apiClient.get(API_ROUTES.create.teamStats(params.toString()));
 
-	if (existingRes.data.data.length > 0) {
+	if (existingRes.data?.data?.length > 0) {
 		throw new Error('Team stats for this game and team already exist.');
 	}
 
@@ -69,6 +69,7 @@ export const createTeamStats = async (data: TeamStatsFormData) => {
 		pointsInPaint: data.pointsInPaint ? +data.pointsInPaint : undefined
 	};
 
-	const res = await axios.post(API_ROUTES.create.teamStats(), { data: payload });
-	return res;
+	const res = await apiClient.post(API_ROUTES.create.teamStats(), { data: payload });
+	if (res.status >= 200 && res.status < 300) return res.data;
+	throw new Error(`createTeamStats failed: ${res.status}`);
 };

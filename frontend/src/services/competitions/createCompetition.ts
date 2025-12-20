@@ -2,10 +2,10 @@ import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
 import { CompetitionFormData } from '@/types/api/competition';
-import axios from 'axios';
+import apiClient from '@/services/apiClient';
 
 export const createCompetiton = async (data: CompetitionFormData) => {
-	return axios.post(API_ROUTES.create.competition(), {
+	const res = await apiClient.post(API_ROUTES.create.competition(), {
 		data: {
 			name: data.name,
 			short_name: data.short_name,
@@ -14,4 +14,7 @@ export const createCompetiton = async (data: CompetitionFormData) => {
 			trophies: data.trophies
 		}
 	});
+
+	if (res.status >= 200 && res.status < 300) return res.data;
+	throw new Error(`createCompetiton failed: ${res.status}`);
 };
