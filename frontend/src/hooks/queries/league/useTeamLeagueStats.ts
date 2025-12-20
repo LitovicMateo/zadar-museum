@@ -12,9 +12,9 @@ export const useTeamLeagueSeasonStats = (leagueSlug: string, season: string) => 
 };
 
 const getSingleTeamLeagueStats = async (leagueSlug: string, season: string): Promise<TeamSeasonStatsResponse[]> => {
-	const res = await apiClient.get(API_ROUTES.league.teamSeasonStats(leagueSlug, season));
+	const res = await apiClient.get<TeamSeasonStatsResponse[]>(API_ROUTES.league.teamSeasonStats(leagueSlug, season));
 
-	const data = res.data;
+	const data = res.data ?? [];
 
 	return data;
 };

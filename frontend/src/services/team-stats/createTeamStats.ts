@@ -12,7 +12,7 @@ export const createTeamStats = async (data: TeamStatsFormData) => {
 	});
 
 	// check if already exists
-	const existingRes = await apiClient.get(API_ROUTES.create.teamStats(params.toString()));
+	const existingRes = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.teamStats(params.toString()));
 
 	if (existingRes.data?.data?.length > 0) {
 		throw new Error('Team stats for this game and team already exist.');

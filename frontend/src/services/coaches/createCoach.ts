@@ -11,7 +11,7 @@ export const createCoach = async (data: CoachFormData) => {
 		'filters[last_name][$eq]': data.last_name
 	});
 
-	const existingCoach = await apiClient.get(API_ROUTES.create.coach(params.toString()));
+	const existingCoach = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.coach(params.toString()));
 
 	if (!existingCoach || existingCoach.status >= 400) {
 		throw new Error('Failed to validate existing coach');

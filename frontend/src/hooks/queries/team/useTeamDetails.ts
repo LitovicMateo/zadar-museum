@@ -12,7 +12,7 @@ export const useTeamDetails = (teamSlug: string) => {
 };
 
 const getSingleTeam = async (slug: string): Promise<TeamDetailsResponse> => {
-	const res = await apiClient.get(API_ROUTES.team.details(slug));
+	const res = await apiClient.get<{ data: TeamDetailsResponse[] }>(API_ROUTES.team.details(slug));
 	const raw = res.data.data[0];
 	return raw;
 };

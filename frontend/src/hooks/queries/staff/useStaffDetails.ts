@@ -12,7 +12,7 @@ export const useStaffDetails = (staffId: string) => {
 };
 
 const getStaffDetails = async (staffId: string): Promise<StaffDetailsResponse> => {
-	const res = await apiClient.get(API_ROUTES.staff.details(staffId));
+	const res = await apiClient.get<{ data: StaffDetailsResponse }>(API_ROUTES.staff.details(staffId));
 	const data = res.data.data;
 
 	return data;

@@ -8,7 +8,7 @@ export const createStaff = async (data: StaffFormData) => {
 		'filters[last_name][$eq]': data.last_name
 	});
 
-	const existing = await apiClient.get(API_ROUTES.create.staff(params.toString()));
+	const existing = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.staff(params.toString()));
 	if (existing.data?.data && existing.data.data.length > 0) {
 		throw new Error('Staff already exists');
 	}

@@ -11,7 +11,7 @@ export const createPlayer = async (data: PlayerFormData) => {
 		'filters[last_name][$eq]': data.last_name
 	});
 
-	const existingPlayer = await apiClient.get(API_ROUTES.create.player(params.toString()));
+	const existingPlayer = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.player(params.toString()));
 
 	if (!existingPlayer || existingPlayer.status >= 400) {
 		// if the check failed for some reason, surface an error

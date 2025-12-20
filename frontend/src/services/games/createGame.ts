@@ -17,7 +17,7 @@ export const createGame = async (data: GameFormData) => {
 		params.append('filters[$or][2][home_team][$eq]', String(away_team));
 		params.append('filters[$or][3][away_team][$eq]', String(away_team));
 
-		const res = await apiClient.get(API_ROUTES.create.game(params.toString()));
+		const res = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.create.game(params.toString()));
 
 		if (!res || res.status >= 400) {
 			throw new Error('Failed to validate duplicate game');

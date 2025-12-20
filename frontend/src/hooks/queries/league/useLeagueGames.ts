@@ -12,7 +12,7 @@ export const useLeagueGames = (leagueSlug: string, season: string) => {
 };
 
 const getCompetitionGamelog = async (competitionSlug: string, season: string): Promise<TeamScheduleResponse[]> => {
-	const res = await apiClient.get(API_ROUTES.league.gamelog(competitionSlug, season));
+	const res = await apiClient.get<TeamScheduleResponse[]>(API_ROUTES.league.gamelog(competitionSlug, season));
 
-	return res.data;
+	return res.data ?? [];
 };

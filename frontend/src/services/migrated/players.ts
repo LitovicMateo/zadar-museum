@@ -21,14 +21,14 @@ export async function updatePlayer(payload: PlayerUpdatePayload) {
 }
 
 export async function getPlayer(id: number) {
-	const res = await apiClient.get(`/players/${id}`);
+	const res = await apiClient.get<{ data?: unknown }>(`/players/${id}`);
 	if (res.status >= 200 && res.status < 300) return res.data;
 	return null;
 }
 
 export async function listPlayers(query?: Record<string, unknown>) {
 	const qs = query ? '?' + new URLSearchParams(Object.entries(query).map(([k, v]) => [k, String(v)])).toString() : '';
-	const res = await apiClient.get(`/players${qs}`);
+	const res = await apiClient.get<{ data?: unknown[] }>(`/players${qs}`);
 	if (res.status >= 200 && res.status < 300) return res.data;
 	return [];
 }

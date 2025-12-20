@@ -12,7 +12,7 @@ export const useLeagueTeamRecord = (leagueSlug: string) => {
 };
 
 const getCompetitionTeamRecord = async (competitionSlug: string): Promise<LeagueStats> => {
-	const res = await apiClient.get(API_ROUTES.league.teamRecord(competitionSlug));
+	const res = await apiClient.get<LeagueStats>(API_ROUTES.league.teamRecord(competitionSlug));
 
 	const data = res.data;
 

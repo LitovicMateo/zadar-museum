@@ -20,7 +20,7 @@ const getAllStaffs = async (sortKey?: StaffKey, direction: 'asc' | 'desc' = 'asc
 	}
 
 	// Use the collection endpoint for staff list (stable CRUD route)
-	const res = await apiClient.get(API_ROUTES.staff.list(params.toString()));
+	const res = await apiClient.get<{ data?: unknown[] }>(API_ROUTES.staff.list(params.toString()));
 
 	return res.data.data;
 };
