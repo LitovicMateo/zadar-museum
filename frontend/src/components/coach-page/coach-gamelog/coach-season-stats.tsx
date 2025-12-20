@@ -24,6 +24,8 @@ const CoachSeasonStats: React.FC<CoachSeasonStatsProps> = ({ season }) => {
 	const [coachRole, setCoachRole] = useState<'total' | 'headCoach' | 'assistantCoach'>('total');
 	const [location, setLocation] = useState<'total' | 'home' | 'away'>('total');
 
+	const idRole = React.useId();
+	const idLocation = React.useId();
 	const leagueStats: CoachStats[] = useMemo(() => {
 		if (!coachLeagueStats) return [];
 
@@ -48,28 +50,35 @@ const CoachSeasonStats: React.FC<CoachSeasonStatsProps> = ({ season }) => {
 			<div className="flex flex-row gap-8 font-abel">
 				<div>
 					<p className="font-semibold mb-1">Coach Role</p>
-					<fieldset className="flex flex-row gap-4 font-abel">
-						<label className="flex gap-2">
+					<fieldset aria-label="Coach role" className="flex flex-row gap-4 font-abel">
+						<legend className="sr-only">Coach role</legend>
+						<label htmlFor={`${idRole}-total`} className="flex gap-2">
 							<input
+								id={`${idRole}-total`}
 								type="radio"
+								name={`coach-role-${idRole}`}
 								value="total"
 								checked={coachRole === 'total'}
 								onChange={() => setCoachRole('total')}
 							/>
 							Total
 						</label>
-						<label className="flex gap-2">
+						<label htmlFor={`${idRole}-head`} className="flex gap-2">
 							<input
+								id={`${idRole}-head`}
 								type="radio"
+								name={`coach-role-${idRole}`}
 								value="headCoach"
 								checked={coachRole === 'headCoach'}
 								onChange={() => setCoachRole('headCoach')}
 							/>
 							Head
 						</label>
-						<label className="flex gap-2">
+						<label htmlFor={`${idRole}-assist`} className="flex gap-2">
 							<input
+								id={`${idRole}-assist`}
 								type="radio"
+								name={`coach-role-${idRole}`}
 								value="assistantCoach"
 								checked={coachRole === 'assistantCoach'}
 								onChange={() => setCoachRole('assistantCoach')}
@@ -81,28 +90,35 @@ const CoachSeasonStats: React.FC<CoachSeasonStatsProps> = ({ season }) => {
 
 				<div>
 					<p className="font-semibold mb-1">Location</p>
-					<fieldset className="flex flex-row gap-4 font-abel">
-						<label className="flex gap-2">
+					<fieldset aria-label="Location" className="flex flex-row gap-4 font-abel">
+						<legend className="sr-only">Location</legend>
+						<label htmlFor={`${idLocation}-total`} className="flex gap-2">
 							<input
+								id={`${idLocation}-total`}
 								type="radio"
+								name={`location-${idLocation}`}
 								value="total"
 								checked={location === 'total'}
 								onChange={() => setLocation('total')}
 							/>
 							Total
 						</label>
-						<label className="flex gap-2">
+						<label htmlFor={`${idLocation}-home`} className="flex gap-2">
 							<input
+								id={`${idLocation}-home`}
 								type="radio"
+								name={`location-${idLocation}`}
 								value="home"
 								checked={location === 'home'}
 								onChange={() => setLocation('home')}
 							/>
 							Home
 						</label>
-						<label className="flex gap-2">
+						<label htmlFor={`${idLocation}-away`} className="flex gap-2">
 							<input
+								id={`${idLocation}-away`}
 								type="radio"
+								name={`location-${idLocation}`}
 								value="away"
 								checked={location === 'away'}
 								onChange={() => setLocation('away')}

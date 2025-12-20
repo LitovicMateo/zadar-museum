@@ -1,11 +1,12 @@
+import React from 'react';
+
 import TableCell from '@/components/ui/table-cell';
 import { CoachRecordRow } from '@/types/api/coach';
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
 export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) => {
-	const table = useReactTable<CoachRecordRow>({
-		data: data || [],
-		columns: [
+	const columns = React.useMemo(
+		() => [
 			{
 				header: 'Statistic',
 				accessorKey: 'name'
@@ -13,18 +14,18 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			{
 				header: 'G',
 				accessorKey: 'games',
-				cell: (info) => {
-					if (info.getValue() === 0) {
+				cell: (info: any) => {
+					const value = info.getValue();
+					if (!value && value !== 0) return <div className="min-w-6">-</div>;
+					if (Number(value) === 0)
 						return (
 							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
-					}
-
 					return (
 						<div className="min-w-6">
-							<p>{info.getValue()}</p>
+							<p>{value}</p>
 						</div>
 					);
 				}
@@ -32,16 +33,13 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			{
 				header: 'W',
 				accessorKey: 'wins',
-				cell: (info) => {
-					// check total games
-					if (info.row.original.games === 0) {
+				cell: (info: any) => {
+					if (info.row.original.games === 0)
 						return (
 							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
-					}
-
 					return (
 						<div className="min-w-6">
 							<p>{info.getValue()}</p>
@@ -52,16 +50,13 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			{
 				header: 'L',
 				accessorKey: 'losses',
-				cell: (info) => {
-					// check total games
-					if (info.row.original.games === 0) {
+				cell: (info: any) => {
+					if (info.row.original.games === 0)
 						return (
 							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
-					}
-
 					return (
 						<div className="min-w-6">
 							<p>{info.getValue()}</p>
@@ -72,18 +67,17 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			{
 				header: 'Win %',
 				accessorKey: 'win_percentage',
-				cell: (info) => {
-					if (info.row.original.games === 0) {
+				cell: (info: any) => {
+					if (info.row.original.games === 0)
 						return (
 							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
-					}
-
+					const v = info.getValue();
 					return (
 						<div className="min-w-6">
-							<p>{info.getValue().toFixed(1)}</p>
+							<p>{typeof v === 'number' ? v.toFixed(1) : v}</p>
 						</div>
 					);
 				}
@@ -91,18 +85,17 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			{
 				header: 'Pts For',
 				accessorKey: 'points_scored',
-				cell: (info) => {
-					if (info.row.original.games === 0) {
+				cell: (info: any) => {
+					if (info.row.original.games === 0)
 						return (
 							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
-					}
-
+					const v = info.getValue();
 					return (
 						<div className="min-w-6">
-							<p>{info.getValue().toFixed(1)}</p>
+							<p>{typeof v === 'number' ? v.toFixed(1) : v}</p>
 						</div>
 					);
 				}
@@ -110,19 +103,17 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			{
 				header: 'Pts Ag',
 				accessorKey: 'points_received',
-				cell: (info) => {
-					// check total games
-					if (info.row.original.games === 0) {
+				cell: (info: any) => {
+					if (info.row.original.games === 0)
 						return (
 							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
-					}
-
+					const v = info.getValue();
 					return (
 						<div className="min-w-6">
-							<p>{info.getValue().toFixed(1)}</p>
+							<p>{typeof v === 'number' ? v.toFixed(1) : v}</p>
 						</div>
 					);
 				}
@@ -130,24 +121,28 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 			{
 				header: 'Pts Diff',
 				accessorKey: 'pointsDiff',
-				cell: (info) => {
-					// check total games
-					if (info.row.original.games === 0) {
+				cell: (info: any) => {
+					if (info.row.original.games === 0)
 						return (
 							<div className="min-w-6">
 								<p>-</p>
 							</div>
 						);
-					}
-
+					const v = info.getValue();
 					return (
 						<div className="min-w-6">
-							<p>{info.getValue().toFixed(1)}</p>
+							<p>{typeof v === 'number' ? v.toFixed(1) : v}</p>
 						</div>
 					);
 				}
 			}
 		],
+		[]
+	);
+
+	const table = useReactTable<CoachRecordRow>({
+		data: data || [],
+		columns: columns as any,
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel()
 	});

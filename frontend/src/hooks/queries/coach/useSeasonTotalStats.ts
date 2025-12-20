@@ -8,7 +8,7 @@ export const useSeasonTotalStats = (coachId: string, season: string, db: PlayerD
 	return useQuery({
 		queryKey: ['season-total-stats', coachId, season, db],
 		queryFn: getSeasonTotalStats.bind(null, coachId, season, db),
-		enabled: !!coachId && !!db
+		enabled: !!coachId && !!season && !!db
 	});
 };
 

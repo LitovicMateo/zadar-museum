@@ -14,16 +14,18 @@ export type View = 'allTime' | 'headCoach' | 'assistantCoach';
 const CoachAllTimeStats: React.FC = () => {
 	const [view, setView] = React.useState<View>('allTime');
 	const { coachId } = useParams();
-	const { db } = useCoachProfileDatabase(coachId!);
 
-	const { data: coachRecord } = useCoachRecord(coachId!, db);
+	if (!coachId) return null;
+
+	const { db } = useCoachProfileDatabase(coachId);
+	const { data: coachRecord } = useCoachRecord(coachId, db);
 
 	const data = React.useMemo(() => coachRecord?.[view] || [], [coachRecord, view]);
 
 	const { TableBody, TableHead } = useCoachAllTimeStatsTable(data);
 
 	return (
-		<section className="flex flex-col gap-4">
+		<section className="flex flex-col gap-4" aria-label="Coach all time statistics">
 			<Heading title="All-time stats" />
 			<RadioButtons view={view} setView={setView} />
 			<TableWrapper>
@@ -34,4 +36,4 @@ const CoachAllTimeStats: React.FC = () => {
 	);
 };
 
-export default CoachAllTimeStats;
+export default React.memo(CoachAllTimeStats);

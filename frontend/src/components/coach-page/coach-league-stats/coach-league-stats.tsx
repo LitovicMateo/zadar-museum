@@ -14,13 +14,15 @@ import LocationFilter from './location-filter';
 
 const CoachLeagueStats: React.FC = () => {
 	const { coachId } = useParams();
-	const { db } = useCoachProfileDatabase(coachId!);
+	if (!coachId) return null;
+
+	const { db } = useCoachProfileDatabase(coachId);
 
 	const [coachRole, setCoachRole] = useState<'total' | 'allTime' | 'headCoach' | 'assistantCoach'>('total');
 	const [location, setLocation] = useState<'total' | 'home' | 'away'>('total');
 
-	const { data: coachLeagueStats } = useCoachLeagueStats(coachId!, db!);
-	const { data: coachRecord } = useCoachRecord(coachId!, db);
+	const { data: coachLeagueStats } = useCoachLeagueStats(coachId, db);
+	const { data: coachRecord } = useCoachRecord(coachId, db);
 
 	const leagueStats: CoachStats[] = useMemo(() => {
 		if (!coachLeagueStats) return [];

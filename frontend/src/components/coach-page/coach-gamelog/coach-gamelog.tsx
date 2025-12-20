@@ -12,19 +12,28 @@ import Filters from './filters';
 const CoachGamelog: React.FC = () => {
 	const { coachId } = useParams();
 
+	if (!coachId) return null;
+
 	const [selectedCompetitions, setSelectedCompetitions] = useState<string[]>([]);
-	const [selectedSeason, setSelectedSeason] = useState('2026');
+	const [selectedSeason, setSelectedSeason] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
 
-	const { db } = useCoachProfileDatabase(coachId!);
+	const { db } = useCoachProfileDatabase(coachId);
 
-	const { data: coachGamelog } = useCoachGamelog(coachId!, db);
+	const { data: coachGamelog } = useCoachGamelog(coachId, db);
+
+	React.useEffect(() => {
+		if (!selectedSeason && coachGamelog && coachGamelog.length) {
+			setSelectedSeason(coachGamelog[0].season || '');
+		}
+	}, [coachGamelog, selectedSeason]);
 
 	const filteredGames = useMemo(() => {
 		if (!coachGamelog) return [];
 
 		return coachGamelog.filter((game) => {
-			const matchesCompetition = selectedCompetitions.includes(game.league_id);
+			const matchesCompetition =
+				selectedCompetitions.length === 0 ? false : selectedCompetitions.includes(game.league_id);
 
 			const matchesSearch =
 				searchTerm.trim().length === 0 ||
@@ -35,10 +44,10 @@ const CoachGamelog: React.FC = () => {
 		});
 	}, [coachGamelog, selectedCompetitions, searchTerm]);
 
-	const { Schedule } = useScheduleTable(filteredGames!);
+	const { Schedule } = useScheduleTable(filteredGames || []);
 
 	return (
-		<section className="flex flex-col gap-2 font-abel">
+		<section className="flex flex-col gap-2 font-abel" aria-live="polite">
 			<Heading title="Seasonal Data" />
 			<div className="flex flex-col gap-8 ">
 				<Filters
@@ -62,4 +71,4 @@ const CoachGamelog: React.FC = () => {
 	);
 };
 
-export default CoachGamelog;
+export default React.memo(CoachGamelog);

@@ -13,7 +13,8 @@ const CoachHeader: React.FC = () => {
 
 	const { data: coach, isLoading } = useCoachDetails(coachId!);
 
-	if (!coach || isLoading) return <div>Loading...</div>;
+	if (!coach || isLoading)
+		return <div role="status" aria-busy="true" className="max-h-[250px] bg-gray-100 animate-pulse" />;
 
 	const imagePath = coach.image?.url;
 	const imageUrl = getImageUrl(imagePath);

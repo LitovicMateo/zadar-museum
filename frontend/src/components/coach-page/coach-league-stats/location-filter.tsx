@@ -6,31 +6,40 @@ type LocationFilterProps = {
 };
 
 const LocationFilter: React.FC<LocationFilterProps> = ({ location, setLocation }) => {
+	const id = React.useId();
+
 	return (
 		<div>
 			<p className="font-semibold mb-1">Location</p>
-			<fieldset className="flex flex-row gap-4 font-abel">
-				<label className="flex gap-2">
+			<fieldset aria-label="Location" className="flex flex-row gap-4 font-abel">
+				<legend className="sr-only">Location</legend>
+				<label htmlFor={`${id}-total`} className="flex gap-2">
 					<input
+						id={`${id}-total`}
 						type="radio"
+						name={`location-${id}`}
 						value="total"
 						checked={location === 'total'}
 						onChange={() => setLocation('total')}
 					/>
 					Total
 				</label>
-				<label className="flex gap-2">
+				<label htmlFor={`${id}-home`} className="flex gap-2">
 					<input
+						id={`${id}-home`}
 						type="radio"
+						name={`location-${id}`}
 						value="home"
 						checked={location === 'home'}
 						onChange={() => setLocation('home')}
 					/>
 					Home
 				</label>
-				<label className="flex gap-2">
+				<label htmlFor={`${id}-away`} className="flex gap-2">
 					<input
+						id={`${id}-away`}
 						type="radio"
+						name={`location-${id}`}
 						value="away"
 						checked={location === 'away'}
 						onChange={() => setLocation('away')}
@@ -42,4 +51,4 @@ const LocationFilter: React.FC<LocationFilterProps> = ({ location, setLocation }
 	);
 };
 
-export default LocationFilter;
+export default React.memo(LocationFilter);

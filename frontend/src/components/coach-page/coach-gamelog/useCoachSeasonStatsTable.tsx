@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import TableCell from '@/components/ui/table-cell';
@@ -7,13 +8,12 @@ import { CoachStats } from '@/types/api/coach';
 import { CellContext, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined, type: 'league' | 'total') => {
-	const table = useReactTable({
-		data: data || [],
-		columns: [
+	const columns = React.useMemo(
+		() => [
 			{
 				header: 'League',
 				accessorFn: (row: CoachStats) => row?.league_slug,
-				cell: (info) => {
+				cell: (info: any) => {
 					if (info.getValue() === undefined) return <p>Total</p>;
 					return <LeagueCell leagueSlug={info.getValue() as string | undefined} />;
 				}
@@ -21,39 +21,45 @@ export const useCoachSeasonStatsTable = (data: CoachStats[] | undefined, type: '
 			{
 				header: 'G',
 				accessorFn: (row: CoachStats) => row?.games,
-				cell: (info) => <Cell info={info} />
+				cell: (info: any) => <Cell info={info as any} />
 			},
 			{
 				header: 'W',
 				accessorFn: (row: CoachStats) => row?.wins,
-				cell: (info) => <Cell info={info} />
+				cell: (info: any) => <Cell info={info as any} />
 			},
 			{
 				header: 'L',
 				accessorFn: (row: CoachStats) => row?.losses,
-				cell: (info) => <Cell info={info} />
+				cell: (info: any) => <Cell info={info as any} />
 			},
 			{
 				header: 'Win %',
 				accessorFn: (row: CoachStats) => row?.win_percentage,
-				cell: (info) => <Cell info={info} />
+				cell: (info: any) => <Cell info={info as any} />
 			},
 			{
 				header: 'PTS A',
 				accessorFn: (row: CoachStats) => row?.points_scored,
-				cell: (info) => <Cell info={info} />
+				cell: (info: any) => <Cell info={info as any} />
 			},
 			{
 				header: 'PTS R',
 				accessorFn: (row: CoachStats) => row?.points_received,
-				cell: (info) => <Cell info={info} />
+				cell: (info: any) => <Cell info={info as any} />
 			},
 			{
 				header: 'PTS D',
 				accessorFn: (row: CoachStats) => row?.points_difference,
-				cell: (info) => <Cell info={info} />
+				cell: (info: any) => <Cell info={info as any} />
 			}
 		],
+		[]
+	);
+
+	const table = useReactTable({
+		data: data || [],
+		columns: columns as any,
 		getCoreRowModel: getCoreRowModel()
 	});
 

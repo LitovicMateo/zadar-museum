@@ -6,31 +6,40 @@ type CoachRoleFilterProps = {
 };
 
 const CoachRoleFilter: React.FC<CoachRoleFilterProps> = ({ coachRole, setCoachRole }) => {
+	const id = React.useId();
+
 	return (
 		<div>
 			<p className="font-semibold mb-1">Coach Role</p>
-			<fieldset className="flex flex-row gap-4 font-abel">
-				<label className="flex gap-2">
+			<fieldset aria-label="Coach role" className="flex flex-row gap-4 font-abel">
+				<legend className="sr-only">Coach role</legend>
+				<label htmlFor={`${id}-total`} className="flex gap-2">
 					<input
+						id={`${id}-total`}
 						type="radio"
+						name={`coach-role-${id}`}
 						value="total"
 						checked={coachRole === 'total'}
 						onChange={() => setCoachRole('total')}
 					/>
 					Total
 				</label>
-				<label className="flex gap-2">
+				<label htmlFor={`${id}-head`} className="flex gap-2">
 					<input
+						id={`${id}-head`}
 						type="radio"
+						name={`coach-role-${id}`}
 						value="headCoach"
 						checked={coachRole === 'headCoach'}
 						onChange={() => setCoachRole('headCoach')}
 					/>
 					Head
 				</label>
-				<label className="flex gap-2">
+				<label htmlFor={`${id}-assistant`} className="flex gap-2">
 					<input
+						id={`${id}-assistant`}
 						type="radio"
+						name={`coach-role-${id}`}
 						value="assistantCoach"
 						checked={coachRole === 'assistantCoach'}
 						onChange={() => setCoachRole('assistantCoach')}
@@ -42,4 +51,4 @@ const CoachRoleFilter: React.FC<CoachRoleFilterProps> = ({ coachRole, setCoachRo
 	);
 };
 
-export default CoachRoleFilter;
+export default React.memo(CoachRoleFilter);

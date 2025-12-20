@@ -37,14 +37,16 @@ const Filters: React.FC<FilterProps> = ({
 	const { data: competitions } = useCoachSeasonCompetitions(coachId!, selectedSeason);
 
 	useEffect(() => {
-		if (seasons) {
+		if (seasons && !selectedSeason) {
 			setSelectedSeason(seasons[0]);
 		}
-	}, [seasons, setSelectedSeason]);
+	}, [seasons, setSelectedSeason, selectedSeason]);
 
+	const initializedRef = React.useRef(false);
 	useEffect(() => {
-		if (competitions) {
+		if (competitions && !initializedRef.current) {
 			setSelectedCompetitions(competitions.map((c) => c.league_id));
+			initializedRef.current = true;
 		}
 	}, [competitions, setSelectedCompetitions]);
 
@@ -55,16 +57,24 @@ const Filters: React.FC<FilterProps> = ({
 	};
 
 	if (seasons === undefined || competitions === undefined) {
-		return <div>Loading...</div>;
+		return (
+			<div role="status" aria-busy="true">
+				Loading...
+			</div>
+		);
 	}
 
 	return (
-		<div className="flex flex-col sm:flex-row-reverse gap-4 w-full">
+		<div
+			className="flex flex-col sm:flex-row-reverse gap-4 w-full"
+			aria-busy={seasons === undefined || competitions === undefined}
+		>
 			<div className="flex gap-4 w-full ">
 				<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 				<Select<SeasonOption, false>
 					placeholder="Season"
 					className="text-sm shadow-sm w-full"
+					aria-label="Season select"
 					value={seasonOptions.find((s) => s.value === selectedSeason)}
 					options={seasonOptions}
 					onChange={(e) => setSelectedSeason(e?.value || '')}
