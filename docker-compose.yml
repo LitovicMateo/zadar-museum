@@ -57,6 +57,9 @@ services:
       target: development
       args:
         VITE_API_ROOT: ${VITE_API_ROOT}
+    environment:
+      - VITE_API_ROOT=${VITE_API_ROOT}
+      - CHOKIDAR_USEPOLLING=true
     container_name: react_dev
     volumes:
       - ./frontend:/app

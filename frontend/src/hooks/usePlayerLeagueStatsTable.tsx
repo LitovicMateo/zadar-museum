@@ -26,10 +26,13 @@ export const usePlayerLeagueStatsTable = (rows: GameStatsEntry[] | undefined) =>
 			{ header: 'BLK', accessorKey: 'blocks' },
 			{ header: 'FGM', accessorKey: 'field_goals_made' },
 			{ header: 'FGA', accessorKey: 'field_goals_attempted' },
+			{ header: 'FG%', accessorKey: 'field_goal_percentage' },
 			{ header: '3PM', accessorKey: 'three_pointers_made' },
 			{ header: '3PA', accessorKey: 'three_pointers_attempted' },
+			{ header: '3P%', accessorKey: 'three_point_percentage' },
 			{ header: 'FTM', accessorKey: 'free_throws_made' },
 			{ header: 'FTA', accessorKey: 'free_throws_attempted' },
+			{ header: 'FT%', accessorKey: 'free_throw_percentage' },
 			{ header: 'EFF', accessorKey: 'efficiency' }
 		],
 		getCoreRowModel: getCoreRowModel(),

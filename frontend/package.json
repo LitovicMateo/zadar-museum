@@ -30,7 +30,7 @@
 		"clsx": "^2.1.1",
 		"cmdk": "^1.1.1",
 		"date-fns": "^4.1.0",
-		"framer-motion": "^12.23.25",
+		"framer-motion": "^12.24.11",
 		"i18n-iso-countries": "^7.14.0",
 		"js-cookie": "^3.0.5",
 		"lucide-react": "^0.534.0",

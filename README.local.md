@@ -47,7 +47,7 @@
     cd backend && npm run migrate:mvs -- --refresh
 
     # via Docker
-    docker compose exec backend npm run migrate:mvs -- --refresh
+    docker-compose exec backend npm run migrate:mvs -- --refresh
     ```
 
   - Force drop and recreate matviews from SQL files:
@@ -61,7 +61,7 @@
 
     ```
     cd backend && npm run migrate:mvs -- --refresh --concurrent
-    docker compose exec backend npm run migrate:mvs -- --refresh --concurrent
+    docker-compose exec backend npm run migrate:mvs -- --refresh --concurrent
     ```
 
   Notes:
