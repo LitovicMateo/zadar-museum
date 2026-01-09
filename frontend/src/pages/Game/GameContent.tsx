@@ -35,7 +35,7 @@ const GameContent: React.FC = () => {
 		return <NoContent type="info" description="There is no boxscore for this game." />;
 
 	return (
-		<PageContentWrapper width="1100px">
+		<PageContentWrapper width="1200px">
 			{game?.isNulled && <NoContent type="info" description="Results of this game have been nulled." />}
 			<GameReferees />
 			<GameStats />

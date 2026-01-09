@@ -174,17 +174,6 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 				}
 			},
 			{
-				id: 'assists',
-				accessorKey: 'assists',
-				header: 'AST',
-				cell: (info) => {
-					if (info.row.original.status === 'dnp-cd') {
-						return <p className="text-gray-600">-</p>;
-					}
-					return <p>{info.getValue<number | null>()}</p>;
-				}
-			},
-			{
 				id: 'off_rebounds',
 				accessorKey: 'offensive_rebounds',
 				header: 'OREB',
@@ -210,6 +199,17 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 				id: 'rebounds',
 				accessorKey: 'rebounds',
 				header: 'REB',
+				cell: (info) => {
+					if (info.row.original.status === 'dnp-cd') {
+						return <p className="text-gray-600">-</p>;
+					}
+					return <p>{info.getValue<number | null>()}</p>;
+				}
+			},
+			{
+				id: 'assists',
+				accessorKey: 'assists',
+				header: 'AST',
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
@@ -307,7 +307,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 							// Decide sticky classes based on index
 							let stickyClass = '';
 							if (idx === 0) stickyClass = 'sticky left-0 z-10 bg-gray-50 w-[60px]';
-							if (idx === 1) stickyClass = 'sticky left-[40px] z-10 bg-gray-50 w-[150px]';
+							if (idx === 1) stickyClass = 'sticky left-[40px] z-10 bg-gray-50 w-[200px]';
 
 							return (
 								<th
@@ -340,7 +340,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 							if (idx === 0)
 								stickyClass = `sticky left-0 z-10 ${isStarter ? 'bg-slate-100' : 'bg-white'}  w-[60px]`;
 							if (idx === 1)
-								stickyClass = `sticky left-[40px] z-10 ${isStarter ? 'bg-slate-100' : 'bg-white'}  w-[150px]`;
+								stickyClass = `sticky left-[40px] z-10 ${isStarter ? 'bg-slate-100' : 'bg-white'}  w-[200px]`;
 
 							if (isStarter) {
 								stickyClass += ' bg-slate-100';
