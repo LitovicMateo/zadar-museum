@@ -47,8 +47,6 @@ const EditGame = () => {
 		setGameId('');
 	}, [season, league]);
 
-	console.log(game);
-
 	return (
 		<div>
 			<FormWrapper>
