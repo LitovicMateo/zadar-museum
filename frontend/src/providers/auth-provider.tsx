@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const navigate = useNavigate();
 
-	const root = import.meta.env.VITE_API_ROOT;
+	const root = import.meta.env.VITE_API_ROOT || 'https://ovdjejekosarkasve.com/api';
 	const path = root + '/auth/local';
 
 	useEffect(() => {
