@@ -60,7 +60,7 @@ services:
     image: nginx:alpine
     container_name: nginx_staging
     volumes:
-      - ./nginx/nginx.local.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.staging.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "8080:80"
     depends_on:
