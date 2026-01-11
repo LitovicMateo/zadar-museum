@@ -7,8 +7,14 @@ import axios from 'axios';
 
 export const updateGame = async ({ id, ...data }: { id: string } & GameFormData) => {
 	// fetch existing game to compare which fields actually changed
-	const existingRes = await axios.get(API_ROUTES.game.details(id));
-	const existing = existingRes.data as any;
+	let existing: any;
+	try {
+		const existingRes = await axios.get(API_ROUTES.game.details(id));
+		existing = existingRes.data as any;
+	} catch (err: any) {
+		const msg = `Failed to fetch existing game ${id}: ${err?.message || err}`;
+		throw new Error(msg);
+	}
 
 	const needsStatsRebuild = (() => {
 		// fields that, when changed, require deleting/ rebuilding player & team stats
@@ -81,9 +87,6 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 
 		return false;
 	})();
-
-	console.log(needsStatsRebuild);
-	// return;
 
 	const galleryIds = await uploadGallery(data.gallery);
 
