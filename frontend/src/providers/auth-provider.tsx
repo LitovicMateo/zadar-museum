@@ -12,6 +12,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const navigate = useNavigate();
 
+	const root = import.meta.env.VITE_API_ROOT;
+	const path = root + '/auth/local';
+
 	useEffect(() => {
 		const storedJwt = localStorage.getItem('jwt');
 		const storedUser = localStorage.getItem('user');
@@ -26,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const login = async (identifier: string, password: string) => {
 		try {
-			const res = await axios.post<StrapiAuthResponse>('https://ovdjejekosarkasve.com/api/auth/local', {
+			const res = await axios.post<StrapiAuthResponse>(path, {
 				identifier,
 				password
 			});
