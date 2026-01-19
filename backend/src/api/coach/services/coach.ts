@@ -3,6 +3,11 @@
  */
 
 import { factories } from "@strapi/strapi";
+import {
+  validateWhitelist,
+  validateSeason,
+  ALLOWED_DATABASES,
+} from "../../../validation";
 
 export default factories.createCoreService(
   "api::coach.coach",
@@ -17,7 +22,13 @@ export default factories.createCoreService(
     },
 
     async findCoachTeamRecord(coachId, db) {
-      const table = `${db}_coach_record_full`;
+      // Validate inputs
+      if (!coachId) {
+        throw new Error("Coach ID is required");
+      }
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+
+      const table = `${validatedDb}_coach_record_full`;
       const knex = strapi.db.connection;
       const data = await knex(table).select("*").where("coach_id", coachId);
 
@@ -38,16 +49,22 @@ export default factories.createCoreService(
     },
 
     async findCoachGamelog(coachId: string, db: string) {
+      // Validate inputs
+      if (!coachId) {
+        throw new Error("Coach ID is required");
+      }
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+
       const knex = strapi.db.connection;
 
-      if (db === "zadar") {
+      if (validatedDb === "zadar") {
         return await knex("schedule")
           .where(function () {
             // Coach led Zadar at home
             this.where("home_team_slug", "kk-zadar").andWhere(function () {
               this.where("home_head_coach_id", coachId).orWhere(
                 "home_assistant_coach_id",
-                coachId
+                coachId,
               );
             });
           })
@@ -56,7 +73,7 @@ export default factories.createCoreService(
             this.where("away_team_slug", "kk-zadar").andWhere(function () {
               this.where("away_head_coach_id", coachId).orWhere(
                 "away_assistant_coach_id",
-                coachId
+                coachId,
               );
             });
           })
@@ -68,7 +85,7 @@ export default factories.createCoreService(
             this.whereNot("home_team_slug", "kk-zadar").andWhere(function () {
               this.where("home_head_coach_id", coachId).orWhere(
                 "home_assistant_coach_id",
-                coachId
+                coachId,
               );
             });
           })
@@ -77,7 +94,7 @@ export default factories.createCoreService(
             this.whereNot("away_team_slug", "kk-zadar").andWhere(function () {
               this.where("away_head_coach_id", coachId).orWhere(
                 "away_assistant_coach_id",
-                coachId
+                coachId,
               );
             });
           })
@@ -93,19 +110,25 @@ export default factories.createCoreService(
         .where(function () {
           this.where("home_head_coach_id", coachId).orWhere(
             "home_assistant_coach_id",
-            coachId
+            coachId,
           );
         })
         .orWhere(function () {
           this.where("away_head_coach_id", coachId).orWhere(
             "away_assistant_coach_id",
-            coachId
+            coachId,
           );
         })
         .orderBy("season", "desc");
     },
 
     async findCoachSeasonCompetitions(coachId, season) {
+      // Validate inputs
+      if (!coachId) {
+        throw new Error("Coach ID is required");
+      }
+      const validatedSeason = validateSeason(season);
+
       const knex = strapi.db.connection;
       return await knex("schedule")
         .select("league_slug", "league_name", "league_id")
@@ -113,16 +136,16 @@ export default factories.createCoreService(
         .where(function () {
           this.where("home_head_coach_id", coachId).orWhere(
             "home_assistant_coach_id",
-            coachId
+            coachId,
           );
         })
         .orWhere(function () {
           this.where("away_head_coach_id", coachId).orWhere(
             "away_assistant_coach_id",
-            coachId
+            coachId,
           );
         })
-        .andWhere("season", season);
+        .andWhere("season", validatedSeason);
     },
 
     async findCoachTeams(coachId) {
@@ -135,8 +158,14 @@ export default factories.createCoreService(
     },
 
     async findCoachLeagueRecord(coachId, db) {
+      // Validate inputs
+      if (!coachId) {
+        throw new Error("Coach ID is required");
+      }
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+
       const knex = strapi.db.connection;
-      const data = await knex(`${db}_coach_league_record_full`)
+      const data = await knex(`${validatedDb}_coach_league_record_full`)
         .select("*")
         .where("coach_id", coachId);
 
@@ -159,11 +188,18 @@ export default factories.createCoreService(
     },
 
     async findCoachLeagueSeasonStats(coachId, season, db) {
+      // Validate inputs
+      if (!coachId) {
+        throw new Error("Coach ID is required");
+      }
+      const validatedSeason = validateSeason(season);
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+
       const knex = strapi.db.connection;
-      const data = await knex(`${db}_coach_season_league_record_full`)
+      const data = await knex(`${validatedDb}_coach_season_league_record_full`)
         .select("*")
         .where("coach_id", coachId)
-        .andWhere("season", season);
+        .andWhere("season", validatedSeason);
 
       if (data.length === 0) {
         return null;
@@ -185,13 +221,20 @@ export default factories.createCoreService(
     },
 
     async findCoachTotalSeasonStats(coachId, season, db) {
+      // Validate inputs
+      if (!coachId) {
+        throw new Error("Coach ID is required");
+      }
+      const validatedSeason = validateSeason(season);
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+
       const knex = strapi.db.connection;
 
       try {
-        const data = await knex(`${db}_coach_season_record_full`)
+        const data = await knex(`${validatedDb}_coach_season_record_full`)
           .select("*")
           .where("coach_id", coachId)
-          .andWhere("season", season);
+          .andWhere("season", validatedSeason);
 
         if (data.length === 0) {
           return null;
@@ -208,8 +251,8 @@ export default factories.createCoreService(
           assistantCoach: JSON.parse(coach.assistant_coach_record),
         };
       } catch (err) {
-        console.log(err);
+        throw new Error(`Failed to fetch coach season stats: ${err.message}`);
       }
     },
-  })
+  }),
 );

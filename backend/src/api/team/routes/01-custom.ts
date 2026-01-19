@@ -1,3 +1,14 @@
+import { validate } from "../../../middlewares/validation";
+import {
+  teamSlugParamsSchema,
+  teamSeasonsParamsSchema,
+  teamSeasonCompetitionsQuerySchema,
+  teamGamesParamsSchema,
+  teamLeadersQuerySchema,
+  teamAverageParamsSchema,
+  teamRecordParamsSchema,
+} from "../../../validation/schemas/team";
+
 export default {
   routes: [
     {
@@ -6,6 +17,7 @@ export default {
       handler: "team.getTeamDetails",
       config: {
         auth: false,
+        middlewares: [validate({ params: teamSlugParamsSchema })],
       },
     },
     {
@@ -14,6 +26,7 @@ export default {
       handler: "team.getTeamAllTimeStats",
       config: {
         auth: false,
+        middlewares: [validate({ params: teamSlugParamsSchema })],
       },
     },
     {
@@ -22,6 +35,7 @@ export default {
       handler: "team.getTeamSeasons",
       config: {
         auth: false,
+        middlewares: [validate({ params: teamSlugParamsSchema })],
       },
     },
     {
@@ -30,6 +44,7 @@ export default {
       handler: "team.getTeamCompetitions",
       config: {
         auth: false,
+        middlewares: [validate({ params: teamSlugParamsSchema })],
       },
     },
     {
@@ -38,6 +53,7 @@ export default {
       handler: "team.getTeamSeasonCompetitions",
       config: {
         auth: false,
+        middlewares: [validate({ query: teamSeasonCompetitionsQuerySchema })],
       },
     },
     {
@@ -46,6 +62,7 @@ export default {
       handler: "team.getTeamLeagueStats",
       config: {
         auth: false,
+        middlewares: [validate({ params: teamSlugParamsSchema })],
       },
     },
     {
@@ -54,6 +71,7 @@ export default {
       handler: "team.getTeamSchedule",
       config: {
         auth: false,
+        middlewares: [validate({ params: teamGamesParamsSchema })],
       },
     },
 
@@ -63,6 +81,7 @@ export default {
       handler: "team.getTeamLeaders",
       config: {
         auth: false,
+        middlewares: [validate({ query: teamLeadersQuerySchema })],
       },
     },
 
@@ -72,6 +91,7 @@ export default {
       handler: "team.getTeamSeasonLeagueStats",
       config: {
         auth: false,
+        middlewares: [validate({ params: teamAverageParamsSchema })],
       },
     },
 
@@ -81,6 +101,7 @@ export default {
       handler: "team.getTeamSeasonStats",
       config: {
         auth: false,
+        middlewares: [validate({ params: teamRecordParamsSchema })],
       },
     },
   ],

@@ -25,8 +25,6 @@ const VenueGamelog: React.FC = () => {
 
 	const { Schedule } = useScheduleTable(filteredGames!);
 
-	console.log(games);
-
 	if (games && games.length === 0 && selectedSeason) {
 		return <NoContent type="info" description="No games have been played at this venue in the selected season." />;
 	}

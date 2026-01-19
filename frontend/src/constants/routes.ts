@@ -7,8 +7,6 @@ import { PlayerDB } from '@/pages/Player/Player';
 
 const path = import.meta.env.VITE_API_ROOT;
 const root = path ? path : 'https://www.ovdjejekosarkasve.com/api';
-console.log(import.meta.env);
-console.log(`ROOT: ${root}`);
 
 export const API_ROUTES = {
 	// auth

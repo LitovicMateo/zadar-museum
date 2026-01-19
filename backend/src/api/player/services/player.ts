@@ -3,17 +3,28 @@
  */
 
 import { factories } from "@strapi/strapi";
+import {
+  validateWhitelist,
+  validateSeason,
+  ALLOWED_DATABASES,
+} from "../../../validation";
 
 export default factories.createCoreService(
   "api::player.player",
   ({ strapi }) => ({
     async findPlayersBoxscore(playerId, season) {
+      // Validate inputs
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      const validatedSeason = validateSeason(season);
+
       const knex = strapi.db.connection;
 
       return await knex("player_boxscore")
         .select("*")
         .where("player_id", playerId)
-        .andWhere("season", season)
+        .andWhere("season", validatedSeason)
         .orderBy("game_date", "asc");
     },
 
@@ -32,7 +43,13 @@ export default factories.createCoreService(
     },
 
     async findPlayersAllTimeLeagueStats(playerId, db) {
-      const table = `${db}_player_league_record_full`;
+      // Validate inputs
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+
+      const table = `${validatedDb}_player_league_record_full`;
       const knex = strapi.db.connection;
       const data = await knex(table).select("*").where("player_id", playerId);
 
@@ -55,7 +72,13 @@ export default factories.createCoreService(
     },
 
     async findPlayersAllTimeStats(playerId, db) {
-      const table = `${db}_player_record_full`;
+      // Validate inputs
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+
+      const table = `${validatedDb}_player_record_full`;
 
       const knex = strapi.db.connection;
       const data = await knex(table).select("*").where("player_id", playerId);
@@ -79,9 +102,19 @@ export default factories.createCoreService(
     },
 
     async findPlayerSeasons(playerId, database) {
+      // Validate inputs
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      const validatedDatabase = validateWhitelist(
+        database,
+        ALLOWED_DATABASES,
+        "database",
+      );
+
       const knex = strapi.db.connection;
 
-      if (database === "zadar") {
+      if (validatedDatabase === "zadar") {
         return knex("player_boxscore")
           .distinct("season")
           .where("player_id", playerId)
@@ -95,12 +128,18 @@ export default factories.createCoreService(
     },
 
     async findPlayerSeasonCompetitions(playerId, season) {
+      // Validate inputs
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      const validatedSeason = validateSeason(season);
+
       const knex = strapi.db.connection;
       return knex("player_boxscore")
         .select("league_id", "league_name", "league_slug")
         .distinct("league_id")
         .where("player_id", playerId)
-        .andWhere("season", season);
+        .andWhere("season", validatedSeason);
     },
 
     async findPlayerTeams(playerId) {
@@ -112,7 +151,17 @@ export default factories.createCoreService(
     },
 
     async findCareerHighStats(playerId, database) {
-      const table = `${database}_player_career_high_aggregate`;
+      // Validate inputs
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      const validatedDatabase = validateWhitelist(
+        database,
+        ALLOWED_DATABASES,
+        "database",
+      );
+
+      const table = `${validatedDatabase}_player_career_high_aggregate`;
       const knex = strapi.db.connection;
       const data = await knex(table).select("*").where("player_id", playerId);
       const player = data[0];
@@ -142,21 +191,43 @@ export default factories.createCoreService(
     },
 
     async findSeasonAverageStats(playerId, season, database) {
+      // Validate inputs
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      const validatedSeason = validateSeason(season);
+      const validatedDatabase = validateWhitelist(
+        database,
+        ALLOWED_DATABASES,
+        "database",
+      );
+
       const knex = strapi.db.connection;
-      const table = `${database}_player_season_average_all_time`;
+      const table = `${validatedDatabase}_player_season_average_all_time`;
       return knex(table)
         .select("*")
         .where("player_id", playerId)
-        .andWhere("season", season);
+        .andWhere("season", validatedSeason);
     },
 
     async findSeasonAverageLeagueStats(playerId, season, database) {
+      // Validate inputs
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      const validatedSeason = validateSeason(season);
+      const validatedDatabase = validateWhitelist(
+        database,
+        ALLOWED_DATABASES,
+        "database",
+      );
+
       const knex = strapi.db.connection;
-      const table = `${database}_player_season_average_all_time_league`;
+      const table = `${validatedDatabase}_player_season_average_all_time_league`;
       return knex(table)
         .select("*")
         .where("player_id", playerId)
-        .andWhere("season", season);
+        .andWhere("season", validatedSeason);
     },
-  })
+  }),
 );

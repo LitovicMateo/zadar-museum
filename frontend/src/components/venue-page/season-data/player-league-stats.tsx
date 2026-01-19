@@ -16,8 +16,6 @@ const PlayerLeagueStats: React.FC<PlayerLeagueStatsProps> = ({ season }) => {
 
 	const { data: playerStats } = usePlayerLeagueStats(leagueSlug!, season!);
 
-	console.log('Player Stats', playerStats);
-
 	const { TableBody, TableHead } = usePlayerSeasonLeagueStatsTable(playerStats!);
 
 	if (playerStats === undefined || playerStats.length === 0) {

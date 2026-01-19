@@ -5,7 +5,7 @@ export default {
       path: "/refresh/views",
       handler: "refresh.refreshViews",
       config: {
-        auth: false,
+        policies: ["admin::isAuthenticatedAdmin"],
       },
     },
 
@@ -14,7 +14,7 @@ export default {
       path: "/refresh/schedule",
       handler: "refresh.refreshSchedule",
       config: {
-        auth: false,
+        policies: ["admin::isAuthenticatedAdmin"],
       },
     },
   ],

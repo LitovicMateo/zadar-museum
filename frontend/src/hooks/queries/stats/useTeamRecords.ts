@@ -1,8 +1,8 @@
 import { API_ROUTES } from '@/constants/routes';
+import { useQuery } from '@/hooks/use-query-with-toast';
+import apiClient from '@/lib/api-client';
 import { PlayerDB } from '@/pages/Player/Player';
 import { TeamRecord } from '@/types/api/team-stats';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useTeamRecords = (
 	database: PlayerDB,
@@ -13,7 +13,8 @@ export const useTeamRecords = (
 ) => {
 	return useQuery({
 		queryKey: ['team-records', database, season, league, location, sortKey],
-		queryFn: getTeamRecords.bind(null, database, season, league, location, sortKey)
+		queryFn: getTeamRecords.bind(null, database, season, league, location, sortKey),
+		errorMessage: 'Failed to load team records'
 	});
 };
 
@@ -31,7 +32,7 @@ const getTeamRecords = async (
 		location: location === 'all' ? '' : location,
 		sortKey
 	});
-	const res = await axios.get(API_ROUTES.stats.team.records(params.toString()));
+	const res = await apiClient.get(API_ROUTES.stats.team.records(params.toString()));
 
 	return res.data;
 };

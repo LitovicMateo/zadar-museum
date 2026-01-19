@@ -1,14 +1,15 @@
 import { API_ROUTES } from '@/constants/routes';
+import { useQuery } from '@/hooks/use-query-with-toast';
+import apiClient from '@/lib/api-client';
 import { RefereeDetailsResponse } from '@/types/api/referee';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type RefereeKey = keyof RefereeDetailsResponse;
 
 export const useReferees = (sortKey?: RefereeKey, direction: 'asc' | 'desc' = 'asc') => {
 	return useQuery({
 		queryKey: ['referees', sortKey, direction],
-		queryFn: getAllReferee.bind(null, sortKey, direction)
+		queryFn: getAllReferee.bind(null, sortKey, direction),
+		errorMessage: 'Failed to load referees'
 	});
 };
 
@@ -22,7 +23,7 @@ const getAllReferee = async (
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.referees(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.referees(params.toString()));
 
 	return res.data;
 };

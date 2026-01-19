@@ -1,13 +1,14 @@
 import { API_ROUTES } from '@/constants/routes';
+import { useQuery } from '@/hooks/use-query-with-toast';
+import apiClient from '@/lib/api-client';
 import { TeamStatsResponse } from '@/types/api/team';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useTeamLeagueStats = (teamId: string) => {
 	return useQuery({
 		queryKey: ['team-league-stats', 'league', teamId],
 		queryFn: getTeamLeagueStats.bind(null, teamId),
-		enabled: !!teamId
+		enabled: !!teamId,
+		errorMessage: 'Failed to load team league statistics'
 	});
 };
 

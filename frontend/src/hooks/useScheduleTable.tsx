@@ -9,8 +9,6 @@ export const useScheduleTable = (schedule: TeamScheduleResponse[] = []) => {
 			<div className="overflow-x-auto">
 				<div className="w-full bg-white divide-y divide-gray-200">
 					{schedule.map((g) => {
-						console.log(g);
-
 						const url = APP_ROUTES.game(g.game_document_id.toString());
 
 						const home = g.home_score;
