@@ -1,7 +1,7 @@
 export default ({ env }) => {
   const allowedOrigins = env(
     "CORS_ORIGINS",
-    "http://localhost:5174,http://localhost:5173,http://localhost:1337,https://ovdjejekosarkasve.com"
+    "http://localhost:5174,http://localhost:5173,http://localhost:1337,http://backend:1337,https://ovdjejekosarkasve.com",
   )
     .split(",")
     .map((s) => s.trim())
@@ -16,15 +16,10 @@ export default ({ env }) => {
       config: {
         origin: allowedOrigins,
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
-        headers: [
-          "Content-Type",
-          "Authorization",
-          "X-Requested-With",
-          "Accept",
-          "X-CSRF-Token",
-        ],
-        keepHeadersOnError: true,
+        headers: "*",
         credentials: env("CORS_CREDENTIALS", "true") === "true",
+        keepHeadersOnError: true,
+        exposedHeaders: ["Content-Range", "Content-Length", "Content-Type"],
       },
     },
     "strapi::poweredBy",

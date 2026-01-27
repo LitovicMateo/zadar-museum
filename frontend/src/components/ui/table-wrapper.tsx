@@ -2,8 +2,8 @@ import React from 'react';
 
 const TableWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	return (
-		<div className="overflow-x-auto pb-4 w-fit max-w-full rounded-md">
-			<table className="font-abel text-md">{children}</table>
+		<div className="overflow-x-auto w-fit max-w-full rounded-lg shadow-lg border border-gray-200 bg-white">
+			<table className="font-abel text-md w-full">{children}</table>
 		</div>
 	);
 };

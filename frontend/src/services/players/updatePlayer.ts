@@ -1,12 +1,12 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { PlayerFormData } from '@/schemas/player-schema';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
-import axios from 'axios';
 
 export const updatePlayer = async ({ id, ...data }: { id: string } & PlayerFormData) => {
 	const uploadedImageId = await uploadSingleImage(data.image);
 
-	const res = await axios.put(API_ROUTES.edit.player(id), {
+	const res = await apiClient.put(API_ROUTES.edit.player(id), {
 		data: {
 			first_name: data.first_name,
 			last_name: data.last_name,

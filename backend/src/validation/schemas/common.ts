@@ -53,16 +53,24 @@ export const entitySchema = z.enum(
  */
 export const seasonSchema = z
   .string()
-  .regex(/^\d{4}$/, "Season must be in YYYY format (e.g., 2023)")
+  .transform((val) => (val === "" ? undefined : val))
+  .optional()
+  .nullable()
   .refine(
     (val) => {
+      if (!val) return true; // Allow null/undefined/empty
+      return /^\d{4}$/.test(val);
+    },
+    { message: "Season must be in YYYY format (e.g., 2023)" },
+  )
+  .refine(
+    (val) => {
+      if (!val) return true; // Allow null/undefined/empty
       const year = parseInt(val, 10);
       return year >= 1900 && year <= 2100;
     },
     { message: "Season year must be between 1900 and 2100" },
-  )
-  .optional()
-  .nullable();
+  );
 
 /**
  * League slug validation (lowercase alphanumeric with hyphens, max 50 chars) - optional
@@ -90,11 +98,9 @@ export const slugSchema = z
 
 /**
  * Positive integer ID (player, coach, referee, etc.)
+ * Updated to support Strapi's documentId (string format)
  */
-export const numericIdSchema = z.coerce
-  .number()
-  .int("ID must be an integer")
-  .positive("ID must be positive");
+export const numericIdSchema = z.string().min(1, "ID is required");
 
 /**
  * Game ID (positive integer)

@@ -1,0 +1,85 @@
+version: "3.8"
+
+name: zadar-development
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    image: zadar-museum-backend:dev
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
+      DATABASE_NAME: ${DATABASE_NAME:-${POSTGRES_DB}}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-${POSTGRES_USER}}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-${POSTGRES_PASSWORD}}
+      NODE_ENV: production
+      PORT: 1337
+      # Strapi secrets (supply via .env.dev passed with --env-file)
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      API_TOKEN_SALT: ${API_TOKEN_SALT}
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+      APP_KEYS: ${APP_KEYS}
+    volumes:
+      - strapi_uploads:/app/public/uploads
+    ports:
+      - "1337:1337"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+      args:
+        VITE_API_ROOT: ${VITE_API_ROOT}
+    image: zadar-museum-frontend:dev
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          initial_sync: true
+          ignore:
+            - node_modules
+            - dist
+
+    volumes:
+      - ./frontend:/app:cached
+      - frontend_node_modules:/app/node_modules
+    environment:
+      - VITE_API_ROOT=${VITE_API_ROOT}
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run dev -- --host 0.0.0.0 --port 5173
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_dev_data:
+  strapi_uploads:
+  frontend_node_modules:

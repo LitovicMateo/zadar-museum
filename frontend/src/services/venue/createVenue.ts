@@ -1,11 +1,11 @@
 import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { VenueFormData } from '@/types/api/venue';
-import axios from 'axios';
 
 export const createVenue = async (data: VenueFormData) => {
-	return axios.post(API_ROUTES.create.venue(), {
+	return apiClient.post(API_ROUTES.create.venue(), {
 		data: {
 			name: data.name,
 			city: data.city,

@@ -13,7 +13,7 @@ export const useTeamLeagueStats = (teamId: string) => {
 };
 
 const getTeamLeagueStats = async (teamId: string): Promise<TeamStatsResponse[]> => {
-	const data = await axios.get(API_ROUTES.team.stats.leagueStats(teamId));
+	const data = await apiClient.get(API_ROUTES.team.stats.leagueStats(teamId));
 
 	return data.data;
 };

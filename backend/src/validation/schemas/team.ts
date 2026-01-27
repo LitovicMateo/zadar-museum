@@ -9,6 +9,7 @@ import {
   teamNameSchema,
   statKeySchema,
   teamIdSchema,
+  entitySchema,
 } from "./common";
 
 /**
@@ -74,11 +75,11 @@ export const teamCareerHighParamsSchema = z.object({
 
 /**
  * GET /api/team/leaders
- * Query params: team, db, statKey, competitionSlug?
+ * Query params: team (slug), db (player|coach), statKey, competitionSlug?
  */
 export const teamLeadersQuerySchema = z.object({
-  team: teamIdSchema,
-  db: databaseSchema,
+  team: slugSchema,
+  db: entitySchema,
   statKey: statKeySchema,
   competitionSlug: slugSchema.optional().nullable(),
 });

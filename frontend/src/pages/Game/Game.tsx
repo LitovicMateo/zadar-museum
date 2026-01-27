@@ -18,7 +18,7 @@ const Game = () => {
 	}
 
 	return (
-		<section className="w-full flex flex-col gap-6 justify-start overflow-y-auto">
+		<section className="w-full flex flex-col gap-6 justify-start overflow-y-auto pt-6">
 			<GameHeader />
 			<GameContent />
 		</section>

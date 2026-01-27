@@ -156,7 +156,7 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 		return (
 			<thead>
 				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b border-slate-400">
+					<tr key={headerGroup.id} className="border-b-2 border-blue-500">
 						{headerGroup.headers.map((header, index) => {
 							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10' : '';
 
@@ -169,7 +169,7 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) =>
 								<th
 									key={header.id}
 									colSpan={header.colSpan}
-									className={`px-4 py-2 text-center whitespace-nowrap ${sticky} bg-slate-50 ${
+									className={`px-4 py-2 text-center whitespace-nowrap ${sticky} bg-slate-100 hover:bg-blue-50 transition-colors duration-200 ${
 										header.column.getCanSort() ? 'select-none cursor-pointer' : ''
 									} ${isLastInGroup ? 'border-r border-slate-400' : ''}`}
 									onClick={header.column.getToggleSortingHandler()}

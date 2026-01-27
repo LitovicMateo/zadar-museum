@@ -6,11 +6,19 @@ import { numericIdSchema, seasonSchema, databaseSchema } from "./common";
 
 /**
  * GET /api/player/boxscore
- * Query params: playerId, season
+ * Query params: playerId, season (optional)
  */
 export const playersBoxscoreQuerySchema = z.object({
   playerId: numericIdSchema,
-  season: seasonSchema,
+  season: seasonSchema.optional(),
+});
+
+/**
+ * GET /api/players/stats/:db/all-time
+ * Query params: playerId
+ */
+export const playerAllTimeStatsQuerySchema = z.object({
+  playerId: numericIdSchema,
 });
 
 /**

@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { validate } from "../../../middlewares/validation";
 import {
   playersBoxscoreQuerySchema,
@@ -8,6 +9,7 @@ import {
   playerIdParamsSchema,
   playerCareerHighParamsSchema,
   playerSeasonAverageParamsSchema,
+  playerAllTimeStatsQuerySchema,
 } from "../../../validation/schemas/player";
 import { databaseSchema } from "../../../validation/schemas/common";
 
@@ -28,7 +30,12 @@ export default {
       handler: "player.findPlayersAllTimeStats",
       config: {
         auth: false,
-        middlewares: [validate({ params: playerStatsParamsSchema })],
+        middlewares: [
+          validate({
+            params: z.object({ db: databaseSchema }),
+            query: playerAllTimeStatsQuerySchema,
+          }),
+        ],
       },
     },
     {
@@ -37,7 +44,12 @@ export default {
       handler: "player.findPlayersAllTimeLeagueStats",
       config: {
         auth: false,
-        middlewares: [validate({ params: playerStatsParamsSchema })],
+        middlewares: [
+          validate({
+            params: z.object({ db: databaseSchema }),
+            query: playerAllTimeStatsQuerySchema,
+          }),
+        ],
       },
     },
     {

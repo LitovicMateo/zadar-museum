@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { TableSkeleton } from '@/components/ui/skeletons';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { useAllTimeLeagueStats } from '@/hooks/queries/player/useAllTimeLeagueStats';
@@ -37,9 +38,7 @@ const MainTable: React.FC<MainTableProps> = ({ view }) => {
 	if (isLoadingAverage || isLoadingTotal) {
 		return (
 			<div className={wrapperClass}>
-				<div className="p-2">
-					<p>Loading...</p>
-				</div>
+				<TableSkeleton rows={5} columns={8} />
 			</div>
 		);
 	}

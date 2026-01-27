@@ -146,13 +146,23 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
 
     // Validate statKey to prevent SQL injection
     const allowedStatKeys = [
+      // Player stats
       "points",
       "assists",
       "rebounds",
+      "steals",
+      "blocks",
+      "three_pointers_made",
+      "free_throws_made",
+      "minutes",
+      // Coach stats
       "games",
       "wins",
       "losses",
-      "minutes",
+      "win_percentage",
+      "points_scored",
+      "points_received",
+      "points_difference",
     ];
     if (statKey && !allowedStatKeys.includes(statKey)) {
       throw new Error(`Invalid statKey: "${statKey}"`);
