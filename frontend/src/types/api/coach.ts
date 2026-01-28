@@ -5,7 +5,7 @@ export type CoachFormData = {
 	last_name: string;
 	date_of_birth: Date | null;
 	image: File | null;
-	nationality: string;
+	nationality?: string | null;
 };
 
 export interface CoachDetailsResponse {
@@ -14,7 +14,7 @@ export interface CoachDetailsResponse {
 	last_name: string;
 	date_of_birth?: string | null;
 	image: StrapiImage;
-	nationality: string;
+	nationality?: string | null;
 	createdAt: string;
 	documentId: string;
 }

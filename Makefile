@@ -3,7 +3,7 @@ SHELL := /bin/bash
 
 # Project root and compose detection
 PROJECT_ROOT := $(CURDIR)
-COMPOSE_CMD := $(shell command -v docker-compose >/dev/null 2>&1 && echo docker-compose || echo docker compose)
+COMPOSE_CMD := docker-compose
 
 DEV_COMPOSE := docker-compose.dev.yml
 DEV_ENV := .env.dev
@@ -20,7 +20,7 @@ help:
 	@echo "Targets: dev dev-stop dev-mv staging staging-stop prod prod-stop backup-dev backup-staging backup-prod load-*-backup import-*-backup apply-mvs apply-mvs-staging apply-mvs-prod"
 
 dev:
-	$(COMPOSE_CMD) -f $(DEV_COMPOSE) --env-file $(DEV_ENV) up --build -d
+	docker-compose -f docker-compose.dev.yml --env-file .env.dev up --build -d
 
 dev-stop:
 	$(COMPOSE_CMD) -f $(DEV_COMPOSE) --env-file $(DEV_ENV) down

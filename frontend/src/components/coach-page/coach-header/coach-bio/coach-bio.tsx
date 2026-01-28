@@ -30,7 +30,11 @@ const CoachBio: React.FC<CoachBio> = ({ coach }) => {
 				<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
 					Nationality:
 					<div className="h-4 aspect-video rounded-xs overflow-hidden">
-						<Flag className="object-cover object- h-full" code={coach.nationality} />
+						{coach.nationality ? (
+							<Flag className="object-cover object- h-full" code={coach.nationality} />
+						) : (
+							<span className="text-gray-300">-</span>
+						)}
 					</div>
 				</label>
 				{date && (

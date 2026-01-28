@@ -30,13 +30,21 @@ const PlayerBio: React.FC<PlayerBio> = ({ player }) => {
 				<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
 					Nationality:
 					<div className="h-[16px]  aspect-video rounded-xs overflow-hidden">
-						<Flag className="object-cover object- h-full" code={player.nationality} />
+						{player.nationality ? (
+							<Flag className="object-cover object- h-full" code={player.nationality} />
+						) : (
+							<span className="text-gray-300">-</span>
+						)}
 					</div>
 				</label>
 				<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
 					Position:
 					<span className="uppercase">
-						{player.primary_position} {player.secondary_position && `/ ${player.secondary_position}`}
+						{player.primary_position ? (
+							<>{player.primary_position}{player.secondary_position ? ` / ${player.secondary_position}` : ''}</>
+						) : (
+							<span className="text-gray-300">-</span>
+						)}
 					</span>
 				</label>
 				{player.height && (

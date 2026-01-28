@@ -30,7 +30,9 @@
       "type": "date"
     },
     "nationality": {
-      "type": "string"
+      "type": "string",
+      "required": false,
+      "default": null
     }
   }
 }

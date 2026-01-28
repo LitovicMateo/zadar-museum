@@ -3,12 +3,12 @@ import { StrapiImage } from './strapi';
 export type PlayerFormData = {
 	first_name: string;
 	last_name: string;
-	nationality: string;
+	nationality?: string | null;
 	height?: string;
 	date_of_birth?: string;
 	date_of_death?: string;
 	isActivePlayer: boolean;
-	primary_position: string;
+	primary_position?: string | null;
 	secondary_position?: string | null;
 	image: File | null;
 };
@@ -22,8 +22,8 @@ export type PlayerResponse = {
 	date_of_death: string; // ISO 8601 date
 	isActivePlayer: boolean;
 	primary_position: string; // e.g. "pg"
-	secondary_position: string; // e.g. "sg"
-	nationality: string; // ISO country code like "ME"
+	secondary_position: string | null; // e.g. "sg"
+	nationality?: string | null; // ISO country code like "ME"
 	height?: string; // three-digit string (e.g. "185")
 	createdAt: string;
 	updatedAt: string;

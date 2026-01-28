@@ -27,7 +27,7 @@ export const createPlayer = async (data: PlayerFormData) => {
 		secondary_position: data.secondary_position || null,
 		height: data.height || null,
 		image: uploadedImageId,
-		nationality: data.nationality
+		nationality: data.nationality ?? null
 	};
 
 	return apiClient.post(API_ROUTES.create.player(), {

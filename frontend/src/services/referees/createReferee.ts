@@ -7,7 +7,7 @@ export const createReferee = async (data: RefereeFormData) => {
 		data: {
 			first_name: data.first_name,
 			last_name: data.last_name,
-			nationality: data.nationality
+			nationality: data.nationality ?? null
 		}
 	});
 };
