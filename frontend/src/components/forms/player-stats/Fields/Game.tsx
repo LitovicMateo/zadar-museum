@@ -14,7 +14,10 @@ const Game: React.FC = () => {
 
 	const { data: games } = useCompetitionGames(season, league?.toString() || '');
 
-	const gameOptions = games?.map((g) => ({
+	// Sort games by date ascending (earliest first) and map to select options
+	const sortedGames = games ? [...games].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : [];
+
+	const gameOptions = sortedGames.map((g) => ({
 		value: g.id.toString(),
 		label: `R${g.round}: ${g.home_team_name} vs ${g.away_team_name}`
 	}));
