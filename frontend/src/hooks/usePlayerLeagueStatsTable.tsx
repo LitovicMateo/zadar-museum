@@ -19,9 +19,21 @@ export const usePlayerLeagueStatsTable = (rows: GameStatsEntry[] | undefined) =>
 			},
 			{ header: 'GP', accessorKey: 'games' },
 			{ header: 'GS', accessorKey: 'games_started' },
+			{
+				header: 'MIN',
+				accessorKey: 'minutes',
+				cell: (info) => {
+					const val = info.getValue();
+					if (val === null || val === undefined || val === '') return '-';
+					const n = Number(val);
+					return Number.isNaN(n) ? '-' : n.toFixed(1);
+				}
+			},
 			{ header: 'PTS', accessorKey: 'points' },
-			{ header: 'AST', accessorKey: 'assists' },
+			{ header: 'OR', accessorKey: 'off_rebounds' },
+			{ header: 'DR', accessorKey: 'def_rebounds' },
 			{ header: 'REB', accessorKey: 'rebounds' },
+			{ header: 'AST', accessorKey: 'assists' },
 			{ header: 'STL', accessorKey: 'steals' },
 			{ header: 'BLK', accessorKey: 'blocks' },
 			{ header: 'FGM', accessorKey: 'field_goals_made' },
