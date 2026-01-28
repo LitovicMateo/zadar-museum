@@ -120,7 +120,7 @@ export default ({ strapi }) => ({
   async findTeamsGameStats(game) {
     // Parameters already validated by middleware
     const data = await strapi.entityService.findMany(
-      "api::team-stat.team-stat",
+      "api::team-stats.team-stat",
       {
         filters: {
           game: { id: { $eq: game } },
@@ -132,6 +132,8 @@ export default ({ strapi }) => ({
             },
           },
           team: true,
+          coach: true,
+          assistantCoach: true,
         },
       },
     );
