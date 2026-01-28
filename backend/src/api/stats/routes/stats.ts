@@ -1,3 +1,15 @@
+import { validate } from "../../../middlewares/validation";
+import {
+  playersAllTimeStatsQuerySchema,
+  playersGameStatsQuerySchema,
+  playersRecordsQuerySchema,
+  teamsAllTimeStatsQuerySchema,
+  teamsGameStatsQuerySchema,
+  teamRecordsQuerySchema,
+  coachesAllTimeStatsQuerySchema,
+  refereesAllTimeStatsQuerySchema,
+} from "../../../validation/schemas/stats";
+
 export default {
   routes: [
     {
@@ -6,6 +18,7 @@ export default {
       handler: "stats.getPlayersAllTimeStats",
       config: {
         auth: false,
+        middlewares: [validate({ query: playersAllTimeStatsQuerySchema })],
       },
     },
     {
@@ -14,6 +27,7 @@ export default {
       handler: "stats.getPlayersGameStats",
       config: {
         auth: false,
+        middlewares: [validate({ query: playersGameStatsQuerySchema })],
       },
     },
     {
@@ -22,6 +36,7 @@ export default {
       handler: "stats.getPlayersRecords",
       config: {
         auth: false,
+        middlewares: [validate({ query: playersRecordsQuerySchema })],
       },
     },
     {
@@ -30,6 +45,7 @@ export default {
       handler: "stats.getTeamsAllTimeStats",
       config: {
         auth: false,
+        middlewares: [validate({ query: teamsAllTimeStatsQuerySchema })],
       },
     },
     {
@@ -38,6 +54,7 @@ export default {
       handler: "stats.getTeamsGameStats",
       config: {
         auth: false,
+        middlewares: [validate({ query: teamsGameStatsQuerySchema })],
       },
     },
     {
@@ -46,6 +63,7 @@ export default {
       handler: "stats.getTeamRecords",
       config: {
         auth: false,
+        middlewares: [validate({ query: teamRecordsQuerySchema })],
       },
     },
     {
@@ -54,6 +72,7 @@ export default {
       handler: "stats.getCoachesAllTimeStats",
       config: {
         auth: false,
+        middlewares: [validate({ query: coachesAllTimeStatsQuerySchema })],
       },
     },
     {
@@ -62,6 +81,7 @@ export default {
       handler: "stats.getRefereesAllTimeStats",
       config: {
         auth: false,
+        middlewares: [validate({ query: refereesAllTimeStatsQuerySchema })],
       },
     },
   ],

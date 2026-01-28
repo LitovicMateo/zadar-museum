@@ -4,16 +4,13 @@
 
 export default ({ strapi }) => ({
   async findPlayersAllTimeStats(stats, location, league, season, database) {
+    // Parameters already validated by middleware
     const statsString = "_" + stats;
     const locationString = location ? "_" + location : "";
     const leagueString = league ? "_league" : "";
     const seasonString = season ? "_season" : "";
 
     const table = `${database}_player${seasonString}${statsString}_all_time${leagueString}${locationString}`;
-
-    strapi.log.info(`TABLE: ${table}`);
-    strapi.log.info(`LEAGUE: ${league}`);
-    strapi.log.info(`SEASON PARAM: ${season}, Type: ${typeof season}`);
 
     const knex = strapi.db.connection;
     const query = knex(table).select("*").orderBy("points", "desc");
@@ -27,20 +24,12 @@ export default ({ strapi }) => ({
     }
 
     if (season) {
-      strapi.log.info(`Adding WHERE season = ${season}`);
       query.where("season", season);
       prevQuery.where("season", season);
     }
 
-    const querySQL = query.toSQL();
-    strapi.log.info(`Query SQL: ${JSON.stringify(querySQL)}`);
-
     const data = await query;
     const prevData = await prevQuery;
-
-    strapi.log.info(
-      `Data count: ${data.length}, Prev data count: ${prevData.length}`
-    );
 
     return {
       current: data,
@@ -49,10 +38,7 @@ export default ({ strapi }) => ({
   },
 
   async findPlayersGameStats(game, team) {
-    if (!game || !team) {
-      throw new Error("Game ID and Player ID are required");
-    }
-
+    // Parameters already validated by middleware
     const data = await strapi.entityService.findMany(
       "api::player-stats.player-stat",
       {
@@ -69,13 +55,14 @@ export default ({ strapi }) => ({
           player: true,
           team: true,
         },
-      }
+      },
     );
 
     return data;
   },
 
   async findPlayersRecords(database, location, league, season, sortKey) {
+    // Parameters already validated by middleware
     const locationString = location ? "_" + location : "";
     const leagueString = league ? "_league" : "";
     const seasonString = season ? "_season" : "";
@@ -83,7 +70,9 @@ export default ({ strapi }) => ({
     const table = `${database}_player${seasonString}${leagueString}_record${locationString}`;
 
     const knex = strapi.db.connection;
-    const query = knex(table).select("*").orderBy(sortKey, "desc");
+    const query = knex(table)
+      .select("*")
+      .orderBy(sortKey || "points", "desc");
 
     if (league) {
       query.where("league_slug", league);
@@ -101,7 +90,9 @@ export default ({ strapi }) => ({
 
     return data;
   },
+
   async findTeamsAllTimeStats(location, league, season) {
+    // Parameters already validated by middleware
     const locationString = location ? "_" + location : "";
     const leagueString = league ? "_league" : "";
     const seasonString = season ? "_season" : "";
@@ -126,31 +117,30 @@ export default ({ strapi }) => ({
     return data;
   },
 
-  async findTeamsGameStats(game, team) {
+  async findTeamsGameStats(game) {
+    // Parameters already validated by middleware
     const data = await strapi.entityService.findMany(
-      "api::team-stats.team-stat",
+      "api::team-stat.team-stat",
       {
         filters: {
-          game: game,
-          team: team,
+          game: { id: { $eq: game } },
         },
         populate: {
           game: {
             populate: {
-              competition: true, // 👈 this tells Strapi to go one level deeper
+              competition: true,
             },
           },
           team: true,
-          coach: true,
-          assistantCoach: true,
         },
-      }
+      },
     );
 
     return data;
   },
 
   async findTeamRecords(database, season, league, location, sortKey) {
+    // Parameters already validated by middleware
     const locationString = location ? "_" + location : "";
     const leagueString = league ? "_league" : "";
     const seasonString = season ? "_season" : "";
@@ -158,7 +148,9 @@ export default ({ strapi }) => ({
     const table = `${database}_team${seasonString}${leagueString}_record${locationString}`;
 
     const knex = strapi.db.connection;
-    const query = knex(table).select("*").orderBy(sortKey, "desc");
+    const query = knex(table)
+      .select("*")
+      .orderBy(sortKey || "games", "desc");
 
     if (league) {
       query.where("league_slug", league);
@@ -170,14 +162,11 @@ export default ({ strapi }) => ({
 
     const data = await query;
 
-    if (!data) {
-      return [];
-    }
-
     return data;
   },
 
   async findCoachesAllTimeStats(database, role, location, league, season) {
+    // Parameters already validated by middleware
     const roleString = role ? "_" + role : "";
     const locationString = location ? "_" + location : "";
     const leagueString = league ? "_league" : "";
@@ -202,7 +191,6 @@ export default ({ strapi }) => ({
     }
 
     const data = await query;
-
     const prevData = await prevQuery;
 
     return {
@@ -212,6 +200,7 @@ export default ({ strapi }) => ({
   },
 
   async findRefereesAllTimeStats(location, league, season) {
+    // Parameters already validated by middleware
     const locationString = location ? "_" + location : "";
     const leagueString = league ? "_league" : "";
     const seasonString = season ? "_season" : "";

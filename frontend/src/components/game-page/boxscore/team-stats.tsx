@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import Heading from '@/components/ui/heading';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useGameDetails } from '@/hooks/queries/game/useGameDetails';
 import { useGameTeamStats } from '@/hooks/queries/game/useGameTeamStats';
@@ -37,13 +36,10 @@ const TeamStats: React.FC = () => {
 	const { TableBody, TableHead } = useTeamStatsTable(ordered);
 
 	return (
-		<div className="flex flex-col gap-2">
-			<Heading title="Team Stats" />
-			<TableWrapper>
-				<TableHead />
-				<TableBody />
-			</TableWrapper>
-		</div>
+		<TableWrapper>
+			<TableHead />
+			<TableBody />
+		</TableWrapper>
 	);
 };
 

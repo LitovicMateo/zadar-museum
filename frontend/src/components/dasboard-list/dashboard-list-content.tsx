@@ -36,17 +36,19 @@ const DashboardListContent: React.FC<DashboardListContentProps> = ({
 
 	return (
 		<div className="w-full">
-			<div className="overflow-hidden rounded-md">
+			<div className="overflow-hidden rounded-lg">
 				<table className="w-full table-fixed">
-					<thead>
-						<tr>
-							<th className="px-4 py-2 text-left text-xs text-gray-500 uppercase font-medium">
+					<thead className="bg-slate-100">
+						<tr className="border-b-2 border-blue-500">
+							<th className="px-4 py-3 text-left text-xs text-gray-600 uppercase font-semibold tracking-wide">
 								{header}
 							</th>
-							<th className="px-4 py-2 text-right text-xs text-gray-500 uppercase font-medium">Date</th>
+							<th className="px-4 py-3 text-right text-xs text-gray-600 uppercase font-semibold tracking-wide">
+								Date
+							</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody className="divide-y divide-gray-100">
 						{items.map((it) => (
 							<DashboardListItem key={it.id} item={it} />
 						))}

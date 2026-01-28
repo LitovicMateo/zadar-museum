@@ -1,15 +1,15 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { GameFormData } from '@/schemas/game-schema';
 import { PlayerStatsResponse } from '@/types/api/player-stats';
 import { TeamStatsResponse } from '@/types/api/team-stats';
 import { uploadGallery } from '@/utils/uploadGallery';
-import axios from 'axios';
 
 export const updateGame = async ({ id, ...data }: { id: string } & GameFormData) => {
 	// fetch existing game to compare which fields actually changed
 	let existing: any;
 	try {
-		const existingRes = await axios.get(API_ROUTES.game.details(id));
+		const existingRes = await apiClient.get(API_ROUTES.game.details(id));
 		existing = existingRes.data as any;
 	} catch (err: any) {
 		const msg = `Failed to fetch existing game ${id}: ${err?.message || err}`;
@@ -90,7 +90,7 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 
 	const galleryIds = await uploadGallery(data.gallery);
 
-	await axios.put(API_ROUTES.edit.game(id), {
+	await apiClient.put(API_ROUTES.edit.game(id), {
 		data: {
 			season: data.season,
 			round: data.round,
@@ -126,18 +126,18 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 	const playerParams = new URLSearchParams();
 	playerParams.append('filters[game][documentId][$eq]', id);
 
-	const teamStatsRes = await axios.get(API_ROUTES.create.teamStats(teamParams.toString()));
-	const playerStatsRes = await axios.get(API_ROUTES.create.playerStats(playerParams.toString()));
+	const teamStatsRes = await apiClient.get(API_ROUTES.create.teamStats(teamParams.toString()));
+	const playerStatsRes = await apiClient.get(API_ROUTES.create.playerStats(playerParams.toString()));
 
 	const teamStatsArr = teamStatsRes.data.data;
 	const playerStatsArr = playerStatsRes.data.data;
 
 	const deletePromises = teamStatsArr.map((teamStat: TeamStatsResponse) =>
-		axios.delete(API_ROUTES.edit.teamStats(teamStat.documentId))
+		apiClient.delete(API_ROUTES.edit.teamStats(teamStat.documentId))
 	);
 
 	const deletePlayerStatsPromises = playerStatsArr.map((playerStat: PlayerStatsResponse) =>
-		axios.delete(API_ROUTES.edit.playerStats(playerStat.documentId))
+		apiClient.delete(API_ROUTES.edit.playerStats(playerStat.documentId))
 	);
 
 	await Promise.all(deletePromises);

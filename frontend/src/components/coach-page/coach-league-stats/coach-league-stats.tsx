@@ -45,7 +45,7 @@ const CoachLeagueStats: React.FC = () => {
 	return (
 		<section className="flex flex-col gap-4">
 			<Heading title="All Time Record" />
-			<div className="flex flex-row gap-8 font-abel">
+			<div className="flex flex-col md:flex-row gap-4 md:gap-8 font-abel">
 				<CoachRoleFilter coachRole={coachRole} setCoachRole={setCoachRole} />
 				<LocationFilter location={location} setLocation={setLocation} />
 			</div>

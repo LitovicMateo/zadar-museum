@@ -1,13 +1,14 @@
 import { API_ROUTES } from '@/constants/routes';
+import { useQuery } from '@/hooks/use-query-with-toast';
+import apiClient from '@/lib/api-client';
 import { TeamStatsResponse } from '@/types/api/team-stats';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useSingleTeamStats = (game: string, team: string) => {
 	return useQuery({
 		queryKey: ['team-stats', game, team],
 		queryFn: getSingleTeamStats.bind(null, game, team),
-		enabled: !!game && !!team
+		enabled: !!game && !!team,
+		errorMessage: 'Failed to load team statistics'
 	});
 };
 
@@ -16,7 +17,7 @@ const getSingleTeamStats = async (game: string, team: string): Promise<TeamStats
 		game,
 		team
 	});
-	const res = await axios.get(API_ROUTES.stats.team.game(params.toString()));
+	const res = await apiClient.get(API_ROUTES.stats.team.game(params.toString()));
 
 	return res.data[0];
 };

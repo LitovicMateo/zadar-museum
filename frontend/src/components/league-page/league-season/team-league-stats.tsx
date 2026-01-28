@@ -16,8 +16,6 @@ const TeamLeagueStats: React.FC<TeamLeagueStatsProps> = ({ season }) => {
 
 	const { data: teamStats } = useTeamLeagueSeasonStats(leagueSlug!, season!);
 
-	console.log(teamStats);
-
 	const stats = useMemo(() => {
 		if (!teamStats || teamStats.length === 0) return [];
 		const home = teamStats[0].stats.home;

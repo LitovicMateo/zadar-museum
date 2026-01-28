@@ -20,19 +20,19 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({ item }) => {
 	}, []);
 
 	return (
-		<tr className="border-b hover:bg-gray-50 cursor-pointer">
-			<td className="py-2 px-4 align-middle">
+		<tr className="hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
+			<td className="py-3 px-4 align-middle">
 				<div
 					ref={contentRef}
 					title={tooltip}
-					className="text-sm font-medium text-gray-900 truncate"
+					className="text-sm font-semibold text-gray-900 truncate hover:text-blue-600 transition-colors duration-200"
 					style={{ maxWidth: 'min(46ch, 100%)' }}
 				>
 					{item.item}
 				</div>
 			</td>
-			<td className="py-2 px-4 text-right align-middle w-28">
-				<div className="text-xs text-gray-400 uppercase font-mono">{date}</div>
+			<td className="py-3 px-4 text-right align-middle w-28">
+				<div className="text-xs text-gray-500 font-medium">{date}</div>
 			</td>
 		</tr>
 	);

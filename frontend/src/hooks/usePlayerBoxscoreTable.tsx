@@ -300,20 +300,20 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 
 	const TableHead: React.FC = () => {
 		return (
-			<thead className="bg-gray-50 sticky top-0 z-10 text-xs uppercase">
+			<thead className="bg-slate-100 sticky top-0 z-10 text-xs uppercase">
 				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b">
+					<tr key={headerGroup.id} className="border-b-2 border-blue-500">
 						{headerGroup.headers.map((header, idx) => {
 							// Decide sticky classes based on index
 							let stickyClass = '';
-							if (idx === 0) stickyClass = 'sticky left-0 z-10 bg-gray-50 w-[60px]';
-							if (idx === 1) stickyClass = 'sticky left-[40px] z-10 bg-gray-50 w-[200px]';
+							if (idx === 0) stickyClass = 'sticky left-0 z-10 bg-slate-100 w-[60px]';
+							if (idx === 1) stickyClass = 'sticky left-[40px] z-10 bg-slate-100 w-[200px]';
 
 							return (
 								<th
 									key={header.id}
 									colSpan={header.colSpan}
-									className={`px-3 py-2 text-center whitespace-nowrap font-semibold select-none cursor-pointer ${stickyClass}`}
+									className={`px-3 py-2 text-center whitespace-nowrap font-semibold select-none cursor-pointer hover:bg-blue-50 transition-colors duration-200 ${stickyClass}`}
 									onClick={header.column.getToggleSortingHandler()}
 								>
 									{header.isPlaceholder

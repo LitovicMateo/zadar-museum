@@ -78,17 +78,17 @@ export const useTeamLeagueStatsTable = (data: TeamStats[] | undefined) => {
 		return (
 			<thead>
 				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b border-slate-400">
+					<tr key={headerGroup.id} className="border-b-2 border-blue-500">
 						{headerGroup.headers.map((header, index) => {
 							const sticky =
-								index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-slate-50' : '';
+								index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-slate-100' : '';
 
 							return (
 								<th
 									key={header.id}
 									colSpan={header.colSpan}
 									onClick={header.column.getToggleSortingHandler()}
-									className={`px-4 py-2 whitespace-nowrap text-center bg-slate-50 ${sticky} cursor-pointer ${header.column.getCanSort() ? 'select-none' : ''}`}
+									className={`px-4 py-3 whitespace-nowrap text-center font-semibold text-gray-700 bg-slate-100 ${sticky} ${header.column.getCanSort() ? 'cursor-pointer hover:bg-slate-200 transition-colors select-none' : ''}`}
 								>
 									{flexRender(header.column.columnDef.header, header.getContext())}
 								</th>
@@ -104,9 +104,12 @@ export const useTeamLeagueStatsTable = (data: TeamStats[] | undefined) => {
 		return (
 			<tbody>
 				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
+					<tr key={row.id} className="hover:bg-blue-50 transition-colors group">
 						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-white' : '';
+							const sticky =
+								index === 0
+									? 'text-left whitespace-nowrap sticky left-0 z-10 bg-white group-hover:bg-blue-50'
+									: '';
 
 							return (
 								<TableCell key={cell.id} sticky={sticky}>
@@ -124,14 +127,15 @@ export const useTeamLeagueStatsTable = (data: TeamStats[] | undefined) => {
 		return (
 			<tfoot>
 				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
+					<tr key={row.id} className="bg-slate-100">
 						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 ' : '';
+							const sticky =
+								index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-slate-100' : '';
 
 							return (
 								<td
 									key={cell.id}
-									className={`px-4 py-2 border-t border-slate-400 font-semibold text-center ${sticky} bg-slate-50`}
+									className={`px-4 py-3 border-t-2 border-blue-500 font-bold text-center text-gray-800 ${sticky}`}
 								>
 									{flexRender(cell.column.columnDef.cell, cell.getContext())}
 								</td>

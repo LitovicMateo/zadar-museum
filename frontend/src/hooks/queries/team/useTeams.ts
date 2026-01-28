@@ -1,14 +1,15 @@
 import { API_ROUTES } from '@/constants/routes';
+import { useQuery } from '@/hooks/use-query-with-toast';
+import apiClient from '@/lib/api-client';
 import { TeamDetailsResponse } from '@/types/api/team';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type TeamKey = keyof TeamDetailsResponse;
 
 export const useTeams = (sortKey?: TeamKey, direction: 'asc' | 'desc' = 'asc') => {
 	return useQuery({
 		queryKey: ['teams', sortKey, direction],
-		queryFn: getAllTeams.bind(null, sortKey, direction)
+		queryFn: getAllTeams.bind(null, sortKey, direction),
+		errorMessage: 'Failed to load teams'
 	});
 };
 
@@ -19,7 +20,7 @@ const getAllTeams = async (sortKey?: TeamKey, direction: 'asc' | 'desc' = 'asc')
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.teams(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.teams(params.toString()));
 
 	return res.data;
 };

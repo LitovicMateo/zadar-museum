@@ -7,8 +7,10 @@ type SidebarGroupProps = {
 
 const SidebarGroup: React.FC<SidebarGroupProps> = ({ label, children }) => {
 	return (
-		<div id="group" className="px-2 py-1">
-			{label && <div className="text-xs text-gray-400 uppercase mb-2">{label}</div>}
+		<div id="group" className="">
+			{label && (
+				<div className="text-xs font-semibold text-gray-500 uppercase mb-3 px-2 tracking-wider">{label}</div>
+			)}
 			<div className="space-y-1">{children}</div>
 		</div>
 	);

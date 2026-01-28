@@ -1,13 +1,14 @@
 import { API_ROUTES } from '@/constants/routes';
+import { useQuery } from '@/hooks/use-query-with-toast';
+import apiClient from '@/lib/api-client';
 import { RefereSeasonStatsResponse } from '@/types/api/referee';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useRefereeSeasonLeagueStats = (refereeId: string | undefined, season: string) => {
 	return useQuery({
 		queryKey: ['seasonLeagueStats', refereeId, season],
 		queryFn: getRefereeSeasonLeagueStats.bind(null, refereeId, season),
-		enabled: !!refereeId
+		enabled: !!refereeId,
+		errorMessage: 'Failed to load season league statistics'
 	});
 };
 
@@ -15,7 +16,7 @@ const getRefereeSeasonLeagueStats = async (
 	refereeId: string | undefined,
 	season: string
 ): Promise<RefereSeasonStatsResponse[]> => {
-	const res = await axios.get(API_ROUTES.referee.seasonLeagueStats(refereeId!, season));
+	const res = await apiClient.get(API_ROUTES.referee.seasonLeagueStats(refereeId!, season));
 
 	const data = res.data;
 

@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/routes';
-import axios from 'axios';
+import apiClient from '@/lib/api-client';
 
 export const uploadSingleImage = async (file: File | null): Promise<number | null> => {
 	if (!file) {
@@ -9,7 +9,12 @@ export const uploadSingleImage = async (file: File | null): Promise<number | nul
 	const formData = new FormData();
 	formData.append('files', file);
 
-	const res = await axios.post(API_ROUTES.uploadImage, formData);
+	// Don't set Content-Type - let axios set it automatically with the correct boundary
+	const res = await apiClient.post(API_ROUTES.uploadImage, formData, {
+		headers: {
+			'Content-Type': undefined
+		}
+	});
 
 	if (res.status === 201) {
 		return res.data[0].id;

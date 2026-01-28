@@ -1,8 +1,10 @@
 version: "3.8"
 
+name: zadar-museum-staging
+
 services:
   postgres:
-    image: postgres:15-alpine
+    image: postgres:15.4-alpine
     container_name: postgres_staging
     volumes:
       - postgres_staging_data:/var/lib/postgresql/data
@@ -36,39 +38,71 @@ services:
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
       JWT_SECRET: ${JWT_SECRET}
       # Allow configuring CORS origins from the .env file on the host (comma-separated)
-      CORS_ORIGINS: ${CORS_ORIGINS}
+      # Allow browser requests from staging host root
+      CORS_ORIGINS: "http://localhost"
       NODE_ENV: production
-      PUBLIC_URL: ${PUBLIC_URL}
-      PROXY: ${PROXY}
+      PUBLIC_URL: "http://localhost"
+      PROXY: "http://localhost"
     command: npm run start
     depends_on:
       - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:1337/admin || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     networks:
       - app_network
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
 
   frontend:
     image: ghcr.io/litovicmateo/zadar-museum-frontend:latest
     container_name: react_staging
+    build:
+      context: ./frontend
+      args:
+        VITE_API_ROOT: ${VITE_API_ROOT}
     depends_on:
       - backend
     networks:
       - app_network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /usr/share/nginx/html/index.html ] || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
 
   nginx:
-    image: nginx:alpine
+    image: nginx:1.25-alpine
     container_name: nginx_staging
     volumes:
-      - ./nginx/nginx.staging.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx:/etc/nginx:ro
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - frontend
       - backend
     networks:
       - app_network
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
 
 volumes:
   postgres_staging_data:

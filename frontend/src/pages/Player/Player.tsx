@@ -25,10 +25,20 @@ const Player: React.FC = () => {
 	if (!playerDetails) return null;
 
 	return (
-		<BoxscoreProvider>
-			<PlayerHeader />
-			<PlayerContent />
-		</BoxscoreProvider>
+		<>
+			<a
+				href="#player-content"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded"
+			>
+				Skip to player content
+			</a>
+			<BoxscoreProvider>
+				<PlayerHeader />
+				<main id="player-content" tabIndex={-1}>
+					<PlayerContent />
+				</main>
+			</BoxscoreProvider>
+		</>
 	);
 };
 

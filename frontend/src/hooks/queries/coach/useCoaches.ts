@@ -1,14 +1,15 @@
 import { API_ROUTES } from '@/constants/routes';
+import { useQuery } from '@/hooks/use-query-with-toast';
+import apiClient from '@/lib/api-client';
 import { CoachDetailsResponse } from '@/types/api/coach';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type CoachKey = keyof CoachDetailsResponse;
 
 export const useCoaches = (sortKey?: CoachKey, direction: 'asc' | 'desc' = 'asc') => {
 	return useQuery({
 		queryKey: ['coaches', sortKey, direction],
-		queryFn: getAllCoaches.bind(null, sortKey, direction)
+		queryFn: getAllCoaches.bind(null, sortKey, direction),
+		errorMessage: 'Failed to load coaches'
 	});
 };
 
@@ -22,7 +23,7 @@ const getAllCoaches = async (
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.coaches(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.coaches(params.toString()));
 
 	return res.data;
 };

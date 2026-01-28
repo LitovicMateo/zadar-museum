@@ -135,13 +135,13 @@ const Dashboard: React.FC = () => {
 	};
 
 	return (
-		<div className="flex  gap-4 h-full  ">
+		<div className="flex gap-6 h-full bg-slate-50">
 			<div className="hidden md:block">
 				<Sidebar basePath="dashboard" title="Dashboard" groups={sidebarGroups} />
 			</div>
-			<div className="py-6 w-full">
+			<div className="py-6 px-4 w-full">
 				{isMobile && (
-					<div className="px-4 mb-4">
+					<div className="mb-6">
 						<Select<Option, false>
 							options={options}
 							defaultValue={currentOption ?? undefined}

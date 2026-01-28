@@ -2,18 +2,17 @@ import { useEffect, useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext, AuthContextType, StrapiAuthResponse, StrapiUser } from '@/context/auth-context';
-import axios from 'axios';
+import apiClient from '@/lib/api-client';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-	console.debug('[AuthProvider] mount');
 	const [user, setUser] = useState<StrapiUser | null>(null);
 	const [jwt, setJwt] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	const navigate = useNavigate();
+	const endpoint = import.meta.env.VITE_API_ROOT || 'http://localhost:1337/api';
 
-	const root = import.meta.env.VITE_API_ROOT || 'https://ovdjejekosarkasve.com/api';
-	const path = root + '/auth/local';
+	// use relative API paths; VITE_API_ROOT handled in API client / routes
 
 	useEffect(() => {
 		const storedJwt = localStorage.getItem('jwt');
@@ -29,7 +28,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const login = async (identifier: string, password: string) => {
 		try {
-			const res = await axios.post<StrapiAuthResponse>(path, {
+			const res = await apiClient.post<StrapiAuthResponse>(`${endpoint}/auth/local`, {
 				identifier,
 				password
 			});
@@ -45,9 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			navigate('/'); // ✅ redirect on success
 			return data.user;
 		} catch (error) {
-			// Log the underlying error for diagnostics and throw a normalized message
-			// (do not leak sensitive internals to callers)
-			console.debug('[AuthProvider] login error', error);
+			// Throw normalized error message without logging sensitive details
 			throw new Error('Invalid credentials');
 		}
 	};
