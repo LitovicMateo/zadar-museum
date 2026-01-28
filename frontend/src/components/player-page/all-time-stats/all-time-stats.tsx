@@ -62,7 +62,11 @@ const AllTimeStats: React.FC = React.memo(() => {
 				</div>
 				{statsConfig.map((stat) => (
 					<div key={stat.key} role="row">
-						<StatCard label={stat.label} value={totalStats[stat.key]} rank={totalStats[stat.rankKey]} />
+						<StatCard
+							label={stat.label}
+							value={totalStats[stat.key] ?? '-'}
+							rank={(totalStats[stat.rankKey] ?? undefined) as number | undefined}
+						/>
 					</div>
 				))}
 			</div>

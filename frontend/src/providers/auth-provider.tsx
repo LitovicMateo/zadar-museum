@@ -10,9 +10,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [loading, setLoading] = useState(true);
 
 	const navigate = useNavigate();
+	const endpoint = import.meta.env.VITE_API_ROOT || 'http://localhost:1337/api';
 
-	const root = import.meta.env.VITE_API_ROOT || 'https://ovdjejekosarkasve.com/api';
-	const path = root + '/auth/local';
+	// use relative API paths; VITE_API_ROOT handled in API client / routes
 
 	useEffect(() => {
 		const storedJwt = localStorage.getItem('jwt');
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const login = async (identifier: string, password: string) => {
 		try {
-			const res = await apiClient.post<StrapiAuthResponse>('/auth/local', {
+			const res = await apiClient.post<StrapiAuthResponse>(`${endpoint}/auth/local`, {
 				identifier,
 				password
 			});

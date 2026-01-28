@@ -38,7 +38,8 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       # Provide a sensible default for development so CORS isn't set to an empty string
       # If you prefer to control this via an env file, remove this line and set CORS_ORIGINS there.
-      CORS_ORIGINS: "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://localhost:1337,http://backend:1337"
+      # Allow browser origins for local development and local nginx proxy
+      CORS_ORIGINS: "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://localhost:1337,http://backend:1337,http://localhost:8080"
       NODE_ENV: development
       PORT: 1337
     # Run Strapi in development mode so it watches source changes
@@ -70,6 +71,17 @@ services:
       - backend
     networks:
       - app_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_dev
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.local.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - app_network
+    restart: unless-stopped
 
 volumes:
   postgres_data:

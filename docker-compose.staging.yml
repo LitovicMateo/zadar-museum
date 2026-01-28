@@ -90,7 +90,7 @@ services:
     image: nginx:1.25-alpine
     container_name: nginx_staging
     volumes:
-      - ./nginx/nginx.staging.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx:/etc/nginx:ro
     ports:
       - "80:80"
     depends_on:

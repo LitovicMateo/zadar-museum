@@ -26,7 +26,7 @@ const GameReferees: React.FC = () => {
 				</div>
 
 				<div className="flex flex-wrap gap-2">
-					{refs?.map((ref, idx) => (
+					{refs?.map((ref) => (
 						<Link
 							key={ref.id}
 							to={APP_ROUTES.referee(ref.documentId)}
