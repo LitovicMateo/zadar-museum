@@ -1,5 +1,6 @@
 import React from 'react';
 import Flag from 'react-world-flags';
+import { format } from 'date-fns';
 
 import { CoachDetailsResponse } from '@/types/api/coach';
 import { calculateAge } from '@/utils/calculateAge';
@@ -9,15 +10,14 @@ type CoachBio = {
 };
 
 const CoachBio: React.FC<CoachBio> = ({ coach }) => {
-	const date =
+	const birthDateStr =
 		!!coach.date_of_birth &&
-		new Date(coach.date_of_birth).toLocaleString('default', {
-			month: 'short',
-			day: 'numeric',
-			year: 'numeric'
-		});
+		format(new Date(coach.date_of_birth), 'd MMM yyyy');
+
+	const deathDateStr = !!coach.date_of_death && format(new Date(coach.date_of_death), 'd MMM yyyy');
 
 	const age = coach.date_of_birth ? calculateAge(coach.date_of_birth) : null;
+	const ageAtDeath = coach.date_of_birth && coach.date_of_death ? calculateAge(coach.date_of_birth, coach.date_of_death) : null;
 	return (
 		<div className="h-fit flex flex-col text-white font-mono">
 			<div className="border-b border-white border-solid">
@@ -37,11 +37,18 @@ const CoachBio: React.FC<CoachBio> = ({ coach }) => {
 						)}
 					</div>
 				</label>
-				{date && (
+				{deathDateStr ? (
 					<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
-						{`Age: ${age}`}
-						<span className="uppercase">{`(${date})`}</span>
+						<span>{`Born: ${birthDateStr} — Died: ${deathDateStr}`}</span>
+						{ageAtDeath !== null && <span className="uppercase">{`(aged ${ageAtDeath})`}</span>}
 					</label>
+				) : (
+					birthDateStr && (
+						<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
+							{`Age: ${age}`}
+							<span className="uppercase">{`(${birthDateStr})`}</span>
+						</label>
+					)
 				)}
 			</div>
 		</div>

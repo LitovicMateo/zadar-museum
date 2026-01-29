@@ -7,6 +7,7 @@ import SubmitButton from '@/components/ui/submit-button';
 import { CoachFormData } from '@/schemas/coach-schema';
 
 import DateOfBirth from '../Fields/DateOfBirth';
+import DateOfDeath from '../Fields/DateOfDeath';
 import FirstName from '../Fields/FirstName';
 import LastName from '../Fields/LastName';
 import Nationality from '../Fields/Nationality';
@@ -28,6 +29,7 @@ const CoachFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 				<FirstName />
 				<LastName />
 				<DateOfBirth />
+				<DateOfDeath />
 				<Nationality />
 			</Fieldset>
 

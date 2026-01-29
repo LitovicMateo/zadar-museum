@@ -13,6 +13,7 @@ export interface CoachDetailsResponse {
 	first_name: string;
 	last_name: string;
 	date_of_birth?: string | null;
+	date_of_death?: string | null;
 	image: StrapiImage;
 	nationality?: string | null;
 	createdAt: string;
