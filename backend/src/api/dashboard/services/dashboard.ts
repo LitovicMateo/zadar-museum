@@ -28,7 +28,6 @@ export default ({ strapi }: FactoryArgs) => ({
       where: {
         season,
         competition: { documentId: competition },
-        forfeited: false,
       },
       populate: ["competition", "teams", "home_team", "away_team"],
     });
@@ -133,7 +132,7 @@ export default ({ strapi }: FactoryArgs) => ({
   async findGames(sortKey, direction) {
     const games = await strapi.db.query("api::game.game").findMany({
       select: ["*"],
-      where: { forfeited: false },
+      
       populate: ["home_team", "away_team"],
       orderBy: {
         [sortKey]: direction,
