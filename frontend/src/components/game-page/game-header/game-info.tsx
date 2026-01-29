@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { APP_ROUTES } from '@/constants/routes';
 import { useGameDetails } from '@/hooks/queries/game/useGameDetails';
 import { Calendar1, MapPin, Trophy, Users } from 'lucide-react';
+import getRoundLabel from './game-info.utils';
 
 const GameInfo: React.FC = () => {
 	const { gameId } = useParams();
@@ -11,6 +12,9 @@ const GameInfo: React.FC = () => {
 	const { data: game, isLoading } = useGameDetails(gameId!);
 
 	if (!game || isLoading) return null;
+
+	console.log(game);
+	
 
 	const date = new Date(game.date).toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' });
 
@@ -29,7 +33,7 @@ const GameInfo: React.FC = () => {
 						<span className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
 							{game.league_name}
 						</span>
-						<span className="text-xs text-gray-600">Round {game.round}</span>
+						<span className="text-xs text-gray-600">{getRoundLabel(game.stage, game.round)}</span>
 					</div>
 				</Link>
 
