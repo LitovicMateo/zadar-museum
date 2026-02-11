@@ -30,10 +30,10 @@ const getCoachAllTimeStats = async (
 }> => {
 	const params = new URLSearchParams({
 		database,
-		role: role === 'all' ? '' : role,
-		location: location === 'all' ? '' : location,
-		league: league === 'all' ? '' : league,
-		season: season === 'all' ? '' : season
+		role,
+		location,
+		league,
+		season
 	});
 	const res = await apiClient.get(API_ROUTES.stats.coach.allTime(params.toString()));
 

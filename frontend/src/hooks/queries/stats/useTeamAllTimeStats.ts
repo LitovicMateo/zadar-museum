@@ -17,9 +17,9 @@ const getTeamAllTimeStats = async (
 	season: string
 ): Promise<TeamStatsRanking[]> => {
 	const params = new URLSearchParams({
-		location: location === 'all' ? '' : location,
-		league: league === 'all' ? '' : league,
-		season: season === 'all' ? '' : season
+		location,
+		league,
+		season
 	});
 	const res = await apiClient.get(API_ROUTES.stats.team.allTime(params.toString()));
 

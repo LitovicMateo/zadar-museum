@@ -66,7 +66,8 @@ export default ({ strapi }) => ({
 
   async findPlayersRecords(database, location, league, season, sortKey) {
     // Parameters already validated by middleware
-    const locationString = location ? "_" + location : "";
+    const includeLocation = location && String(location).toLowerCase() !== "all";
+    const locationString = includeLocation ? "_" + location : "";
     const includeLeague = league && String(league).toLowerCase() !== "all";
     const leagueString = includeLeague ? "_league" : "";
     const includeSeason = season && String(season).toLowerCase() !== "all";
@@ -98,7 +99,8 @@ export default ({ strapi }) => ({
 
   async findTeamsAllTimeStats(location, league, season) {
     // Parameters already validated by middleware
-    const locationString = location ? "_" + location : "";
+    const includeLocation = location && String(location).toLowerCase() !== "all";
+    const locationString = includeLocation ? "_" + location : "";
     const includeLeague = league && String(league).toLowerCase() !== "all";
     const leagueString = includeLeague ? "_league" : "";
     const includeSeason = season && String(season).toLowerCase() !== "all";
@@ -150,7 +152,8 @@ export default ({ strapi }) => ({
 
   async findTeamRecords(database, season, league, location, sortKey) {
     // Parameters already validated by middleware
-    const locationString = location ? "_" + location : "";
+    const includeLocation = location && String(location).toLowerCase() !== "all";
+    const locationString = includeLocation ? "_" + location : "";
     const includeLeague = league && String(league).toLowerCase() !== "all";
     const leagueString = includeLeague ? "_league" : "";
     const includeSeason = season && String(season).toLowerCase() !== "all";
@@ -178,8 +181,10 @@ export default ({ strapi }) => ({
 
   async findCoachesAllTimeStats(database, role, location, league, season) {
     // Parameters already validated by middleware
-    const roleString = role ? "_" + role : "";
-    const locationString = location ? "_" + location : "";
+    const includeRole = role && String(role).toLowerCase() !== "all";
+    const roleString = includeRole ? "_" + role : "";
+    const includeLocation = location && String(location).toLowerCase() !== "all";
+    const locationString = includeLocation ? "_" + location : "";
     const includeLeague = league && String(league).toLowerCase() !== "all";
     const leagueString = includeLeague ? "_league" : "";
     const includeSeason = season && String(season).toLowerCase() !== "all";
@@ -193,7 +198,7 @@ export default ({ strapi }) => ({
       .select("*")
       .orderBy("games", "desc");
 
-    if (league) {
+    if (includeLeague) {
       query.where("league_slug", league);
       prevQuery.where("league_slug", league);
     }
@@ -214,7 +219,8 @@ export default ({ strapi }) => ({
 
   async findRefereesAllTimeStats(location, league, season) {
     // Parameters already validated by middleware
-    const locationString = location ? "_" + location : "";
+    const includeLocation = location && String(location).toLowerCase() !== "all";
+    const locationString = includeLocation ? "_" + location : "";
     const includeLeague = league && String(league).toLowerCase() !== "all";
     const leagueString = includeLeague ? "_league" : "";
     const includeSeason = season && String(season).toLowerCase() !== "all";
@@ -224,7 +230,7 @@ export default ({ strapi }) => ({
     const knex = strapi.db.connection;
     const query = knex(table).select("*").orderBy("games", "desc");
 
-    if (league) {
+    if (includeLeague) {
       query.where("league_slug", league);
     }
 
