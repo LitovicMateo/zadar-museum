@@ -20,8 +20,13 @@ help:
 	@echo "Targets: dev dev-stop dev-mv staging staging-stop prod prod-stop backup-dev backup-staging backup-prod load-*-backup import-*-backup apply-mvs apply-mvs-staging apply-mvs-prod"
 
 dev:
-	docker-compose -f docker-compose.dev.yml --env-file .env.dev up --build -d
-
+	docker-compose -f docker-compose.dev.yml --env-file .env.dev up --build -d --no-deps --force-recreate
+dev-logs-backend:
+	docker-compose -f docker-compose.dev.yml logs --follow --tail=30 backend
+dev-logs-postgres:
+	docker-compose -f docker-compose.dev.yml logs --follow --tail=30 postgres
+dev-logs-frontend:
+	docker-compose -f docker-compose.dev.yml logs --follow --tail=30 frontend
 dev-stop:
 	$(COMPOSE_CMD) -f $(DEV_COMPOSE) --env-file $(DEV_ENV) down
 
@@ -44,6 +49,7 @@ staging-stop:
 	$(COMPOSE_CMD) -f $(STAGING_COMPOSE) --env-file $(STAGING_ENV) down
 
 prod:
+	@if [ ! -f "$(PROD_ENV)" ]; then echo "Error: $(PROD_ENV) not found. Create it from .env.prod.example or provide env vars in CI/VPS."; exit 1; fi
 	$(COMPOSE_CMD) -f $(PROD_COMPOSE) --env-file $(PROD_ENV) up --build -d --no-deps --force-recreate
 
 prod-stop:

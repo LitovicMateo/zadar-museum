@@ -9,9 +9,12 @@ export default factories.createCoreService(
   ({ strapi }) => ({
     async findPlayersAllTimeStats(stats, location, league, season, database) {
       const statsString = "_" + stats;
-      const locationString = location ? "_" + location : "";
-      const leagueString = league ? "_league" : "";
-      const seasonString = season ? "_season" : "";
+      const includeLocation = location && String(location).toLowerCase() !== "all";
+      const locationString = includeLocation ? "_" + location : "";
+      const includeLeague = league && String(league).toLowerCase() !== "all";
+      const leagueString = includeLeague ? "_league" : "";
+      const includeSeason = season && String(season).toLowerCase() !== "all";
+      const seasonString = includeSeason ? "_season" : "";
 
       const table = `${database}_player${seasonString}${statsString}_all_time${leagueString}${locationString}`;
 
@@ -22,7 +25,7 @@ export default factories.createCoreService(
         query.where("league_slug", league);
       }
 
-      if (season) {
+      if (includeSeason) {
         query.where("season", season);
       }
 

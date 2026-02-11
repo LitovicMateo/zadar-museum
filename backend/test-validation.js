@@ -82,6 +82,11 @@ async function runTests() {
       expectedStatus: 200,
     },
     {
+      name: "Valid player all-time stats (all seasons)",
+      path: "/api/stats/player/all-time?database=zadar&stats=total&season=all",
+      expectedStatus: 200,
+    },
+    {
       name: "Valid team game stats",
       path: "/api/stats/team/game?database=zadar&season=2024",
       expectedStatus: 200,
