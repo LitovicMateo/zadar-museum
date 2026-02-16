@@ -30,6 +30,22 @@ type GamesContextType = {
 
 const GamesContext = createContext<GamesContextType | undefined>(undefined);
 
+export const filterSchedule = (
+	schedule: TeamScheduleResponse[],
+	selectedCompetitions: string[],
+	searchTerm: string,
+	isZadar: boolean
+): TeamScheduleResponse[] => {
+	if (!schedule || schedule.length === 0) return [];
+
+	const compSet = new Set(selectedCompetitions);
+	return schedule.filter((game) => {
+		if (!compSet.has(game.league_id)) return false;
+		if (isZadar && searchTerm) return searchGames(game, searchTerm);
+		return true;
+	});
+};
+
 export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	// cookies
 	const initialSeason = Cookies.get('season') || '';
@@ -80,26 +96,7 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 		setSelectedCompetitions((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
 	}, [setSelectedCompetitions]);
 
-	// helper used to filter schedule (exported for unit tests)
-	export const filterSchedule = (
-		schedule: TeamScheduleResponse[],
-		selectedCompetitions: string[],
-		searchTerm: string,
-		isZadar: boolean
-	): TeamScheduleResponse[] => {
-		if (!schedule || schedule.length === 0) return [];
-
-		const compSet = new Set(selectedCompetitions);
-		return schedule.filter((game) => {
-			// cheap filter first: competition membership
-			if (!compSet.has(game.league_id)) return false;
-
-			// if it's Zadar, optionally apply the search-term filter
-			if (isZadar && searchTerm) return searchGames(game, searchTerm);
-
-			return true;
-		});
-	};
+	// use top-level `filterSchedule` helper (defined above)
 
 	const filteredSchedule = useMemo(() => {
 		if (!schedule) return [];
