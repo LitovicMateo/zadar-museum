@@ -75,10 +75,11 @@ SELECT
 
 FROM (
     SELECT b.player_id,
-           b.league_id,
-           b.league_slug,
-           b.first_name,
-           b.last_name,
+                 b.league_id,
+                 b.league_slug,
+                 b.first_name,
+                 b.last_name,
+                 b.is_active,
            count(DISTINCT b.game_id) AS games,
            sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) AS games_started,
            sum(b.minutes + (b.seconds / 60.0)) AS minutes,
@@ -104,5 +105,5 @@ FROM (
           AND is_nulled = false
         ORDER BY player_id, game_id, league_id, document_id
     ) b
-    GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.league_slug
+    GROUP BY b.player_id, b.first_name, b.last_name, b.is_active, b.league_id, b.league_slug
 ) s;

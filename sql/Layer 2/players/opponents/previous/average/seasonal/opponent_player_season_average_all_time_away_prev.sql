@@ -1,9 +1,10 @@
 CREATE MATERIALIZED VIEW public.opponent_player_season_average_all_time_away_prev AS
  
- SELECT b.player_id,
-    b.first_name,
-    b.last_name,
-    b.season,
+    SELECT b.player_id,
+             b.first_name,
+             b.last_name,
+             b.is_active,
+             b.season,
 
     count(b.game_id) AS games,
     rank() OVER (PARTITION BY b.season ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
@@ -91,4 +92,4 @@ CREATE MATERIALIZED VIEW public.opponent_player_season_average_all_time_away_pre
             status::text <> 'dnp-cd'::text AND
             is_home_team = 'away'
     )  
-      GROUP BY b.player_id, b.first_name, b.last_name, b.season;
+    GROUP BY b.player_id, b.first_name, b.last_name, b.is_active, b.season;

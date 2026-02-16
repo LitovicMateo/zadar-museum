@@ -5,18 +5,20 @@ set -euo pipefail
 # Usage: ./scripts/apply-mvs.sh [--compose-file FILE] [--dry-run] [--force] [--backup]
 
 COMPOSE_FILE="docker-compose.dev.yml"
+ENV_FILE=""
 DRY_RUN=0
 FORCE=0
 BACKUP=0
 LOG_DIR="logs"
 LOG_FILE="${LOG_DIR}/apply-mvs-$(date +%Y%m%d_%H%M%S).log"
+# these may be overridden by a provided env file or DATABASE_* vars below
 POSTGRES_USER="${POSTGRES_USER:-postgres}"
 POSTGRES_DB="${POSTGRES_DB:-postgres}"
 RETRIES=10
 SLEEP=2
 
 usage(){
-  echo "Usage: $0 [--compose-file FILE] [--dry-run] [--force] [--backup]"
+  echo "Usage: $0 [--compose-file FILE] [--env-file FILE] [--dry-run] [--force] [--backup]"
   exit 1
 }
 
@@ -24,6 +26,8 @@ while [[ ${#} -gt 0 ]]; do
   case "$1" in
     --compose-file)
       COMPOSE_FILE="$2"; shift 2;;
+    --env-file)
+      ENV_FILE="$2"; shift 2;;
     --dry-run)
       DRY_RUN=1; shift;;
     --force)
@@ -38,6 +42,24 @@ while [[ ${#} -gt 0 ]]; do
 done
 
 mkdir -p "${LOG_DIR}"
+
+# Load env file if provided so callers can pass credentials from .env files
+if [[ -n "${ENV_FILE}" ]]; then
+  if [[ ! -f "${ENV_FILE}" ]]; then
+    echo "Env file ${ENV_FILE} not found" | tee -a "${LOG_FILE}" >&2
+    exit 1
+  fi
+  echo "Loading env file: ${ENV_FILE}" | tee -a "${LOG_FILE}"
+  # Export all variables from a simple KEY=VALUE .env file
+  set -o allexport
+  # shellcheck disable=SC1090
+  source "${ENV_FILE}" || true
+  set +o allexport
+
+  # Support common DATABASE_* names used in this project
+  POSTGRES_USER="${DATABASE_USERNAME:-${POSTGRES_USER}}"
+  POSTGRES_DB="${DATABASE_NAME:-${POSTGRES_DB}}"
+fi
 
 detect_compose_cmd(){
   if command -v docker-compose >/dev/null 2>&1; then

@@ -7,6 +7,7 @@ SELECT
     s.league_slug,
     s.first_name,
     s.last_name,
+    s.is_active,
     s.season,
 
     s.games,
@@ -82,6 +83,7 @@ FROM (
                  b.league_slug,
                  b.first_name,
                  b.last_name,
+                 b.is_active,
                  b.season,
                  count(b.game_id) AS games,
                  sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) AS games_started,
@@ -105,5 +107,5 @@ FROM (
          AND b.status::text <> 'dnp-cd'::text
          AND b.is_home_team = 'away'
          AND b.is_nulled = false
-     GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.league_name, b.league_slug, b.season
+    GROUP BY b.player_id, b.first_name, b.last_name, b.is_active, b.league_id, b.league_name, b.league_slug, b.season
 ) s;

@@ -89,4 +89,4 @@ CREATE MATERIALIZED VIEW public.opponent_player_total_all_time_prev AS
             team_slug::text <> 'kk-zadar'::text AND 
             status::text <> 'dnp-cd'::text 
     )  
-      GROUP BY b.player_id, b.first_name, b.last_name;
+    GROUP BY b.player_id, b.first_name, b.last_name, b.is_active;

@@ -6,6 +6,7 @@ SELECT
     s.league_slug,
     s.first_name,
     s.last_name,
+    s.is_active,
 
     s.games,
     rank() OVER (PARTITION BY s.league_id ORDER BY s.games DESC NULLS LAST) AS games_rank,
@@ -79,6 +80,7 @@ FROM (
                  b.league_slug,
                  b.first_name,
                  b.last_name,
+                 b.is_active,
                  count(b.game_id) AS games,
                  sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) AS games_started,
                  sum(b.minutes + (b.seconds / 60.0)) AS minutes,
@@ -100,5 +102,5 @@ FROM (
      WHERE b.team_slug::text = 'kk-zadar'::text
          AND b.status::text <> 'dnp-cd'::text
          AND b.is_nulled = false
-     GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.league_slug
+    GROUP BY b.player_id, b.first_name, b.last_name, b.is_active, b.league_id, b.league_slug, b.is_active
 ) s;

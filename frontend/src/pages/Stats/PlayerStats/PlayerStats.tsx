@@ -33,6 +33,9 @@ const PlayerStats: React.FC = () => {
 	});
 
 	const { data: players } = usePlayerAllTimeStats(database, stats, location, league, season);
+
+	console.log(players);
+	
 	const filteredPlayers = searchPlayerStats(players?.current, searchTerm);
 
 	const {

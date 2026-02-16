@@ -7,6 +7,7 @@ SELECT
     s.league_slug,
     s.first_name,
     s.last_name,
+    s.is_active,
 
     s.games,
     rank() OVER (PARTITION BY s.league_id ORDER BY s.games DESC NULLS LAST) AS games_rank,
@@ -75,12 +76,13 @@ SELECT
     rank() OVER (PARTITION BY s.league_id ORDER BY s.efficiency DESC NULLS LAST) AS efficiency_rank
 
 FROM (
-    SELECT b.player_id,
-           b.league_id,
-           b.league_name,
-           b.league_slug,
-           b.first_name,
-           b.last_name,
+        SELECT b.player_id,
+            b.league_id,
+            b.league_name,
+            b.league_slug,
+            b.first_name,
+            b.last_name,
+            b.is_active,
            count(DISTINCT b.game_id) AS games,
            sum(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) AS games_started,
            round(avg(b.minutes + (b.seconds / 60.0)), 1) AS minutes,
@@ -107,5 +109,5 @@ FROM (
           AND is_nulled = false
         ORDER BY player_id, game_id, league_id, document_id
     ) b
-    GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.league_name, b.league_slug
+    GROUP BY b.player_id, b.first_name, b.last_name, b.is_active, b.league_id, b.league_name, b.league_slug
 ) s;

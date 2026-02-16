@@ -3,6 +3,7 @@
  SELECT b.player_id,
     b.first_name,
     b.last_name,
+    b.is_active,
 
     count(b.game_id) AS games,
     rank() OVER (ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
@@ -80,4 +81,4 @@
     b.team_slug::text = 'kk-zadar'::text AND 
     b.status::text <> 'dnp-cd'::text AND
     b.is_nulled = false
-  GROUP BY b.player_id, b.first_name, b.last_name;
+  GROUP BY b.player_id, b.first_name, b.last_name, b.is_active;

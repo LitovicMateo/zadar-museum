@@ -27,6 +27,7 @@
     ps.is_captain as captain,
     p.primary_position AS "position",
     p.secondary_position AS secondary_position,
+    p.is_active_player AS is_active,
     ps.player_number AS shirt_number,
     round(EXTRACT(epoch FROM g.date::timestamp without time zone - p.date_of_birth::timestamp without time zone) / (365.25 * 24::numeric * 60::numeric * 60::numeric), 1) AS age_decimal,
 

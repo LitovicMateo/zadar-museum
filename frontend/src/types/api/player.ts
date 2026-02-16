@@ -53,6 +53,7 @@ export interface PlayerAllTimeStats {
 	player_id: string;
 	first_name: string;
 	last_name: string;
+	is_active: boolean;
 
 	league_id: string;
 	league_name: string;

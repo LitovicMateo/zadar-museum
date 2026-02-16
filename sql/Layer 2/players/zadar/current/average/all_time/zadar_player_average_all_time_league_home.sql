@@ -1,11 +1,12 @@
 CREATE MATERIALIZED VIEW public.zadar_player_average_all_time_league_home AS
  
-  SELECT b.player_id,
-    b.league_id,
-    b.league_name,
-    b.league_slug,
-    b.first_name,
-    b.last_name,
+    SELECT b.player_id,
+        b.league_id,
+        b.league_name,
+        b.league_slug,
+        b.first_name,
+        b.last_name,
+        b.is_active,
     count(b.game_id) AS games,
     rank() OVER (PARTITION BY b.league_id ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
     sum(
@@ -83,4 +84,4 @@ CREATE MATERIALIZED VIEW public.zadar_player_average_all_time_league_home AS
     b.status::text <> 'dnp-cd'::text AND 
     b.is_home_team = 'home' AND
     b.is_nulled = false
-  GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.league_name, b.league_slug;
+    GROUP BY b.player_id, b.first_name, b.last_name, b.is_active, b.league_id, b.league_name, b.league_slug;

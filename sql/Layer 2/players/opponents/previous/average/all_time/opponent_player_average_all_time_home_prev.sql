@@ -1,8 +1,9 @@
 CREATE MATERIALIZED VIEW public.opponent_player_average_all_time_home_prev AS
  
  SELECT b.player_id,
-    b.first_name,
-    b.last_name,
+     b.first_name,
+     b.last_name,
+     b.is_active,
     count(b.game_id) AS games,
     rank() OVER (ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
     sum(
@@ -89,4 +90,4 @@ CREATE MATERIALIZED VIEW public.opponent_player_average_all_time_home_prev AS
             status::text <> 'dnp-cd'::text AND
             is_home_team = 'home'
     )  
-      GROUP BY b.player_id, b.first_name, b.last_name;
+    GROUP BY b.player_id, b.first_name, b.last_name, b.is_active;

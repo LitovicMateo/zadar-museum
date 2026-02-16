@@ -42,11 +42,17 @@ export const usePlayerStatsTable = (
 			{
 				header: 'Player',
 				accessorFn: (row) => row.first_name + ' ' + row.last_name,
-				cell: (info) => (
-					<div className="whitespace-nowrap !text-left">
-						<Link to={APP_ROUTES.player(info.row.original.player_id)}>{info.getValue()}</Link>
-					</div>
-				),
+				cell: (info) => {
+					const row = info.row.original as PlayerAllTimeStats;
+
+					return (
+						<div className="whitespace-nowrap !text-left">
+							<Link to={APP_ROUTES.player(row.player_id)}>
+								<span className={row.is_active ? 'font-semibold' : ''}>{info.getValue()}</span>
+							</Link>
+						</div>
+					);
+				},
 				enableSorting: false
 			},
 			{
