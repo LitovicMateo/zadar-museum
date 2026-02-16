@@ -1,5 +1,5 @@
 // context/GamesContext.tsx
-import React, { createContext, useState, useEffect, useMemo, JSX } from 'react';
+import React, { createContext, useState, useEffect, useMemo, useCallback, JSX } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useTeamDetails } from '@/hooks/queries/team/useTeamDetails';
@@ -76,49 +76,75 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	}, [competitions, selectedSeason]);
 
 	// handlers
-	const toggleCompetition = (slug: string) => {
+	const toggleCompetition = useCallback((slug: string) => {
 		setSelectedCompetitions((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
+	}, [setSelectedCompetitions]);
+
+	// helper used to filter schedule (exported for unit tests)
+	export const filterSchedule = (
+		schedule: TeamScheduleResponse[],
+		selectedCompetitions: string[],
+		searchTerm: string,
+		isZadar: boolean
+	): TeamScheduleResponse[] => {
+		if (!schedule || schedule.length === 0) return [];
+
+		const compSet = new Set(selectedCompetitions);
+		return schedule.filter((game) => {
+			// cheap filter first: competition membership
+			if (!compSet.has(game.league_id)) return false;
+
+			// if it's Zadar, optionally apply the search-term filter
+			if (isZadar && searchTerm) return searchGames(game, searchTerm);
+
+			return true;
+		});
 	};
 
-	// derived schedule
 	const filteredSchedule = useMemo(() => {
 		if (!schedule) return [];
-
-		return schedule.filter((game) => {
-			const matchesCompetition = schedule.filter((g) => selectedCompetitions.includes(g.league_id));
-
-			// if it's Zadar -> filter by search term
-			if (isZadar) {
-				const matchesSearch = searchGames(game, searchTerm);
-				return matchesCompetition && matchesSearch;
-			}
-
-			return matchesCompetition;
-		});
+		if (process.env.NODE_ENV === 'development') console.time('filteredSchedule');
+		const result = filterSchedule(schedule, selectedCompetitions, searchTerm, isZadar);
+		if (process.env.NODE_ENV === 'development') console.timeEnd('filteredSchedule');
+		return result;
 	}, [schedule, selectedCompetitions, searchTerm, isZadar]);
 
-	return (
-		<GamesContext.Provider
-			value={{
-				seasons,
-				selectedSeason,
-				setSelectedSeason,
-				competitions,
-				selectedCompetitions,
-				toggleCompetition,
-				searchTerm,
-				SearchInput,
-				schedule,
-				filteredSchedule,
-				scheduleLoading,
-				teamSlug: effectiveSlug,
-				teamName: effectiveName,
-				isZadar
-			}}
-		>
-			{children}
-		</GamesContext.Provider>
+	const providerValue = useMemo(
+		() => ({
+			seasons,
+			selectedSeason,
+			setSelectedSeason,
+			competitions,
+			selectedCompetitions,
+			toggleCompetition,
+			searchTerm,
+			SearchInput,
+			schedule,
+			filteredSchedule,
+			scheduleLoading,
+			teamSlug: effectiveSlug,
+			teamName: effectiveName,
+			isZadar
+		}),
+		[
+			seasons,
+			selectedSeason,
+			setSelectedSeason,
+			competitions,
+			selectedCompetitions,
+			toggleCompetition,
+			searchTerm,
+			SearchInput,
+			schedule,
+			filteredSchedule,
+			scheduleLoading,
+			effectiveSlug,
+			effectiveName,
+			isZadar
+		]
 	);
+
+	return <GamesContext.Provider value={providerValue}>{children}</GamesContext.Provider>;
 };
 
 export default GamesContext;
