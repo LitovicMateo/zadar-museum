@@ -5,6 +5,7 @@ set -euo pipefail
 # Usage: ./scripts/apply-mvs.sh [--compose-file FILE] [--dry-run] [--force] [--backup]
 
 COMPOSE_FILE="docker-compose.dev.yml"
+ENV_FILE=".env.dev"
 DRY_RUN=0
 FORCE=0
 BACKUP=0
@@ -16,7 +17,7 @@ RETRIES=10
 SLEEP=2
 
 usage(){
-  echo "Usage: $0 [--compose-file FILE] [--dry-run] [--force] [--backup]"
+  echo "Usage: $0 [--compose-file FILE] [--env-file FILE] [--dry-run] [--force] [--backup]"
   exit 1
 }
 
@@ -24,6 +25,8 @@ while [[ ${#} -gt 0 ]]; do
   case "$1" in
     --compose-file)
       COMPOSE_FILE="$2"; shift 2;;
+    --env-file)
+      ENV_FILE="$2"; shift 2;;
     --dry-run)
       DRY_RUN=1; shift;;
     --force)
@@ -36,6 +39,34 @@ while [[ ${#} -gt 0 ]]; do
       echo "Unknown arg: $1"; usage;;
   esac
 done
+
+# Try to read database password and DB/user names from the provided env file (if present)
+DB_PASSWORD=""
+if [[ -f "${ENV_FILE}" ]]; then
+  DB_PASSWORD=$(grep -E '^(DATABASE_PASSWORD|POSTGRES_PASSWORD)=' "${ENV_FILE}" | head -n1 | sed -E 's/^[^=]+=//' ) || true
+  # prefer Postgres vars, fall back to generic DATABASE_* names
+  POSTGRES_USER_FROM_FILE=$(grep -E '^(POSTGRES_USER|DATABASE_USERNAME)=' "${ENV_FILE}" | head -n1 | sed -E 's/^[^=]+=//' ) || true
+  POSTGRES_DB_FROM_FILE=$(grep -E '^(POSTGRES_DB|DATABASE_NAME)=' "${ENV_FILE}" | head -n1 | sed -E 's/^[^=]+=//' ) || true
+fi
+
+# fallback to environment variables when provided to the shell
+if [[ -z "${DB_PASSWORD}" ]] && [[ -n "${DATABASE_PASSWORD:-}" ]]; then
+  DB_PASSWORD="${DATABASE_PASSWORD}"
+fi
+if [[ -n "${DB_PASSWORD}" ]]; then
+  export PGPASSWORD="${DB_PASSWORD}"
+fi
+
+# If env file provided DB user / name, prefer env-file values (override defaults and shell env)
+if [[ -n "${POSTGRES_USER_FROM_FILE:-}" ]]; then
+  POSTGRES_USER="${POSTGRES_USER_FROM_FILE}"
+fi
+if [[ -n "${POSTGRES_DB_FROM_FILE:-}" ]]; then
+  POSTGRES_DB="${POSTGRES_DB_FROM_FILE}"
+fi
+
+# Log selected DB user/name (safe to log non-sensitive info)
+echo "Using Postgres user='${POSTGRES_USER}', db='${POSTGRES_DB}' (env-file: ${ENV_FILE:-none})" | tee -a "${LOG_FILE}"
 
 mkdir -p "${LOG_DIR}"
 

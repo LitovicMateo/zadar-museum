@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import Heading from '@/components/ui/heading';
 import { useCoachGamelog } from '@/hooks/queries/coach/useCoachGamelog';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/useCoachProfileDatabase';
-import { useScheduleTable } from '@/hooks/useScheduleTable';
+import { ScheduleList } from '@/hooks/useScheduleTable';
 
 import CoachSeasonStats from './coach-season-stats';
 import Filters from './filters';
@@ -35,8 +35,6 @@ const CoachGamelog: React.FC = () => {
 		});
 	}, [coachGamelog, selectedCompetitions, searchTerm]);
 
-	const { Schedule } = useScheduleTable(filteredGames!);
-
 	return (
 		<section className="flex flex-col gap-2 font-abel">
 			<Heading title="Seasonal Data" />
@@ -55,7 +53,7 @@ const CoachGamelog: React.FC = () => {
 				</div>
 				<div className="flex flex-col gap-2">
 					<Heading title="Gamelog" type="secondary" />
-					<Schedule />
+					<ScheduleList schedule={filteredGames} />
 				</div>
 			</div>
 		</section>

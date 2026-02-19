@@ -5,7 +5,7 @@ import { TeamScheduleResponse } from '@/types/api/team';
 
 export const useSeasonSchedule = (season: string, teamSlug: string) => {
 	return useQuery({
-		queryKey: ['games', 'schedule', season],
+		queryKey: ['games', 'schedule', season, teamSlug],
 		queryFn: fetchSchedule.bind(null, season, teamSlug),
 		enabled: !!season,
 		errorMessage: 'Failed to load season schedule'

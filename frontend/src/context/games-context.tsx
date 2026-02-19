@@ -1,5 +1,5 @@
-// context/GamesContext.tsx
-import React, { createContext, useState, useEffect, useMemo, useCallback, JSX } from 'react';
+import { filterSchedule } from './games-utils';
+import React, { createContext, useState, useEffect, useMemo, JSX } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useTeamDetails } from '@/hooks/queries/team/useTeamDetails';
@@ -8,7 +8,6 @@ import { useTeamSeasons } from '@/hooks/queries/team/useTeamSeasons';
 import { useSeasonSchedule } from '@/hooks/queries/useSeasonSchedule';
 import { useSearch } from '@/hooks/useSearch';
 import { TeamCompetitionsResponse, TeamScheduleResponse } from '@/types/api/team';
-import { searchGames } from '@/utils/search-functions';
 import Cookies from 'js-cookie';
 
 type GamesContextType = {
@@ -29,22 +28,6 @@ type GamesContextType = {
 };
 
 const GamesContext = createContext<GamesContextType | undefined>(undefined);
-
-export const filterSchedule = (
-	schedule: TeamScheduleResponse[],
-	selectedCompetitions: string[],
-	searchTerm: string,
-	isZadar: boolean
-): TeamScheduleResponse[] => {
-	if (!schedule || schedule.length === 0) return [];
-
-	const compSet = new Set(selectedCompetitions);
-	return schedule.filter((game) => {
-		if (!compSet.has(game.league_id)) return false;
-		if (isZadar && searchTerm) return searchGames(game, searchTerm);
-		return true;
-	});
-};
 
 export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	// cookies
@@ -67,8 +50,20 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 	// queries
 	const { data: seasons } = useTeamSeasons(effectiveSlug);
-	const { data: competitions } = useTeamSeasonCompetitions(effectiveSlug, selectedSeason);
+	const { data: rawCompetitions } = useTeamSeasonCompetitions(effectiveSlug, selectedSeason);
 	const { data: schedule, isLoading: scheduleLoading } = useSeasonSchedule(selectedSeason, effectiveSlug);
+
+	// deduplicate competitions by league_id — API returns one row per game type (home/away/neutral)
+	const competitions = useMemo<TeamCompetitionsResponse[] | undefined>(() => {
+		if (!rawCompetitions) return undefined;
+		const seen = new Set<string>();
+		return rawCompetitions.filter((c) => {
+			const id = String(c.league_id);
+			if (seen.has(id)) return false;
+			seen.add(id);
+			return true;
+		});
+	}, [rawCompetitions]);
 
 	useEffect(() => {
 		if (seasons) setSelectedSeason(seasons[0]);
@@ -89,59 +84,41 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 			const uniqueLeagueIds = Array.from(new Set(competitions.map((c) => c.league_id)));
 			setSelectedCompetitions(uniqueLeagueIds);
 		}
-	}, [competitions, selectedSeason]);
+	}, [competitions]);
 
 	// handlers
-	const toggleCompetition = useCallback((slug: string) => {
+	const toggleCompetition = (slug: string) => {
 		setSelectedCompetitions((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
-	}, [setSelectedCompetitions]);
+	};
 
-	// use top-level `filterSchedule` helper (defined above)
-
-	const filteredSchedule = useMemo(() => {
-		if (!schedule) return [];
-		if (process.env.NODE_ENV === 'development') console.time('filteredSchedule');
-		const result = filterSchedule(schedule, selectedCompetitions, searchTerm, isZadar);
-		if (process.env.NODE_ENV === 'development') console.timeEnd('filteredSchedule');
-		return result;
-	}, [schedule, selectedCompetitions, searchTerm, isZadar]);
-
-	const providerValue = useMemo(
-		() => ({
-			seasons,
-			selectedSeason,
-			setSelectedSeason,
-			competitions,
-			selectedCompetitions,
-			toggleCompetition,
-			searchTerm,
-			SearchInput,
-			schedule,
-			filteredSchedule,
-			scheduleLoading,
-			teamSlug: effectiveSlug,
-			teamName: effectiveName,
-			isZadar
-		}),
-		[
-			seasons,
-			selectedSeason,
-			setSelectedSeason,
-			competitions,
-			selectedCompetitions,
-			toggleCompetition,
-			searchTerm,
-			SearchInput,
-			schedule,
-			filteredSchedule,
-			scheduleLoading,
-			effectiveSlug,
-			effectiveName,
-			isZadar
-		]
+	// derived schedule
+	const filteredSchedule = useMemo(
+		() => filterSchedule(schedule, selectedCompetitions, searchTerm, isZadar),
+		[schedule, selectedCompetitions, searchTerm, isZadar]
 	);
 
-	return <GamesContext.Provider value={providerValue}>{children}</GamesContext.Provider>;
+	return (
+		<GamesContext.Provider
+			value={{
+				seasons,
+				selectedSeason,
+				setSelectedSeason,
+				competitions,
+				selectedCompetitions,
+				toggleCompetition,
+				searchTerm,
+				SearchInput,
+				schedule,
+				filteredSchedule,
+				scheduleLoading,
+				teamSlug: effectiveSlug,
+				teamName: effectiveName,
+				isZadar
+			}}
+		>
+			{children}
+		</GamesContext.Provider>
+	);
 };
 
 export default GamesContext;

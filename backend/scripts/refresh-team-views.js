@@ -17,17 +17,21 @@ const teamSqlFiles = [
   "sql/Layer 2/team/all_time/team_average_stats.sql",
   "sql/Layer 2/team/all_time/team_average_stats_home.sql",
   "sql/Layer 2/team/all_time/team_average_stats_away.sql",
+  "sql/Layer 2/team/all_time/team_average_stats_neutral.sql",
   "sql/Layer 2/team/all_time/team_league_average_stats.sql",
   "sql/Layer 2/team/all_time/team_league_average_stats_home.sql",
   "sql/Layer 2/team/all_time/team_league_average_stats_away.sql",
+  "sql/Layer 2/team/all_time/team_league_average_stats_neutral.sql",
 
   // Layer 2 - Season
   "sql/Layer 2/team/season/team_season_average_stats.sql",
   "sql/Layer 2/team/season/team_season_average_stats_home.sql",
   "sql/Layer 2/team/season/team_season_average_stats_away.sql",
+  "sql/Layer 2/team/season/team_season_average_stats_neutral.sql",
   "sql/Layer 2/team/season/team_season_league_average_stats.sql",
   "sql/Layer 2/team/season/team_season_league_average_stats_home.sql",
   "sql/Layer 2/team/season/team_season_league_average_stats_away.sql",
+  "sql/Layer 2/team/season/team_season_league_average_stats_neutral.sql",
 
   // Layer 3 - Full aggregations
   "sql/Layer 3/team/team_average_stats_full.sql",

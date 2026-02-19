@@ -67,10 +67,13 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       return null;
     }
 
+    
+    
     const team = data.map((team) => {
       const total = JSON.parse(team.total);
       const home = JSON.parse(team.home);
       const away = JSON.parse(team.away);
+      const neutral = team.neutral ? JSON.parse(team.neutral) : null;
       return {
         teamId: team.team_id,
         teamSlug: team.team_slug,
@@ -80,6 +83,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
         total,
         home,
         away,
+        neutral,
       };
     });
 
@@ -107,6 +111,11 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
     const total = JSON.parse(team.total);
     const home = JSON.parse(team.home);
     const away = JSON.parse(team.away);
+    const neutral = team.neutral ? JSON.parse(team.neutral) : null;
+
+    const stats = [home, away];
+    if (neutral) stats.push(neutral);
+    stats.push(total);
 
     return {
       teamId: team.team_id,
@@ -115,7 +124,8 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       total,
       home,
       away,
-      stats: [home, away, total],
+      neutral,
+      stats,
     };
   },
 
@@ -209,6 +219,11 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
     const total = JSON.parse(team.total);
     const home = JSON.parse(team.home);
     const away = JSON.parse(team.away);
+    const neutral = team.neutral ? JSON.parse(team.neutral) : null;
+
+    const stats = [home, away];
+    if (neutral) stats.push(neutral);
+    stats.push(total);
 
     return {
       teamId: team.team_id,
@@ -217,7 +232,8 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       total,
       home,
       away,
-      stats: [home, away, total],
+      neutral,
+      stats,
     };
   },
 
@@ -236,6 +252,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       const total = JSON.parse(team.total);
       const home = JSON.parse(team.home);
       const away = JSON.parse(team.away);
+      const neutral = team.neutral ? JSON.parse(team.neutral) : null;
       return {
         teamId: team.team_id,
         teamSlug: team.team_slug,
@@ -245,6 +262,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
         total,
         home,
         away,
+        neutral,
       };
     });
 

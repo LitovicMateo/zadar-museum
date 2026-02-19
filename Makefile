@@ -16,8 +16,8 @@ PROD_ENV := .env.prod
 .PHONY: dev dev-stop dev-mv staging staging-stop prod prod-stop load-dev-backup import-dev-backup load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod help
 
 help:
-	@echo "Usage: make <target>"
-	@echo "Targets: dev dev-stop dev-mv staging staging-stop prod prod-stop backup-dev backup-staging backup-prod load-*-backup import-*-backup apply-mvs apply-mvs-staging apply-mvs-prod"
+	@echo "Usage: make <target>"	@echo "Note: several targets forward flags to underlying scripts (e.g. apply-mvs accepts --env-file)"
+	@echo "Script flags (when applicable): --compose-file FILE | --env-file FILE | --dry-run | --force | --backup"	@echo "Targets: dev dev-stop dev-mv staging staging-stop prod prod-stop backup-dev backup-staging backup-prod load-*-backup import-*-backup apply-mvs apply-mvs-staging apply-mvs-prod"
 
 dev:
 	docker-compose -f docker-compose.dev.yml --env-file .env.dev up --build -d --no-deps --force-recreate
