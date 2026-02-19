@@ -16,9 +16,7 @@ const getGameReferees = async (gameId: string): Promise<RefereeDetailsResponse[]
 	const res = await apiClient.get(API_ROUTES.game.details(gameId));
 	const game = res.data;
 
-	if (!game.mainReferee || !game.secondReferee || !game.thirdReferee) return [];
-
-	const refs = [game.mainReferee, game.secondReferee, game.thirdReferee];
+	const refs = [game.mainReferee, game.secondReferee, game.thirdReferee].filter(Boolean) as RefereeDetailsResponse[];
 
 	return refs;
 };

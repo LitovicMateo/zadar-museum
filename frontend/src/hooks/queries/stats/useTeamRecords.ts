@@ -27,9 +27,9 @@ const getTeamRecords = async (
 ): Promise<TeamRecord[]> => {
 	const params = new URLSearchParams({
 		database,
-		season: season === 'all' ? '' : season,
-		league: league === 'all' ? '' : league,
-		location: location === 'all' ? '' : location,
+		season,
+		league,
+		location,
 		sortKey
 	});
 	const res = await apiClient.get(API_ROUTES.stats.team.records(params.toString()));

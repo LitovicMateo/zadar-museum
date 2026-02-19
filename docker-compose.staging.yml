@@ -64,10 +64,6 @@ services:
   frontend:
     image: ghcr.io/litovicmateo/zadar-museum-frontend:latest
     container_name: react_staging
-    build:
-      context: ./frontend
-      args:
-        VITE_API_ROOT: ${VITE_API_ROOT}
     depends_on:
       - backend
     networks:

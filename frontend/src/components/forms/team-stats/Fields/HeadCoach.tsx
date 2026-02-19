@@ -10,6 +10,7 @@ const HeadCoach: React.FC = () => {
 	const { control, watch, setValue } = useFormContext<TeamStatsFormData>();
 
 	const game = watch('gameId');
+	const headCoach = watch('coachId');
 
 	const { data: coaches } = useCoaches('last_name', 'asc');
 
@@ -18,6 +19,12 @@ const HeadCoach: React.FC = () => {
 			setValue('coachId', '');
 		}
 	}, [game, setValue]);
+
+	React.useEffect(() => {
+		if (!headCoach) {
+			setValue('assistantCoachId', '');
+		}
+	}, [headCoach, setValue]);
 
 	if (!coaches) return null;
 
@@ -32,9 +39,10 @@ const HeadCoach: React.FC = () => {
 			control={control}
 			render={({ field }) => (
 				<Select
-					{...field}
-					onChange={(selected) => field.onChange(selected?.value)}
-					value={options?.find((option) => option.value === field.value) || null}
+					name={field.name}
+					onBlur={field.onBlur}
+					onChange={(selected) => field.onChange(selected ? selected.value : '')}
+					value={options.find((option) => option.value === field.value) ?? null}
 					isDisabled={!game}
 					isClearable
 					placeholder="Select Coach"

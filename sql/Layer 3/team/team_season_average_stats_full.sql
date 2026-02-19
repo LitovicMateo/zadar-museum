@@ -40,9 +40,22 @@ SELECT
             'points_received', away.points_received,
             'points_diff', away.points_diff,
             'attendance', away.attendance
-        ) as away
+        ) as away,
+
+    jsonb_build_object(
+            'key', 'Neutral',
+            'games', neutral.games,
+            'wins', neutral.wins,
+            'losses', neutral.losses,
+            'win_percentage', neutral.win_pct,
+            'points_scored', neutral.points_scored,
+            'points_received', neutral.points_received,
+            'points_diff', neutral.points_diff,
+            'attendance', neutral.attendance
+        ) as neutral
 
 
 FROM public.team_season_average_stats total
 LEFT JOIN public.team_season_average_stats_home home USING (team_id, season)
-LEFT JOIN public.team_season_average_stats_away away USING (team_id, season);
+LEFT JOIN public.team_season_average_stats_away away USING (team_id, season)
+LEFT JOIN public.team_season_average_stats_neutral neutral USING (team_id, season);

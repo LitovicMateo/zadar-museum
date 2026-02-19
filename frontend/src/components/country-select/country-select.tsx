@@ -14,7 +14,7 @@ const options = Object.entries(countries.getNames('en', { select: 'official' }))
 
 type CountrySelectProps = {
 	onChange: (value: string) => void;
-	selectedValue?: string;
+	selectedValue?: string | null;
 };
 
 const CountrySelect: React.FC<CountrySelectProps> = ({ onChange, selectedValue }) => {

@@ -8,21 +8,21 @@ const Nationality = () => {
 	const { control, setValue, register, watch } = useFormContext<PlayerFormData>();
 
 	React.useEffect(() => {
-		register('nationality', { required: 'Nationality is required' });
+		// nationality is optional now
+		register('nationality');
 	}, [setValue, register]);
 	return (
 		<label>
 			<span className="text-sm  text-gray-700 uppercase">
-				Nationality: <span className="text-red-500">*</span>
+				Nationality:
 			</span>
 			<Controller
 				control={control}
 				name="nationality"
-				rules={{ required: 'Nationality is required' }}
 				render={() => (
 					<CountrySelect
 						selectedValue={watch('nationality')}
-						onChange={(value) => setValue('nationality', value)}
+						onChange={(value) => setValue('nationality', value ?? null)}
 					/>
 				)}
 			/>

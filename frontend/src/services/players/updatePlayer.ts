@@ -18,7 +18,7 @@ export const updatePlayer = async ({ id, ...data }: { id: string } & PlayerFormD
 			secondary_position: data.secondary_position || null,
 			height: data.height || undefined,
 			image: uploadedImageId,
-			nationality: data.nationality
+			nationality: data.nationality ?? null
 		}
 	});
 

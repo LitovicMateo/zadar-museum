@@ -21,8 +21,9 @@ export const createCoach = async (data: CoachFormData) => {
 		first_name: data.first_name,
 		last_name: data.last_name,
 		date_of_birth: data.date_of_birth || null,
+		date_of_death: (data as any).date_of_death || null,
 		image: uploadedImageId,
-		nationality: data.nationality
+		nationality: data.nationality ?? null
 	};
 
 	return apiClient.post(API_ROUTES.create.coach(), {

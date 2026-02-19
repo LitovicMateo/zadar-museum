@@ -22,7 +22,7 @@ export const SecondaryPosition: React.FC = () => {
 					<Select<PositionOption, false>
 						options={positionOptions}
 						value={positionOptions.find((opt) => opt.value === field.value) || null}
-						onChange={(selected) => field.onChange(selected?.value || '')}
+						onChange={(selected) => field.onChange(selected?.value ?? null)}
 						isDisabled={!primaryPosition}
 						isClearable
 						styles={selectStyle()}

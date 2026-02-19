@@ -3,14 +3,14 @@
 export type RefereeFormData = {
 	first_name: string;
 	last_name: string;
-	nationality: string;
+	nationality?: string | null;
 };
 
 export interface RefereeDetailsResponse {
 	id: number;
 	first_name: string;
 	last_name: string;
-	nationality: string;
+	nationality?: string | null;
 	createdAt: string;
 	documentId: string;
 }

@@ -34,9 +34,10 @@ const AssistantCoach: React.FC = () => {
 			control={control}
 			render={({ field }) => (
 				<Select
-					{...field}
-					onChange={(selected) => field.onChange(selected?.value)}
-					value={assistantOptions?.find((option) => option.value === field.value) || null}
+					name={field.name}
+					onBlur={field.onBlur}
+					onChange={(selected) => field.onChange(selected ? selected.value : '')}
+					value={assistantOptions.find((option) => option.value === field.value) ?? null}
 					isDisabled={!headCoach || !game}
 					isClearable
 					placeholder="Select Assistant Coach"

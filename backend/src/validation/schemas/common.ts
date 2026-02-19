@@ -50,6 +50,8 @@ export const entitySchema = z.enum(
 
 /**
  * Season validation (YYYY format, 1900-2100) - optional
+ *
+ * Accepts the sentinel value 'all' to indicate all seasons.
  */
 export const seasonSchema = z
   .string()
@@ -59,13 +61,16 @@ export const seasonSchema = z
   .refine(
     (val) => {
       if (!val) return true; // Allow null/undefined/empty
+      // Allow sentinel 'all' (case-insensitive)
+      if (typeof val === "string" && val.toLowerCase() === "all") return true;
       return /^\d{4}$/.test(val);
     },
-    { message: "Season must be in YYYY format (e.g., 2023)" },
+    { message: "Season must be in YYYY format (e.g., 2023) or 'all'" },
   )
   .refine(
     (val) => {
       if (!val) return true; // Allow null/undefined/empty
+      if (typeof val === "string" && val.toLowerCase() === "all") return true;
       const year = parseInt(val, 10);
       return year >= 1900 && year <= 2100;
     },

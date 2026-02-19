@@ -1,4 +1,4 @@
-// context/GamesContext.tsx
+import { filterSchedule } from './games-utils';
 import React, { createContext, useState, useEffect, useMemo, JSX } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -8,7 +8,6 @@ import { useTeamSeasons } from '@/hooks/queries/team/useTeamSeasons';
 import { useSeasonSchedule } from '@/hooks/queries/useSeasonSchedule';
 import { useSearch } from '@/hooks/useSearch';
 import { TeamCompetitionsResponse, TeamScheduleResponse } from '@/types/api/team';
-import { searchGames } from '@/utils/search-functions';
 import Cookies from 'js-cookie';
 
 type GamesContextType = {
@@ -51,8 +50,20 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 	// queries
 	const { data: seasons } = useTeamSeasons(effectiveSlug);
-	const { data: competitions } = useTeamSeasonCompetitions(effectiveSlug, selectedSeason);
+	const { data: rawCompetitions } = useTeamSeasonCompetitions(effectiveSlug, selectedSeason);
 	const { data: schedule, isLoading: scheduleLoading } = useSeasonSchedule(selectedSeason, effectiveSlug);
+
+	// deduplicate competitions by league_id — API returns one row per game type (home/away/neutral)
+	const competitions = useMemo<TeamCompetitionsResponse[] | undefined>(() => {
+		if (!rawCompetitions) return undefined;
+		const seen = new Set<string>();
+		return rawCompetitions.filter((c) => {
+			const id = String(c.league_id);
+			if (seen.has(id)) return false;
+			seen.add(id);
+			return true;
+		});
+	}, [rawCompetitions]);
 
 	useEffect(() => {
 		if (seasons) setSelectedSeason(seasons[0]);
@@ -73,7 +84,7 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 			const uniqueLeagueIds = Array.from(new Set(competitions.map((c) => c.league_id)));
 			setSelectedCompetitions(uniqueLeagueIds);
 		}
-	}, [competitions, selectedSeason]);
+	}, [competitions]);
 
 	// handlers
 	const toggleCompetition = (slug: string) => {
@@ -81,21 +92,10 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	};
 
 	// derived schedule
-	const filteredSchedule = useMemo(() => {
-		if (!schedule) return [];
-
-		return schedule.filter((game) => {
-			const matchesCompetition = schedule.filter((g) => selectedCompetitions.includes(g.league_id));
-
-			// if it's Zadar -> filter by search term
-			if (isZadar) {
-				const matchesSearch = searchGames(game, searchTerm);
-				return matchesCompetition && matchesSearch;
-			}
-
-			return matchesCompetition;
-		});
-	}, [schedule, selectedCompetitions, searchTerm, isZadar]);
+	const filteredSchedule = useMemo(
+		() => filterSchedule(schedule, selectedCompetitions, searchTerm, isZadar),
+		[schedule, selectedCompetitions, searchTerm, isZadar]
+	);
 
 	return (
 		<GamesContext.Provider

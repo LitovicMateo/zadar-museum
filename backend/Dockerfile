@@ -1,3 +1,16 @@
+FROM node:20-alpine AS development
+
+WORKDIR /app
+
+# Development image: install dependencies but skip build steps.
+# This target is used for local development and runs `npm run develop`.
+COPY package*.json ./
+RUN npm ci
+
+EXPOSE 1337
+CMD ["npm", "run", "develop"]
+
+
 FROM node:20-alpine AS builder
 
 WORKDIR /app

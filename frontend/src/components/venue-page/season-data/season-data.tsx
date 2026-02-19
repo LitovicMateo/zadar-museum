@@ -5,7 +5,7 @@ import SeasonSelect from '@/components/games-page/games-filter/season-select';
 import Heading from '@/components/ui/heading';
 import { useLeagueGames } from '@/hooks/queries/league/useLeagueGames';
 import { useLeagueSeasons } from '@/hooks/queries/league/useLeagueSeasons';
-import { useScheduleTable } from '@/hooks/useScheduleTable';
+import { ScheduleList } from '@/hooks/useScheduleTable';
 
 import TeamLeagueStats from '../../league-page/league-season/team-league-stats';
 import PlayerLeagueStats from './player-league-stats';
@@ -17,7 +17,7 @@ const SeasonData = () => {
 
 	const { data: seasons } = useLeagueSeasons(leagueSlug!);
 	const { data: leagueGamelog } = useLeagueGames(leagueSlug!, selectedSeason);
-	const { Schedule } = useScheduleTable(leagueGamelog!);
+
 
 	useEffect(() => {
 		if (seasons) setSelectedSeason(seasons[0]);
@@ -34,7 +34,7 @@ const SeasonData = () => {
 			<Heading title="Player Stats" type="secondary" />
 			<PlayerLeagueStats season={selectedSeason} />
 			<Heading title="Schedule" type="secondary" />
-			<Schedule />
+		<ScheduleList schedule={leagueGamelog} />
 		</section>
 	);
 };

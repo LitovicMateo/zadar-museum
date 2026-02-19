@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import Heading from '@/components/ui/heading';
 import { useGamesContext } from '@/hooks/context/useGamesContext';
-import { useScheduleTable } from '@/hooks/useScheduleTable';
+import { ScheduleList } from '@/hooks/useScheduleTable';
 
 type GamesListProps = {
 	competitionSlug: string;
@@ -19,8 +19,6 @@ const GamesList: React.FC<GamesListProps> = ({ competitionSlug }) => {
 		[filteredSchedule, competitionSlug]
 	);
 
-	const { Schedule } = useScheduleTable(competitionGames);
-
 	if (scheduleLoading) {
 		return <div>Loading...</div>;
 	}
@@ -28,7 +26,7 @@ const GamesList: React.FC<GamesListProps> = ({ competitionSlug }) => {
 	return (
 		<section className="w-full flex flex-col gap-4">
 			<Heading title={leagueName ?? ''} type="secondary" />
-			<Schedule />
+			<ScheduleList schedule={competitionGames} />
 		</section>
 	);
 };

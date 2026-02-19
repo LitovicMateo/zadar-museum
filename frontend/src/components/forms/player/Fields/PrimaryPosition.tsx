@@ -17,12 +17,12 @@ const PrimaryPosition: React.FC = () => {
 			<Controller
 				control={control}
 				name="primary_position"
-				rules={{ required: 'Position is required' }}
+				// primary position is now optional/nullable
 				render={({ field }) => (
 					<Select<PositionOption, false>
 						options={positionOptions}
 						value={positionOptions.find((opt) => opt.value === field.value) || null}
-						onChange={(selected) => field.onChange(selected?.value || '')}
+						onChange={(selected) => field.onChange(selected?.value ?? null)}
 						isClearable
 						styles={selectStyle()}
 					/>

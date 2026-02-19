@@ -21,10 +21,10 @@ const emptydefaults: PlayerFormData = {
 	date_of_birth: '',
 	date_of_death: '',
 	active_player: true,
-	primary_position: '',
-	secondary_position: '',
+	primary_position: null,
+	secondary_position: null,
 	image: null,
-	nationality: ''
+	nationality: null
 };
 
 const PlayerForm: React.FC<PlayerFormProps> = ({
