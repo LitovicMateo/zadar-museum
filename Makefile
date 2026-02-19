@@ -43,6 +43,7 @@ dev-mv:
 		sh -lc 'npm ci --production && export DATABASE_HOST=postgres && export DATABASE_PORT=5432 && export DATABASE_USERNAME=$${DATABASE_USERNAME:-strapi} && export DATABASE_PASSWORD=$${DATABASE_PASSWORD:-strapi_password_change_me} && export DATABASE_NAME=$${DATABASE_NAME:-strapi} && node ./scripts/apply-mvs.js --refresh --concurrent'
 
 staging:
+	$(COMPOSE_CMD) -f $(STAGING_COMPOSE) --env-file $(STAGING_ENV) pull --ignore-buildable
 	$(COMPOSE_CMD) -f $(STAGING_COMPOSE) --env-file $(STAGING_ENV) up --build -d --no-deps --force-recreate
 
 staging-stop:
@@ -50,7 +51,8 @@ staging-stop:
 
 prod:
 	@if [ ! -f "$(PROD_ENV)" ]; then echo "Error: $(PROD_ENV) not found. Create it from .env.prod.example or provide env vars in CI/VPS."; exit 1; fi
-	$(COMPOSE_CMD) -f $(PROD_COMPOSE) --env-file $(PROD_ENV) up --build -d --no-deps --force-recreate
+	$(COMPOSE_CMD) -f $(PROD_COMPOSE) --env-file $(PROD_ENV) pull
+	$(COMPOSE_CMD) -f $(PROD_COMPOSE) --env-file $(PROD_ENV) up -d --no-deps --force-recreate
 
 prod-stop:
 	$(COMPOSE_CMD) -f $(PROD_COMPOSE) --env-file $(PROD_ENV) down
