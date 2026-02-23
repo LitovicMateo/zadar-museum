@@ -2,8 +2,8 @@ CREATE MATERIALIZED VIEW public.opponent_player_season_average_all_time_league_a
  
   SELECT b.player_id,
     b.league_id,
-    b.league_name,
-    b.league_slug,
+    MAX(b.league_name) AS league_name,
+    MAX(b.league_slug) AS league_slug,
     b.first_name,
     b.last_name,
     b.season,
@@ -85,4 +85,4 @@ CREATE MATERIALIZED VIEW public.opponent_player_season_average_all_time_league_a
     b.status::text <> 'dnp-cd'::text AND 
     b.is_home_team = 'away' AND
     b.is_nulled = false
-  GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.league_name, b.league_slug, b.season;
+  GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.season;

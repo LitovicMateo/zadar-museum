@@ -6,12 +6,8 @@ import TableWrapper from '@/components/ui/table-wrapper';
 import { useGamesContext } from '@/hooks/context/useGamesContext';
 import { useTeamSeasonLeagueStats } from '@/hooks/queries/team/useTeamSeasonLeagueStats';
 import { useTeamSeasonStats } from '@/hooks/queries/team/useTeamSeasonStats';
-import {
-	LeagueStatsTableBody,
-	LeagueStatsTableFoot,
-	LeagueStatsTableHead,
-	useTeamLeagueStatsTable
-} from '@/hooks/useTeamLeagueStats';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
+import { useTeamLeagueStatsTable } from '@/hooks/useTeamLeagueStats';
 import { TeamStats } from '@/types/api/team';
 
 type View = 'total' | 'home' | 'away' | 'neutral';
@@ -46,9 +42,6 @@ const TeamSeasonStats: React.FC = () => {
 	const { table: footTable } = useTeamLeagueStatsTable(selectTotalStats);
 
 	if (!seasonStats || !seasonLeagueStats) return null;
-
-	console.log("LS", seasonLeagueStats);
-	
 
 	return (
 		<>
@@ -104,9 +97,9 @@ const TeamSeasonStats: React.FC = () => {
 			</form>
 
 			<TableWrapper>
-				<LeagueStatsTableHead table={mainTable} />
-				<LeagueStatsTableBody table={mainTable} />
-				<LeagueStatsTableFoot table={footTable} />
+				<UniversalTableHead table={mainTable} />
+				<UniversalTableBody table={mainTable} />
+				<UniversalTableFooter table={footTable} variant="light" />
 			</TableWrapper>
 		</>
 	);

@@ -5,11 +5,8 @@ import Heading from '@/components/ui/heading';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useTeamTotalStats } from '@/hooks/queries/team/useTeamTotalStats';
 
-import {
-	AllTimeStatsTableBody,
-	AllTimeStatsTableHead,
-	useTeamAllTimeStatsTable
-} from './useTeamAllTimeStatsTable';
+import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
+import { useTeamAllTimeStatsTable } from './useTeamAllTimeStatsTable';
 
 const TeamAllTimeStats: React.FC = () => {
 	const { teamSlug } = useParams();
@@ -23,8 +20,8 @@ const TeamAllTimeStats: React.FC = () => {
 		<>
 			<Heading title="All Time Stats" />
 			<TableWrapper>
-				<AllTimeStatsTableHead table={table} />
-				<AllTimeStatsTableBody table={table} />
+				<UniversalTableHead table={table} />
+				<UniversalTableBody table={table} />
 			</TableWrapper>
 		</>
 	);

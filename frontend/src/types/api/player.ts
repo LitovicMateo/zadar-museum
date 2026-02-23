@@ -213,19 +213,21 @@ export interface PlayerCareerStats {
 		total: GameStatsEntry;
 		home: GameStatsEntry;
 		away: GameStatsEntry;
+		neutral?: GameStatsEntry;
 	};
 	average: {
 		total: GameStatsEntry;
 		home: GameStatsEntry;
 		away: GameStatsEntry;
+		neutral?: GameStatsEntry;
 	};
 }
 
 /**
- * A single stat entry (home / away / total) with a key identifier.
+ * A single stat entry (home / away / total / neutral) with a key identifier.
  */
 export interface GameStatsEntry extends GameStats {
-	key: 'home' | 'away' | 'total';
+	key: 'home' | 'away' | 'total' | 'neutral';
 }
 
 /**

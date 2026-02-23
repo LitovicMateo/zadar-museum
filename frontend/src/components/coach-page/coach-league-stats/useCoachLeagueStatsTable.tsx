@@ -1,6 +1,6 @@
-import TableCell from '@/components/ui/table-cell';
+import '@/components/ui/table/types';
 import { CoachLeagueStatsResponse } from '@/types/api/coach';
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | undefined) => {
 	const table = useReactTable<CoachLeagueStatsResponse>({
@@ -12,7 +12,8 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 				columns: [
 					{
 						header: 'League',
-						accessorKey: 'league_name'
+						accessorKey: 'league_name',
+						meta: { sticky: 'left', stickyOffset: '0' }
 					}
 				]
 			},
@@ -434,64 +435,5 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 		getCoreRowModel: getCoreRowModel()
 	});
 
-	const TableHead = () => {
-		return (
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b-2 border-blue-500">
-						{headerGroup.headers.map((header, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10' : '';
-
-							// check if this is the last column in its parent group
-							const isLastInGroup =
-								header.column.parent?.columns?.[header.column.parent.columns.length - 1]?.id ===
-								header.column.id;
-
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									className={`px-4 py-2 text-center ${sticky} bg-slate-100 hover:bg-blue-50 transition-colors duration-200 ${
-										header.column.getCanSort() ? 'select-none cursor-pointer' : ''
-									} ${isLastInGroup ? 'border-r border-slate-400' : ''}`}
-									onClick={header.column.getToggleSortingHandler()}
-								>
-									{flexRender(header.column.columnDef.header, header.getContext())}
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
-
-	const TableBody = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-white' : '';
-
-							const isLastInGroup =
-								cell.column.parent?.columns?.[cell.column.parent.columns.length - 1]?.id ===
-								cell.column.id;
-
-							return (
-								<TableCell
-									key={cell.id}
-									sticky={`${sticky} ${isLastInGroup ? 'border-r border-slate-400' : ''}`}
-								>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</TableCell>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
-
-	return { table, TableHead, TableBody };
+	return { table };
 };

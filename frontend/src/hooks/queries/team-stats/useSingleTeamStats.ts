@@ -19,7 +19,5 @@ const getSingleTeamStats = async (game: string, team: string): Promise<TeamStats
 	});
 	const res = await apiClient.get(API_ROUTES.stats.team.game(params.toString()));
 
-	console.log(res.data[0]);
-	
 	return res.data[0];
 };

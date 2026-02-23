@@ -16,20 +16,15 @@ const GameHeader: React.FC = () => {
 	// fetch game details
 	const { data: game, isLoading } = useGameDetails(gameId!);
 
-	console.log(game);
-
 	const { data: score } = useGameScore(gameId!);
 
 	if (!game || isLoading) return null;
 
 	const homeImagePath = game.home_team?.image?.url;
 	const awayImagePath = game.away_team?.image?.url;
-	console.log(awayImagePath);
 
 	const homeImageUrl = homeImagePath ? getImageUrl(homeImagePath) : '';
 	const awayImageUrl = awayImagePath ? getImageUrl(awayImagePath) : '';
-
-	console.log(awayImageUrl);
 
 	return (
 		<section className="w-full px-4">

@@ -4,8 +4,8 @@ CREATE MATERIALIZED VIEW public.opponent_player_season_total_all_time_per_team_p
     b.first_name,
     b.last_name,
     b.team_slug,
-    b.league_name,
-    b.league_slug,
+    MAX(b.league_name) AS league_name,
+    MAX(b.league_slug) AS league_slug,
     b.season,
     count(b.game_id) AS games,
     rank() OVER (PARTITION BY b.league_id, b.season ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
@@ -81,4 +81,4 @@ CREATE MATERIALIZED VIEW public.opponent_player_season_total_all_time_per_team_p
     b.team_slug::text <> 'kk-zadar'::text AND 
     b.status::text <> 'dnp-cd'::text AND
     b.is_nulled = false
-    GROUP BY b.player_id, b.first_name, b.last_name, b.team_slug, b.league_id, b.league_name, b.league_slug, b.season;
+    GROUP BY b.player_id, b.first_name, b.last_name, b.team_slug, b.league_id, b.season;

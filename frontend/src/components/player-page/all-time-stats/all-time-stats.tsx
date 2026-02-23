@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Heading from '@/components/ui/heading';
@@ -22,6 +22,13 @@ const AllTimeStats: React.FC = React.memo(() => {
 
 	const { data, isLoading } = useAllTimeStats(playerId!, selectedDatabase!);
 
+	const [location, setLocation] = useState<'total' | 'home' | 'away' | 'neutral'>('total');
+	const hasNeutral = !!(data?.[0]?.total?.neutral?.games);
+
+	useEffect(() => {
+		if (!hasNeutral && location === 'neutral') setLocation('total');
+	}, [hasNeutral, location]);
+
 	if (isLoading || !data) {
 		return (
 			<section className="flex flex-col gap-4">
@@ -39,11 +46,30 @@ const AllTimeStats: React.FC = React.memo(() => {
 		);
 	}
 
-	const totalStats = data[0].total.total;
+	const totalStats = data[0].total[location] ?? data[0].total.total;
 
 	return (
 		<section className="flex flex-col gap-4" aria-labelledby="all-time-stats-heading">
 			<Heading title="All Time Stats" id="all-time-stats-heading" />
+			<fieldset className="flex flex-row gap-4 font-abel">
+				{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
+					<label
+						key={loc}
+						className={`flex items-center gap-2 transition-colors duration-200 ${loc === 'neutral' && !hasNeutral ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`}
+					>
+						<input
+							type="radio"
+							name="all-time-stats-location"
+							value={loc}
+							checked={location === loc}
+							onChange={() => setLocation(loc)}
+							disabled={loc === 'neutral' && !hasNeutral}
+							className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+						/>
+						<span className="text-sm font-medium capitalize">{loc}</span>
+					</label>
+				))}
+			</fieldset>
 			<div
 				className="rounded-lg shadow-md border border-gray-200 overflow-hidden bg-white"
 				role="table"

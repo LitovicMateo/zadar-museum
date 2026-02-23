@@ -2,6 +2,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { usePlayerBoxscore } from '@/hooks/queries/player/usePlayerBoxscore';
@@ -19,7 +20,7 @@ const Boxscore: React.FC = () => {
 		return filtered;
 	}, [data, selectedCompetitions]);
 
-	const { TableHead, TableBody } = usePlayerGamelogTable(filteredGames);
+	const { table } = usePlayerGamelogTable(filteredGames);
 
 	if (isLoading) return null;
 
@@ -29,8 +30,8 @@ const Boxscore: React.FC = () => {
 
 	return (
 		<TableWrapper>
-			<TableHead />
-			<TableBody />
+			<UniversalTableHead table={table} />
+			<UniversalTableBody table={table} />
 		</TableWrapper>
 	);
 };

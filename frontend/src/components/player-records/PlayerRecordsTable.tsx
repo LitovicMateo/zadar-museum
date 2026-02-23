@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
 import { PlayerRecords } from '@/types/api/player-stats';
 import { SortingState } from '@tanstack/react-table';
 
@@ -14,18 +15,16 @@ type PlayerRecordsTableProps = {
 };
 
 const PlayerRecordsTable: React.FC<PlayerRecordsTableProps> = ({ data, sorting, setSorting }) => {
-	const { TableBody, TableHead } = usePlayerRecordsTable(data, sorting, setSorting);
+	const { table } = usePlayerRecordsTable(data, sorting, setSorting);
 	if (!data || data.length === 0) {
 		return <NoContent type="info" description={<p>There are no player stats in the database.</p>} />;
 	}
 
 	return (
-		<div className="w-full overflow-x-scroll">
-			<TableWrapper>
-				<TableHead />
-				<TableBody />
-			</TableWrapper>
-		</div>
+		<TableWrapper>
+			<UniversalTableHead table={table} />
+			<UniversalTableBody table={table} />
+		</TableWrapper>
 	);
 };
 

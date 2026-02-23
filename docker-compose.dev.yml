@@ -85,8 +85,26 @@ services:
     depends_on:
       - backend
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_dev
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_SERVER_JSON_FILE: /pgadmin4/servers.json
+    ports:
+      - "5051:80"
+    volumes:
+      - ./scripts/pgadmin/servers.json:/pgadmin4/servers.json:ro
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   postgres_dev_data:
   strapi_uploads:
   frontend_node_modules:
   backend_node_modules:
+  pgadmin_data:

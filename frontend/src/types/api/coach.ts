@@ -35,7 +35,7 @@ export type CoachRecordResponse = {
 	coachId: string;
 	firstName: string;
 	lastName: string;
-	allTime: CoachRecordRow[];
+	total: CoachRecordRow[];
 	headCoach: CoachRecordRow[];
 	assistantCoach: CoachRecordRow[];
 };
@@ -86,11 +86,12 @@ export interface CoachStats {
 	avg_points_difference?: number | null;
 }
 
-// Generic container for home/away/total stats
+// Generic container for home/away/total/neutral stats
 export interface CoachStatsGroup {
 	away: CoachStats;
 	home: CoachStats;
 	total: CoachStats;
+	neutral?: CoachStats;
 }
 
 // Top-level API response

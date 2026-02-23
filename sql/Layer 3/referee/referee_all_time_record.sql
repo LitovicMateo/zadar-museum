@@ -42,6 +42,18 @@ SELECT
 
 
 
-FROM public.referee_stats total
-LEFT JOIN public.referee_stats_home home USING (referee_id, first_name, last_name)
-LEFT JOIN public.referee_stats_away away USING (referee_id, first_name, last_name)
+FROM (
+  SELECT DISTINCT ON (referee_id) *
+  FROM public.referee_stats
+  ORDER BY referee_id
+) total
+LEFT JOIN (
+  SELECT DISTINCT ON (referee_id) *
+  FROM public.referee_stats_home
+  ORDER BY referee_id
+) home ON total.referee_id = home.referee_id
+LEFT JOIN (
+  SELECT DISTINCT ON (referee_id) *
+  FROM public.referee_stats_away
+  ORDER BY referee_id
+) away ON total.referee_id = away.referee_id

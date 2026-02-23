@@ -17,13 +17,18 @@ const Coach: React.FC = () => {
 		if (isFetched && !coachDetails) {
 			navigate(APP_ROUTES.home);
 		}
-	});
+	}, [isFetched, coachDetails, navigate]);
 
 	return (
-		<div className="flex flex-col gap-1">
+		<>
+			<a href="#coach-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-2 focus:bg-white focus:text-blue-800">
+				Skip to content
+			</a>
 			<CoachHeader />
-			<CoachContent />
-		</div>
+			<main id="coach-content" className="flex flex-col gap-1">
+				<CoachContent />
+			</main>
+		</>
 	);
 };
 

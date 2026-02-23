@@ -1,6 +1,11 @@
-import TableCell from '@/components/ui/table-cell';
+import '@/components/ui/table/types';
 import { RefereeStats } from '@/types/api/referee';
-import { CellContext, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { CellContext, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+
+const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData, TValue> }) => {
+	const value = info.getValue();
+	return <p>{value === null || value === undefined ? '-' : String(value)}</p>;
+};
 
 export const useRefereeStatsTable = (data: RefereeStats[] | undefined) => {
 	const table = useReactTable<RefereeStats>({
@@ -8,7 +13,8 @@ export const useRefereeStatsTable = (data: RefereeStats[] | undefined) => {
 		columns: [
 			{
 				header: '',
-				accessorKey: 'key'
+				accessorKey: 'key',
+				meta: { sticky: 'left', stickyOffset: '0' }
 			},
 			{
 				header: 'G',
@@ -49,56 +55,5 @@ export const useRefereeStatsTable = (data: RefereeStats[] | undefined) => {
 		getCoreRowModel: getCoreRowModel()
 	});
 
-	const TableHead: React.FC = () => {
-		return (
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b border-slate-400">
-						{headerGroup.headers.map((header, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10' : '';
-
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									className={`px-4 py-2 text-center whitespace-nowrap ${sticky} bg-slate-50 ${header.column.getCanSort() ? 'select-none cursor-pointer' : ''}`}
-									onClick={header.column.getToggleSortingHandler()}
-								>
-									{flexRender(header.column.columnDef.header, header.getContext())}
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
-
-	const TableBody: React.FC = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-white' : '';
-
-							return (
-								<TableCell key={cell.id} sticky={sticky}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</TableCell>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
-
-	const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData, TValue> }) => {
-		const value = info.getValue();
-
-		return <p>{value === null || value === undefined ? '-' : String(value)}</p>;
-	};
-
-	return { TableHead, TableBody };
+	return { table };
 };

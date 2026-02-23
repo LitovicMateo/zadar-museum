@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  width: 100%;
+}
+
+.competitionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}

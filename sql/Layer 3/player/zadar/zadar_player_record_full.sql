@@ -168,6 +168,60 @@ SELECT
             'free_throw_percentage', away.free_throw_percentage,
             'efficiency', away.efficiency,
             'efficiency_rank', away.efficiency_rank
+        ),
+        'neutral', jsonb_build_object(
+            'key', 'neutral',
+            'games', neutral.games,
+            'games_rank', neutral.games_rank,
+            'games_started', neutral.games_started,
+            'minutes', neutral.minutes,
+
+            'points', neutral.points,
+            'points_rank', neutral.points_rank,
+
+            'assists', neutral.assists,
+            'assists_rank', neutral.assists_rank,
+
+            'off_rebounds', neutral.off_rebounds,
+            'off_rebounds_rank', neutral.off_rebounds_rank,
+
+            'def_rebounds', neutral.def_rebounds,
+            'def_rebounds_rank', neutral.def_rebounds_rank,
+
+            'rebounds', neutral.rebounds,
+            'rebounds_rank', neutral.rebounds_rank,
+
+            'steals', neutral.steals,
+            'steals_rank', neutral.steals_rank,
+            
+            'blocks', neutral.blocks,
+            'blocks_rank', neutral.blocks_rank,
+
+            'field_goals_made', neutral.field_goals_made,
+            'field_goals_made_rank', neutral.field_goals_made_rank,
+
+            'field_goals_attempted', neutral.field_goals_attempted,
+            'field_goals_attempted_rank', neutral.field_goals_attempted_rank,
+
+            'field_goal_percentage', neutral.field_goal_percentage,
+
+            'three_pointers_made', neutral.three_pointers_made,
+            'three_pointers_made_rank', neutral.three_pointers_made_rank,
+
+            'three_pointers_attempted', neutral.three_pointers_attempted,
+            'three_pointers_attempted_rank', neutral.three_pointers_attempted_rank,
+
+            'three_point_percentage', neutral.three_point_percentage,
+
+            'free_throws_made', neutral.free_throws_made,
+            'free_throws_made_rank', neutral.free_throws_made_rank,
+
+            'free_throws_attempted', neutral.free_throws_attempted,
+            'free_throws_attempted_rank', neutral.free_throws_attempted_rank,
+
+            'free_throw_percentage', neutral.free_throw_percentage,
+            'efficiency', neutral.efficiency,
+            'efficiency_rank', neutral.efficiency_rank
         )
     ) AS total,
 
@@ -334,12 +388,100 @@ SELECT
             'free_throw_percentage', avg_away.free_throw_percentage,
             'efficiency', avg_away.efficiency,
             'efficiency_rank', avg_away.efficiency_rank
+        ),
+        'neutral', jsonb_build_object(
+            'key', 'neutral',
+            'games', avg_neutral.games,
+            'games_rank', avg_neutral.games_rank,
+            'games_started', avg_neutral.games_started,
+            'minutes', avg_neutral.minutes,
+
+            'points', avg_neutral.points,
+            'points_rank', avg_neutral.points_rank,
+
+            'assists', avg_neutral.assists,
+            'assists_rank', avg_neutral.assists_rank,
+
+            'off_rebounds', avg_neutral.off_rebounds,
+            'off_rebounds_rank', avg_neutral.off_rebounds_rank,
+
+            'def_rebounds', avg_neutral.def_rebounds,
+            'def_rebounds_rank', avg_neutral.def_rebounds_rank,
+
+            'rebounds', avg_neutral.rebounds,
+            'rebounds_rank', avg_neutral.rebounds_rank,
+
+            'steals', avg_neutral.steals,
+            'steals_rank', avg_neutral.steals_rank,
+            
+            'blocks', avg_neutral.blocks,
+            'blocks_rank', avg_neutral.blocks_rank,
+
+            'field_goals_made', avg_neutral.field_goals_made,
+            'field_goals_made_rank', avg_neutral.field_goals_made_rank,
+
+            'field_goals_attempted', avg_neutral.field_goals_attempted,
+            'field_goals_attempted_rank', avg_neutral.field_goals_attempted_rank,
+
+            'field_goal_percentage', avg_neutral.field_goal_percentage,
+
+            'three_pointers_made', avg_neutral.three_pointers_made,
+            'three_pointers_made_rank', avg_neutral.three_pointers_made_rank,
+
+            'three_pointers_attempted', avg_neutral.three_pointers_attempted,
+            'three_pointers_attempted_rank', avg_neutral.three_pointers_attempted_rank,
+
+            'three_point_percentage', avg_neutral.three_point_percentage,
+
+            'free_throws_made', avg_neutral.free_throws_made,
+            'free_throws_made_rank', avg_neutral.free_throws_made_rank,
+
+            'free_throws_attempted', avg_neutral.free_throws_attempted,
+            'free_throws_attempted_rank', avg_neutral.free_throws_attempted_rank,
+
+            'free_throw_percentage', avg_neutral.free_throw_percentage,
+            'efficiency', avg_neutral.efficiency,
+            'efficiency_rank', avg_neutral.efficiency_rank
         )
     ) AS average
 
-FROM public.zadar_player_total_all_time total
-LEFT JOIN public.zadar_player_total_all_time_home home USING (player_id, first_name, last_name)
-LEFT JOIN public.zadar_player_total_all_time_away away USING (player_id, first_name, last_name)
-LEFT JOIN public.zadar_player_average_all_time avg_total USING (player_id, first_name, last_name)
-LEFT JOIN public.zadar_player_average_all_time_home avg_home USING (player_id, first_name, last_name)
-LEFT JOIN public.zadar_player_average_all_time_away avg_away USING (player_id, first_name, last_name);
+FROM (
+  SELECT DISTINCT ON (player_id) *
+  FROM public.zadar_player_total_all_time
+  ORDER BY player_id
+) total
+LEFT JOIN (
+  SELECT DISTINCT ON (player_id) *
+  FROM public.zadar_player_total_all_time_home
+  ORDER BY player_id
+) home ON total.player_id = home.player_id
+LEFT JOIN (
+  SELECT DISTINCT ON (player_id) *
+  FROM public.zadar_player_total_all_time_away
+  ORDER BY player_id
+) away ON total.player_id = away.player_id
+LEFT JOIN (
+  SELECT DISTINCT ON (player_id) *
+  FROM public.zadar_player_total_all_time_neutral
+  ORDER BY player_id
+) neutral ON total.player_id = neutral.player_id
+LEFT JOIN (
+  SELECT DISTINCT ON (player_id) *
+  FROM public.zadar_player_average_all_time
+  ORDER BY player_id
+) avg_total ON total.player_id = avg_total.player_id
+LEFT JOIN (
+  SELECT DISTINCT ON (player_id) *
+  FROM public.zadar_player_average_all_time_home
+  ORDER BY player_id
+) avg_home ON total.player_id = avg_home.player_id
+LEFT JOIN (
+  SELECT DISTINCT ON (player_id) *
+  FROM public.zadar_player_average_all_time_away
+  ORDER BY player_id
+) avg_away ON total.player_id = avg_away.player_id
+LEFT JOIN (
+  SELECT DISTINCT ON (player_id) *
+  FROM public.zadar_player_average_all_time_neutral
+  ORDER BY player_id
+) avg_neutral ON total.player_id = avg_neutral.player_id;

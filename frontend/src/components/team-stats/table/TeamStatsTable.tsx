@@ -1,6 +1,7 @@
 import React from 'react';
 
 import NoContent from '@/components/no-content/no-content';
+import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/pages/Stats/UI/TableWrapper';
 import { TeamStatsRanking } from '@/types/api/team';
 import { SortingState } from '@tanstack/react-table';
@@ -15,7 +16,7 @@ type TeamStatsTableProps = {
 };
 
 const TeamStatsTable: React.FC<TeamStatsTableProps> = ({ stats, isFetching, sorting, setSorting }) => {
-	const { TableHead, TableBody } = useTeamStatsTable(stats, sorting, setSorting);
+	const { table } = useTeamStatsTable(stats, sorting, setSorting);
 	if (!stats || stats.length === 0) {
 		return <NoContent type="info" description={<p>There are no team stats in the database.</p>} />;
 	}
@@ -24,8 +25,8 @@ const TeamStatsTable: React.FC<TeamStatsTableProps> = ({ stats, isFetching, sort
 
 	return (
 		<TableWrapper>
-			<TableHead />
-			<TableBody />
+			<UniversalTableHead table={table} />
+			<UniversalTableBody table={table} />
 		</TableWrapper>
 	);
 };
