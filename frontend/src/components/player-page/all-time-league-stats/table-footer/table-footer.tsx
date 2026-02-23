@@ -8,9 +8,10 @@ import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-tabl
 type TableFooterProps = {
 	view: 'total' | 'average';
 	db: PlayerDB;
+	location?: 'total' | 'home' | 'away' | 'neutral';
 };
 
-const TableFooter: React.FC<TableFooterProps> = ({ view, db }) => {
+const TableFooter: React.FC<TableFooterProps> = ({ view, db, location = 'total' }) => {
 	const { playerId } = useParams();
 
 	const { data, isLoading } = useAllTimeStats(playerId!, db);
@@ -37,7 +38,8 @@ const TableFooter: React.FC<TableFooterProps> = ({ view, db }) => {
 	const totalStats: TotalRow[] | undefined = ((): TotalRow[] | undefined => {
 		if (!data) return undefined;
 		return data.map((d) => {
-			const chosen = view === 'total' ? d.total?.total : d.average?.total;
+			const viewGroup = view === 'total' ? d.total : d.average;
+			const chosen = viewGroup?.[location] ?? viewGroup?.total;
 
 			const leagueName = (chosen as unknown as { league_name?: string })?.league_name ?? 'TOTAL';
 

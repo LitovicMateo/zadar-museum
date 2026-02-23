@@ -1,0 +1,44 @@
+.trBorder {
+  border-bottom: 2px solid #3b82f6; /* blue-500 */
+}
+
+.thBase {
+  padding: 0.5rem 1rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.stickyLeft {
+  text-align: left;
+  white-space: nowrap;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background-color: #f1f5f9; /* slate-100 */
+}
+
+.hoverBg {
+  transition: background-color 0.2s;
+}
+
+.bgSlate100 {
+  background-color: #f1f5f9;
+}
+
+.selectNone {
+  user-select: none;
+  cursor: pointer;
+}
+
+.stickyLeftBody {
+  text-align: left;
+  white-space: nowrap;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background-color: #ffffff;
+}
+
+.borderRight {
+  border-right: 1px solid #cbd5e1; /* slate-400 */
+}

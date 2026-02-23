@@ -1,6 +1,7 @@
 import TableCell from '@/components/ui/table-cell';
 import { CoachLeagueStatsResponse } from '@/types/api/coach';
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import styles from './useCoachLeagueStatsTable.module.css';
 
 export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | undefined) => {
 	const table = useReactTable<CoachLeagueStatsResponse>({
@@ -25,14 +26,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.getValue() === 0) {
 								return (
-									<div className="min-w-6">
+									<div className={styles.minWidth6}>
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-6">
+								<div className={styles.minWidth6}>
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -44,14 +45,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className="min-w-6">
+									<div className={styles.minWidth6}>
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-6">
+								<div className={styles.minWidth6}>
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -82,14 +83,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className="min-w-6">
+									<div className={styles.minWidth6}>
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className="min-w-6">
+								<div className={styles.minWidth6}>
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -438,9 +439,9 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 		return (
 			<thead>
 				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b-2 border-blue-500">
+					<tr key={headerGroup.id} className={styles.trBorder}>
 						{headerGroup.headers.map((header, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10' : '';
+							const sticky = index === 0 ? styles.stickyLeft : '';
 
 							// check if this is the last column in its parent group
 							const isLastInGroup =
@@ -451,9 +452,9 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 								<th
 									key={header.id}
 									colSpan={header.colSpan}
-									className={`px-4 py-2 text-center ${sticky} bg-slate-100 hover:bg-blue-50 transition-colors duration-200 ${
-										header.column.getCanSort() ? 'select-none cursor-pointer' : ''
-									} ${isLastInGroup ? 'border-r border-slate-400' : ''}`}
+									className={`${styles.thBase} ${sticky} ${styles.bgSlate100} ${styles.hoverBg} ${
+										header.column.getCanSort() ? styles.selectNone : ''
+									} ${isLastInGroup ? styles.borderRight : ''}`}
 									onClick={header.column.getToggleSortingHandler()}
 								>
 									{flexRender(header.column.columnDef.header, header.getContext())}
@@ -472,7 +473,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 				{table.getRowModel().rows.map((row) => (
 					<tr key={row.id}>
 						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-white' : '';
+							const sticky = index === 0 ? styles.stickyLeftBody : '';
 
 							const isLastInGroup =
 								cell.column.parent?.columns?.[cell.column.parent.columns.length - 1]?.id ===
@@ -481,7 +482,7 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 							return (
 								<TableCell
 									key={cell.id}
-									sticky={`${sticky} ${isLastInGroup ? 'border-r border-slate-400' : ''}`}
+									sticky={`${sticky} ${isLastInGroup ? styles.borderRight : ''}`}
 								>
 									{flexRender(cell.column.columnDef.cell, cell.getContext())}
 								</TableCell>

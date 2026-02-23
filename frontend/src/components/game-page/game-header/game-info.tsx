@@ -13,9 +13,6 @@ const GameInfo: React.FC = () => {
 
 	if (!game || isLoading) return null;
 
-	console.log(game);
-	
-
 	const date = new Date(game.date).toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' });
 
 	return (

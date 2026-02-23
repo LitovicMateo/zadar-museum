@@ -1,57 +1,50 @@
 import React from 'react';
 import Flag from 'react-world-flags';
-import { format } from 'date-fns';
 
 import { CoachDetailsResponse } from '@/types/api/coach';
-import { calculateAge } from '@/utils/calculateAge';
+import { getCoachBioInfo } from './coach-bio.utils';
+import styles from './coach-bio.module.css';
 
 type CoachBio = {
 	coach: CoachDetailsResponse;
 };
 
 const CoachBio: React.FC<CoachBio> = ({ coach }) => {
-	const birthDateStr =
-		!!coach.date_of_birth &&
-		format(new Date(coach.date_of_birth), 'd MMM yyyy');
-
-	const deathDateStr = !!coach.date_of_death && format(new Date(coach.date_of_death), 'd MMM yyyy');
-
-	const age = coach.date_of_birth ? calculateAge(coach.date_of_birth) : null;
-	const ageAtDeath = coach.date_of_birth && coach.date_of_death ? calculateAge(coach.date_of_birth, coach.date_of_death) : null;
+	const { birthDateStr, deathDateStr, age, ageAtDeath } = getCoachBioInfo(coach);
 	return (
-		<div className="h-fit flex flex-col text-white font-mono">
-			<div className="border-b border-white border-solid">
-				<h2 className="font-bold flex flex-col">
-					<span className="text-sm">{coach.first_name}</span>
-					<span className="text-4xl uppercase">{coach.last_name}</span>
-				</h2>
-			</div>
-			<div className="h-fit py-4 flex flex-col justify-start gap-2 items-start">
-				<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
-					Nationality:
-					<div className="h-4 aspect-video rounded-xs overflow-hidden">
-						{coach.nationality ? (
-							<Flag className="object-cover object- h-full" code={coach.nationality} />
-						) : (
-							<span className="text-gray-300">-</span>
-						)}
-					</div>
-				</label>
-				{deathDateStr ? (
-					<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
-						<span>{`Born: ${birthDateStr} — Died: ${deathDateStr}`}</span>
-						{ageAtDeath !== null && <span className="uppercase">{`(aged ${ageAtDeath})`}</span>}
+			<div className={styles.root}>
+				<div className={styles.borderBottom}>
+					<h2 className={styles.title}>
+						<span className={styles.firstName}>{coach.first_name}</span>
+						<span className={styles.lastName}>{coach.last_name}</span>
+					</h2>
+				</div>
+				<div className={styles.bioContainer}>
+					<label htmlFor="" className={styles.label}>
+						Nationality:
+						<div className={styles.flagWrapper}>
+							{coach.nationality ? (
+								<Flag className={styles.flagImg} code={coach.nationality} />
+							) : (
+								<span className={styles.grayText}>-</span>
+							)}
+						</div>
 					</label>
-				) : (
-					birthDateStr && (
-						<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
-							{`Age: ${age}`}
-							<span className="uppercase">{`(${birthDateStr})`}</span>
+					{deathDateStr ? (
+						<label htmlFor="" className={styles.label}>
+							<span>{`Born: ${birthDateStr} — Died: ${deathDateStr}`}</span>
+							{ageAtDeath !== null && <span className={styles.uppercase}>{`(aged ${ageAtDeath})`}</span>}
 						</label>
-					)
-				)}
+					) : (
+						birthDateStr && (
+							<label htmlFor="" className={styles.label}>
+								{`Age: ${age}`}
+								<span className={styles.uppercase}>{`(${birthDateStr})`}</span>
+							</label>
+						)
+					)}
+				</div>
 			</div>
-		</div>
 	);
 };
 

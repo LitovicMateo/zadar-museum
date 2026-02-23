@@ -6,8 +6,9 @@ import { useCoachGamelog } from '@/hooks/queries/coach/useCoachGamelog';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/useCoachProfileDatabase';
 import { ScheduleList } from '@/hooks/useScheduleTable';
 
-import CoachSeasonStats from './coach-season-stats';
-import Filters from './filters';
+import CoachSeasonStats from './season-stats/coach-season-stats';
+import styles from './coach-gamelog.module.css';
+import Filters from './filters/filters';
 
 const CoachGamelog: React.FC = () => {
 	const { coachId } = useParams();
@@ -24,7 +25,9 @@ const CoachGamelog: React.FC = () => {
 		if (!coachGamelog) return [];
 
 		return coachGamelog.filter((game) => {
-			const matchesCompetition = selectedCompetitions.includes(game.league_id);
+			const matchesCompetition =
+				selectedCompetitions.length === 0 ||
+				selectedCompetitions.includes(String(game.league_id));
 
 			const matchesSearch =
 				searchTerm.trim().length === 0 ||
@@ -36,9 +39,9 @@ const CoachGamelog: React.FC = () => {
 	}, [coachGamelog, selectedCompetitions, searchTerm]);
 
 	return (
-		<section className="flex flex-col gap-2 font-abel">
+		<section className={styles.section}>
 			<Heading title="Seasonal Data" />
-			<div className="flex flex-col gap-8 ">
+			<div className={styles.inner}>
 				<Filters
 					selectedSeason={selectedSeason}
 					setSelectedSeason={setSelectedSeason}
@@ -47,11 +50,11 @@ const CoachGamelog: React.FC = () => {
 					setSearchTerm={setSearchTerm}
 					searchTerm={searchTerm}
 				/>
-				<div className="flex flex-col gap-2">
+				<div className={styles.colGap2}>
 					<Heading title="Season Stats" type="secondary" />
 					<CoachSeasonStats season={selectedSeason} />
 				</div>
-				<div className="flex flex-col gap-2">
+				<div className={styles.colGap2}>
 					<Heading title="Gamelog" type="secondary" />
 					<ScheduleList schedule={filteredGames} />
 				</div>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Heading from '@/components/ui/heading';
@@ -8,47 +8,38 @@ import { useCoachRecord } from '@/hooks/queries/coach/useCoachRecord';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/useCoachProfileDatabase';
 import { CoachStats } from '@/types/api/coach';
 
-import { useCoachSeasonStatsTable } from '../coach-gamelog/useCoachSeasonStatsTable';
-import CoachRoleFilter from './coach-role-filter';
-import LocationFilter from './location-filter';
+import CoachFilterBar from '../shared/CoachFilterBar';
+import styles from './coach-league-stats.module.css';
+import { computeHasNeutral, computeLeagueStats, computeTotalStats } from './coach-league-stats.utils';
+import { useCoachSeasonStatsTable } from '../coach-gamelog/season-stats/useCoachSeasonStatsTable';
 
 const CoachLeagueStats: React.FC = () => {
 	const { coachId } = useParams();
 	const { db } = useCoachProfileDatabase(coachId!);
 
-	const [coachRole, setCoachRole] = useState<'total' | 'allTime' | 'headCoach' | 'assistantCoach'>('total');
-	const [location, setLocation] = useState<'total' | 'home' | 'away'>('total');
+	const [coachRole, setCoachRole] = useState<'total' | 'headCoach' | 'assistantCoach'>('total');
+	const [location, setLocation] = useState<'total' | 'home' | 'away' | 'neutral'>('total');
 
 	const { data: coachLeagueStats } = useCoachLeagueStats(coachId!, db!);
 	const { data: coachRecord } = useCoachRecord(coachId!, db);
 
-	const leagueStats: CoachStats[] = useMemo(() => {
-		if (!coachLeagueStats) return [];
-		return coachLeagueStats
-			.map((row) => {
-				const r = row as unknown as Record<string, Record<string, CoachStats | undefined>>;
-				return r[coachRole]?.[location];
-			})
-			.filter(Boolean) as CoachStats[];
-	}, [coachLeagueStats, coachRole, location]);
+	const hasNeutral = useMemo(() => computeHasNeutral(coachLeagueStats, coachRole), [coachLeagueStats, coachRole]);
 
-	const totalStats: CoachStats[] = useMemo(() => {
-		if (!coachRecord) return [];
-		const r = coachRecord as unknown as Record<string, Record<string, CoachStats | undefined>>;
-		const v = r[coachRole]?.[location];
-		return v ? [v] : [];
-	}, [coachRecord, coachRole, location]);
+	useEffect(() => {
+		if (!hasNeutral && location === 'neutral') setLocation('total');
+	}, [hasNeutral, location]);
+
+	const leagueStats: CoachStats[] = useMemo(() => computeLeagueStats(coachLeagueStats, coachRole, location), [coachLeagueStats, coachRole, location]);
+
+	const totalStats: CoachStats[] = useMemo(() => computeTotalStats(coachRecord, coachRole, location), [coachRecord, coachRole, location]);
 
 	const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats, 'league');
 	const { TableFoot } = useCoachSeasonStatsTable(totalStats, 'total');
 
 	return (
-		<section className="flex flex-col gap-4">
+		<section className={styles.section}>
 			<Heading title="All Time Record" />
-			<div className="flex flex-col md:flex-row gap-4 md:gap-8 font-abel">
-				<CoachRoleFilter coachRole={coachRole} setCoachRole={setCoachRole} />
-				<LocationFilter location={location} setLocation={setLocation} />
-			</div>
+			<CoachFilterBar coachRole={coachRole} setCoachRole={setCoachRole} location={location} setLocation={setLocation} hasNeutral={hasNeutral} />
 
 			<TableWrapper>
 				<TableHead />

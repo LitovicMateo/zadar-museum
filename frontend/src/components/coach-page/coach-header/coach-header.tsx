@@ -7,6 +7,7 @@ import { getImageUrl } from '@/utils/getImageUrl';
 
 import CoachBio from './coach-bio/coach-bio';
 import CoachImage from './coach-image/coach-image';
+import styles from './coach-header.module.css';
 
 const CoachHeader: React.FC = () => {
 	const { coachId } = useParams();
@@ -19,8 +20,8 @@ const CoachHeader: React.FC = () => {
 	const imageUrl = getImageUrl(imagePath);
 
 	return (
-		<section className={`max-h-[250px] ${zadarBg} drop-shadow-xl overflow-hidden`}>
-			<div className="h-full w-full relative max-w-[800px] flex gap-6 justify-start items-end mx-auto">
+		<section className={`${styles.section} ${zadarBg}`}>
+			<div className={styles.inner}>
 				<CoachImage imageUrl={imageUrl} name={`${coach.first_name} ${coach.last_name}`} />
 				<CoachBio coach={coach} />
 			</div>

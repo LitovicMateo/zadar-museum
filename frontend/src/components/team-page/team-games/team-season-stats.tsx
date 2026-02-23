@@ -47,9 +47,6 @@ const TeamSeasonStats: React.FC = () => {
 
 	if (!seasonStats || !seasonLeagueStats) return null;
 
-	console.log("LS", seasonLeagueStats);
-	
-
 	return (
 		<>
 			<Heading title="Season Stats" type="secondary" />

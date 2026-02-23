@@ -58,8 +58,6 @@ export const LeagueStatsTableHead: React.FC<{ table: Table<TeamStats> }> = ({ ta
 
 export const LeagueStatsTableBody: React.FC<{ table: Table<TeamStats> }> = ({ table }) => {
 
-	console.log(table.getRowModel().rows);
-	
 	return (
 		<tbody>
 			{table.getRowModel().rows.map((row) => (
@@ -111,7 +109,6 @@ export const LeagueStatsTableFoot: React.FC<{ table: Table<TeamStats> }> = ({ ta
 // ---------------------------------------------------------------------------
 
 export const useTeamLeagueStatsTable = (data: TeamStats[] | undefined) => {
-	console.log("DATA", data);
 	
 	const table = useReactTable<TeamStats>({
 		data: data || [],

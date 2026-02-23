@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRoutes, RouteObject } from 'react-router-dom';
+import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 
 import { GamesProvider } from '@/context/games-context';
 import { TeamGamesProvider } from '@/context/team-context';
@@ -137,6 +137,12 @@ const AppRoutes: React.FC = () => {
 		{
 			...statsRoutes,
 			element: protect(statsRoutes.element)
+		}
+		,
+		// Catch-all: redirect unmatched routes to home
+		{
+			path: '*',
+			element: <Navigate to='/' replace />
 		}
 	];
 

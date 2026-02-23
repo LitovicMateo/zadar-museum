@@ -1,215 +1,161 @@
+import React, { useMemo } from 'react';
 import TableCell from '@/components/ui/table-cell';
+import styles from './useCoachAllTimeStatsTable.module.css';
 import { CoachRecordRow } from '@/types/api/coach';
-import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, Table } from '@tanstack/react-table';
+
+const renderCell = (value: unknown, decimals?: number) => {
+	const num = Number(value as any);
+	if (Number.isNaN(num))
+		return (
+			<div className={styles.minWidth6}>
+				<p>-</p>
+			</div>
+		);
+
+	return (
+		<div className={styles.minWidth6}>
+			<p>{decimals != null ? num.toFixed(decimals) : num}</p>
+		</div>
+	);
+};
 
 export const useCoachAllTimeStatsTable = (data: CoachRecordRow[] | undefined) => {
+	const columns = useMemo(() => [
+		{
+			header: 'Statistic',
+			accessorKey: 'name'
+		},
+		{
+			header: 'G',
+			accessorKey: 'games',
+			cell: (info: any) => {
+				return info.getValue() === 0 ? (
+					<div className={styles.minWidth6}>
+						<p>-</p>
+					</div>
+				) : (
+					<div className={styles.minWidth6}>
+						<p>{info.getValue()}</p>
+					</div>
+				);
+			}
+		},
+		{
+			header: 'W',
+			accessorKey: 'wins',
+			cell: (info: any) => (info.row.original.games === 0 ? (
+				<div className={styles.minWidth6}>
+					<p>-</p>
+				</div>
+			) : renderCell(info.getValue()))
+		},
+		{
+			header: 'L',
+			accessorKey: 'losses',
+			cell: (info: any) => (info.row.original.games === 0 ? (
+				<div className={styles.minWidth6}>
+					<p>-</p>
+				</div>
+			) : renderCell(info.getValue()))
+		},
+		{
+			header: 'Win %',
+			accessorKey: 'win_percentage',
+			cell: (info: any) => (info.row.original.games === 0 ? (
+				<div className={styles.minWidth6}>
+					<p>-</p>
+				</div>
+			) : renderCell(info.getValue(), 1))
+		},
+		{
+			header: 'Pts For',
+			accessorKey: 'points_scored',
+			cell: (info: any) => (info.row.original.games === 0 ? (
+				<div className={styles.minWidth6}>
+					<p>-</p>
+				</div>
+			) : renderCell(info.getValue(), 1))
+		},
+		{
+			header: 'Pts Ag',
+			accessorKey: 'points_received',
+			cell: (info: any) => (info.row.original.games === 0 ? (
+				<div className={styles.minWidth6}>
+					<p>-</p>
+				</div>
+			) : renderCell(info.getValue(), 1))
+		},
+		{
+			header: 'Pts Diff',
+			accessorKey: 'pointsDiff',
+			cell: (info: any) => (info.row.original.games === 0 ? (
+				<div className={styles.minWidth6}>
+					<p>-</p>
+				</div>
+			) : renderCell(info.getValue(), 1))
+		}
+	], [] as any);
+
 	const table = useReactTable<CoachRecordRow>({
 		data: data || [],
-		columns: [
-			{
-				header: 'Statistic',
-				accessorKey: 'name'
-			},
-			{
-				header: 'G',
-				accessorKey: 'games',
-				cell: (info) => {
-					if (info.getValue() === 0) {
-						return (
-							<div className="min-w-6">
-								<p>-</p>
-							</div>
-						);
-					}
-
-					return (
-						<div className="min-w-6">
-							<p>{info.getValue()}</p>
-						</div>
-					);
-				}
-			},
-			{
-				header: 'W',
-				accessorKey: 'wins',
-				cell: (info) => {
-					// check total games
-					if (info.row.original.games === 0) {
-						return (
-							<div className="min-w-6">
-								<p>-</p>
-							</div>
-						);
-					}
-
-					return (
-						<div className="min-w-6">
-							<p>{info.getValue()}</p>
-						</div>
-					);
-				}
-			},
-			{
-				header: 'L',
-				accessorKey: 'losses',
-				cell: (info) => {
-					// check total games
-					if (info.row.original.games === 0) {
-						return (
-							<div className="min-w-6">
-								<p>-</p>
-							</div>
-						);
-					}
-
-					return (
-						<div className="min-w-6">
-							<p>{info.getValue()}</p>
-						</div>
-					);
-				}
-			},
-			{
-				header: 'Win %',
-				accessorKey: 'win_percentage',
-				cell: (info) => {
-					if (info.row.original.games === 0) {
-						return (
-							<div className="min-w-6">
-								<p>-</p>
-							</div>
-						);
-					}
-
-					return (
-						<div className="min-w-6">
-							<p>{info.getValue().toFixed(1)}</p>
-						</div>
-					);
-				}
-			},
-			{
-				header: 'Pts For',
-				accessorKey: 'points_scored',
-				cell: (info) => {
-					if (info.row.original.games === 0) {
-						return (
-							<div className="min-w-6">
-								<p>-</p>
-							</div>
-						);
-					}
-
-					return (
-						<div className="min-w-6">
-							<p>{info.getValue().toFixed(1)}</p>
-						</div>
-					);
-				}
-			},
-			{
-				header: 'Pts Ag',
-				accessorKey: 'points_received',
-				cell: (info) => {
-					// check total games
-					if (info.row.original.games === 0) {
-						return (
-							<div className="min-w-6">
-								<p>-</p>
-							</div>
-						);
-					}
-
-					return (
-						<div className="min-w-6">
-							<p>{info.getValue().toFixed(1)}</p>
-						</div>
-					);
-				}
-			},
-			{
-				header: 'Pts Diff',
-				accessorKey: 'pointsDiff',
-				cell: (info) => {
-					// check total games
-					if (info.row.original.games === 0) {
-						return (
-							<div className="min-w-6">
-								<p>-</p>
-							</div>
-						);
-					}
-
-					return (
-						<div className="min-w-6">
-							<p>{info.getValue().toFixed(1)}</p>
-						</div>
-					);
-				}
-			}
-		],
+		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel()
 	});
 
-	const TableHead: React.FC = () => {
-		return (
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b-2 border-blue-500">
-						{headerGroup.headers.map((header, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10' : '';
+	return { table } as const;
+};
 
-							// check if this is the last column in its parent group
-							const isLastInGroup =
-								header.column.parent?.columns?.[header.column.parent.columns.length - 1]?.id ===
-								header.column.id;
+export const CoachAllTimeStatsTableHead: React.FC<{ table: Table<CoachRecordRow> }> = ({ table }) => {
+	return (
+		<thead>
+			{table.getHeaderGroups().map((headerGroup) => (
+					<tr key={headerGroup.id} className={styles.trBorder}>
+					{headerGroup.headers.map((header, index) => {
+						const sticky = index === 0 ? styles.stickyLeft : '';
 
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									className={`px-4 py-2 text-center whitespace-nowrap ${sticky} bg-slate-100 hover:bg-blue-50 transition-colors duration-200 ${
-										header.column.getCanSort() ? 'select-none cursor-pointer' : ''
-									} ${isLastInGroup ? 'border-r border-slate-400' : ''}`}
-									onClick={header.column.getToggleSortingHandler()}
-								>
-									{flexRender(header.column.columnDef.header, header.getContext())}
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
+						const isLastInGroup =
+							header.column.parent?.columns?.[header.column.parent.columns.length - 1]?.id === header.column.id;
 
-	const TableBody: React.FC = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-white' : '';
+						return (
+							<th
+								key={header.id}
+								colSpan={header.colSpan}
+								className={`${styles.thBase} ${sticky} ${styles.bgSlate100} ${styles.hoverBg} ${
+									header.column.getCanSort() ? styles.selectNone : ''
+								} ${isLastInGroup ? styles.borderRight : ''}`}
+								onClick={header.column.getToggleSortingHandler()}
+							>
+								{flexRender(header.column.columnDef.header, header.getContext())}
+							</th>
+						);
+					})}
+				</tr>
+			))}
+		</thead>
+	);
+};
 
-							const isLastInGroup =
-								cell.column.parent?.columns?.[cell.column.parent.columns.length - 1]?.id ===
-								cell.column.id;
+export const CoachAllTimeStatsTableBody: React.FC<{ table: Table<CoachRecordRow> }> = ({ table }) => {
+	return (
+		<tbody>
+			{table.getRowModel().rows.map((row) => (
+				<tr key={row.id}>
+					{row.getVisibleCells().map((cell, index) => {
+						const sticky = index === 0 ? styles.stickyLeftBody : '';
 
-							return (
-								<TableCell
-									key={cell.id}
-									sticky={`${sticky} ${isLastInGroup ? 'border-r border-slate-400' : ''}`}
-								>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</TableCell>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
+						const isLastInGroup =
+							cell.column.parent?.columns?.[cell.column.parent.columns.length - 1]?.id === cell.column.id;
 
-	return { table, TableHead, TableBody };
+						return (
+							<TableCell key={cell.id} sticky={`${sticky} ${isLastInGroup ? styles.borderRight : ''}`}>
+								{flexRender(cell.column.columnDef.cell, cell.getContext())}
+							</TableCell>
+						);
+					})}
+				</tr>
+			))}
+		</tbody>
+	);
 };

@@ -10,9 +10,10 @@ import { usePlayerLeagueStatsTable } from '@/hooks/usePlayerLeagueStatsTable';
 
 type MainTableProps = {
 	view: 'total' | 'average';
+	location: 'total' | 'home' | 'away' | 'neutral';
 };
 
-const MainTable: React.FC<MainTableProps> = ({ view }) => {
+const MainTable: React.FC<MainTableProps> = ({ view, location }) => {
 	const { playerId } = useParams();
 	const { selectedDatabase } = useBoxscore();
 
@@ -21,13 +22,19 @@ const MainTable: React.FC<MainTableProps> = ({ view }) => {
 
 	const leagueStats = useMemo(() => {
 		if (!league) return [];
-		return league.map((league) => (view === 'average' ? league.average.total : league.total.total));
-	}, [league, view]);
+		return league.map((league) => {
+			const group = view === 'average' ? league.average : league.total;
+			return group[location] ?? group.total;
+		});
+	}, [league, view, location]);
 
 	const careerStats = useMemo(() => {
 		if (!career) return [];
-		return career.map((league) => (view === 'average' ? league.average.total : league.total.total));
-	}, [career, view]);
+		return career.map((league) => {
+			const group = view === 'average' ? league.average : league.total;
+			return group[location] ?? group.total;
+		});
+	}, [career, view, location]);
 
 	const { TableHead, TableBody } = usePlayerLeagueStatsTable(leagueStats);
 	const { TableFooter } = usePlayerLeagueStatsTable(careerStats);

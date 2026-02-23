@@ -1,0 +1,63 @@
+.root {
+	display: flex;
+	flex-direction: column;
+	color: #ffffff;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Helvetica Neue", monospace;
+}
+
+.borderBottom {
+	border-bottom: 1px solid #ffffff;
+}
+
+.title {
+	font-weight: 700;
+	display: flex;
+	flex-direction: column;
+}
+
+.firstName {
+	font-size: 0.875rem;
+}
+
+.lastName {
+	font-size: 2.25rem;
+	text-transform: uppercase;
+}
+
+.bioContainer {
+	padding: 1rem 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 0.5rem;
+	align-items: flex-start;
+}
+
+.label {
+	font-size: 0.875rem;
+	display: flex;
+	gap: 0.5rem;
+	justify-content: center;
+	align-items: center;
+}
+
+.flagWrapper {
+	height: 1rem;
+	aspect-ratio: 16/9;
+	border-radius: 2px;
+	overflow: hidden;
+}
+
+.flagImg {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.grayText {
+	color: #d1d5db;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
