@@ -20,7 +20,7 @@ const CoachBio: React.FC<CoachBio> = ({ coach }) => {
 					</h2>
 				</div>
 				<div className={styles.bioContainer}>
-					<label htmlFor="" className={styles.label}>
+					<div className={styles.label}>
 						Nationality:
 						<div className={styles.flagWrapper}>
 							{coach.nationality ? (
@@ -29,18 +29,18 @@ const CoachBio: React.FC<CoachBio> = ({ coach }) => {
 								<span className={styles.grayText}>-</span>
 							)}
 						</div>
-					</label>
+					</div>
 					{deathDateStr ? (
-						<label htmlFor="" className={styles.label}>
+						<div className={styles.label}>
 							<span>{`Born: ${birthDateStr} — Died: ${deathDateStr}`}</span>
 							{ageAtDeath !== null && <span className={styles.uppercase}>{`(aged ${ageAtDeath})`}</span>}
-						</label>
+						</div>
 					) : (
 						birthDateStr && (
-							<label htmlFor="" className={styles.label}>
+							<div className={styles.label}>
 								{`Age: ${age}`}
 								<span className={styles.uppercase}>{`(${birthDateStr})`}</span>
-							</label>
+							</div>
 						)
 					)}
 				</div>

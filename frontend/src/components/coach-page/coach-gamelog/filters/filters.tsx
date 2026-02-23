@@ -1,27 +1,37 @@
-import CompetitionSelectItem from '@/components/games-page/games-filter/competition-select';
-import SearchBar from '@/components/games-page/games-filter/search-bar';
-import Select from 'react-select';
-import { selectStyle } from '@/constants/react-select-style';
-import styles from './filters.module.css';
-import { useCoachSeasonCompetitions } from '@/hooks/queries/coach/useCoachSeasonCompetitions';
-import { useCoachSeasons } from '@/hooks/queries/coach/useCoachSeasons';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-type SeasonOption = { label: string; value: string };
+import CompetitionSelectItem from '@/components/games-page/games-filter/competition-select';
+import SearchBar from '@/components/games-page/games-filter/search-bar';
+import { useCoachSeasonCompetitions } from '@/hooks/queries/coach/useCoachSeasonCompetitions';
+import styles from './filters.module.css';
+
+type Competition = {
+  league_id: string;
+  league_name: string;
+  competition_slug: string;
+};
 
 const Filters: React.FC<{
   selectedSeason: string;
-  setSelectedSeason: (s: string) => void;
   selectedCompetitions: string[];
   setSelectedCompetitions: (c: string[]) => void;
   setSearchTerm: (s: string) => void;
   searchTerm: string;
-}> = ({ selectedSeason, setSelectedSeason, selectedCompetitions, setSelectedCompetitions, setSearchTerm, searchTerm }) => {
+}> = ({ selectedSeason, selectedCompetitions, setSelectedCompetitions, setSearchTerm, searchTerm }) => {
   const { coachId } = useParams();
   const { data: competitions } = useCoachSeasonCompetitions(coachId!, selectedSeason);
-  const { data: seasons } = useCoachSeasons(coachId!);
 
-  const seasonOptions = (seasons || []).map((s: string) => ({ label: s, value: s }));
+  const uniqueCompetitions = useMemo(() => {
+    if (!competitions) return [];
+    const seen = new Set<string>();
+    return competitions.filter((c: Competition) => {
+      const id = String(c.league_id);
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+  }, [competitions]);
 
   const toggleCompetition = (leagueId: string) => {
     if (selectedCompetitions.includes(leagueId)) {
@@ -33,24 +43,17 @@ const Filters: React.FC<{
 
   return (
     <div className={styles.root}>
-      <div className={styles.leftRow}>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        <Select<SeasonOption, false>
-          placeholder="Season"
-          className={styles.selectSmall}
-          value={seasonOptions.find((s) => s.value === selectedSeason)}
-          options={seasonOptions}
-          onChange={(e) => setSelectedSeason(e?.value || '')}
-          styles={selectStyle()}
-        />
-      </div>
-
-      <div className={styles.rightRow}>
-        <div className={styles.competitionsRow}>
-          {competitions?.map((c: any) => (
-            <CompetitionSelectItem key={c.league_id} leagueId={c.league_id} leagueName={c.league_name} onCompetitionChange={toggleCompetition} selectedCompetitions={selectedCompetitions} />
-          ))}
-        </div>
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <div className={styles.competitionsRow}>
+        {uniqueCompetitions.map((c: Competition) => (
+          <CompetitionSelectItem
+            key={String(c.league_id)}
+            leagueId={String(c.league_id)}
+            leagueName={c.league_name}
+            onCompetitionChange={toggleCompetition}
+            selectedCompetitions={selectedCompetitions}
+          />
+        ))}
       </div>
     </div>
   );

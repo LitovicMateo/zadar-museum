@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { TableSkeleton } from '@/components/ui/skeletons';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { useAllTimeLeagueStats } from '@/hooks/queries/player/useAllTimeLeagueStats';
@@ -36,8 +37,8 @@ const MainTable: React.FC<MainTableProps> = ({ view, location }) => {
 		});
 	}, [career, view, location]);
 
-	const { TableHead, TableBody } = usePlayerLeagueStatsTable(leagueStats);
-	const { TableFooter } = usePlayerLeagueStatsTable(careerStats);
+	const { table } = usePlayerLeagueStatsTable(leagueStats);
+	const { table: footTable } = usePlayerLeagueStatsTable(careerStats);
 
 	const wrapperClass =
 		'max-w-[800px] mx-auto overflow-x-auto rounded-lg m-4 drop-shadow-2xl bg-linear-to-br from-white to-slate-100';
@@ -52,9 +53,9 @@ const MainTable: React.FC<MainTableProps> = ({ view, location }) => {
 
 	return (
 		<TableWrapper>
-			<TableHead />
-			<TableBody />
-			<TableFooter />
+			<UniversalTableHead table={table} />
+			<UniversalTableBody table={table} />
+			<UniversalTableFooter table={footTable} variant="gradient" />
 		</TableWrapper>
 	);
 };

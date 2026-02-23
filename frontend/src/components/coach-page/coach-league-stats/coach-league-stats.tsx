@@ -9,6 +9,7 @@ import { useCoachProfileDatabase } from '@/hooks/queries/player/useCoachProfileD
 import { CoachStats } from '@/types/api/coach';
 
 import CoachFilterBar from '../shared/CoachFilterBar';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import styles from './coach-league-stats.module.css';
 import { computeHasNeutral, computeLeagueStats, computeTotalStats } from './coach-league-stats.utils';
 import { useCoachSeasonStatsTable } from '../coach-gamelog/season-stats/useCoachSeasonStatsTable';
@@ -33,8 +34,8 @@ const CoachLeagueStats: React.FC = () => {
 
 	const totalStats: CoachStats[] = useMemo(() => computeTotalStats(coachRecord, coachRole, location), [coachRecord, coachRole, location]);
 
-	const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats, 'league');
-	const { TableFoot } = useCoachSeasonStatsTable(totalStats, 'total');
+	const { table } = useCoachSeasonStatsTable(leagueStats, 'league');
+	const { table: footTable } = useCoachSeasonStatsTable(totalStats, 'total');
 
 	return (
 		<section className={styles.section}>
@@ -42,9 +43,9 @@ const CoachLeagueStats: React.FC = () => {
 			<CoachFilterBar coachRole={coachRole} setCoachRole={setCoachRole} location={location} setLocation={setLocation} hasNeutral={hasNeutral} />
 
 			<TableWrapper>
-				<TableHead />
-				<TableBody />
-				<TableFoot />
+				<UniversalTableHead table={table} />
+				<UniversalTableBody table={table} />
+				<UniversalTableFooter table={footTable} variant="default" />
 			</TableWrapper>
 		</section>
 	);

@@ -1,7 +1,6 @@
-import TableCell from '@/components/ui/table-cell';
+import '@/components/ui/table/types';
 import { CoachLeagueStatsResponse } from '@/types/api/coach';
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import styles from './useCoachLeagueStatsTable.module.css';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | undefined) => {
 	const table = useReactTable<CoachLeagueStatsResponse>({
@@ -13,7 +12,8 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 				columns: [
 					{
 						header: 'League',
-						accessorKey: 'league_name'
+						accessorKey: 'league_name',
+						meta: { sticky: 'left', stickyOffset: '0' }
 					}
 				]
 			},
@@ -26,14 +26,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.getValue() === 0) {
 								return (
-									<div className={styles.minWidth6}>
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className={styles.minWidth6}>
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -45,14 +45,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className={styles.minWidth6}>
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className={styles.minWidth6}>
+								<div className="min-w-6">
 									<p>{info.getValue()}</p>
 								</div>
 							);
@@ -83,14 +83,14 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 						cell: (info) => {
 							if (info.row.original.total_games === '0') {
 								return (
-									<div className={styles.minWidth6}>
+									<div className="min-w-6">
 										<p>-</p>
 									</div>
 								);
 							}
 
 							return (
-								<div className={styles.minWidth6}>
+								<div className="min-w-6">
 									<p>{info.getValue().toFixed(1)}</p>
 								</div>
 							);
@@ -435,64 +435,5 @@ export const useCoachLeagueStatsTable = (data: CoachLeagueStatsResponse[] | unde
 		getCoreRowModel: getCoreRowModel()
 	});
 
-	const TableHead = () => {
-		return (
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className={styles.trBorder}>
-						{headerGroup.headers.map((header, index) => {
-							const sticky = index === 0 ? styles.stickyLeft : '';
-
-							// check if this is the last column in its parent group
-							const isLastInGroup =
-								header.column.parent?.columns?.[header.column.parent.columns.length - 1]?.id ===
-								header.column.id;
-
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									className={`${styles.thBase} ${sticky} ${styles.bgSlate100} ${styles.hoverBg} ${
-										header.column.getCanSort() ? styles.selectNone : ''
-									} ${isLastInGroup ? styles.borderRight : ''}`}
-									onClick={header.column.getToggleSortingHandler()}
-								>
-									{flexRender(header.column.columnDef.header, header.getContext())}
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
-
-	const TableBody = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? styles.stickyLeftBody : '';
-
-							const isLastInGroup =
-								cell.column.parent?.columns?.[cell.column.parent.columns.length - 1]?.id ===
-								cell.column.id;
-
-							return (
-								<TableCell
-									key={cell.id}
-									sticky={`${sticky} ${isLastInGroup ? styles.borderRight : ''}`}
-								>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</TableCell>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
-
-	return { table, TableHead, TableBody };
+	return { table };
 };

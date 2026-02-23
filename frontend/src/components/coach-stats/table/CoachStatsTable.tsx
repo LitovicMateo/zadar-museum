@@ -1,6 +1,7 @@
 import React from 'react';
 
 import NoContent from '@/components/no-content/no-content';
+import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/pages/Stats/UI/TableWrapper';
 import { CoachStatsRanking } from '@/types/api/coach';
 import { SortingState } from '@tanstack/react-table';
@@ -15,15 +16,15 @@ type CoachStatsTableProps = {
 };
 
 const CoachStatsTable: React.FC<CoachStatsTableProps> = ({ stats, prev, sorting, setSorting }) => {
-	const { TableBody, TableHead } = useCoachStatsTable(stats, prev, sorting, setSorting);
+	const { table } = useCoachStatsTable(stats, prev, sorting, setSorting);
 	if (!stats || stats.length === 0) {
 		return <NoContent type="info" description={<p>There are no coach stats in the database.</p>} />;
 	}
 
 	return (
 		<TableWrapper>
-			<TableHead />
-			<TableBody />
+			<UniversalTableHead table={table} />
+			<UniversalTableBody table={table} />
 		</TableWrapper>
 	);
 };

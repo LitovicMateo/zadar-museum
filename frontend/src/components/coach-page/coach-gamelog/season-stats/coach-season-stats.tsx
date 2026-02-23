@@ -7,6 +7,7 @@ import { useSeasonTotalStats } from '@/hooks/queries/coach/useSeasonTotalStats';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/useCoachProfileDatabase';
 import { CoachStats } from '@/types/api/coach';
 
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import styles from './coach-season-stats.module.css';
 import CoachFilterBar from '@/components/coach-page/shared/CoachFilterBar';
 import { computeHasNeutralSeason, computeLeagueStatsSeason, computeTotalStatsSeason } from './coach-season-stats.utils';
@@ -38,8 +39,8 @@ const CoachSeasonStats: React.FC<CoachSeasonStatsProps> = ({ season }) => {
   const totalStats: CoachStats[] = useMemo(() => computeTotalStatsSeason(coachTotalStats, coachRole, location), [coachTotalStats, coachRole, location]);
 
   // create table
-  const { TableHead, TableBody } = useCoachSeasonStatsTable(leagueStats, 'league');
-  const { TableFoot } = useCoachSeasonStatsTable(totalStats, 'total');
+  const { table } = useCoachSeasonStatsTable(leagueStats, 'league');
+  const { table: footTable } = useCoachSeasonStatsTable(totalStats, 'total');
 
   return (
     <div className={styles.root}>
@@ -49,9 +50,9 @@ const CoachSeasonStats: React.FC<CoachSeasonStatsProps> = ({ season }) => {
       </div>
 
       <TableWrapper>
-        <TableHead />
-        <TableBody />
-        <TableFoot />
+        <UniversalTableHead table={table} />
+        <UniversalTableBody table={table} />
+        <UniversalTableFooter table={footTable} variant="light" />
       </TableWrapper>
     </div>
   );

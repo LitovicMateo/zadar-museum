@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 
+import '@/components/ui/table/types';
 import { APP_ROUTES } from '@/constants/routes';
 import { TeamBoxscoreResponse } from '@/types/api/team';
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 const pct = (v: number | null) => (v === null ? '—' : `${v}%`);
 
@@ -23,6 +24,7 @@ export const useTeamStatsTable = (data: TeamBoxscoreResponse[]) => {
 				id: 'name',
 				accessorFn: (row) => row.team_name,
 				header: 'team',
+				meta: { sticky: 'left', stickyOffset: '0', width: '150px' },
 				cell: (info) => (
 					<Link
 						className=" min-w-[100px] whitespace-nowrap"
@@ -220,55 +222,5 @@ export const useTeamStatsTable = (data: TeamBoxscoreResponse[]) => {
 		]
 	});
 
-	const TableHead: React.FC = () => {
-		return (
-			<thead className="bg-slate-100 sticky top-0 z-10 text-xs uppercase">
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b-2 border-blue-500">
-						{headerGroup.headers.map((header, idx) => {
-							// Decide sticky classes based on index
-							let stickyClass = '';
-							if (idx === 0) stickyClass = 'sticky left-0 z-10 bg-slate-100 w-[150px] text-left pl-4';
-
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									className={`px-3 py-2 text-center whitespace-nowrap font-semibold select-none cursor-pointer hover:bg-blue-50 transition-colors duration-200 ${stickyClass}`}
-								>
-									{header.isPlaceholder
-										? null
-										: flexRender(header.column.columnDef.header, header.getContext())}
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
-
-	const TableBody: React.FC = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id} className="border-b hover:bg-blue-50 transition-colors duration-200">
-						{row.getVisibleCells().map((cell, idx) => {
-							// Decide sticky classes based on index
-							let stickyClass = '';
-							if (idx === 0) stickyClass = `sticky left-0 z-10 text-left bg-white pl-4 w-[60px]`;
-
-							return (
-								<td className={`px-3 py-2 text-center whitespace-nowrap  ${stickyClass}`} key={cell.id}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</td>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
-
-	return { table, TableHead, TableBody };
+	return { table };
 };

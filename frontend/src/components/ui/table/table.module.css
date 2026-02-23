@@ -1,0 +1,155 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Shared CSS module for all universal table components.
+   Replaces all Tailwind utility classes from UniversalTableHead / Body / Footer.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── HEAD ──────────────────────────────────────────────────────────────────── */
+
+.thead {
+  background-color: #f1f5f9; /* slate-100 */
+}
+
+.theadSticky {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.trHead {
+  border-bottom: 2px solid #3b82f6; /* blue-500 */
+}
+
+.th {
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #374151; /* gray-700 */
+  background-color: #f1f5f9; /* slate-100 */
+  text-align: center;
+}
+
+.thLeft {
+  text-align: left;
+}
+
+.thSortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s;
+}
+
+.thSortable:hover {
+  background-color: #e2e8f0; /* slate-200 */
+}
+
+.thSticky {
+  position: sticky;
+  z-index: 10;
+}
+
+/* ── BODY ───────────────────────────────────────────────────────────────────── */
+
+.trBody {
+  transition: background-color 0.15s;
+}
+
+.trBody:hover {
+  background-color: #eff6ff; /* blue-50 */
+}
+
+/* Sticky body cells get a solid background; update on tr hover */
+.tdSticky {
+  position: sticky;
+  z-index: 10;
+  background-color: #ffffff;
+}
+
+.trBody:hover .tdSticky {
+  background-color: #eff6ff; /* blue-50 */
+}
+
+.td {
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: 0.875rem;
+  border-top: 1px solid #e5e7eb; /* gray-200 */
+  transition: background-color 0.15s;
+  text-align: center;
+}
+
+.tdLeft {
+  text-align: left;
+}
+
+/* ── FOOTER ─────────────────────────────────────────────────────────────────── */
+
+.tdFoot {
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  color: #1f2937; /* gray-800 */
+  text-align: center;
+}
+
+.tdFootLeft {
+  text-align: left;
+}
+
+.tdFootSticky {
+  position: sticky;
+  z-index: 10;
+}
+
+/* variant: default — solid slate-100, thick blue border, bold */
+.trFootDefault {
+  background-color: #f1f5f9;
+}
+
+.trFootDefault .tdFoot {
+  border-top: 2px solid #3b82f6;
+  font-weight: 700;
+}
+
+.trFootDefault .tdFootSticky {
+  background-color: #f1f5f9;
+}
+
+/* variant: gradient — slate-100 → slate-50, thick blue border, bold */
+.trFootGradient {
+  background: linear-gradient(to right, #f1f5f9, #f8fafc);
+}
+
+.trFootGradient .tdFoot {
+  border-top: 2px solid #3b82f6;
+  font-weight: 700;
+}
+
+.trFootGradient .tdFootSticky {
+  background-color: #f1f5f9; /* match gradient start */
+}
+
+/* variant: light — slate-50, thin slate border, semi-bold */
+.trFootLight {
+  background-color: #f8fafc;
+}
+
+.trFootLight .tdFoot {
+  border-top: 1px solid #94a3b8; /* slate-400 */
+  font-weight: 600;
+}
+
+.trFootLight .tdFootSticky {
+  background-color: #f8fafc;
+}
+
+/* ── SHARED ──────────────────────────────────────────────────────────────────── */
+
+.groupBorder {
+  border-right: 1px solid #94a3b8; /* slate-400 */
+}
+
+.sortIcon {
+  font-size: 0.625rem; /* 10px */
+}

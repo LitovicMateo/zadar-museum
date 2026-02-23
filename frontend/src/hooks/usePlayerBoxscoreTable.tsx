@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 
+import '@/components/ui/table/types';
 import { APP_ROUTES } from '@/constants/routes';
 import { PlayerBoxscoreResponse } from '@/types/api/player';
-import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import { getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
 const pct = (v: number | null) => (v === null ? '—' : `${v}%`);
 const mmss = (m: number | null, s: number | null) => {
@@ -32,6 +33,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 				id: 'number',
 				accessorKey: 'shirt_number',
 				header: '#',
+				meta: { sticky: 'left', stickyOffset: '0', width: '60px', align: 'center' },
 				cell: (info) => <p className="text-center">{info.getValue()}</p>
 			},
 			{
@@ -41,6 +43,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					return row.first_name + ' ' + row.last_name + (isCaptain ? ' (c)' : '');
 				},
 				header: 'name',
+				meta: { sticky: 'left', stickyOffset: '40px', width: '200px' },
 				cell: (info) => {
 					return (
 						<Link className=" whitespace-nowrap" to={APP_ROUTES.player(info.row.original.player_id)}>
@@ -298,68 +301,5 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 		data: data
 	});
 
-	const TableHead: React.FC = () => {
-		return (
-			<thead className="bg-slate-100 sticky top-0 z-10 text-xs uppercase">
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b-2 border-blue-500">
-						{headerGroup.headers.map((header, idx) => {
-							// Decide sticky classes based on index
-							let stickyClass = '';
-							if (idx === 0) stickyClass = 'sticky left-0 z-10 bg-slate-100 w-[60px]';
-							if (idx === 1) stickyClass = 'sticky left-[40px] z-10 bg-slate-100 w-[200px]';
-
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									className={`px-3 py-2 text-center whitespace-nowrap font-semibold select-none cursor-pointer hover:bg-blue-50 transition-colors duration-200 ${stickyClass}`}
-									onClick={header.column.getToggleSortingHandler()}
-								>
-									{header.isPlaceholder
-										? null
-										: flexRender(header.column.columnDef.header, header.getContext())}
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
-
-	const TableBody: React.FC = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id} className="border-b">
-						{row.getVisibleCells().map((cell, idx) => {
-							// Decide sticky classes based on index
-							const isStarter = cell.row.original.status === 'starter';
-							let stickyClass = '';
-							if (idx === 0)
-								stickyClass = `sticky left-0 z-10 ${isStarter ? 'bg-slate-100' : 'bg-white'}  w-[60px]`;
-							if (idx === 1)
-								stickyClass = `sticky left-[40px] z-10 ${isStarter ? 'bg-slate-100' : 'bg-white'}  w-[200px]`;
-
-							if (isStarter) {
-								stickyClass += ' bg-slate-100';
-							}
-
-							return (
-								<td
-									className={`px-3 py-2 ${idx === 1 ? 'text-left' : 'text-center'}  ${stickyClass}`}
-									key={cell.id}
-								>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</td>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
-
-	return { table, TableHead, TableBody };
+	return { table };
 };

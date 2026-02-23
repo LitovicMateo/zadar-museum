@@ -11,22 +11,6 @@
   font-family: 'Abel', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
-.group {
-  display: flex;
-  flex-direction: column;
-}
-
-.labelTitle {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.fieldset {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-}
-
 .option {
   display: flex;
   gap: 0.5rem;

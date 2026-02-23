@@ -5,12 +5,8 @@ import Heading from '@/components/ui/heading';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useTeamLeagueStats } from '@/hooks/queries/team/useTeamLeagueStats';
 import { useTeamTotalStats } from '@/hooks/queries/team/useTeamTotalStats';
-import {
-	LeagueStatsTableBody,
-	LeagueStatsTableFoot,
-	LeagueStatsTableHead,
-	useTeamLeagueStatsTable
-} from '@/hooks/useTeamLeagueStats';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
+import { useTeamLeagueStatsTable } from '@/hooks/useTeamLeagueStats';
 import { TeamStats } from '@/types/api/team';
 
 import DatabaseSelect from './database-select';
@@ -44,9 +40,9 @@ const TeamLeagueStats: React.FC = () => {
 			<Heading title="All Time League Record" />
 			<DatabaseSelect selected={selected} setSelected={setSelected} />
 			<TableWrapper>
-				<LeagueStatsTableHead table={mainTable} />
-				<LeagueStatsTableBody table={mainTable} />
-				<LeagueStatsTableFoot table={footTable} />
+				<UniversalTableHead table={mainTable} />
+				<UniversalTableBody table={mainTable} />
+				<UniversalTableFooter table={footTable} variant="default" />
 			</TableWrapper>
 		</section>
 	);

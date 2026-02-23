@@ -7,7 +7,8 @@ import { useCoachProfileDatabase } from '@/hooks/queries/player/useCoachProfileD
 
 import Heading from '../../ui/heading';
 import RadioButtons from './radio-buttons/radio-buttons';
-import { useCoachAllTimeStatsTable, CoachAllTimeStatsTableHead, CoachAllTimeStatsTableBody } from './useCoachAllTimeStatsTable';
+import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
+import { useCoachAllTimeStatsTable } from './useCoachAllTimeStatsTable';
 import styles from './coach-all-time-stats.module.css';
 
 export type View = 'total' | 'headCoach' | 'assistantCoach';
@@ -26,8 +27,8 @@ const CoachAllTimeStats: React.FC = () => {
 			<Heading title="All-time stats" />
 			<RadioButtons view={view} setView={setView} />
 			<TableWrapper>
-				<CoachAllTimeStatsTableHead table={table} />
-				<CoachAllTimeStatsTableBody table={table} />
+				<UniversalTableHead table={table} />
+				<UniversalTableBody table={table} />
 			</TableWrapper>
 		</section>
 	);

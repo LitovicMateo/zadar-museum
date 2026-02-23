@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useGameDetails } from '@/hooks/queries/game/useGameDetails';
 import { useGameTeamStats } from '@/hooks/queries/game/useGameTeamStats';
@@ -33,12 +34,12 @@ const TeamStats: React.FC = () => {
 		return result;
 	}, [data, game]);
 
-	const { TableBody, TableHead } = useTeamStatsTable(ordered);
+	const { table } = useTeamStatsTable(ordered);
 
 	return (
 		<TableWrapper>
-			<TableHead />
-			<TableBody />
+			<UniversalTableHead table={table} />
+			<UniversalTableBody table={table} />
 		</TableWrapper>
 	);
 };

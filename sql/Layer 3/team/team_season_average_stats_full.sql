@@ -55,7 +55,23 @@ SELECT
         ) as neutral
 
 
-FROM public.team_season_average_stats total
-LEFT JOIN public.team_season_average_stats_home home USING (team_id, season)
-LEFT JOIN public.team_season_average_stats_away away USING (team_id, season)
-LEFT JOIN public.team_season_average_stats_neutral neutral USING (team_id, season);
+FROM (
+  SELECT DISTINCT ON (team_id, season) *
+  FROM public.team_season_average_stats
+  ORDER BY team_id, season
+) total
+LEFT JOIN (
+  SELECT DISTINCT ON (team_id, season) *
+  FROM public.team_season_average_stats_home
+  ORDER BY team_id, season
+) home ON total.team_id = home.team_id AND total.season = home.season
+LEFT JOIN (
+  SELECT DISTINCT ON (team_id, season) *
+  FROM public.team_season_average_stats_away
+  ORDER BY team_id, season
+) away ON total.team_id = away.team_id AND total.season = away.season
+LEFT JOIN (
+  SELECT DISTINCT ON (team_id, season) *
+  FROM public.team_season_average_stats_neutral
+  ORDER BY team_id, season
+) neutral ON total.team_id = neutral.team_id AND total.season = neutral.season;

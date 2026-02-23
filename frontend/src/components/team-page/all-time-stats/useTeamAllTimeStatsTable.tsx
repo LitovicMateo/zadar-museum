@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import TableCell from '@/components/ui/table-cell';
+import '@/components/ui/table/types';
 import { TeamStats } from '@/types/api/team';
-import { CellContext, Table, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { CellContext, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 // ---------------------------------------------------------------------------
 // Module-level sub-components — stable references across renders
@@ -13,81 +13,8 @@ const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData,
 	return <p>{value === null || value === undefined ? '-' : String(value)}</p>;
 };
 
-export const AllTimeStatsTableHead: React.FC<{ table: Table<TeamStats> }> = ({ table }) => {
-	return (
-		<thead>
-			{table.getHeaderGroups().map((headerGroup) => (
-				<tr key={headerGroup.id} className="border-b-2 border-blue-500">
-					{headerGroup.headers.map((header, index) => {
-						const sticky =
-							index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-slate-100' : '';
-
-						return (
-							<th
-								key={header.id}
-								colSpan={header.colSpan}
-								onClick={header.column.getToggleSortingHandler()}
-								className={`px-4 py-3 whitespace-nowrap text-center font-semibold text-gray-700 bg-slate-100 ${sticky} ${header.column.getCanSort() ? 'cursor-pointer hover:bg-slate-200 transition-colors select-none' : ''}`}
-							>
-								{flexRender(header.column.columnDef.header, header.getContext())}
-							</th>
-						);
-					})}
-				</tr>
-			))}
-		</thead>
-	);
-};
-
-export const AllTimeStatsTableBody: React.FC<{ table: Table<TeamStats> }> = ({ table }) => {
-	return (
-		<tbody>
-			{table.getRowModel().rows.map((row) => (
-				<tr key={row.id} className="hover:bg-blue-50 transition-colors group">
-					{row.getVisibleCells().map((cell, index) => {
-						const sticky =
-							index === 0
-								? 'text-left whitespace-nowrap sticky left-0 z-10 bg-white group-hover:bg-blue-50'
-								: '';
-
-						return (
-							<TableCell key={cell.id} sticky={sticky}>
-								{flexRender(cell.column.columnDef.cell, cell.getContext())}
-							</TableCell>
-						);
-					})}
-				</tr>
-			))}
-		</tbody>
-	);
-};
-
-export const AllTimeStatsTableFoot: React.FC<{ table: Table<TeamStats> }> = ({ table }) => {
-	return (
-		<tfoot>
-			{table.getRowModel().rows.map((row) => (
-				<tr key={row.id} className="bg-slate-100">
-					{row.getVisibleCells().map((cell, index) => {
-						const sticky =
-							index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-slate-100' : '';
-
-						return (
-							<td
-								key={cell.id}
-								className={`px-4 py-3 border-t-2 border-blue-500 font-bold text-center text-gray-800 ${sticky}`}
-							>
-								{flexRender(cell.column.columnDef.cell, cell.getContext())}
-							</td>
-						);
-					})}
-				</tr>
-			))}
-		</tfoot>
-	);
-};
-
 // ---------------------------------------------------------------------------
-// Hook — returns only the table instance; use the named exports above to render
+// Hook
 // ---------------------------------------------------------------------------
 
 const KEY_ORDER = ['Home', 'Away', 'Neutral', 'Total'];
@@ -109,6 +36,7 @@ export const useTeamAllTimeStatsTable = (data: TeamStats[] | undefined) => {
 			{
 				header: 'League',
 				accessorKey: 'key',
+				meta: { sticky: 'left', stickyOffset: '0' },
 				cell: (info) => <Cell info={info} />,
 				enableSorting: false
 			},

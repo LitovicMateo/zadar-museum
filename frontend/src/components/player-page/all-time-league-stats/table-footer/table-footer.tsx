@@ -1,9 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { UniversalTableFooter } from '@/components/ui/table';
+import '@/components/ui/table/types';
 import { useAllTimeStats } from '@/hooks/queries/player/useAllTimeStats';
 import { PlayerDB } from '@/pages/Player/Player';
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 type TableFooterProps = {
 	view: 'total' | 'average';
@@ -69,6 +71,7 @@ const TableFooter: React.FC<TableFooterProps> = ({ view, db, location = 'total' 
 			{
 				header: 'League',
 				accessorKey: 'league_name',
+				meta: { sticky: 'left', stickyOffset: '0' },
 				cell: () => <p>TOTAL</p>
 			},
 			{
@@ -149,26 +152,7 @@ const TableFooter: React.FC<TableFooterProps> = ({ view, db, location = 'total' 
 		return <tfoot></tfoot>;
 	}
 
-	return (
-		<tfoot>
-			{table.getRowModel().rows.map((row) => (
-				<tr key={row.id}>
-					{row.getVisibleCells().map((cell, index) => {
-						const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 ' : '';
-
-						return (
-							<td
-								key={cell.id}
-								className={`px-4 py-2 border-t border-slate-400 font-semibold text-center ${sticky} bg-slate-50`}
-							>
-								{flexRender(cell.column.columnDef.cell, cell.getContext())}
-							</td>
-						);
-					})}
-				</tr>
-			))}
-		</tfoot>
-	);
+	return <UniversalTableFooter table={table} variant="light" />;
 };
 
 export default TableFooter;
