@@ -2,7 +2,7 @@ import React from 'react';
 
 import NoContent from '@/components/no-content/no-content';
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
-import TableWrapper from '@/pages/Stats/UI/TableWrapper';
+import AnimatedTableWrapper from '@/components/ui/animated-table-wrapper';
 import { TeamStatsRanking } from '@/types/api/team';
 import { SortingState } from '@tanstack/react-table';
 
@@ -24,10 +24,10 @@ const TeamStatsTable: React.FC<TeamStatsTableProps> = ({ stats, isFetching, sort
 	if (isFetching) return null;
 
 	return (
-		<TableWrapper>
+		<AnimatedTableWrapper>
 			<UniversalTableHead table={table} />
 			<UniversalTableBody table={table} />
-		</TableWrapper>
+		</AnimatedTableWrapper>
 	);
 };
 

@@ -54,19 +54,22 @@ export const usePlayerStatsTable = (
 				header: 'GP',
 				accessorKey: 'games',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'GS',
 				accessorKey: 'games_started',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'MIN',
 				accessorKey: 'minutes',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'PTS',

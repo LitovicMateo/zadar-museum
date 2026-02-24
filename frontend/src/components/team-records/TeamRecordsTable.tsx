@@ -6,7 +6,7 @@ import { TeamRecord } from '@/types/api/team-stats';
 import { SortingState } from '@tanstack/react-table';
 
 import NoContent from '../no-content/no-content';
-import TableWrapper from '../ui/table-wrapper';
+import AnimatedTableWrapper from '../ui/animated-table-wrapper';
 import { useTeamRecordsTable } from './useTeamRecordsTable';
 
 type TeamRecordsTableProps = {
@@ -23,10 +23,10 @@ const TeamRecordsTable: React.FC<TeamRecordsTableProps> = ({ database, data, sor
 		return <NoContent type="info" description={<p>There are no team stats in the database.</p>} />;
 	}
 	return (
-		<TableWrapper>
+		<AnimatedTableWrapper>
 			<UniversalTableHead table={table} />
 			<UniversalTableBody table={table} />
-		</TableWrapper>
+		</AnimatedTableWrapper>
 	);
 };
 

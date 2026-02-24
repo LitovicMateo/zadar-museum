@@ -53,43 +53,50 @@ export const useTeamStatsTable = (
 				header: 'G',
 				accessorKey: 'games',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'W',
 				accessorKey: 'wins',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'L',
 				accessorKey: 'losses',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'Win %',
 				accessorKey: 'win_pct',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'PTS S',
 				accessorKey: 'points_scored',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'PTS A',
 				accessorKey: 'points_received',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: '+/-',
 				accessorKey: 'points_diff',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			}
 		],
 		getCoreRowModel: getCoreRowModel(),

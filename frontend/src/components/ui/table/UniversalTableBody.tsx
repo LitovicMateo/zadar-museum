@@ -1,10 +1,12 @@
-import { flexRender, Table } from '@tanstack/react-table';
+import { flexRender, Row, Table } from '@tanstack/react-table';
 
 import './types';
 import styles from './table.module.css';
 
 type Props<TData> = {
 table: Table<TData>;
+/** Return a CSS module key (e.g. 'trStarter') to apply a variant class to a row. */
+rowVariant?: (row: Row<TData>) => string | undefined;
 };
 
 /**
@@ -18,11 +20,14 @@ table: Table<TData>;
  *
  * All visual styling comes from table.module.css.
  */
-export const UniversalTableBody = <TData,>({ table }: Props<TData>) => {
+export const UniversalTableBody = <TData,>({ table, rowVariant }: Props<TData>) => {
 return (
 <tbody>
-{table.getRowModel().rows.map((row) => (
-<tr key={row.id} className={styles.trBody}>
+{table.getRowModel().rows.map((row) => {
+const variant = rowVariant?.(row);
+const variantClass = variant ? styles[variant] : undefined;
+return (
+<tr key={row.id} className={[styles.trBody, variantClass].filter(Boolean).join(' ')}>
 {row.getVisibleCells().map((cell) => {
 const meta = cell.column.columnDef.meta;
 const isSticky = meta?.sticky === 'left';
@@ -63,7 +68,8 @@ className={tdClass}
 );
 })}
 </tr>
-))}
+);
+})}
 </tbody>
 );
 };
