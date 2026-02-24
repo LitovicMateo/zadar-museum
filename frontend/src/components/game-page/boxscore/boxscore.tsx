@@ -15,7 +15,12 @@ const Boxscore: React.FC<BoxscoreProps> = ({ boxscore }) => {
 	return (
 		<TableWrapper>
 			<UniversalTableHead table={table} />
-			<UniversalTableBody table={table} />
+			<UniversalTableBody
+				table={table}
+				rowVariant={(row) =>
+					row.original.status === 'starter' ? 'trStarter' : undefined
+				}
+			/>
 		</TableWrapper>
 	);
 };

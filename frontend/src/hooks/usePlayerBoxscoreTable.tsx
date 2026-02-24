@@ -24,11 +24,30 @@ const formatMakeAttempt = (made: number | null, attempted: number | null) => {
 	return `${made}/${attDisplay}`;
 };
 
+const statusOrder = (status: PlayerBoxscoreResponse['status']): number => {
+	if (status === 'starter') return 0;
+	if (status === 'dnp-cd') return 2;
+	return 1; // 'bench' and anything else
+};
+
 export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 	const table = useReactTable<PlayerBoxscoreResponse>({
 		getCoreRowModel: getCoreRowModel<PlayerBoxscoreResponse>(),
 		getSortedRowModel: getSortedRowModel<PlayerBoxscoreResponse>(),
+		initialState: {
+			columnVisibility: { _statusOrder: false },
+			sorting: [
+				{ id: '_statusOrder', desc: false },
+				{ id: 'number', desc: false }
+			]
+		},
 		columns: [
+			{
+				id: '_statusOrder',
+				accessorFn: (row) => statusOrder(row.status),
+				header: '',
+				enableSorting: true
+			},
 			{
 				id: 'number',
 				accessorKey: 'shirt_number',
@@ -42,7 +61,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					const isCaptain = row.captain;
 					return row.first_name + ' ' + row.last_name + (isCaptain ? ' (c)' : '');
 				},
-				header: 'name',
+				header: 'Player',
 				meta: { sticky: 'left', stickyOffset: '40px', width: '200px' },
 				cell: (info) => {
 					return (
@@ -69,13 +88,15 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 			{
 				id: 'time',
 				accessorFn: (row) => row.minutes + ':' + row.seconds,
+				header: 'MIN',
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">DNP</p>;
 					}
 
 					return <p>{mmss(info.row.original.minutes, info.row.original.seconds)}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'pts',
@@ -86,7 +107,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'fg',
@@ -105,7 +127,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 							)}
 						</p>
 					);
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'fg_per',
@@ -116,7 +139,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{pct(info.getValue<number | null>())}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'three_point',
@@ -134,7 +158,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 							)}
 						</p>
 					);
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'three_per',
@@ -145,7 +170,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{pct(info.getValue<number | null>())}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'free_throw',
@@ -163,7 +189,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 							)}
 						</p>
 					);
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'free_throw_per',
@@ -174,7 +201,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{pct(info.getValue<number | null>())}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'off_rebounds',
@@ -185,7 +213,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'def_rebounds',
@@ -196,7 +225,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'rebounds',
@@ -207,7 +237,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'assists',
@@ -218,7 +249,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'turnovers',
@@ -229,7 +261,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'steals',
@@ -240,7 +273,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'blocks',
@@ -251,7 +285,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'FLS',
@@ -262,7 +297,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'FLS ON',
@@ -273,7 +309,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'plus_minus',
@@ -284,7 +321,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'efficiency',
@@ -295,7 +333,8 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						return <p className="text-gray-600">-</p>;
 					}
 					return <p>{info.getValue<number | null>()}</p>;
-				}
+				},
+				sortingFn: "alphanumeric"
 			}
 		],
 		data: data

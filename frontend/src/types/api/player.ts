@@ -137,7 +137,7 @@ export interface PlayerBoxscoreResponse {
 	secondary_position: string | null;
 	shirt_number: number | null;
 
-	status: string;
+	status: 'starter' | 'bench' | 'dnp-cd' | (string & {});
 
 	minutes: number | null;
 	seconds: number | null;

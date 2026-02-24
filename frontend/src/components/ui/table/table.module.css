@@ -69,6 +69,19 @@
   background-color: #eff6ff; /* blue-50 */
 }
 
+/* Row variants */
+.trStarter {
+  background-color: #dbeafe; /* blue-100 */
+}
+
+.trStarter .tdSticky {
+  background-color: #dbeafe; /* blue-100 */
+}
+
+.trStarter:hover .tdSticky {
+  background-color: #bfdbfe; /* blue-200 */
+}
+
 .td {
   padding: 0.75rem 1rem;
   white-space: nowrap;
