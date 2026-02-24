@@ -2,7 +2,7 @@ import React from 'react';
 
 import NoContent from '@/components/no-content/no-content';
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
-import TableWrapper from '@/pages/Stats/UI/TableWrapper';
+import AnimatedTableWrapper from '@/components/ui/animated-table-wrapper';
 import { CoachStatsRanking } from '@/types/api/coach';
 import { SortingState } from '@tanstack/react-table';
 
@@ -22,10 +22,10 @@ const CoachStatsTable: React.FC<CoachStatsTableProps> = ({ stats, prev, sorting,
 	}
 
 	return (
-		<TableWrapper>
+		<AnimatedTableWrapper>
 			<UniversalTableHead table={table} />
 			<UniversalTableBody table={table} />
-		</TableWrapper>
+		</AnimatedTableWrapper>
 	);
 };
 

@@ -5,7 +5,7 @@ import { PlayerRecords } from '@/types/api/player-stats';
 import { SortingState } from '@tanstack/react-table';
 
 import NoContent from '../no-content/no-content';
-import TableWrapper from '../ui/table-wrapper';
+import AnimatedTableWrapper from '../ui/animated-table-wrapper';
 import { usePlayerRecordsTable } from './usePlayerRecordsTable';
 
 type PlayerRecordsTableProps = {
@@ -21,10 +21,10 @@ const PlayerRecordsTable: React.FC<PlayerRecordsTableProps> = ({ data, sorting, 
 	}
 
 	return (
-		<TableWrapper>
+		<AnimatedTableWrapper>
 			<UniversalTableHead table={table} />
 			<UniversalTableBody table={table} />
-		</TableWrapper>
+		</AnimatedTableWrapper>
 	);
 };
 
