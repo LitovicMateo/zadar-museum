@@ -54,19 +54,22 @@ export const useCoachStatsTable = (
 				header: 'G',
 				accessorKey: 'games',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'W',
 				accessorKey: 'wins',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'L',
 				accessorKey: 'losses',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: 'alphanumeric'
 			},
 			{
 				header: 'W%',

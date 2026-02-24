@@ -55,28 +55,32 @@ export const useRefereeStatsTable = (
 				header: 'G',
 				accessorKey: 'games',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'wins',
 				header: 'W',
 				accessorKey: 'wins',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'losses',
 				header: 'L',
 				accessorKey: 'losses',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'win_percentage',
 				header: '%',
 				accessorKey: 'win_percentage',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 
 			{
@@ -84,21 +88,24 @@ export const useRefereeStatsTable = (
 				header: 'F',
 				accessorKey: 'fouls_for',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'fouls_against',
 				header: 'A',
 				accessorKey: 'fouls_against',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'foul_difference',
 				header: 'Diff',
 				accessorKey: 'foul_difference',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			}
 		],
 		getCoreRowModel: getCoreRowModel(),
