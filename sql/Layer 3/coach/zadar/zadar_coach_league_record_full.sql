@@ -1,11 +1,22 @@
 CREATE MATERIALIZED VIEW public.zadar_coach_league_record_full AS
 
 WITH coaches AS (
-    SELECT DISTINCT coach_id, first_name, last_name FROM public.zadar_coach_record
-    UNION
-    SELECT DISTINCT coach_id, first_name, last_name FROM public.zadar_head_coach_record
-    UNION
-    SELECT DISTINCT coach_id, first_name, last_name FROM public.zadar_assistant_coach_record
+  -- Reduce to one row per coach_id. Some source tables may contain
+  -- varying name values for the same coach_id which caused row
+  -- multiplication when using UNION. Aggregate and pick a stable
+  -- value (MIN) for names to ensure a single row per coach.
+  SELECT
+    coach_id,
+    MIN(first_name) AS first_name,
+    MIN(last_name) AS last_name
+  FROM (
+    SELECT coach_id, first_name, last_name FROM public.zadar_coach_record
+    UNION ALL
+    SELECT coach_id, first_name, last_name FROM public.zadar_head_coach_record
+    UNION ALL
+    SELECT coach_id, first_name, last_name FROM public.zadar_assistant_coach_record
+  ) t
+  GROUP BY coach_id
 )
 SELECT
     c.coach_id,
@@ -49,6 +60,17 @@ SELECT
             'points_scored', away.points_scored,
             'points_received', away.points_received,
             'points_difference', away.points_difference
+        ),
+        'neutral', jsonb_build_object(
+            'league_id', neutral.league_id,
+            'league_slug', neutral.league_slug,
+            'games', neutral.games,
+            'wins', neutral.wins,
+            'losses', neutral.losses,
+            'win_percentage', neutral.win_percentage,
+            'points_scored', neutral.points_scored,
+            'points_received', neutral.points_received,
+            'points_difference', neutral.points_difference
         )
     ) AS total_record,
 
@@ -86,6 +108,17 @@ SELECT
             'points_scored', head_away.points_scored,
             'points_received', head_away.points_received,
             'points_difference', head_away.points_difference
+        ),
+        'neutral', jsonb_build_object(
+            'league_id', head_neutral.league_id,
+            'league_slug', head_neutral.league_slug,
+            'games', head_neutral.games,
+            'wins', head_neutral.wins,
+            'losses', head_neutral.losses,
+            'win_percentage', head_neutral.win_percentage,
+            'points_scored', head_neutral.points_scored,
+            'points_received', head_neutral.points_received,
+            'points_difference', head_neutral.points_difference
         )
     ) AS head_coach_record,
 
@@ -123,35 +156,103 @@ SELECT
             'points_scored', assistant_away.points_scored,
             'points_received', assistant_away.points_received,
             'points_difference', assistant_away.points_difference
+        ),
+        'neutral', jsonb_build_object(
+            'league_id', assistant_neutral.league_id,
+            'league_slug', assistant_neutral.league_slug,
+            'games', assistant_neutral.games,
+            'wins', assistant_neutral.wins,
+            'losses', assistant_neutral.losses,
+            'win_percentage', assistant_neutral.win_percentage,
+            'points_scored', assistant_neutral.points_scored,
+            'points_received', assistant_neutral.points_received,
+            'points_difference', assistant_neutral.points_difference
         )
     ) AS assistant_coach_record
 
 FROM coaches c
-LEFT JOIN public.zadar_coach_league_record total
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_coach_league_record
+  ORDER BY coach_id, league_id
+) total
   ON c.coach_id = total.coach_id
-LEFT JOIN public.zadar_coach_league_record_home home
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_coach_league_record_home
+  ORDER BY coach_id, league_id
+) home
   ON c.coach_id = home.coach_id
   AND total.league_id = home.league_id
-LEFT JOIN public.zadar_coach_league_record_away away
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_coach_league_record_away
+  ORDER BY coach_id, league_id
+) away
   ON c.coach_id = away.coach_id
   AND total.league_id = away.league_id
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_coach_league_record_neutral
+  ORDER BY coach_id, league_id
+) neutral
+  ON c.coach_id = neutral.coach_id
+  AND total.league_id = neutral.league_id
 
-LEFT JOIN public.zadar_head_coach_league_record head
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_head_coach_league_record
+  ORDER BY coach_id, league_id
+) head
   ON c.coach_id = head.coach_id
   AND total.league_id = head.league_id
-LEFT JOIN public.zadar_head_coach_league_record_home head_home
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_head_coach_league_record_home
+  ORDER BY coach_id, league_id
+) head_home
   ON c.coach_id = head_home.coach_id
   AND head.league_id = head_home.league_id
-LEFT JOIN public.zadar_head_coach_league_record_away head_away
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_head_coach_league_record_away
+  ORDER BY coach_id, league_id
+) head_away
   ON c.coach_id = head_away.coach_id
   AND head.league_id = head_away.league_id
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_head_coach_league_record_neutral
+  ORDER BY coach_id, league_id
+) head_neutral
+  ON c.coach_id = head_neutral.coach_id
+  AND head.league_id = head_neutral.league_id
 
-LEFT JOIN public.zadar_assistant_coach_league_record assistant
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_assistant_coach_league_record
+  ORDER BY coach_id, league_id
+) assistant
   ON c.coach_id = assistant.coach_id
   AND total.league_id = assistant.league_id
-LEFT JOIN public.zadar_assistant_coach_league_record_home assistant_home
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_assistant_coach_league_record_home
+  ORDER BY coach_id, league_id
+) assistant_home
   ON c.coach_id = assistant_home.coach_id
   AND assistant.league_id = assistant_home.league_id
-LEFT JOIN public.zadar_assistant_coach_league_record_away assistant_away
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_assistant_coach_league_record_away
+  ORDER BY coach_id, league_id
+) assistant_away
   ON c.coach_id = assistant_away.coach_id
   AND assistant.league_id = assistant_away.league_id
+LEFT JOIN (
+  SELECT DISTINCT ON (coach_id, league_id) *
+  FROM public.zadar_assistant_coach_league_record_neutral
+  ORDER BY coach_id, league_id
+) assistant_neutral
+  ON c.coach_id = assistant_neutral.coach_id
+  AND assistant.league_id = assistant_neutral.league_id

@@ -9,20 +9,25 @@ export interface OptionType {
 export const selectStyle = <Option extends OptionType = OptionType>(
 	width?: string
 ): StylesConfig<Option, false, GroupBase<Option>> => ({
-	control: (provided) => ({
+	control: (provided, state) => ({
 		...provided,
-		maxHeight: '24px',
-		borderRadius: '4px',
-		border: '1px solid #99a1af',
+		maxHeight: '40px',
+		borderRadius: '8px',
+		border: state.isFocused ? '2px solid #3b82f6' : '1px solid #d1d5db',
 		fontSize: '14px',
-		minHeight: '32px',
-		height: '32px',
-		padding: '0 4px'
+		minHeight: '40px',
+		height: '40px',
+		padding: '0 4px',
+		boxShadow: state.isFocused ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+		transition: 'all 0.2s ease',
+		'&:hover': {
+			borderColor: '#9ca3af'
+		}
 	}),
 	valueContainer: (provided) => ({
 		...provided,
-		height: '32px',
-		padding: '0 8px'
+		height: '40px',
+		padding: '0 12px'
 	}),
 	input: (provided) => ({
 		...provided,
@@ -31,23 +36,40 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 	}),
 	indicatorsContainer: (provided) => ({
 		...provided,
-		height: '32px'
+		height: '40px'
 	}),
 	placeholder: (provided) => ({
 		...provided,
-		fontSize: '12px'
+		fontSize: '14px',
+		color: '#9ca3af'
 	}),
 	container: (provided) => ({
 		...provided,
-		borderRadius: '4px',
+		borderRadius: '8px',
 		border: 'none',
 		background: 'transparent',
 		boxShadow: 'none',
 		minWidth: '120px',
 		width: width ? width : '100%'
-		// 🚫 Remove zIndex here
 	}),
-	// ✅ Ensure dropdown always appears on top (high z-index to beat app stacking contexts)
-	menuPortal: (base) => ({ ...base, zIndex: 2147483647 }),
-	menu: (base) => ({ ...base, zIndex: 2147483647 })
+	option: (provided, state) => ({
+		...provided,
+		backgroundColor: state.isSelected ? '#3b82f6' : state.isFocused ? '#eff6ff' : 'white',
+		color: state.isSelected ? 'white' : '#1f2937',
+		padding: '10px 12px',
+		cursor: 'pointer',
+		transition: 'all 0.15s ease',
+		'&:active': {
+			backgroundColor: '#3b82f6'
+		}
+	}),
+	menu: (provided) => ({
+		...provided,
+		borderRadius: '8px',
+		boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+		border: '1px solid #e5e7eb',
+		overflow: 'hidden',
+		zIndex: 2147483647
+	}),
+	menuPortal: (base) => ({ ...base, zIndex: 2147483647 })
 });

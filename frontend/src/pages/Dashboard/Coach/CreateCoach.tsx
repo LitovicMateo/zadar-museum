@@ -16,7 +16,7 @@ const defaultValues: CoachFormData = {
 	first_name: '',
 	last_name: '',
 	date_of_birth: null,
-	nationality: '',
+	nationality: null,
 	image: null
 };
 

@@ -1,0 +1,22 @@
+/* Styles for LocationRadio component */
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.labelTitle {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.fieldset {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+}
+
+.option {
+  margin: 0;
+}

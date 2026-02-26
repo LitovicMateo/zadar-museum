@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import TableCell from '@/components/ui/table-cell';
+import '@/components/ui/table/types';
 import { APP_ROUTES } from '@/constants/routes';
 import { CoachStatsRanking } from '@/types/api/coach';
 import {
 	CellContext,
-	flexRender,
 	getCoreRowModel,
 	getSortedRowModel,
 	SortingState,
@@ -37,11 +36,13 @@ export const useCoachStatsTable = (
 				id: 'rank',
 				header: '#',
 				enableSorting: false,
+				meta: { sticky: 'left', stickyOffset: '0' },
 				cell: (info) => <RankCell info={info} />
 			},
 			{
 				header: 'Coach',
 				accessorFn: (row) => row.first_name + ' ' + row.last_name,
+				meta: { sticky: 'left', stickyOffset: '4ch' },
 				cell: (info) => (
 					<div className="whitespace-nowrap !text-left">
 						<Link to={APP_ROUTES.coach(info.row.original.coach_id)}>{info.getValue()}</Link>
@@ -53,19 +54,22 @@ export const useCoachStatsTable = (
 				header: 'G',
 				accessorKey: 'games',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'W',
 				accessorKey: 'wins',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: "alphanumeric"
 			},
 			{
 				header: 'L',
 				accessorKey: 'losses',
 				cell: (info) => <Cell info={info} />,
-				sortDescFirst: true
+				sortDescFirst: true,
+				sortingFn: 'alphanumeric'
 			},
 			{
 				header: 'W%',
@@ -102,72 +106,6 @@ export const useCoachStatsTable = (
 		state: { sorting },
 		initialState: { sorting: [{ id: 'wins', desc: true }] }
 	});
-
-	const TableHead: React.FC = () => {
-		return (
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b border-slate-400">
-						{headerGroup.headers.map((header, index) => {
-							const stickyFirst = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10' : '';
-							const stickySecond =
-								index === 1 ? 'text-left whitespace-nowrap sticky left-[4ch] z-10' : '';
-							// get cell id
-							const cellId = header.column.id as keyof CoachStatsRanking;
-							const isActive = cellId === sorting[0]?.id;
-
-							const arrow = sorting[0]?.desc ? '▼' : '▲';
-
-							const Arrow: React.FC = () => (
-								<span className="absolute top-[50%] right-0 transform translate-y-[-50%] text-[10px]">
-									{isActive && arrow}
-								</span>
-							);
-
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									className={`relative px-4 py-2 text-center whitespace-nowrap ${stickyFirst} ${stickySecond} bg-slate-50 ${header.column.getCanSort() ? 'select-none cursor-pointer' : ''}`}
-									onClick={header.column.getToggleSortingHandler()}
-								>
-									{flexRender(header.column.columnDef.header, header.getContext())}
-									<Arrow />
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
-
-	const TableBody: React.FC = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map((cell, index) => {
-							// get cell id
-							const cellId = cell.column.id as keyof CoachStatsRanking;
-
-							const stickyFirst =
-								index === 0 ? 'text-left whitespace-nowrap bg-white sticky left-0 z-10' : '';
-							const stickySecond =
-								index === 1 ? 'text-left whitespace-nowrap bg-white sticky left-[4ch] z-10' : '';
-							const highlight = cellId === sorting[0]?.id ? 'bg-slate-100' : '';
-
-							return (
-								<TableCell key={cell.id} sticky={`${stickyFirst} ${stickySecond} ${highlight}`}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</TableCell>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
 
 	const RankCell = <TData extends object, TValue>({ info }: { info: CellContext<TData, TValue> }) => {
 		const row = info.row.original as CoachStatsRanking;
@@ -232,5 +170,5 @@ export const useCoachStatsTable = (
 		return <p>{value === null || value === undefined ? '-' : String(value)}</p>;
 	};
 
-	return { table, TableHead, TableBody };
+	return { table };
 };

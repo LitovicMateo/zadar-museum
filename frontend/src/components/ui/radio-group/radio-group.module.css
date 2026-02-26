@@ -1,0 +1,17 @@
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.labelTitle {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.fieldset {
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  border: 0;
+}

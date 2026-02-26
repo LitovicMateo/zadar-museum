@@ -2,6 +2,11 @@ import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import NoContent from '@/components/no-content/no-content';
+import {
+	UniversalTableBody,
+	UniversalTableFooter,
+	UniversalTableHead,
+} from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useTeamLeagueSeasonStats } from '@/hooks/queries/league/useTeamLeagueStats';
 
@@ -16,18 +21,20 @@ const TeamLeagueStats: React.FC<TeamLeagueStatsProps> = ({ season }) => {
 
 	const { data: teamStats } = useTeamLeagueSeasonStats(leagueSlug!, season!);
 
-	console.log(teamStats);
-
-	const stats = useMemo(() => {
+	// Home/Away rows → table body
+	const bodyStats = useMemo(() => {
 		if (!teamStats || teamStats.length === 0) return [];
-		const home = teamStats[0].stats.home;
-		const away = teamStats[0].stats.away;
-		const total = teamStats[0].stats.total;
-
-		return [home, away, total];
+		return [teamStats[0].stats.home, teamStats[0].stats.away];
 	}, [teamStats]);
 
-	const { TableBody, TableHead } = useTeamLeagueStatsTable(stats);
+	// Total row → dedicated footer table (keeps body data independent)
+	const footStats = useMemo(() => {
+		if (!teamStats || teamStats.length === 0) return [];
+		return [teamStats[0].stats.total];
+	}, [teamStats]);
+
+	const { table } = useTeamLeagueStatsTable(bodyStats);
+	const { table: footTable } = useTeamLeagueStatsTable(footStats);
 
 	if (teamStats === undefined || teamStats.length === 0) {
 		return <NoContent type="info" description="No data available." />;
@@ -35,8 +42,9 @@ const TeamLeagueStats: React.FC<TeamLeagueStatsProps> = ({ season }) => {
 
 	return (
 		<TableWrapper>
-			<TableHead />
-			<TableBody />
+			<UniversalTableHead table={table} />
+			<UniversalTableBody table={table} />
+			<UniversalTableFooter table={footTable} variant="light" />
 		</TableWrapper>
 	);
 };

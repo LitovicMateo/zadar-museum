@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import Heading from '@/components/ui/heading';
 import { useRefereeGamelog } from '@/hooks/queries/referee/useRefereeGamelog';
-import { useScheduleTable } from '@/hooks/useScheduleTable';
+import { ScheduleList } from '@/hooks/useScheduleTable';
 
 import RefereeFilter from './referee-filter';
 import RefereeSeasonStats from './referee-season-stats';
@@ -21,8 +21,6 @@ const RefereeGamelog: React.FC = () => {
 		return filtered;
 	}, [refereeGamelog, selectedCompetitions]);
 
-	const { Schedule } = useScheduleTable(filteredGames!);
-
 	if (refereeGamelog === undefined) return null;
 
 	return (
@@ -36,7 +34,7 @@ const RefereeGamelog: React.FC = () => {
 			/>
 			<RefereeSeasonStats season={selectedSeason} />
 			<Heading title="Gamelog" type="secondary" />
-			<Schedule />
+		<ScheduleList schedule={filteredGames} />
 		</section>
 	);
 };

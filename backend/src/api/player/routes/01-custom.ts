@@ -1,3 +1,18 @@
+import { z } from "zod";
+import { validate } from "../../../middlewares/validation";
+import {
+  playersBoxscoreQuerySchema,
+  playerStatsParamsSchema,
+  playerNumberParamsSchema,
+  playerSeasonsParamsSchema,
+  playerSeasonCompetitionsParamsSchema,
+  playerIdParamsSchema,
+  playerCareerHighParamsSchema,
+  playerSeasonAverageParamsSchema,
+  playerAllTimeStatsQuerySchema,
+} from "../../../validation/schemas/player";
+import { databaseSchema } from "../../../validation/schemas/common";
+
 export default {
   routes: [
     {
@@ -6,6 +21,7 @@ export default {
       handler: "player.findPlayersBoxscore",
       config: {
         auth: false,
+        middlewares: [validate({ query: playersBoxscoreQuerySchema })],
       },
     },
     {
@@ -14,6 +30,12 @@ export default {
       handler: "player.findPlayersAllTimeStats",
       config: {
         auth: false,
+        middlewares: [
+          validate({
+            params: z.object({ db: databaseSchema }),
+            query: playerAllTimeStatsQuerySchema,
+          }),
+        ],
       },
     },
     {
@@ -22,6 +44,12 @@ export default {
       handler: "player.findPlayersAllTimeLeagueStats",
       config: {
         auth: false,
+        middlewares: [
+          validate({
+            params: z.object({ db: databaseSchema }),
+            query: playerAllTimeStatsQuerySchema,
+          }),
+        ],
       },
     },
     {
@@ -30,6 +58,7 @@ export default {
       handler: "player.getMostFrequentPlayerNumber",
       config: {
         auth: false,
+        middlewares: [validate({ params: playerNumberParamsSchema })],
       },
     },
     {
@@ -38,6 +67,7 @@ export default {
       handler: "player.getPlayerSeasons",
       config: {
         auth: false,
+        middlewares: [validate({ params: playerSeasonsParamsSchema })],
       },
     },
     {
@@ -46,6 +76,9 @@ export default {
       handler: "player.getPlayerSeasonCompetitions",
       config: {
         auth: false,
+        middlewares: [
+          validate({ params: playerSeasonCompetitionsParamsSchema }),
+        ],
       },
     },
     {
@@ -54,6 +87,7 @@ export default {
       handler: "player.getPlayerTeams",
       config: {
         auth: false,
+        middlewares: [validate({ params: playerIdParamsSchema })],
       },
     },
     {
@@ -62,6 +96,7 @@ export default {
       handler: "player.getCareerHighStats",
       config: {
         auth: false,
+        middlewares: [validate({ params: playerCareerHighParamsSchema })],
       },
     },
     {
@@ -70,6 +105,7 @@ export default {
       handler: "player.getSeasonAverageStats",
       config: {
         auth: false,
+        middlewares: [validate({ params: playerSeasonAverageParamsSchema })],
       },
     },
     {
@@ -78,6 +114,7 @@ export default {
       handler: "player.getSeasonAverageLeagueStats",
       config: {
         auth: false,
+        middlewares: [validate({ params: playerSeasonAverageParamsSchema })],
       },
     },
   ],

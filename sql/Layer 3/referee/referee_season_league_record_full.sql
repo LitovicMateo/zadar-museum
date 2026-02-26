@@ -51,6 +51,22 @@ SELECT
 
 
 
-FROM public.referee_season_league_stats total
-LEFT JOIN public.referee_season_league_stats_home home USING (referee_id, first_name, last_name)
-LEFT JOIN public.referee_season_league_stats_away away USING (referee_id, first_name, last_name)
+FROM (
+  SELECT DISTINCT ON (referee_id, season, league_id) *
+  FROM public.referee_season_league_stats
+  ORDER BY referee_id, season, league_id
+) total
+LEFT JOIN (
+  SELECT DISTINCT ON (referee_id, season, league_id) *
+  FROM public.referee_season_league_stats_home
+  ORDER BY referee_id, season, league_id
+) home ON total.referee_id = home.referee_id
+  AND total.season = home.season
+  AND total.league_id = home.league_id
+LEFT JOIN (
+  SELECT DISTINCT ON (referee_id, season, league_id) *
+  FROM public.referee_season_league_stats_away
+  ORDER BY referee_id, season, league_id
+) away ON total.referee_id = away.referee_id
+  AND total.season = away.season
+  AND total.league_id = away.league_id

@@ -40,9 +40,38 @@ SELECT
             'points_received', away.points_received,
             'points_diff', away.points_diff,
             'attendance', away.attendance
-        ) as away
+        ) as away,
+
+    jsonb_build_object(
+            'key', 'Neutral',
+            'games', neutral.games,
+            'wins', neutral.wins,
+            'losses', neutral.losses,
+            'win_percentage', neutral.win_pct,
+            'points_scored', neutral.points_scored,
+            'points_received', neutral.points_received,
+            'points_diff', neutral.points_diff,
+            'attendance', neutral.attendance
+        ) as neutral
 
 
-FROM public.team_season_average_stats total
-LEFT JOIN public.team_season_average_stats_home home USING (team_id, season)
-LEFT JOIN public.team_season_average_stats_away away USING (team_id, season);
+FROM (
+  SELECT DISTINCT ON (team_id, season) *
+  FROM public.team_season_average_stats
+  ORDER BY team_id, season
+) total
+LEFT JOIN (
+  SELECT DISTINCT ON (team_id, season) *
+  FROM public.team_season_average_stats_home
+  ORDER BY team_id, season
+) home ON total.team_id = home.team_id AND total.season = home.season
+LEFT JOIN (
+  SELECT DISTINCT ON (team_id, season) *
+  FROM public.team_season_average_stats_away
+  ORDER BY team_id, season
+) away ON total.team_id = away.team_id AND total.season = away.season
+LEFT JOIN (
+  SELECT DISTINCT ON (team_id, season) *
+  FROM public.team_season_average_stats_neutral
+  ORDER BY team_id, season
+) neutral ON total.team_id = neutral.team_id AND total.season = neutral.season;

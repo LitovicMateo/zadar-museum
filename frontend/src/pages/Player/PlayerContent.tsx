@@ -12,7 +12,7 @@ import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { useAllTimeStats } from '@/hooks/queries/player/useAllTimeStats';
 import { usePlayerProfileDatabase } from '@/hooks/queries/player/usePlayerProfileDatabase';
 
-const PlayerContent: React.FC = () => {
+const PlayerContent: React.FC = React.memo(() => {
 	const { playerId } = useParams();
 	const { selectedDatabase } = useBoxscore();
 
@@ -32,6 +32,8 @@ const PlayerContent: React.FC = () => {
 			<PlayerBoxscore />
 		</PageContentWrapper>
 	);
-};
+});
+
+PlayerContent.displayName = 'PlayerContent';
 
 export default PlayerContent;

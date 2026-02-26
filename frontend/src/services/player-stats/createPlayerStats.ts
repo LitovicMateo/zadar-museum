@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { PlayerStatsFormData } from '@/schemas/player-stats';
 import { validateStats } from '@/utils/validateStats';
-import axios from 'axios';
 
 export const createPlayerStats = async (data: PlayerStatsFormData) => {
 	const { gameId, playerId, status } = data;
@@ -12,7 +12,7 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 	});
 
 	// 1️⃣ Check for existing entry
-	const existingRes = await axios.get(API_ROUTES.create.playerStats(params.toString()));
+	const existingRes = await apiClient.get(API_ROUTES.create.playerStats(params.toString()));
 
 	if (existingRes.data.data.length > 0) {
 		throw new Error('Player stats for this game, team, and player already exist.');
@@ -49,7 +49,7 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 			plusMinus: undefined
 		};
 
-		const res = await axios.post(API_ROUTES.create.playerStats(), { data: payload });
+		const res = await apiClient.post(API_ROUTES.create.playerStats(), { data: payload });
 		return res;
 	}
 
@@ -86,6 +86,6 @@ export const createPlayerStats = async (data: PlayerStatsFormData) => {
 		plusMinus: data.plusMinus ? +data.plusMinus : undefined
 	};
 
-	const res = await axios.post(API_ROUTES.create.playerStats(), { data: payload });
+	const res = await apiClient.post(API_ROUTES.create.playerStats(), { data: payload });
 	return res;
 };

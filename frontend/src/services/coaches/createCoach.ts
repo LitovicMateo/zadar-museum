@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { CoachFormData } from '@/schemas/coach-schema';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
-import axios from 'axios';
 
 export const createCoach = async (data: CoachFormData) => {
 	const uploadedImageId = await uploadSingleImage(data.image);
@@ -11,7 +11,7 @@ export const createCoach = async (data: CoachFormData) => {
 		'filters[last_name][$eq]': data.last_name
 	});
 
-	const existingCoach = await axios.get(API_ROUTES.create.coach(params.toString()));
+	const existingCoach = await apiClient.get(API_ROUTES.create.coach(params.toString()));
 
 	if (existingCoach.data.data.length > 0) {
 		throw new Error('Coach already exists');
@@ -21,11 +21,12 @@ export const createCoach = async (data: CoachFormData) => {
 		first_name: data.first_name,
 		last_name: data.last_name,
 		date_of_birth: data.date_of_birth || null,
+		date_of_death: (data as any).date_of_death || null,
 		image: uploadedImageId,
-		nationality: data.nationality
+		nationality: data.nationality ?? null
 	};
 
-	return axios.post(API_ROUTES.create.coach(), {
+	return apiClient.post(API_ROUTES.create.coach(), {
 		data: coachPayload
 	});
 };

@@ -1,9 +1,9 @@
 import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { TeamFormData } from '@/schemas/team-schema';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
-import axios from 'axios';
 
 export const createTeam = async (data: TeamFormData) => {
 	const uploadedImageId = await uploadSingleImage(data.image);
@@ -15,7 +15,7 @@ export const createTeam = async (data: TeamFormData) => {
 		short_name: alt.short_name.toUpperCase()
 	}));
 
-	return axios.post(API_ROUTES.create.team(), {
+	return apiClient.post(API_ROUTES.create.team(), {
 		data: {
 			name: data.name,
 			short_name: data.short_name.toUpperCase(),

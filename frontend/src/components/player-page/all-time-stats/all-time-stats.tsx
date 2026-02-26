@@ -1,84 +1,105 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Heading from '@/components/ui/heading';
+import { StatCardSkeleton } from '@/components/ui/skeletons';
+import StatCard from '@/components/ui/stat-card';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { useAllTimeStats } from '@/hooks/queries/player/useAllTimeStats';
 
-const AllTimeStats: React.FC = () => {
+const statsConfig = [
+	{ label: 'Games', key: 'games' as const, rankKey: 'games_rank' as const },
+	{ label: 'Points', key: 'points' as const, rankKey: 'points_rank' as const },
+	{ label: 'Rebounds', key: 'rebounds' as const, rankKey: 'rebounds_rank' as const },
+	{ label: 'Assists', key: 'assists' as const, rankKey: 'assists_rank' as const },
+	{ label: '3PT', key: 'three_pointers_made' as const, rankKey: 'three_pointers_made_rank' as const },
+	{ label: 'FT', key: 'free_throws_made' as const, rankKey: 'free_throws_made_rank' as const }
+];
+
+const AllTimeStats: React.FC = React.memo(() => {
 	const { playerId } = useParams();
 	const { selectedDatabase } = useBoxscore();
 
 	const { data, isLoading } = useAllTimeStats(playerId!, selectedDatabase!);
 
-	if (isLoading || !data) return null;
-	const totalStats = data[0].total.total;
+	const [location, setLocation] = useState<'total' | 'home' | 'away' | 'neutral'>('total');
+	const hasNeutral = !!(data?.[0]?.total?.neutral?.games);
+
+	useEffect(() => {
+		if (!hasNeutral && location === 'neutral') setLocation('total');
+	}, [hasNeutral, location]);
+
+	if (isLoading || !data) {
+		return (
+			<section className="flex flex-col gap-4">
+				<Heading title="All Time Stats" />
+				<div className="rounded-lg shadow-md border border-gray-200 overflow-hidden bg-white">
+					<div className="flex justify-between px-4 py-3 font-semibold bg-slate-100 text-lg border-b-2 border-blue-500">
+						<span className="text-gray-700">Statistic</span>
+						<span className="text-gray-700">Record (Rank)</span>
+					</div>
+					{Array.from({ length: 6 }).map((_, i) => (
+						<StatCardSkeleton key={i} />
+					))}
+				</div>
+			</section>
+		);
+	}
+
+	const totalStats = data[0].total[location] ?? data[0].total.total;
 
 	return (
-		<section className="flex flex-col gap-4">
-			<Heading title="All Time Stats" />
-			<ul className="font-abel text-lg">
-				<li className="flex justify-between border-b-1 border-solid border-gray-500 px-2 py-2 font-semibold bg-slate-100 text-xl">
-					<span>Statistic</span>
-					<span>Record (Rank)</span>
-				</li>
-				<li>
-					<div className="flex justify-between px-2 py-2 hover:bg-gray-50 border-b-1 border-solid border-gray-500">
-						<div>Games</div>
-						<div className="flex gap-2 items-baseline">
-							<span className="font-bold">{totalStats.games}</span>
-							<span className="">({totalStats.games_rank}.)</span>
-						</div>
+		<section className="flex flex-col gap-4" aria-labelledby="all-time-stats-heading">
+			<Heading title="All Time Stats" id="all-time-stats-heading" />
+			<fieldset className="flex flex-row gap-4 font-abel">
+				{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
+					<label
+						key={loc}
+						className={`flex items-center gap-2 transition-colors duration-200 ${loc === 'neutral' && !hasNeutral ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`}
+					>
+						<input
+							type="radio"
+							name="all-time-stats-location"
+							value={loc}
+							checked={location === loc}
+							onChange={() => setLocation(loc)}
+							disabled={loc === 'neutral' && !hasNeutral}
+							className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+						/>
+						<span className="text-sm font-medium capitalize">{loc}</span>
+					</label>
+				))}
+			</fieldset>
+			<div
+				className="rounded-lg shadow-md border border-gray-200 overflow-hidden bg-white"
+				role="table"
+				aria-label="Career statistics"
+			>
+				<div
+					className="flex justify-between px-4 py-3 font-semibold bg-gradient-to-r from-slate-100 to-slate-50 text-lg border-b-2 border-blue-500 min-w-[280px]"
+					role="row"
+				>
+					<span role="columnheader" className="text-gray-700">
+						Statistic
+					</span>
+					<span role="columnheader" className="text-gray-700">
+						Record (Rank)
+					</span>
+				</div>
+				{statsConfig.map((stat) => (
+					<div key={stat.key} role="row">
+						<StatCard
+							label={stat.label}
+							value={totalStats[stat.key] ?? '-'}
+							rank={(totalStats[stat.rankKey] ?? undefined) as number | undefined}
+						/>
 					</div>
-				</li>
-				<li>
-					<div className="flex justify-between px-2 py-2 hover:bg-gray-50 border-b-1 border-solid border-gray-500">
-						<div>Points</div>
-						<div className="flex gap-2 items-baseline">
-							<span className="font-bold">{totalStats.points}</span>
-							<span className="">({totalStats.points_rank}.)</span>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div className="flex justify-between px-2 py-2 hover:bg-gray-50 border-b-1 border-solid border-gray-500">
-						<div>Rebounds</div>
-						<div className="flex gap-2 items-baseline">
-							<span className="font-bold">{totalStats.rebounds}</span>
-							<span className="">({totalStats.rebounds_rank}.)</span>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div className="flex justify-between px-2 py-2 hover:bg-gray-50 border-b-1 border-solid border-gray-500">
-						<div>Assists</div>
-						<div className="flex gap-2 items-baseline">
-							<span className="font-bold">{totalStats.assists}</span>
-							<span className="">({totalStats.assists_rank}.)</span>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div className="flex justify-between px-2 py-2 hover:bg-gray-50 border-b-1 border-solid border-gray-500">
-						<div>3PT</div>
-						<div className="flex gap-2 items-baseline">
-							<span className="font-bold">{totalStats.three_pointers_made}</span>
-							<span className="">({totalStats.three_pointers_made_rank}.)</span>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div className="flex justify-between px-2 py-2 hover:bg-gray-50 border-b-1 border-solid border-gray-500">
-						<div>FT</div>
-						<div className="flex gap-2 items-baseline">
-							<span className="font-bold">{totalStats.free_throws_made}</span>
-							<span className="">({totalStats.free_throws_made_rank}.)</span>
-						</div>
-					</div>
-				</li>
-			</ul>
+				))}
+			</div>
 		</section>
 	);
-};
+});
+
+AllTimeStats.displayName = 'AllTimeStats';
 
 export default AllTimeStats;

@@ -1,9 +1,9 @@
 import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { TeamFormData } from '@/schemas/team-schema';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
-import axios from 'axios';
 
 export const updateTeam = async ({ id, ...data }: { id: string } & TeamFormData) => {
 	// Determine image payload:
@@ -51,7 +51,7 @@ export const updateTeam = async ({ id, ...data }: { id: string } & TeamFormData)
 		payload.image = imagePayload;
 	}
 
-	const res = await axios.put(API_ROUTES.edit.team(id), {
+	const res = await apiClient.put(API_ROUTES.edit.team(id), {
 		data: payload
 	});
 

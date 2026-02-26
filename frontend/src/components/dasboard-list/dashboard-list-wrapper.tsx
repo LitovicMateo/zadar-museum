@@ -2,13 +2,15 @@ import React from 'react';
 
 const DashboardListWrapper: React.FC<{ children: React.ReactNode; title: string }> = ({ children, title }) => {
 	return (
-		<div className="w-full max-w-md p-4">
-			<div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-				<div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-					<h2 className="text-lg font-semibold text-gray-700 font-mono">Latest {title}</h2>
-					<span className="text-xs text-gray-400">Recent</span>
+		<div className="w-full max-w-md">
+			<div className="bg-white border-2 border-gray-200 rounded-xl shadow-md overflow-hidden">
+				<div className="px-5 py-4 bg-gradient-to-r from-slate-50 to-white border-b-2 border-gray-200 flex items-center justify-between">
+					<div>
+						<h2 className="text-lg font-bold text-gray-900">Latest {title}</h2>
+						<p className="text-xs text-gray-500 mt-0.5">Recently added entries</p>
+					</div>
 				</div>
-				<div className="p-2">{children}</div>
+				<div className="p-3">{children}</div>
 			</div>
 		</div>
 	);

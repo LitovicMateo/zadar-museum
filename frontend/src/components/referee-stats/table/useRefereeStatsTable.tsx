@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import TableCell from '@/components/ui/table-cell';
+import '@/components/ui/table/types';
 import { APP_ROUTES } from '@/constants/routes';
 import { RefereeStatsRanking } from '@/types/api/referee';
 import {
 	CellContext,
-	flexRender,
 	getCoreRowModel,
 	getSortedRowModel,
 	SortingState,
@@ -36,12 +35,14 @@ export const useRefereeStatsTable = (
 				id: 'rank',
 				header: '#',
 				enableSorting: false,
+				meta: { sticky: 'left', stickyOffset: '0' },
 				cell: (info) => <RankCell info={info} />
 			},
 			{
 				id: 'referee',
 				header: 'Referee',
 				accessorFn: (row) => row.first_name + ' ' + row.last_name,
+				meta: { sticky: 'left', stickyOffset: '4ch' },
 				cell: (info) => (
 					<div className="whitespace-nowrap !text-left">
 						<Link to={APP_ROUTES.referee(info.row.original.referee_document_id)}>{info.getValue()}</Link>
@@ -54,28 +55,32 @@ export const useRefereeStatsTable = (
 				header: 'G',
 				accessorKey: 'games',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'wins',
 				header: 'W',
 				accessorKey: 'wins',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'losses',
 				header: 'L',
 				accessorKey: 'losses',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'win_percentage',
 				header: '%',
 				accessorKey: 'win_percentage',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 
 			{
@@ -83,21 +88,24 @@ export const useRefereeStatsTable = (
 				header: 'F',
 				accessorKey: 'fouls_for',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'fouls_against',
 				header: 'A',
 				accessorKey: 'fouls_against',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			},
 			{
 				id: 'foul_difference',
 				header: 'Diff',
 				accessorKey: 'foul_difference',
 				sortDescFirst: true,
-				cell: (info) => <Cell info={info} />
+				cell: (info) => <Cell info={info} />,
+				sortingFn: "alphanumeric"
 			}
 		],
 		getCoreRowModel: getCoreRowModel(),
@@ -106,72 +114,6 @@ export const useRefereeStatsTable = (
 		state: { sorting },
 		initialState: { sorting: [{ id: 'wins', desc: true }] }
 	});
-
-	const TableHead: React.FC = () => {
-		return (
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b border-slate-400">
-						{headerGroup.headers.map((header, index) => {
-							const stickyFirst = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10' : '';
-							const stickySecond =
-								index === 1 ? 'text-left whitespace-nowrap sticky left-[4ch] z-10' : '';
-							// get cell id
-							const cellId = header.column.id as keyof RefereeStatsRanking;
-							const isActive = cellId === sorting[0]?.id;
-
-							const arrow = sorting[0]?.desc ? '▼' : '▲';
-
-							const Arrow: React.FC = () => (
-								<span className="absolute top-[50%] right-0 transform translate-y-[-50%] text-[10px]">
-									{isActive && arrow}
-								</span>
-							);
-
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									className={`relative px-4 py-2 text-center whitespace-nowrap ${stickyFirst} ${stickySecond} bg-slate-50 ${header.column.getCanSort() ? 'select-none cursor-pointer' : ''}`}
-									onClick={header.column.getToggleSortingHandler()}
-								>
-									{flexRender(header.column.columnDef.header, header.getContext())}
-									<Arrow />
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
-
-	const TableBody: React.FC = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map((cell, index) => {
-							// get cell id
-							const cellId = cell.column.id as keyof RefereeStatsRanking;
-
-							const stickyFirst =
-								index === 0 ? 'text-left whitespace-nowrap bg-white sticky left-0 z-10' : '';
-							const stickySecond =
-								index === 1 ? 'text-left whitespace-nowrap bg-white sticky left-[4ch] z-10' : '';
-							const highlight = cellId === sorting[0]?.id ? 'bg-slate-100' : '';
-
-							return (
-								<TableCell key={cell.id} sticky={`${stickyFirst} ${stickySecond} ${highlight}`}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</TableCell>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
 
 	const RankCell = <TData extends object, TValue>({ info }: { info: CellContext<TData, TValue> }) => {
 		const row = info.row.original as RefereeStatsRanking;
@@ -200,5 +142,5 @@ export const useRefereeStatsTable = (
 		return <p>{value === null || value === undefined ? '-' : String(value)}</p>;
 	};
 
-	return { table, TableHead, TableBody };
+	return { table };
 };

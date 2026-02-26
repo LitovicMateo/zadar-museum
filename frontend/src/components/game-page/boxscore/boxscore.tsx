@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { usePlayerBoxscoreTable } from '@/hooks/usePlayerBoxscoreTable';
 import { PlayerBoxscoreResponse } from '@/types/api/player';
@@ -9,12 +10,17 @@ type BoxscoreProps = {
 };
 
 const Boxscore: React.FC<BoxscoreProps> = ({ boxscore }) => {
-	const { TableHead, TableBody } = usePlayerBoxscoreTable(boxscore);
+	const { table } = usePlayerBoxscoreTable(boxscore);
 
 	return (
 		<TableWrapper>
-			<TableHead />
-			<TableBody />
+			<UniversalTableHead table={table} />
+			<UniversalTableBody
+				table={table}
+				rowVariant={(row) =>
+					row.original.status === 'starter' ? 'trStarter' : undefined
+				}
+			/>
 		</TableWrapper>
 	);
 };

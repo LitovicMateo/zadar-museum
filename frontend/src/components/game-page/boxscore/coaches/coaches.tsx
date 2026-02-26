@@ -16,26 +16,32 @@ const Coaches: React.FC<CoachesProps> = ({ teamSlug }) => {
 	if (isLoading || !coaches) return null;
 
 	return (
-		<div className="flex gap-8">
+		<div className="flex flex-col sm:flex-row gap-3">
 			{coaches.coach && (
-				<div className="flex flex-col lg:flex-row lg:gap-2 items-baseline">
-					<span className="text-xs">Head coach: </span>
-					<span>
-						<Link to={APP_ROUTES.coach(coaches.coach.documentId)}>
+				<Link
+					to={APP_ROUTES.coach(coaches.coach.documentId)}
+					className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border-2 border-gray-200 hover:border-blue-400 transition-all duration-200 hover:shadow-md group"
+				>
+					<div className="flex flex-col">
+						<span className="text-xs text-gray-500 font-medium uppercase">Head Coach</span>
+						<span className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
 							{coaches?.coach.first_name} {coaches?.coach.last_name}
-						</Link>
-					</span>
-				</div>
+						</span>
+					</div>
+				</Link>
 			)}
 			{coaches.assistantCoach && (
-				<div className="flex flex-col lg:flex-row lg:gap-2 items-baseline">
-					<span className="text-xs">Assistant coach:</span>{' '}
-					<span>
-						<Link to={APP_ROUTES.coach(coaches.assistantCoach.documentId)}>
+				<Link
+					to={APP_ROUTES.coach(coaches.assistantCoach.documentId)}
+					className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border-2 border-gray-200 hover:border-blue-400 transition-all duration-200 hover:shadow-md group"
+				>
+					<div className="flex flex-col">
+						<span className="text-xs text-gray-500 font-medium uppercase">Assistant Coach</span>
+						<span className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
 							{coaches?.assistantCoach?.first_name} {coaches?.assistantCoach?.last_name}
-						</Link>
-					</span>
-				</div>
+						</span>
+					</div>
+				</Link>
 			)}
 		</div>
 	);

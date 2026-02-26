@@ -15,6 +15,11 @@ build/
 .next/
 out/
 
+# TypeScript compiled output
+backend/src/**/*.js
+backend/src/**/*.js.map
+!backend/src/**/*.config.js
+
 # Logs
 logs
 *.log

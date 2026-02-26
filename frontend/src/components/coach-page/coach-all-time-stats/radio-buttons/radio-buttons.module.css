@@ -1,0 +1,13 @@
+.fieldset {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  font-family: 'Abel', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+.option {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  cursor: pointer;
+}

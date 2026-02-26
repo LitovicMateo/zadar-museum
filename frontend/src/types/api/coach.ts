@@ -5,7 +5,7 @@ export type CoachFormData = {
 	last_name: string;
 	date_of_birth: Date | null;
 	image: File | null;
-	nationality: string;
+	nationality?: string | null;
 };
 
 export interface CoachDetailsResponse {
@@ -13,8 +13,9 @@ export interface CoachDetailsResponse {
 	first_name: string;
 	last_name: string;
 	date_of_birth?: string | null;
+	date_of_death?: string | null;
 	image: StrapiImage;
-	nationality: string;
+	nationality?: string | null;
 	createdAt: string;
 	documentId: string;
 }
@@ -34,7 +35,7 @@ export type CoachRecordResponse = {
 	coachId: string;
 	firstName: string;
 	lastName: string;
-	allTime: CoachRecordRow[];
+	total: CoachRecordRow[];
 	headCoach: CoachRecordRow[];
 	assistantCoach: CoachRecordRow[];
 };
@@ -85,11 +86,12 @@ export interface CoachStats {
 	avg_points_difference?: number | null;
 }
 
-// Generic container for home/away/total stats
+// Generic container for home/away/total/neutral stats
 export interface CoachStatsGroup {
 	away: CoachStats;
 	home: CoachStats;
 	total: CoachStats;
+	neutral?: CoachStats;
 }
 
 // Top-level API response

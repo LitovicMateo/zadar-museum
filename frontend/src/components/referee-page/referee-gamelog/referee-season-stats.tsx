@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Heading from '@/components/ui/heading';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useRefereeSeasonLeagueStats } from '@/hooks/queries/referee/useRefereeSeasonLeagueStats';
 import { useRefereeSeasonStats } from '@/hooks/queries/referee/useRefereeSeasonStats';
@@ -23,8 +24,8 @@ const RefereeSeasonStats: React.FC<RefereeSeasonStatsProps> = ({ season }) => {
 		return seasonLeagueStats.map((league) => league.stats.total);
 	}, [seasonLeagueStats]);
 
-	const { TableHead, TableBody } = useRefereeStatsTable(leagueStats);
-	const { TableFoot } = useRefereeStatsTable(seasonStats);
+		const { table } = useRefereeStatsTable(leagueStats);
+        const { table: footTable } = useRefereeStatsTable(seasonStats);
 
 	if (!seasonStats || seasonStats.length === 0) return null;
 
@@ -33,9 +34,9 @@ const RefereeSeasonStats: React.FC<RefereeSeasonStatsProps> = ({ season }) => {
 			<Heading title="Season Stats" type="secondary" />
 
 			<TableWrapper>
-				<TableHead />
-				<TableBody />
-				<TableFoot />
+				<UniversalTableHead table={table} />
+				<UniversalTableBody table={table} />
+				<UniversalTableFooter table={footTable} variant="light" />
 			</TableWrapper>
 		</>
 	);

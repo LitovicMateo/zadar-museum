@@ -29,8 +29,15 @@
     "date_of_birth": {
       "type": "date"
     },
+    "date_of_death": {
+      "type": "date",
+      "required": false,
+      "default": null
+    },
     "nationality": {
-      "type": "string"
+      "type": "string",
+      "required": false,
+      "default": null
     }
   }
 }

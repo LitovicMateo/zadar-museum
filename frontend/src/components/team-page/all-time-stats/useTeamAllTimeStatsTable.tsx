@@ -1,14 +1,42 @@
-import TableCell from '@/components/ui/table-cell';
+import { useMemo } from 'react';
+
+import '@/components/ui/table/types';
 import { TeamStats } from '@/types/api/team';
-import { CellContext, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { CellContext, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+
+// ---------------------------------------------------------------------------
+// Module-level sub-components — stable references across renders
+// ---------------------------------------------------------------------------
+
+const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData, TValue> }) => {
+	const value = info.getValue();
+	return <p>{value === null || value === undefined ? '-' : String(value)}</p>;
+};
+
+// ---------------------------------------------------------------------------
+// Hook
+// ---------------------------------------------------------------------------
+
+const KEY_ORDER = ['Home', 'Away', 'Neutral', 'Total'];
 
 export const useTeamAllTimeStatsTable = (data: TeamStats[] | undefined) => {
+	const normalized = useMemo(
+		() =>
+			(data || []).slice().sort((a, b) => {
+				const ai = KEY_ORDER.indexOf(a.key as string);
+				const bi = KEY_ORDER.indexOf(b.key as string);
+				return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+			}),
+		[data]
+	);
+
 	const table = useReactTable<TeamStats>({
-		data: data || [],
+		data: normalized,
 		columns: [
 			{
 				header: 'League',
 				accessorKey: 'key',
+				meta: { sticky: 'left', stickyOffset: '0' },
 				cell: (info) => <Cell info={info} />,
 				enableSorting: false
 			},
@@ -22,20 +50,17 @@ export const useTeamAllTimeStatsTable = (data: TeamStats[] | undefined) => {
 				header: 'W',
 				accessorKey: 'wins',
 				cell: (info) => <Cell info={info} />,
-
 				sortingFn: 'alphanumeric'
 			},
 			{
 				header: 'L',
 				accessorKey: 'losses',
 				cell: (info) => <Cell info={info} />,
-
 				sortingFn: 'alphanumeric'
 			},
 			{
 				header: 'W%',
 				accessorKey: 'win_percentage',
-
 				cell: (info) => <Cell info={info} />,
 				sortingFn: 'alphanumeric'
 			},
@@ -67,80 +92,5 @@ export const useTeamAllTimeStatsTable = (data: TeamStats[] | undefined) => {
 		getCoreRowModel: getCoreRowModel()
 	});
 
-	const TableHead: React.FC = () => {
-		return (
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b border-slate-400">
-						{headerGroup.headers.map((header, index) => {
-							const sticky =
-								index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-slate-50' : '';
-
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									onClick={header.column.getToggleSortingHandler()}
-									className={`px-4 py-2 whitespace-nowrap text-center bg-slate-50 ${sticky} cursor-pointer ${header.column.getCanSort() ? 'select-none' : ''}`}
-								>
-									{flexRender(header.column.columnDef.header, header.getContext())}
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
-
-	const TableBody: React.FC = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 bg-white' : '';
-
-							return (
-								<TableCell key={cell.id} sticky={sticky}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</TableCell>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
-
-	const TableFoot = () => {
-		return (
-			<tfoot>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map((cell, index) => {
-							const sticky = index === 0 ? 'text-left whitespace-nowrap sticky left-0 z-10 ' : '';
-
-							return (
-								<td
-									key={cell.id}
-									className={`px-4 py-2 border-t border-slate-400 font-semibold text-center ${sticky} bg-slate-50`}
-								>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</td>
-							);
-						})}
-					</tr>
-				))}
-			</tfoot>
-		);
-	};
-
-	const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData, TValue> }) => {
-		const value = info.getValue();
-
-		return <p>{value === null || value === undefined ? '-' : String(value)}</p>;
-	};
-
-	return { table, TableHead, TableBody, TableFoot };
+	return { table };
 };

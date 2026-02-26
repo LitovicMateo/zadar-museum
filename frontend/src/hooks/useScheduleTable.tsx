@@ -3,14 +3,11 @@
 import { APP_ROUTES } from '@/constants/routes';
 import { TeamScheduleResponse } from '@/types/api/team';
 
-export const useScheduleTable = (schedule: TeamScheduleResponse[] = []) => {
-	const Schedule = () => {
-		return (
-			<div className="overflow-x-auto">
-				<div className="w-full bg-white divide-y divide-gray-200">
-					{schedule.map((g) => {
-						console.log(g);
-
+export const ScheduleList: React.FC<{ schedule?: TeamScheduleResponse[] }> = ({ schedule = [] }) => {
+	return (
+		<div className="overflow-x-auto">
+			<div className="w-full bg-white divide-y divide-gray-200">
+				{schedule.map((g) => {
 						const url = APP_ROUTES.game(g.game_document_id.toString());
 
 						const home = g.home_score;
@@ -77,11 +74,8 @@ export const useScheduleTable = (schedule: TeamScheduleResponse[] = []) => {
 								</div>
 							</div>
 						);
-					})}
-				</div>
+				})}
 			</div>
-		);
-	};
-
-	return { Schedule };
+		</div>
+	);
 };

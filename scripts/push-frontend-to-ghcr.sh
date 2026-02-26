@@ -17,7 +17,9 @@ fi
 echo "$GITHUB_PAT" | docker login ghcr.io -u "$REPO_OWNER" --password-stdin
 
 echo "Building $IMAGE:$SHA"
-docker build -t "$IMAGE:$SHA" -f frontend/Dockerfile frontend
+docker build -t "$IMAGE:$SHA" -f frontend/Dockerfile \
+  --build-arg VITE_API_ROOT="${VITE_API_ROOT:-}" \
+  frontend
 docker tag "$IMAGE:$SHA" "$IMAGE:latest"
 
 echo "Pushing images..."

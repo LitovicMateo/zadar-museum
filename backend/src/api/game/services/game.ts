@@ -11,13 +11,21 @@ export default factories.createCoreService("api::game.game", ({ strapi }) => ({
       // (like `staffers`) are properly expanded. Using a wildcard for each
       // relation guarantees nested fields are included.
       strapi.log.info(
-        `[game.service] findGameDetails: fetching game documentId=${gameId}`
+        `[game.service] findGameDetails: fetching game documentId=${gameId}`,
       );
       const result = await strapi.db.query("api::game.game").findOne({
         where: { documentId: gameId },
         populate: {
-          home_team: true,
-          away_team: true,
+          home_team: {
+            populate: {
+              image: true,
+            },
+          },
+          away_team: {
+            populate: {
+              image: true,
+            },
+          },
           competition: true,
           venue: true,
           mainReferee: true,
@@ -30,7 +38,7 @@ export default factories.createCoreService("api::game.game", ({ strapi }) => ({
 
       if (!result) {
         strapi.log.warn(
-          `[game.service] findGameDetails: no game found for documentId=${gameId}`
+          `[game.service] findGameDetails: no game found for documentId=${gameId}`,
         );
       } else {
         try {
@@ -41,11 +49,11 @@ export default factories.createCoreService("api::game.game", ({ strapi }) => ({
               }))
             : result.staffers;
           strapi.log.info(
-            `[game.service] findGameDetails: staffers=${JSON.stringify(staffInfo)}`
+            `[game.service] findGameDetails: staffers=${JSON.stringify(staffInfo)}`,
           );
         } catch (e) {
           strapi.log.error(
-            `[game.service] findGameDetails: failed to stringify staffers: ${e}`
+            `[game.service] findGameDetails: failed to stringify staffers: ${e}`,
           );
         }
       }

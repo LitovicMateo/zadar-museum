@@ -1,14 +1,15 @@
 import { API_ROUTES } from '@/constants/routes';
+import { useQuery } from '@/hooks/use-query-with-toast';
+import apiClient from '@/lib/api-client';
 import { CompetitionDetailsResponse } from '@/types/api/competition';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type CompetitionKey = keyof CompetitionDetailsResponse;
 
 export const useCompetitions = (sortKey?: CompetitionKey, direction: 'asc' | 'desc' = 'asc') => {
 	return useQuery({
 		queryKey: ['competitions', sortKey, direction],
-		queryFn: getAllCompetitions.bind(null, sortKey, direction)
+		queryFn: getAllCompetitions.bind(null, sortKey, direction),
+		errorMessage: 'Failed to load competitions'
 	});
 };
 
@@ -22,7 +23,7 @@ const getAllCompetitions = async (
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.competitions(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.competitions(params.toString()));
 
 	return res.data;
 };

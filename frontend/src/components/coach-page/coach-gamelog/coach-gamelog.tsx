@@ -1,22 +1,34 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import SeasonSelect from '@/components/games-page/games-filter/season-select';
 import Heading from '@/components/ui/heading';
 import { useCoachGamelog } from '@/hooks/queries/coach/useCoachGamelog';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/useCoachProfileDatabase';
-import { useScheduleTable } from '@/hooks/useScheduleTable';
+import { useCoachSeasons } from '@/hooks/queries/coach/useCoachSeasons';
+import { ScheduleList } from '@/hooks/useScheduleTable';
 
-import CoachSeasonStats from './coach-season-stats';
-import Filters from './filters';
+import Separator from '@/components/ui/separator';
+import CoachSeasonStats from './season-stats/coach-season-stats';
+import Filters from './filters/filters';
+import styles from './coach-gamelog.module.css';
 
 const CoachGamelog: React.FC = () => {
 	const { coachId } = useParams();
 
 	const [selectedCompetitions, setSelectedCompetitions] = useState<string[]>([]);
-	const [selectedSeason, setSelectedSeason] = useState('2026');
+	const [selectedSeason, setSelectedSeason] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
 
+	const { data: seasons } = useCoachSeasons(coachId!);
+
 	const { db } = useCoachProfileDatabase(coachId!);
+
+	useEffect(() => {
+		if (seasons && seasons.length > 0) {
+			setSelectedSeason(seasons[0]);
+		}
+	}, [seasons]);
 
 	const { data: coachGamelog } = useCoachGamelog(coachId!, db);
 
@@ -24,7 +36,9 @@ const CoachGamelog: React.FC = () => {
 		if (!coachGamelog) return [];
 
 		return coachGamelog.filter((game) => {
-			const matchesCompetition = selectedCompetitions.includes(game.league_id);
+			const matchesCompetition =
+				selectedCompetitions.length === 0 ||
+				selectedCompetitions.includes(String(game.league_id));
 
 			const matchesSearch =
 				searchTerm.trim().length === 0 ||
@@ -35,27 +49,33 @@ const CoachGamelog: React.FC = () => {
 		});
 	}, [coachGamelog, selectedCompetitions, searchTerm]);
 
-	const { Schedule } = useScheduleTable(filteredGames!);
-
 	return (
-		<section className="flex flex-col gap-2 font-abel">
-			<Heading title="Seasonal Data" />
-			<div className="flex flex-col gap-8 ">
-				<Filters
+		<section className={styles.section}>
+			<div className={styles.headingRow}>
+				<Heading title="Seasonal Data" />
+				<SeasonSelect
+					seasons={seasons || []}
 					selectedSeason={selectedSeason}
-					setSelectedSeason={setSelectedSeason}
-					selectedCompetitions={selectedCompetitions}
-					setSelectedCompetitions={setSelectedCompetitions}
-					setSearchTerm={setSearchTerm}
-					searchTerm={searchTerm}
+					onSeasonChange={setSelectedSeason}
+					compact
 				/>
-				<div className="flex flex-col gap-2">
+			</div>
+			<div className={styles.inner}>
+				<div className={styles.colGap2}>
 					<Heading title="Season Stats" type="secondary" />
 					<CoachSeasonStats season={selectedSeason} />
 				</div>
-				<div className="flex flex-col gap-2">
+				<Separator />
+				<div className={styles.colGap2}>
 					<Heading title="Gamelog" type="secondary" />
-					<Schedule />
+					<Filters
+						selectedSeason={selectedSeason}
+						selectedCompetitions={selectedCompetitions}
+						setSelectedCompetitions={setSelectedCompetitions}
+						setSearchTerm={setSearchTerm}
+						searchTerm={searchTerm}
+					/>
+					<ScheduleList schedule={filteredGames} />
 				</div>
 			</div>
 		</section>

@@ -1,3 +1,14 @@
+import { validate } from "../../../middlewares/validation";
+import {
+  coachIdParamsSchema,
+  coachSeasonsParamsSchema,
+  coachSeasonCompetitionsParamsSchema,
+  coachDbParamsSchema,
+  coachCareerTotalsParamsSchema,
+  coachLeagueTotalsParamsSchema,
+  coachSeasonTotalsParamsSchema,
+} from "../../../validation/schemas/coach";
+
 export default {
   routes: [
     {
@@ -6,6 +17,7 @@ export default {
       handler: "coach.getCoachDetails",
       config: {
         auth: false,
+        middlewares: [validate({ params: coachIdParamsSchema })],
       },
     },
     {
@@ -14,6 +26,7 @@ export default {
       handler: "coach.getCoachSeasons",
       config: {
         auth: false,
+        middlewares: [validate({ params: coachIdParamsSchema })],
       },
     },
     {
@@ -22,6 +35,9 @@ export default {
       handler: "coach.getCoachSeasonCompetitions",
       config: {
         auth: false,
+        middlewares: [
+          validate({ params: coachSeasonCompetitionsParamsSchema }),
+        ],
       },
     },
     {
@@ -30,6 +46,7 @@ export default {
       handler: "coach.getCoachGamelog",
       config: {
         auth: false,
+        middlewares: [validate({ params: coachDbParamsSchema })],
       },
     },
     {
@@ -38,6 +55,7 @@ export default {
       handler: "coach.getCoachTeamRecord",
       config: {
         auth: false,
+        middlewares: [validate({ params: coachDbParamsSchema })],
       },
     },
     {
@@ -46,6 +64,7 @@ export default {
       handler: "coach.getCoachLeagueRecord",
       config: {
         auth: false,
+        middlewares: [validate({ params: coachDbParamsSchema })],
       },
     },
 
@@ -55,6 +74,7 @@ export default {
       handler: "coach.getCoachTeams",
       config: {
         auth: false,
+        middlewares: [validate({ params: coachIdParamsSchema })],
       },
     },
 
@@ -64,6 +84,7 @@ export default {
       handler: "coach.getCoachLeagueSeasonStats",
       config: {
         auth: false,
+        middlewares: [validate({ params: coachLeagueTotalsParamsSchema })],
       },
     },
 
@@ -73,6 +94,7 @@ export default {
       handler: "coach.getCoachTotalSeasonStats",
       config: {
         auth: false,
+        middlewares: [validate({ params: coachSeasonTotalsParamsSchema })],
       },
     },
   ],

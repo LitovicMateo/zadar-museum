@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { PlayerFormData } from '@/schemas/player-schema';
 import { uploadSingleImage } from '@/utils/uploadSingleImage';
-import axios from 'axios';
 
 export const createPlayer = async (data: PlayerFormData) => {
 	const uploadedImageId = await uploadSingleImage(data.image);
@@ -11,7 +11,7 @@ export const createPlayer = async (data: PlayerFormData) => {
 		'filters[last_name][$eq]': data.last_name
 	});
 
-	const existingPlayer = await axios.get(API_ROUTES.create.player(params.toString()));
+	const existingPlayer = await apiClient.get(API_ROUTES.create.player(params.toString()));
 
 	if (existingPlayer.data.data.length > 0) {
 		throw new Error('Player already exists');
@@ -27,10 +27,10 @@ export const createPlayer = async (data: PlayerFormData) => {
 		secondary_position: data.secondary_position || null,
 		height: data.height || null,
 		image: uploadedImageId,
-		nationality: data.nationality
+		nationality: data.nationality ?? null
 	};
 
-	return axios.post(API_ROUTES.create.player(), {
+	return apiClient.post(API_ROUTES.create.player(), {
 		data: playerPayload
 	});
 };

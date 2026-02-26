@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { usePlayerSeasonAverage } from '@/hooks/queries/player/usePlayerSeasonAverage';
@@ -24,8 +25,8 @@ const SeasonAverage: React.FC = () => {
 		selectedDatabase
 	);
 
-	const { TableHead, TableBody } = usePlayerLeagueStatsTable(seasonLeagueAverage);
-	const { TableFooter } = usePlayerLeagueStatsTable(seasonAverage ?? []);
+	const { table } = usePlayerLeagueStatsTable(seasonLeagueAverage);
+	const { table: footTable } = usePlayerLeagueStatsTable(seasonAverage ?? []);
 
 	const hasAppearances = usePlayerHasAppearances(playerId!, selectedDatabase);
 
@@ -37,9 +38,9 @@ const SeasonAverage: React.FC = () => {
 
 	return (
 		<TableWrapper>
-			<TableHead />
-			<TableBody />
-			<TableFooter />
+			<UniversalTableHead table={table} />
+			<UniversalTableBody table={table} />
+			<UniversalTableFooter table={footTable} variant="gradient" />
 		</TableWrapper>
 	);
 };

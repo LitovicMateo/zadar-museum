@@ -4,8 +4,8 @@ CREATE MATERIALIZED VIEW public.player_total_all_time_per_team_per_league AS
     b.first_name,
     b.last_name,
     b.team_slug,
-    b.league_name,
-    b.league_slug,
+    MAX(b.league_name) AS league_name,
+    MAX(b.league_slug) AS league_slug,
     count(b.game_id) AS games,
     rank() OVER (PARTITION BY b.league_id ORDER BY (count(b.game_id)) DESC NULLS LAST) AS games_rank,
     sum(
@@ -79,4 +79,4 @@ CREATE MATERIALIZED VIEW public.player_total_all_time_per_team_per_league AS
   WHERE 
     b.status::text <> 'dnp-cd'::text AND
     b.is_nulled = false
-    GROUP BY b.player_id, b.first_name, b.last_name, b.team_slug, b.league_id, b.league_name, b.league_slug;
+    GROUP BY b.player_id, b.first_name, b.last_name, b.team_slug, b.league_id;

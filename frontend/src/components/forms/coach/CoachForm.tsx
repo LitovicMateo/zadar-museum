@@ -19,6 +19,7 @@ const emptyDefaults: CoachFormData = {
 	first_name: '',
 	last_name: '',
 	date_of_birth: null,
+	date_of_death: null,
 	nationality: '',
 	image: null
 };

@@ -3,6 +3,14 @@
  */
 
 import { factories } from "@strapi/strapi";
+import {
+  validateWhitelist,
+  validateSeason,
+  ALLOWED_DATABASES,
+  ALLOWED_ENTITIES,
+  ALLOWED_STATS,
+  ALLOWED_LOCATIONS,
+} from "../../../validation";
 
 export default factories.createCoreService("api::team.team", ({ strapi }) => ({
   async getTeamSeasons(teamSlug) {
@@ -22,23 +30,26 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       .where(function () {
         this.where("home_team_slug", teamSlug).orWhere(
           "away_team_slug",
-          teamSlug
+          teamSlug,
         );
       });
   },
 
   async findTeamSeasonCompetitions(teamName, season) {
+    // Validate season
+    const validatedSeason = validateSeason(season);
+
     const knex = strapi.db.connection;
 
     // find unique competitions team played in during the season
     const data = await knex("schedule")
       .select("league_id", "league_name", "league_slug")
       .distinct("league_id")
-      .where("season", season)
+      .where("season", validatedSeason)
       .andWhere(function () {
         this.where("home_team_slug", teamName).orWhere(
           "away_team_slug",
-          teamName
+          teamName,
         );
       });
 
@@ -56,10 +67,13 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       return null;
     }
 
+    
+    
     const team = data.map((team) => {
       const total = JSON.parse(team.total);
       const home = JSON.parse(team.home);
       const away = JSON.parse(team.away);
+      const neutral = team.neutral ? JSON.parse(team.neutral) : null;
       return {
         teamId: team.team_id,
         teamSlug: team.team_slug,
@@ -69,6 +83,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
         total,
         home,
         away,
+        neutral,
       };
     });
 
@@ -96,6 +111,11 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
     const total = JSON.parse(team.total);
     const home = JSON.parse(team.home);
     const away = JSON.parse(team.away);
+    const neutral = team.neutral ? JSON.parse(team.neutral) : null;
+
+    const stats = [home, away];
+    if (neutral) stats.push(neutral);
+    stats.push(total);
 
     return {
       teamId: team.team_id,
@@ -104,37 +124,68 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       total,
       home,
       away,
-      stats: [home, away, total],
+      neutral,
+      stats,
     };
   },
 
   async findTeamSchedule(teamSlug, season) {
+    // Validate season
+    const validatedSeason = validateSeason(season);
+
     const knex = strapi.db.connection;
     return knex("schedule")
       .select("*")
       .where(function () {
         this.where("home_team_slug", teamSlug).orWhere(
           "away_team_slug",
-          teamSlug
+          teamSlug,
         );
       })
-      .andWhere("season", season);
+      .andWhere("season", validatedSeason);
   },
 
   async findTeamLeaders(
     teamSlug: string,
     db: "player" | "coach",
     statKey: string,
-    competitionSlug?: string
+    competitionSlug?: string,
   ) {
+    // Validate db parameter
+    const validatedDb = validateWhitelist(db, ALLOWED_ENTITIES, "entity");
+
+    // Validate statKey to prevent SQL injection
+    const allowedStatKeys = [
+      // Player stats
+      "points",
+      "assists",
+      "rebounds",
+      "steals",
+      "blocks",
+      "three_pointers_made",
+      "free_throws_made",
+      "minutes",
+      // Coach stats
+      "games",
+      "wins",
+      "losses",
+      "win_percentage",
+      "points_scored",
+      "points_received",
+      "points_difference",
+    ];
+    if (statKey && !allowedStatKeys.includes(statKey)) {
+      throw new Error(`Invalid statKey: "${statKey}"`);
+    }
+
     const knex = strapi.db.connection;
     let tableName: string;
 
     const table = competitionSlug
-      ? `${db}_total_all_time_per_team_per_league`
-      : `${db}_total_all_time_per_team`;
+      ? `${validatedDb}_total_all_time_per_team_per_league`
+      : `${validatedDb}_total_all_time_per_team`;
 
-    const id = `${db}_id`;
+    const id = `${validatedDb}_id`;
 
     try {
       return knex(table)
@@ -148,8 +199,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
         .orderBy(statKey, "desc")
         .limit(5);
     } catch (err) {
-      console.log(err);
-      return [];
+      throw new Error(`Failed to fetch team leaders: ${err.message}`);
     }
   },
 
@@ -169,6 +219,11 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
     const total = JSON.parse(team.total);
     const home = JSON.parse(team.home);
     const away = JSON.parse(team.away);
+    const neutral = team.neutral ? JSON.parse(team.neutral) : null;
+
+    const stats = [home, away];
+    if (neutral) stats.push(neutral);
+    stats.push(total);
 
     return {
       teamId: team.team_id,
@@ -177,7 +232,8 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       total,
       home,
       away,
-      stats: [home, away, total],
+      neutral,
+      stats,
     };
   },
 
@@ -196,6 +252,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       const total = JSON.parse(team.total);
       const home = JSON.parse(team.home);
       const away = JSON.parse(team.away);
+      const neutral = team.neutral ? JSON.parse(team.neutral) : null;
       return {
         teamId: team.team_id,
         teamSlug: team.team_slug,
@@ -205,6 +262,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
         total,
         home,
         away,
+        neutral,
       };
     });
 

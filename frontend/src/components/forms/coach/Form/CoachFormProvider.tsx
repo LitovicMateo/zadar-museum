@@ -43,6 +43,7 @@ const CoachFormProvider: React.FC<CoachFormProviderProps> = ({
 				first_name: coach.first_name,
 				last_name: coach.last_name,
 				date_of_birth: coach.date_of_birth || null,
+				date_of_death: (coach as any).date_of_death || null,
 				image: coach.image || null,
 				nationality: coach.nationality
 			});

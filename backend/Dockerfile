@@ -1,3 +1,16 @@
+FROM node:20-alpine AS development
+
+WORKDIR /app
+
+# Development image: install dependencies but skip build steps.
+# This target is used for local development and runs `npm run develop`.
+COPY package*.json ./
+RUN npm ci
+
+EXPOSE 1337
+CMD ["npm", "run", "develop"]
+
+
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -13,7 +26,7 @@ COPY . .
 # If tsc is not used in this project this will be a no-op; keep it so projects
 # that need a TS compile step are handled.
 RUN npx tsc -p tsconfig.json || true
-RUN npm run build || true
+RUN npm run build
 
 
 FROM node:20-alpine AS runtime
@@ -23,6 +36,7 @@ WORKDIR /app
 # Install only production dependencies in the final image
 COPY package*.json ./
 RUN npm ci --only=production
+RUN apk add --no-cache curl
 
 # Copy compiled output and app files from the builder stage
 COPY --from=builder /app .

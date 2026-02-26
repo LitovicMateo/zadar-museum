@@ -1,0 +1,29 @@
+.wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: cover;
+}
+
+.placeholder {
+  height: 250px;
+  min-width: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: cover;
+  object-position: top;
+  border-left: 6px solid #ffffff;
+  border-right: 6px solid #ffffff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.image {
+  height: 250px;
+  object-fit: cover;
+  object-position: top;
+  border-left: 6px solid #ffffff;
+  border-right: 6px solid #ffffff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}

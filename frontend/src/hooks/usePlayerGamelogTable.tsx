@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 
-import TableCell from '@/components/ui/table-cell';
+import '@/components/ui/table/types';
 import { APP_ROUTES } from '@/constants/routes';
 import { PlayerBoxscoreResponse } from '@/types/api/player';
-import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import { getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
 export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefined) => {
 	const table = useReactTable<PlayerBoxscoreResponse>({
@@ -22,12 +22,13 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 			{
 				header: 'VS',
 				accessorKey: 'opponent_team_name',
+				meta: { sticky: 'left', stickyOffset: '0' },
 				cell: (info) => {
 					const isHome = info.row.original.is_home_team;
 					return (
 						<Link
 							to={APP_ROUTES.game(info.row.original.game_id)}
-							className={`py-2 text-left whitespace-nowrap sticky left-0 z-10 font-semibold`}
+							className="py-2 font-semibold"
 						>
 							{isHome ? '' : '@ '}
 							{info.getValue()}
@@ -240,57 +241,5 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 		getSortedRowModel: getSortedRowModel()
 	});
 
-	const TableHead: React.FC = () => {
-		return (
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id} className="border-b border-slate-400 bg-slate-50">
-						{headerGroup.headers.map((header, index) => {
-							const sticky = index === 1 ? 'text-left whitespace-nowrap sticky left-0 bg-slate-50' : '';
-
-							return (
-								<th
-									key={header.id}
-									colSpan={header.colSpan}
-									className={`px-4 py-2 text-center ${sticky}`}
-									onClick={header.column.getToggleSortingHandler()}
-								>
-									{header.isPlaceholder
-										? null
-										: flexRender(header.column.columnDef.header, header.getContext())}
-								</th>
-							);
-						})}
-					</tr>
-				))}
-			</thead>
-		);
-	};
-
-	const TableBody: React.FC = () => {
-		return (
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id} className="border-b border-slate-400 ">
-						{row.getVisibleCells().map((cell, index) => {
-							const sticky =
-								index === 1 ? 'text-left whitespace-nowrap bg-white sticky left-0 z-10 ' : '';
-
-							return (
-								<TableCell key={cell.id} sticky={sticky}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</TableCell>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		);
-	};
-
-	return {
-		table,
-		TableHead,
-		TableBody
-	};
+	return { table };
 };

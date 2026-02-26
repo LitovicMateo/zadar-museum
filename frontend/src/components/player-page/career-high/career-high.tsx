@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import Heading from '@/components/ui/heading';
+import { StatCardSkeleton } from '@/components/ui/skeletons';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { usePlayerCareerHigh } from '@/hooks/queries/player/usePlayerCareerHigh';
 import { PlayerCareerHighResponse } from '@/types/api/player';
@@ -51,7 +52,7 @@ const careerHighData: {
 	}
 ];
 
-const CareerHigh: React.FC = () => {
+const CareerHigh: React.FC = React.memo(() => {
 	const { playerId } = useParams();
 	const { selectedDatabase } = useBoxscore();
 
@@ -62,17 +63,37 @@ const CareerHigh: React.FC = () => {
 	if (!hasAppearances) return null;
 
 	if (isLoading || !careerHigh) {
-		return <div>Loading.....</div>;
+		return (
+			<div className="flex flex-col gap-4 font-abel">
+				<Heading title="Career High" />
+				<div className="rounded-lg shadow-md border border-gray-200 overflow-hidden bg-white">
+					<div className="flex justify-between px-4 py-3 font-semibold bg-slate-100 border-b-2 border-blue-500">
+						<span className="text-gray-700">Statistic</span>
+						<span className="text-gray-700">Record</span>
+					</div>
+					{Array.from({ length: 9 }).map((_, i) => (
+						<StatCardSkeleton key={i} />
+					))}
+				</div>
+			</div>
+		);
 	}
 
 	return (
-		<div className="flex flex-col gap-4 font-abel">
-			<Heading title="Career High" />
-			<div>
-				<ul className="font-abel text-xl">
-					<li className="flex justify-between border-b-1 border-solid border-gray-500 px-2 py-2 font-semibold bg-slate-100">
-						<span>Statistic</span>
-						<span>Record</span>
+		<div className="flex flex-col gap-4 font-abel" aria-labelledby="career-high-heading">
+			<Heading title="Career High" id="career-high-heading" />
+			<div className="overflow-x-auto rounded-lg shadow-md border border-gray-200 bg-white">
+				<ul className="font-abel text-lg min-w-[280px]" role="table" aria-label="Career high statistics">
+					<li
+						className="flex justify-between px-4 py-3 font-semibold bg-slate-100 border-b-2 border-blue-500"
+						role="row"
+					>
+						<span role="columnheader" className="text-gray-700">
+							Statistic
+						</span>
+						<span className="text-right text-gray-700" role="columnheader">
+							Record
+						</span>
 					</li>
 					{careerHighData.map((stat, index) => {
 						const value = careerHigh[stat.key];
@@ -86,6 +107,7 @@ const CareerHigh: React.FC = () => {
 			</div>
 		</div>
 	);
-};
+});
+CareerHigh.displayName = 'CareerHigh';
 
 export default CareerHigh;

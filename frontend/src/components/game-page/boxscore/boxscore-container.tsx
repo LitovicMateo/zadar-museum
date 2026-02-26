@@ -8,6 +8,7 @@ import { sortTeamBoxscore } from '@/utils/sortTeamBoxscore';
 
 import Boxscore from './boxscore';
 import Coaches from './coaches/coaches';
+import Staffers from './staffers/staffers';
 import TeamName from './team-name/team-name';
 
 type BoxscoreContainerProps = {
@@ -32,11 +33,14 @@ const BoxscoreContainer: React.FC<BoxscoreContainerProps> = ({ teamSlug, teamNam
 
 	return (
 		<section className="py-2 font-abel">
-			<div className="flex justify-between items-center mb-2 pb-2 border-b border-gray-500 uppercase">
-				<TeamName name={teamName} imageUrl={imageUrl} slug={teamSlug || ''} />
-				<Coaches teamSlug={teamSlug} />
+			<div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg px-4 py-3 mb-3 border-l-4 border-blue-500 shadow-sm">
+				<div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+					<TeamName name={teamName} imageUrl={imageUrl} slug={teamSlug || ''} />
+					<Coaches teamSlug={teamSlug} />
+				</div>
 			</div>
 			<Boxscore boxscore={sortTeamBoxscore(boxscore)} />
+			<Staffers teamSlug={teamSlug} />
 		</section>
 	);
 };

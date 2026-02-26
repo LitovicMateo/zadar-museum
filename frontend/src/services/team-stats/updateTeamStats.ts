@@ -1,13 +1,13 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { TeamStatsFormData } from '@/schemas/team-stats-schema';
 import { validateStats } from '@/utils/validateStats';
-import axios from 'axios';
 
 export const updateTeamStats = async ({ id, ...data }: { id: string } & TeamStatsFormData) => {
 	// 🔍 Validation: use shared validator for team-specific checks
 	validateStats(data, { checkTeam: true });
 
-	const res = await axios.put(API_ROUTES.edit.teamStats(id), {
+	const res = await apiClient.put(API_ROUTES.edit.teamStats(id), {
 		data: {
 			// filters
 			game: data.gameId,

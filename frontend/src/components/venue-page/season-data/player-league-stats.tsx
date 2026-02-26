@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import NoContent from '@/components/no-content/no-content';
+import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { usePlayerLeagueStats } from '@/hooks/queries/league/usePlayerLeagueStats';
 
@@ -16,9 +17,7 @@ const PlayerLeagueStats: React.FC<PlayerLeagueStatsProps> = ({ season }) => {
 
 	const { data: playerStats } = usePlayerLeagueStats(leagueSlug!, season!);
 
-	console.log('Player Stats', playerStats);
-
-	const { TableBody, TableHead } = usePlayerSeasonLeagueStatsTable(playerStats!);
+	const { table } = usePlayerSeasonLeagueStatsTable(playerStats!);
 
 	if (playerStats === undefined || playerStats.length === 0) {
 		return <NoContent type="info" description="No data available." />;
@@ -26,8 +25,8 @@ const PlayerLeagueStats: React.FC<PlayerLeagueStatsProps> = ({ season }) => {
 
 	return (
 		<TableWrapper>
-			<TableHead />
-			<TableBody />
+			<UniversalTableHead table={table} />
+			<UniversalTableBody table={table} />
 		</TableWrapper>
 	);
 };

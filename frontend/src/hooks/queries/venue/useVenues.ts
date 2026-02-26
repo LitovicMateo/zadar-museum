@@ -1,14 +1,15 @@
 import { API_ROUTES } from '@/constants/routes';
+import { useQuery } from '@/hooks/use-query-with-toast';
+import apiClient from '@/lib/api-client';
 import { VenueDetailsResponse } from '@/types/api/venue';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 type VenueKey = keyof VenueDetailsResponse;
 
 export const useVenues = (sortKey?: VenueKey, direction: 'asc' | 'desc' = 'asc') => {
 	return useQuery({
 		queryKey: ['venues', sortKey, direction],
-		queryFn: getAllVenues.bind(null, sortKey, direction)
+		queryFn: getAllVenues.bind(null, sortKey, direction),
+		errorMessage: 'Failed to load venues'
 	});
 };
 
@@ -19,7 +20,7 @@ const getAllVenues = async (sortKey?: VenueKey, direction: 'asc' | 'desc' = 'asc
 		params.append('direction', direction);
 	}
 
-	const res = await axios.get(API_ROUTES.dashboard.venues(params.toString()));
+	const res = await apiClient.get(API_ROUTES.dashboard.venues(params.toString()));
 
 	return res.data;
 };

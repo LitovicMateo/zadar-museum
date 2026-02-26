@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 
 import BoxscoreContainer from '@/components/game-page/boxscore/boxscore-container';
 import TeamStatsBoxscore from '@/components/game-page/boxscore/team-stats';
-import Heading from '@/components/ui/heading';
 import { useGameBoxscore } from '@/hooks/queries/game/useGameBoxscore';
 import { useGameDetails } from '@/hooks/queries/game/useGameDetails';
 
@@ -20,14 +19,13 @@ const GameStats: React.FC = () => {
 	if (!game || isGameLoading) return <div>Loading...</div>;
 
 	return (
-		<section className="flex flex-col gap-4">
+		<section className="flex flex-col gap-6">
 			<TeamStatsBoxscore />
 			{!disableStats && (
-				<div className="flex flex-col gap-2">
-					<Heading title="Boxscore" />
+				<>
 					<BoxscoreContainer teamSlug={game.home_team.slug} teamName={game.home_team_name} />
 					<BoxscoreContainer teamSlug={game.away_team.slug} teamName={game.away_team_name} />
-				</div>
+				</>
 			)}
 		</section>
 	);

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import NoContent from '@/components/no-content/no-content';
 import Heading from '@/components/ui/heading';
 import { useVenueGamelog } from '@/hooks/queries/venue/useVenueGamelog';
-import { useScheduleTable } from '@/hooks/useScheduleTable';
+import { ScheduleList } from '@/hooks/useScheduleTable';
 
 import Filters from './filter';
 import SeasonStats from './season-stats';
@@ -23,10 +23,6 @@ const VenueGamelog: React.FC = () => {
 		return filtered;
 	}, [games, selectedCompetitions]);
 
-	const { Schedule } = useScheduleTable(filteredGames!);
-
-	console.log(games);
-
 	if (games && games.length === 0 && selectedSeason) {
 		return <NoContent type="info" description="No games have been played at this venue in the selected season." />;
 	}
@@ -43,7 +39,7 @@ const VenueGamelog: React.FC = () => {
 			/>
 			<SeasonStats season={selectedSeason} />
 			<Heading title="Gamelog" type="secondary" />
-			<Schedule />
+			<ScheduleList schedule={filteredGames} />
 		</section>
 	);
 };

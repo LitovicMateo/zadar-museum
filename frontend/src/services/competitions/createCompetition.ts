@@ -1,11 +1,11 @@
 import slugify from 'react-slugify';
 
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { CompetitionFormData } from '@/types/api/competition';
-import axios from 'axios';
 
 export const createCompetiton = async (data: CompetitionFormData) => {
-	return axios.post(API_ROUTES.create.competition(), {
+	return apiClient.post(API_ROUTES.create.competition(), {
 		data: {
 			name: data.name,
 			short_name: data.short_name,

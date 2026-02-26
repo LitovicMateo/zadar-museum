@@ -1,14 +1,14 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { GameFormData } from '@/schemas/game-schema';
 import { uploadGallery } from '@/utils/uploadGallery';
-import axios from 'axios';
 
 export const createGame = async (data: GameFormData) => {
 	if (data.stage === 'league' && data.competition) {
 		const { season, competition, round, home_team, away_team } = data;
 
 		// Query Strapi for any game in this season+competition+round with either team
-		const res = await axios.get(API_ROUTES.create.game(), {
+		const res = await apiClient.get(API_ROUTES.create.game(), {
 			params: {
 				filters: {
 					season: { $eq: season },
@@ -33,7 +33,7 @@ export const createGame = async (data: GameFormData) => {
 
 	const galleryIds = await uploadGallery(data.gallery);
 
-	return axios.post(API_ROUTES.create.game(), {
+	return apiClient.post(API_ROUTES.create.game(), {
 		data: {
 			season: data.season,
 			round: data.round,

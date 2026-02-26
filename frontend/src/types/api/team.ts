@@ -164,7 +164,7 @@ export interface TeamBoxscoreResponse {
 
 // Reusable interface for team stats in a specific context (Home, Away, Total)
 export interface TeamStats {
-	key: 'Home' | 'Away' | 'Total';
+	key: 'Home' | 'Away' | 'Neutral' | 'Total';
 	league_id: string | null;
 	league_slug: string | null;
 	wins: number;
@@ -185,6 +185,7 @@ export interface TeamStatsResponse {
 	total: TeamStats;
 	home: TeamStats;
 	away: TeamStats;
+	neutral?: TeamStats;
 	stats: TeamStats[];
 }
 
@@ -196,6 +197,7 @@ export interface TeamSeasonStatsResponse {
 		total: TeamStats;
 		home: TeamStats;
 		away: TeamStats;
+		neutral?: TeamStats;
 	};
 }
 

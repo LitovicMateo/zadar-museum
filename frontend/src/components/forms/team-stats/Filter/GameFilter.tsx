@@ -14,8 +14,11 @@ const GameFilter: React.FC<GameFilterProps> = ({ season, league, setSelectedGame
 	const { data: games } = useCompetitionGames(season, league);
 	const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
 
+	// Sort games by date ascending (earliest first) and map to select options
+	const sortedGames = games ? [...games].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : [];
+
 	const gameOptions =
-		games?.map((g) => ({
+		sortedGames.map((g) => ({
 			value: g.id.toString(),
 			label: `R${g.round}: ${g.home_team_name} vs ${g.away_team_name}`
 		})) || [];

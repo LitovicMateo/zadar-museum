@@ -12,43 +12,25 @@ export default factories.createCoreService(
 
       if (!staffId) return [];
 
-      try {
-        let games: any[] = [];
+      // The game content-type uses 'staffers' as the relation field name
+      // (confirmed in game schema.json). Query via Strapi ORM so it resolves
+      // the join table automatically, then fetch the schedule rows for those games.
+      const games: { documentId: string }[] = await strapi.db
+        .query("api::game.game")
+        .findMany({
+          where: { staffers: { documentId: staffId } },
+          select: ["documentId"],
+        });
 
-        // try relation field 'staffers' first
-        try {
-          games = await strapi.db.query("api::game.game").findMany({
-            where: { staffers: { id: staffId } },
-            select: ["documentId"],
-          });
-        } catch (e) {
-          // ignore
-        }
+      const documentIds = games.map((g) => g.documentId).filter(Boolean);
+      if (documentIds.length === 0) return [];
 
-        // fallback to relation field 'staff'
-        if (!games || games.length === 0) {
-          try {
-            games = await strapi.db.query("api::game.game").findMany({
-              where: { staff: { id: staffId } },
-              select: ["documentId"],
-            });
-          } catch (e) {
-            // ignore
-          }
-        }
+      const rows = await knex("schedule")
+        .select("*")
+        .whereIn("game_document_id", documentIds)
+        .orderBy("game_date", "asc");
 
-        const documentIds = (games || [])
-          .map((g) => g.documentId)
-          .filter(Boolean);
-        if (documentIds.length === 0) return [];
-
-        const rows = await knex("schedule")
-          .select("*")
-          .whereIn("game_document_id", documentIds);
-        return rows || [];
-      } catch (err) {
-        throw err;
-      }
+      return rows ?? [];
     },
   })
 );

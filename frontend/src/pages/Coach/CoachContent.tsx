@@ -8,7 +8,7 @@ import PageContentWrapper from '@/components/ui/page-content-wrapper';
 import { useCoachLeagueStats } from '@/hooks/queries/coach/useCoachLeagueStats';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/useCoachProfileDatabase';
 
-const CoachContent: React.FC = () => {
+const CoachContent: React.FC = React.memo(function CoachContent() {
 	const { coachId } = useParams();
 	const { db } = useCoachProfileDatabase(coachId!);
 	const { data } = useCoachLeagueStats(coachId!, db!);
@@ -21,6 +21,6 @@ const CoachContent: React.FC = () => {
 			<CoachGamelog />
 		</PageContentWrapper>
 	);
-};
+});
 
 export default CoachContent;

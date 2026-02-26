@@ -1,6 +1,6 @@
 import { API_ROUTES } from '@/constants/routes';
+import apiClient from '@/lib/api-client';
 import { StaffFormData } from '@/schemas/staff-schema';
-import axios from 'axios';
 
 export const createStaff = async (data: StaffFormData) => {
 	const params = new URLSearchParams({
@@ -8,12 +8,12 @@ export const createStaff = async (data: StaffFormData) => {
 		'filters[last_name][$eq]': data.last_name
 	});
 
-	const existing = await axios.get(API_ROUTES.create.staff(params.toString()));
+	const existing = await apiClient.get(API_ROUTES.create.staff(params.toString()));
 	if (existing.data && existing.data.data && existing.data.data.length > 0) {
 		throw new Error('Staff already exists');
 	}
 
-	return axios.post(API_ROUTES.create.staff(), {
+	return apiClient.post(API_ROUTES.create.staff(), {
 		data: {
 			first_name: data.first_name,
 			last_name: data.last_name,

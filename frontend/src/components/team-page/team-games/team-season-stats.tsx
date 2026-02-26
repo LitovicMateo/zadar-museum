@@ -6,10 +6,11 @@ import TableWrapper from '@/components/ui/table-wrapper';
 import { useGamesContext } from '@/hooks/context/useGamesContext';
 import { useTeamSeasonLeagueStats } from '@/hooks/queries/team/useTeamSeasonLeagueStats';
 import { useTeamSeasonStats } from '@/hooks/queries/team/useTeamSeasonStats';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import { useTeamLeagueStatsTable } from '@/hooks/useTeamLeagueStats';
 import { TeamStats } from '@/types/api/team';
 
-type View = 'total' | 'home' | 'away';
+type View = 'total' | 'home' | 'away' | 'neutral';
 
 const TeamSeasonStats: React.FC = () => {
 	const { teamSlug } = useParams();
@@ -20,20 +21,25 @@ const TeamSeasonStats: React.FC = () => {
 	const { data: seasonLeagueStats } = useTeamSeasonStats(selectedSeason!, teamSlug!);
 	const { data: seasonStats } = useTeamSeasonLeagueStats(selectedSeason!, teamSlug!);
 
+	const hasNeutral = (seasonStats?.neutral?.games ?? 0) > 0;
+
+	// If the current selection becomes unavailable (e.g. navigated to a season
+	// with no neutral games while 'neutral' was active), fall back to 'total'.
+	const effectiveSelected: View = selected === 'neutral' && !hasNeutral ? 'total' : selected;
+
 	const leagueStatsRow: TeamStats[] = useMemo(() => {
 		if (!seasonLeagueStats?.length) return [];
-		return seasonLeagueStats.map((team) => {
-			return team[selected];
-		});
-	}, [seasonLeagueStats, selected]);
+		return seasonLeagueStats.map((team) => team[effectiveSelected]).filter(Boolean) as TeamStats[];
+	}, [seasonLeagueStats, effectiveSelected]);
 
 	const selectTotalStats: TeamStats[] = useMemo(() => {
 		if (!seasonStats) return [];
-		return [seasonStats[selected]];
-	}, [seasonStats, selected]);
+		const row = seasonStats[effectiveSelected];
+		return row ? [row] : [];
+	}, [seasonStats, effectiveSelected]);
 
-	const { TableHead, TableBody } = useTeamLeagueStatsTable(leagueStatsRow);
-	const { TableFoot } = useTeamLeagueStatsTable(selectTotalStats);
+	const { table: mainTable } = useTeamLeagueStatsTable(leagueStatsRow);
+	const { table: footTable } = useTeamLeagueStatsTable(selectTotalStats);
 
 	if (!seasonStats || !seasonLeagueStats) return null;
 
@@ -46,9 +52,9 @@ const TeamSeasonStats: React.FC = () => {
 					<label htmlFor="" className="flex gap-2">
 						<input
 							type="radio"
-							name="total"
+							name="view"
 							value={'total'}
-							checked={selected === 'total'}
+							checked={effectiveSelected === 'total'}
 							onChange={(e) => setSelected(e.target.value as View)}
 						/>
 						Total
@@ -56,9 +62,9 @@ const TeamSeasonStats: React.FC = () => {
 					<label htmlFor="" className="flex gap-2">
 						<input
 							type="radio"
-							name="home"
+							name="view"
 							value={'home'}
-							checked={selected === 'home'}
+							checked={effectiveSelected === 'home'}
 							onChange={(e) => setSelected(e.target.value as View)}
 						/>
 						Home
@@ -66,20 +72,34 @@ const TeamSeasonStats: React.FC = () => {
 					<label htmlFor="" className="flex gap-2">
 						<input
 							type="radio"
-							name="away"
+							name="view"
 							value={'away'}
-							checked={selected === 'away'}
+							checked={effectiveSelected === 'away'}
 							onChange={(e) => setSelected(e.target.value as View)}
 						/>
 						Away
+					</label>
+					<label
+						htmlFor=""
+						className={`flex gap-2 ${!hasNeutral ? 'opacity-40 cursor-not-allowed' : ''}`}
+					>
+						<input
+							type="radio"
+							name="view"
+							value={'neutral'}
+							checked={effectiveSelected === 'neutral'}
+							disabled={!hasNeutral}
+							onChange={(e) => setSelected(e.target.value as View)}
+						/>
+						Neutral
 					</label>
 				</fieldset>
 			</form>
 
 			<TableWrapper>
-				<TableHead />
-				<TableBody />
-				<TableFoot />
+				<UniversalTableHead table={mainTable} />
+				<UniversalTableBody table={mainTable} />
+				<UniversalTableFooter table={footTable} variant="light" />
 			</TableWrapper>
 		</>
 	);
