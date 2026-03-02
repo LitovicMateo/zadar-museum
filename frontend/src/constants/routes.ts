@@ -1,12 +1,6 @@
 import { PlayerDB } from '@/pages/Player/Player';
 
-// API root: prefer the Vite environment variable VITE_API_ROOT (set in production).
-// Fallback to the local Strapi dev server used during development.
-// const root = (import.meta.env.VITE_API_ROOT as string) || 'https://www.ovdjejekosarkasve.com/api';
-// const root = (import.meta.env.VITE_API_ROOT as string) || 'http://localhost:1337/api';
-
-const path = import.meta.env.VITE_API_ROOT;
-const root = path ? path : 'https://www.ovdjejekosarkasve.com/api';
+const root = '/api';
 
 export const API_ROUTES = {
 	// auth
