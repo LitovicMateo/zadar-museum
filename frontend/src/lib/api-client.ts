@@ -5,13 +5,8 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 // Create axios instance with base configuration
-const envRoot = import.meta.env.VITE_API_ROOT;
-console.log("ENV ROOT", envRoot);
-
 const apiClient = axios.create({
-	// If VITE_API_ROOT is provided we expect routes to include the root
-	// (e.g. "/api/...") — use empty baseURL to avoid double-prefixing.
-	baseURL: envRoot ? '' : 'https://www.ovdjejekosarkasve.com/api',
+	baseURL: '',
 	headers: {
 		'Content-Type': 'application/json'
 	},

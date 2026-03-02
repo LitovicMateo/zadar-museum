@@ -6,15 +6,12 @@ import { validateStats } from '@/utils/validateStats';
 export const createTeamStats = async (data: TeamStatsFormData) => {
 	const { teamId, gameId } = data;
 
-	const params = new URLSearchParams({
-		'filters[game][id][$eq]': gameId,
-		'filters[team][id][$eq]': teamId
-	});
-
 	// check if already exists
-	const existingRes = await apiClient.get(API_ROUTES.create.teamStats(params.toString()));
+	const duplicateRes = await apiClient.get(
+		API_ROUTES.create.teamStatsCheckDuplicate(gameId, teamId)
+	);
 
-	if (existingRes.data.data.length > 0) {
+	if (duplicateRes.data.isDuplicate) {
 		throw new Error('Team stats for this game and team already exist.');
 	}
 

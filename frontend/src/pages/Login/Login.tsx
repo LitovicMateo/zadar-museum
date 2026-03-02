@@ -23,7 +23,6 @@ export default function Login() {
 	return (
 		<main className="flex justify-center items-center h-svh">
 			<form
-				data-route={'https://ovdjejekosarkasve.com/api/auth/local'}
 				onSubmit={handleSubmit}
 				className="flex flex-col gap-2 "
 			>
