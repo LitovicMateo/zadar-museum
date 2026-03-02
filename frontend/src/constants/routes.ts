@@ -28,7 +28,11 @@ export const API_ROUTES = {
 		venue: (params?: string) => `${root}/venues?${params}`,
 		competition: (params?: string) => `${root}/competitions?${params}`,
 		playerStats: (params?: string) => `${root}/player-stats?${params}`,
-		teamStats: (params?: string) => `${root}/team-stats?${params}`
+		teamStats: (params?: string) => `${root}/team-stats?${params}`,
+		playerStatsCheckDuplicate: (game: string | number, player: string | number) =>
+			`${root}/player-stats/check-duplicate?game=${game}&player=${player}`,
+		teamStatsCheckDuplicate: (game: string | number, team: string | number) =>
+			`${root}/team-stats/check-duplicate?game=${game}&team=${team}`
 	},
 
 	edit: {
