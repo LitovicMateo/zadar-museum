@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { AuthContext, AuthContextType, StrapiAuthResponse, StrapiUser } from '@/context/auth-context';
 import apiClient from '@/lib/api-client';
+import { API_ROUTES } from '@/constants/routes';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [user, setUser] = useState<StrapiUser | null>(null);
@@ -10,9 +11,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [loading, setLoading] = useState(true);
 
 	const navigate = useNavigate();
-	const endpoint = import.meta.env.VITE_API_ROOT || 'http://localhost:1337/api';
-
-	// use relative API paths; VITE_API_ROOT handled in API client / routes
 
 	useEffect(() => {
 		const storedJwt = localStorage.getItem('jwt');
@@ -28,7 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const login = async (identifier: string, password: string) => {
 		try {
-			const res = await apiClient.post<StrapiAuthResponse>(`${endpoint}/auth/local`, {
+			const res = await apiClient.post<StrapiAuthResponse>(API_ROUTES.auth.login, {
 				identifier,
 				password
 			});

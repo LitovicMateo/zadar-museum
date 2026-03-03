@@ -6,16 +6,13 @@ import { validateStats } from '@/utils/validateStats';
 export const createPlayerStats = async (data: PlayerStatsFormData) => {
 	const { gameId, playerId, status } = data;
 
-	const params = new URLSearchParams({
-		'filters[game][id][$eq]': gameId,
-		'filters[player][id][$eq]': playerId
-	});
-
 	// 1️⃣ Check for existing entry
-	const existingRes = await apiClient.get(API_ROUTES.create.playerStats(params.toString()));
+	const duplicateRes = await apiClient.get(
+		API_ROUTES.create.playerStatsCheckDuplicate(gameId, playerId)
+	);
 
-	if (existingRes.data.data.length > 0) {
-		throw new Error('Player stats for this game, team, and player already exist.');
+	if (duplicateRes.data.isDuplicate) {
+		throw new Error('Player stats for this game and player already exist.');
 	}
 
 	// 2️⃣ If DNP-CD → skip all stat validations & clear stats

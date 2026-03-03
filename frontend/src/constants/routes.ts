@@ -1,12 +1,6 @@
 import { PlayerDB } from '@/pages/Player/Player';
 
-// API root: prefer the Vite environment variable VITE_API_ROOT (set in production).
-// Fallback to the local Strapi dev server used during development.
-// const root = (import.meta.env.VITE_API_ROOT as string) || 'https://www.ovdjejekosarkasve.com/api';
-// const root = (import.meta.env.VITE_API_ROOT as string) || 'http://localhost:1337/api';
-
-const path = import.meta.env.VITE_API_ROOT;
-const root = path ? path : 'https://www.ovdjejekosarkasve.com/api';
+const root = '/api';
 
 export const API_ROUTES = {
 	// auth
@@ -28,7 +22,11 @@ export const API_ROUTES = {
 		venue: (params?: string) => `${root}/venues?${params}`,
 		competition: (params?: string) => `${root}/competitions?${params}`,
 		playerStats: (params?: string) => `${root}/player-stats?${params}`,
-		teamStats: (params?: string) => `${root}/team-stats?${params}`
+		teamStats: (params?: string) => `${root}/team-stats?${params}`,
+		playerStatsCheckDuplicate: (game: string | number, player: string | number) =>
+			`${root}/player-stats/check-duplicate?game=${game}&player=${player}`,
+		teamStatsCheckDuplicate: (game: string | number, team: string | number) =>
+			`${root}/team-stats/check-duplicate?game=${game}&team=${team}`
 	},
 
 	edit: {

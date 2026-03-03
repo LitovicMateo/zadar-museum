@@ -33,5 +33,14 @@ export default factories.createCoreService(
 
       return data;
     },
+
+    async checkDuplicate(gameId: number, playerId: number) {
+      return strapi.db.query("api::player-stats.player-stat").findOne({
+        where: {
+          game: gameId,
+          player: playerId,
+        },
+      });
+    },
   })
 );
