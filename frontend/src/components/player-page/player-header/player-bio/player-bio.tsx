@@ -5,6 +5,8 @@ import { format } from 'date-fns';
 import { PlayerResponse } from '@/types/api/player';
 import { calculateAge } from '@/utils/calculateAge';
 
+import styles from './player-bio.module.css';
+
 type PlayerBio = {
 	player: PlayerResponse;
 };
@@ -19,51 +21,51 @@ const PlayerBio: React.FC<PlayerBio> = ({ player }) => {
 	const age = player.date_of_birth ? calculateAge(player.date_of_birth) : null;
 	const ageAtDeath = player.date_of_birth && player.date_of_death ? calculateAge(player.date_of_birth, player.date_of_death) : null;
 	return (
-		<div className="h-fit flex flex-col text-white font-mono">
-			<div className="border-b-1 border-white border-solid">
-				<h2 className="font-bold flex flex-col">
-					<span className="text-sm">{player.first_name}</span>
-					<span className="text-4xl uppercase">{player.last_name}</span>
+		<div className={styles.bio}>
+			<div className={styles.nameBlock}>
+				<h2 className={styles.name}>
+					<span className={styles.firstName}>{player.first_name}</span>
+					<span className={styles.lastName}>{player.last_name}</span>
 				</h2>
 			</div>
-			<div className="h-fit py-4 flex flex-col justify-start gap-2 items-start">
-				<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
+			<div className={styles.details}>
+				<span className={styles.detail}>
 					Nationality:
-					<div className="h-[16px]  aspect-video rounded-xs overflow-hidden">
+					<div className={styles.flag}>
 						{player.nationality ? (
-							<Flag className="object-cover object- h-full" code={player.nationality} />
+							<Flag className={styles.flagImg} code={player.nationality} />
 						) : (
-							<span className="text-gray-300">-</span>
+							<span className={styles.muted}>-</span>
 						)}
 					</div>
-				</label>
-				<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
+				</span>
+				<span className={styles.detail}>
 					Position:
-					<span className="uppercase">
+					<span>
 						{player.primary_position ? (
 							<>{player.primary_position}{player.secondary_position ? ` / ${player.secondary_position}` : ''}</>
 						) : (
-							<span className="text-gray-300">-</span>
+							<span className={styles.muted}>-</span>
 						)}
 					</span>
-				</label>
+				</span>
 				{player.height && (
-					<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
+					<span className={styles.detail}>
 						Height:
-						<span className="uppercase">{player.height} cm</span>
-					</label>
+						<span>{player.height} cm</span>
+					</span>
 				)}
 				{deathDateStr ? (
-					<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
+					<span className={styles.detail}>
 						<span>{`Born: ${birthDateStr} — Died: ${deathDateStr}`}</span>
-						{ageAtDeath !== null && <span className="uppercase">{`(aged ${ageAtDeath})`}</span>}
-					</label>
+						{ageAtDeath !== null && <span>{`(aged ${ageAtDeath})`}</span>}
+					</span>
 				) : (
 					birthDateStr && (
-						<label htmlFor="" className="text-sm flex gap-2 justify-center items-center">
+						<span className={styles.detail}>
 							{`Age: ${age}`}
-							<span className="uppercase">{`(${birthDateStr})`}</span>
-						</label>
+							<span>{`(${birthDateStr})`}</span>
+						</span>
 					)
 				)}
 			</div>

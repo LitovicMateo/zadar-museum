@@ -1,0 +1,35 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.list {
+  font-size: 1.125rem;
+  min-width: 280px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.listHead {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  background-color: #f1f5f9;
+  border-bottom: 2px solid #3b82f6;
+  list-style: none;
+}
+
+.listHeadLabel {
+  color: #374151;
+}

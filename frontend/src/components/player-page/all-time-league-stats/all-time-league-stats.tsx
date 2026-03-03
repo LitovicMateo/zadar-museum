@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import Heading from '@/components/ui/heading';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { useAllTimeLeagueStats } from '@/hooks/queries/player/useAllTimeLeagueStats';
 import { usePlayerHasAppearances } from '@/utils/playerHasAppearances';
 
 import Buttons from './buttons/buttons';
 import MainTable from './main-table/main-table';
+import styles from './all-time-league-stats.module.css';
 
 const AllTimeLeagueStats: React.FC = React.memo(() => {
 	const { playerId } = useParams();
@@ -32,15 +32,17 @@ const AllTimeLeagueStats: React.FC = React.memo(() => {
 	if (!hasAppearances) return null;
 
 	return (
-		<section className="flex flex-col gap-4" aria-labelledby="league-stats-heading">
-			<Heading title="All Time League Stats" id="league-stats-heading" />
-			<div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-8">
+		<section className={styles.section}>
+			<div className={styles.controls}>
 				<Buttons selected={view} setSelected={handleViewChange} />
-				<fieldset className="flex flex-row gap-4 font-abel">
+				<fieldset className={styles.radioGroup}>
 					{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
 						<label
 							key={loc}
-							className={`flex items-center gap-2 transition-colors duration-200 ${loc === 'neutral' && !hasNeutral ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`}
+							className={[
+								styles.radioLabel,
+								loc === 'neutral' && !hasNeutral ? styles.radioLabelDisabled : '',
+							].join(' ')}
 						>
 							<input
 								type="radio"
@@ -49,9 +51,9 @@ const AllTimeLeagueStats: React.FC = React.memo(() => {
 								checked={location === loc}
 								onChange={() => setLocation(loc)}
 								disabled={loc === 'neutral' && !hasNeutral}
-								className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+								className={styles.radio}
 							/>
-							<span className="text-sm font-medium capitalize">{loc}</span>
+							<span>{loc}</span>
 						</label>
 					))}
 				</fieldset>

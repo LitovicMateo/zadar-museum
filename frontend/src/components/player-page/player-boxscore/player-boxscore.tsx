@@ -5,11 +5,11 @@ import Heading from '@/components/ui/heading';
 import Boxscore from './boxscore/boxscore';
 import BoxscoreFilter from './filter/boxscore-filter';
 import SeasonAverage from './season-average/season-average';
+import styles from './player-boxscore.module.css';
 
 const PlayerBoxscore: React.FC = () => {
 	return (
-		<section className="flex flex-col gap-4 min-h-[500px]">
-			<Heading title="Seasonal Data" />
+		<section className={styles.section}>
 			<BoxscoreFilter />
 			<Heading title="Season Stats" type="secondary" />
 			<SeasonAverage />

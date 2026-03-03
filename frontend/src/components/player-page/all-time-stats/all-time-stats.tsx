@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Heading from '@/components/ui/heading';
 import { StatCardSkeleton } from '@/components/ui/skeletons';
 import StatCard from '@/components/ui/stat-card';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { useAllTimeStats } from '@/hooks/queries/player/useAllTimeStats';
+
+import styles from './all-time-stats.module.css';
 
 const statsConfig = [
 	{ label: 'Games', key: 'games' as const, rankKey: 'games_rank' as const },
@@ -31,12 +32,11 @@ const AllTimeStats: React.FC = React.memo(() => {
 
 	if (isLoading || !data) {
 		return (
-			<section className="flex flex-col gap-4">
-				<Heading title="All Time Stats" />
-				<div className="rounded-lg shadow-md border border-gray-200 overflow-hidden bg-white">
-					<div className="flex justify-between px-4 py-3 font-semibold bg-slate-100 text-lg border-b-2 border-blue-500">
-						<span className="text-gray-700">Statistic</span>
-						<span className="text-gray-700">Record (Rank)</span>
+			<section className={styles.section}>
+				<div className={styles.table}>
+					<div className={`${styles.tableHead} ${styles.tableHeadSkeleton}`}>
+						<span className={styles.tableHeadLabel}>Statistic</span>
+						<span className={styles.tableHeadLabel}>Record (Rank)</span>
 					</div>
 					{Array.from({ length: 6 }).map((_, i) => (
 						<StatCardSkeleton key={i} />
@@ -49,13 +49,15 @@ const AllTimeStats: React.FC = React.memo(() => {
 	const totalStats = data[0].total[location] ?? data[0].total.total;
 
 	return (
-		<section className="flex flex-col gap-4" aria-labelledby="all-time-stats-heading">
-			<Heading title="All Time Stats" id="all-time-stats-heading" />
-			<fieldset className="flex flex-row gap-4 font-abel">
+		<section className={styles.section}>
+			<fieldset className={styles.filterRow}>
 				{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
 					<label
 						key={loc}
-						className={`flex items-center gap-2 transition-colors duration-200 ${loc === 'neutral' && !hasNeutral ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`}
+						className={[
+							styles.filterLabel,
+							loc === 'neutral' && !hasNeutral ? styles.filterLabelDisabled : '',
+						].join(' ')}
 					>
 						<input
 							type="radio"
@@ -64,25 +66,25 @@ const AllTimeStats: React.FC = React.memo(() => {
 							checked={location === loc}
 							onChange={() => setLocation(loc)}
 							disabled={loc === 'neutral' && !hasNeutral}
-							className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+							className={styles.filterRadio}
 						/>
-						<span className="text-sm font-medium capitalize">{loc}</span>
+						<span className={styles.filterLabelText}>{loc}</span>
 					</label>
 				))}
 			</fieldset>
 			<div
-				className="rounded-lg shadow-md border border-gray-200 overflow-hidden bg-white"
+				className={styles.table}
 				role="table"
 				aria-label="Career statistics"
 			>
 				<div
-					className="flex justify-between px-4 py-3 font-semibold bg-gradient-to-r from-slate-100 to-slate-50 text-lg border-b-2 border-blue-500 min-w-[280px]"
+					className={styles.tableHead}
 					role="row"
 				>
-					<span role="columnheader" className="text-gray-700">
+					<span role="columnheader" className={styles.tableHeadLabel}>
 						Statistic
 					</span>
-					<span role="columnheader" className="text-gray-700">
+					<span role="columnheader" className={styles.tableHeadLabel}>
 						Record (Rank)
 					</span>
 				</div>

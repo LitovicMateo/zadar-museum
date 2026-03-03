@@ -1,0 +1,39 @@
+.row {
+  list-style: none;
+}
+
+.rowBordered {
+  border-bottom: 1px solid #6b7280;
+}
+
+.link {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 1.125rem;
+  padding: 0.5rem 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.1s ease;
+}
+
+.link:hover {
+  background-color: #f9fafb;
+  color: #000;
+}
+
+.statInfo {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.statMeta {
+  font-size: 0.875rem;
+  color: #4b5563;
+}

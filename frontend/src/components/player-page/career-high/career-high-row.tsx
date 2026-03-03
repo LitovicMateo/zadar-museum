@@ -5,6 +5,8 @@ import { APP_ROUTES } from '@/constants/routes';
 import { useTeamDetails } from '@/hooks/queries/team/useTeamDetails';
 import { Stat } from '@/types/api/player';
 
+import styles from './career-high-row.module.css';
+
 type CareerHighRowProps = {
 	label: string;
 	stat: Stat;
@@ -15,14 +17,12 @@ const CareerHighRow: React.FC<CareerHighRowProps> = ({ label, stat, isLastItem }
 	const { data: team } = useTeamDetails(stat.opponent_team_slug!);
 
 	return (
-		<li
-			className={`flex justify-between px-2 py-2 hover:bg-gray-50 ${isLastItem ? '' : 'border-b-1 border-solid border-gray-500'} `}
-		>
-			<Link to={APP_ROUTES.game(stat.game_id)} className=" hover:!text-black flex justify-between w-full text-lg">
+		<li className={[styles.row, !isLastItem ? styles.rowBordered : ''].join(' ')}>
+			<Link to={APP_ROUTES.game(stat.game_id)} className={styles.link}>
 				<div>{label}</div>
-				<div className="flex gap-2 items-baseline">
-					<span className="text-xl font-bold">{stat.stat_value}</span>
-					<span className="text-sm">
+				<div className={styles.statInfo}>
+					<span className={styles.statValue}>{stat.stat_value}</span>
+					<span className={styles.statMeta}>
 						vs {team?.short_name} ({stat.game_date})
 					</span>
 				</div>

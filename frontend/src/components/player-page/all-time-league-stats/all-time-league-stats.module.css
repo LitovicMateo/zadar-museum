@@ -1,0 +1,58 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.radioLabel:hover {
+  color: #1d4ed8;
+}
+
+.radioLabelDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.radioLabelDisabled:hover {
+  color: inherit;
+}
+
+.radio {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #2563eb;
+}
+
+@media (min-width: 640px) {
+  .controls {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 2rem;
+  }
+}
