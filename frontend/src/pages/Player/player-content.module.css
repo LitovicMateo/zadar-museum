@@ -1,0 +1,125 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Tabs ─────────────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tabsList {
+  /* Reset Radix defaults */
+  display: flex !important;
+  flex-direction: row !important;
+  height: auto !important;
+  width: 100% !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  /* Our styles */
+  border-bottom: 2px solid #e2e8f0;
+  gap: 0.25rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tabsList::-webkit-scrollbar {
+  display: none;
+}
+
+.tabsTrigger {
+  /* Reset Radix defaults */
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  height: auto !important;
+  flex: none !important;
+  /* Our styles */
+  position: relative;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #64748b;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
+  margin-bottom: -2px;
+}
+
+.tabsTrigger:hover {
+  color: #1e40af;
+}
+
+.tabsTrigger[data-state='active'] {
+  color: #1d4ed8;
+  border-bottom-color: #1d4ed8;
+  background: transparent !important;
+}
+
+.tabsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-top: 0;
+}
+
+@media (max-width: 480px) {
+  .tabsTrigger {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+  }
+}
+
+.competitionList {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.gamelogSeasonSelect {
+  width: fit-content;
+  flex-shrink: 0;
+}
+
+/* ── Gamelog tab ─────────────────────────────────────────────────── */
+.tabsContentGamelog {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 0;
+  overflow: hidden;
+}
+
+.gamelogControls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.5rem 0 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .gamelogControls {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+  }
+}
+
+.gamelogScrollArea {
+  overflow: auto;
+  height: calc(100dvh - 380px);
+  min-height: 400px;
+  scrollbar-width: thin;
+}

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styles from './buttons.module.css';
+
 type Buttons = {
 	selected: 'total' | 'average';
 	setSelected: (view: 'total' | 'average') => void;
@@ -7,37 +9,33 @@ type Buttons = {
 
 const Buttons: React.FC<Buttons> = ({ selected, setSelected }) => {
 	return (
-		<fieldset className="flex flex-row gap-3 font-abel">
-			<label className="flex items-center gap-2 cursor-pointer group">
-				<div className="relative flex items-center justify-center">
+		<fieldset className={styles.fieldset}>
+			<label className={styles.label}>
+				<div className={styles.radioWrapper}>
 					<input
 						type="radio"
 						name="view"
 						value="total"
 						checked={selected === 'total'}
 						onChange={(e) => setSelected(e.target.value as 'total' | 'average')}
-						className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all cursor-pointer"
+						className={styles.radio}
 					/>
 				</div>
-				<span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
-					Total
-				</span>
+				<span className={styles.labelText}>Total</span>
 			</label>
 
-			<label className="flex items-center gap-2 cursor-pointer group">
-				<div className="relative flex items-center justify-center">
+			<label className={styles.label}>
+				<div className={styles.radioWrapper}>
 					<input
 						type="radio"
 						name="view"
 						value="average"
 						checked={selected === 'average'}
 						onChange={(e) => setSelected(e.target.value as 'total' | 'average')}
-						className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all cursor-pointer"
+						className={styles.radio}
 					/>
 				</div>
-				<span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
-					Average
-				</span>
+				<span className={styles.labelText}>Average</span>
 			</label>
 		</fieldset>
 	);

@@ -1,0 +1,53 @@
+.card {
+  position: relative;
+  height: 200px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 2px solid #174D93;
+}
+
+.value {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #174D93;
+  padding: 0.75rem;
+}
+
+.labelText {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.rankBadge {
+  position: absolute;
+  width: 2rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: -8px;
+  right: -8px;
+  border: 1px solid #6b7280;
+  background: linear-gradient(to bottom right, #ffffff, #eff6ff);
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: monospace;
+}

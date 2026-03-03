@@ -191,12 +191,13 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       return knex(table)
         .select(`${id} as id`, "first_name", "last_name", statKey)
         .where("team_slug", teamSlug)
+        .whereNotNull(statKey)
         .modify((qb) => {
           if (competitionSlug) {
             qb.where("league_slug", competitionSlug);
           }
         })
-        .orderBy(statKey, "desc")
+        .orderByRaw('?? desc nulls last', [statKey])
         .limit(5);
     } catch (err) {
       throw new Error(`Failed to fetch team leaders: ${err.message}`);

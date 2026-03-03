@@ -1,5 +1,5 @@
 import { filterSchedule } from './games-utils';
-import React, { createContext, useState, useEffect, useMemo, JSX } from 'react';
+import React, { createContext, useState, useTransition, useCallback, useEffect, useMemo, JSX } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useTeamDetails } from '@/hooks/queries/team/useTeamDetails';
@@ -45,8 +45,14 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	const isZadar = effectiveName === 'KK Zadar';
 
 	// state
-	const [selectedSeason, setSelectedSeason] = useState(initialSeason);
+	const [selectedSeason, setSelectedSeasonRaw] = useState(initialSeason);
 	const [selectedCompetitions, setSelectedCompetitions] = useState<string[]>(initialCompetitions);
+	const [, startTransition] = useTransition();
+
+	const setSelectedSeason = useCallback(
+		(s: string) => startTransition(() => setSelectedSeasonRaw(s)),
+		[] // eslint-disable-line react-hooks/exhaustive-deps
+	);
 
 	// queries
 	const { data: seasons } = useTeamSeasons(effectiveSlug);

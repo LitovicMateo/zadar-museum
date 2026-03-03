@@ -2,41 +2,41 @@
 import React from 'react';
 import Select from 'react-select';
 
-import CompetitionSelectItem from '@/components/games-page/games-filter/competition-select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { selectStyle } from '@/constants/react-select-style';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
+import { useSeasonTransition } from '@/hooks/useSeasonTransition';
 import { usePlayerSeasons } from '@/hooks/queries/player/usePlayerSeasons';
 
-const BoxscoreFilter: React.FC = () => {
-	const { season, setSeason, selectedCompetitions, toggleCompetition, competitions, playerId, selectedDatabase } =
-		useBoxscore();
-	const { data: seasons, isLoading } = usePlayerSeasons(playerId, selectedDatabase);
+import styles from './boxscore-filter.module.css';
 
-	// --- Season Options ---
-	const seasonOptions = seasons?.map((s) => ({ value: s, label: s })) ?? [];
+const BoxscoreFilter: React.FC = () => {
+	const { season, setSeason, playerId, selectedDatabase } = useBoxscore();
+	const { data: seasons, isLoading } = usePlayerSeasons(playerId, selectedDatabase);
+	const { selectSeason, isPending } = useSeasonTransition(setSeason);
+
+	const seasonOptions = React.useMemo(
+		() => seasons?.map((s) => ({ value: s, label: s })) ?? [],
+		[seasons]
+	);
 	const selectedSeason = seasonOptions.find((opt) => opt.value === season) ?? null;
 
-	if (isLoading) return <div>Loading...</div>;
+	if (isLoading) {
+		return (
+			<div className={styles.skeletonRow} aria-busy="true" aria-label="Loading filters">
+				<Skeleton style={{ width: 140, height: 34, borderRadius: 6 }} />
+			</div>
+		);
+	}
 
 	return (
-		<div className="flex gap-4 w-full justify-between font-abel">
-			<div className="flex gap-4">
-				{competitions.map((c) => (
-					<CompetitionSelectItem
-						key={String(c.league_id)}
-						leagueId={String(c.league_id)}
-						leagueName={c.league_name}
-						onCompetitionChange={toggleCompetition}
-						selectedCompetitions={selectedCompetitions}
-					/>
-				))}
-			</div>
+		<div className={styles.filter} style={{ opacity: isPending ? 0.6 : 1, transition: 'opacity 0.15s ease' }}>
 			<Select
 				placeholder="Season"
-				className="text-sm shadow-sm w-full"
+				className={styles.select}
 				value={selectedSeason}
 				options={seasonOptions}
-				onChange={(opt) => setSeason(String(opt?.value ?? ''))}
+				onChange={(opt) => selectSeason(String(opt?.value ?? ''))}
 				styles={selectStyle()}
 			/>
 		</div>

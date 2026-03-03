@@ -1,0 +1,39 @@
+.wrapper {
+  width: 100%;
+  border-bottom: 1px solid #f1f5f9;
+  padding: 0.5rem 0;
+}
+
+.inner {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.btn {
+  padding: 0.25rem 0.5rem;
+  min-width: 100px;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  color: #eff6ff;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: filter 0.15s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+.btnZadar {
+  background: linear-gradient(to bottom right, #1e40af, #1e3a8a);
+}
+
+.btnOpponent {
+  background: linear-gradient(to bottom right, #6b7280, #4b5563);
+}

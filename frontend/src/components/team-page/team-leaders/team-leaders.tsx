@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import NoContent from '@/components/no-content/no-content';
-import Heading from '@/components/ui/heading';
 import { APP_ROUTES } from '@/constants/routes';
 import { useTeamCompetitions } from '@/hooks/queries/team/useTeamCompetitions';
 import { useTeamLeaders } from '@/hooks/queries/team/useTeamLeaders';
@@ -31,8 +30,7 @@ const TeamLeaders = () => {
 	if (!competitions) return null;
 
 	return (
-		<section className="w-full h-fit py-4 flex flex-col gap-4">
-			<Heading title={'Team Leaders'} />
+		<section className="w-full h-fit flex flex-col gap-4">
 			<Filters
 				selected={selected}
 				setSelected={setSelected}

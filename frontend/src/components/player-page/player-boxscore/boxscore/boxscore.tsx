@@ -4,9 +4,12 @@ import { useParams } from 'react-router-dom';
 
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
+import { TableSkeleton } from '@/components/ui/skeletons';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { usePlayerBoxscore } from '@/hooks/queries/player/usePlayerBoxscore';
 import { usePlayerGamelogTable } from '@/hooks/usePlayerGamelogTable';
+
+import styles from './boxscore.module.css';
 
 const Boxscore: React.FC = () => {
 	const { playerId } = useParams();
@@ -22,15 +25,15 @@ const Boxscore: React.FC = () => {
 
 	const { table } = usePlayerGamelogTable(filteredGames);
 
-	if (isLoading) return null;
+	if (isLoading) return <TableSkeleton rows={5} columns={8} />;
 
 	if (filteredGames.length === 0) {
-		return <div className="text-center w-full font-abel text-xl text-gray-400">No competitions selected.</div>;
+		return <div className={styles.emptyState}>No competitions selected.</div>;
 	}
 
 	return (
-		<TableWrapper>
-			<UniversalTableHead table={table} />
+		<TableWrapper noOverflow>
+			<UniversalTableHead table={table} stickyTop />
 			<UniversalTableBody table={table} />
 		</TableWrapper>
 	);

@@ -7,6 +7,8 @@ import { BoxscoreProvider } from '@/context/player-gamelog-context';
 import { usePlayerDetails } from '@/hooks/queries/player/usePlayerDetails';
 
 import PlayerContent from './PlayerContent';
+import { PlayerErrorBoundary } from './PlayerErrorBoundary';
+import styles from './player.module.css';
 
 export type PlayerDB = 'zadar' | 'opponent';
 
@@ -26,16 +28,17 @@ const Player: React.FC = () => {
 
 	return (
 		<>
-			<a
-				href="#player-content"
-				className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded"
-			>
+			<a href="#player-content" className={styles.skipLink}>
 				Skip to player content
 			</a>
 			<BoxscoreProvider>
-				<PlayerHeader />
+				<PlayerErrorBoundary>
+					<PlayerHeader />
+				</PlayerErrorBoundary>
 				<main id="player-content" tabIndex={-1}>
-					<PlayerContent />
+					<PlayerErrorBoundary>
+						<PlayerContent />
+					</PlayerErrorBoundary>
 				</main>
 			</BoxscoreProvider>
 		</>
