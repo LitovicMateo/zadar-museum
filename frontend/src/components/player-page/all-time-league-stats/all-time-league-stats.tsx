@@ -1,13 +1,27 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import Select from 'react-select';
 
-import Heading from '@/components/ui/heading';
+import { selectStyle, OptionType } from '@/constants/react-select-style';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { useAllTimeLeagueStats } from '@/hooks/queries/player/useAllTimeLeagueStats';
 import { usePlayerHasAppearances } from '@/utils/playerHasAppearances';
 
 import Buttons from './buttons/buttons';
 import MainTable from './main-table/main-table';
+import styles from './all-time-league-stats.module.css';
+
+const viewOptions: OptionType[] = [
+	{ value: 'total', label: 'Total' },
+	{ value: 'average', label: 'Average' },
+];
+
+const locationOptions: OptionType[] = [
+	{ value: 'total', label: 'Total' },
+	{ value: 'home', label: 'Home' },
+	{ value: 'away', label: 'Away' },
+	{ value: 'neutral', label: 'Neutral' },
+];
 
 const AllTimeLeagueStats: React.FC = React.memo(() => {
 	const { playerId } = useParams();
@@ -32,29 +46,55 @@ const AllTimeLeagueStats: React.FC = React.memo(() => {
 	if (!hasAppearances) return null;
 
 	return (
-		<section className="flex flex-col gap-4" aria-labelledby="league-stats-heading">
-			<Heading title="All Time League Stats" id="league-stats-heading" />
-			<div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-8">
-				<Buttons selected={view} setSelected={handleViewChange} />
-				<fieldset className="flex flex-row gap-4 font-abel">
-					{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
-						<label
-							key={loc}
-							className={`flex items-center gap-2 transition-colors duration-200 ${loc === 'neutral' && !hasNeutral ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`}
-						>
-							<input
-								type="radio"
-								name="league-stats-location"
-								value={loc}
-								checked={location === loc}
-								onChange={() => setLocation(loc)}
-								disabled={loc === 'neutral' && !hasNeutral}
-								className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed"
-							/>
-							<span className="text-sm font-medium capitalize">{loc}</span>
-						</label>
-					))}
-				</fieldset>
+		<section className={styles.section}>
+			{/* Mobile: react-select dropdowns */}
+			<div className={styles.mobileControls}>
+				<Select
+					value={viewOptions.find((o) => o.value === view)}
+					options={viewOptions}
+					onChange={(opt) => opt && setView(opt.value as 'total' | 'average')}
+					styles={selectStyle()}
+					isSearchable={false}
+					aria-label="View"
+				/>
+				<Select
+					value={locationOptions.find((o) => o.value === location)}
+					options={locationOptions.filter((o) => o.value !== 'neutral' || hasNeutral)}
+					onChange={(opt) => opt && setLocation(opt.value as 'total' | 'home' | 'away' | 'neutral')}
+					styles={selectStyle()}
+					isSearchable={false}
+					aria-label="Location"
+				/>
+			</div>
+			{/* Desktop: original radio controls */}
+			<div className={styles.desktopControls}>
+				<div className={styles.controlBox}>
+					<Buttons selected={view} setSelected={handleViewChange} />
+				</div>
+				<div className={styles.controlBox}>
+					<fieldset className={styles.radioGroup}>
+						{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
+							<label
+								key={loc}
+								className={[
+									styles.radioLabel,
+									loc === 'neutral' && !hasNeutral ? styles.radioLabelDisabled : '',
+								].join(' ')}
+							>
+								<input
+									type="radio"
+									name="league-stats-location"
+									value={loc}
+									checked={location === loc}
+									onChange={() => setLocation(loc)}
+									disabled={loc === 'neutral' && !hasNeutral}
+									className={styles.radio}
+								/>
+								<span>{loc}</span>
+							</label>
+						))}
+					</fieldset>
+				</div>
 			</div>
 			<MainTable view={view} location={location} />
 		</section>

@@ -15,6 +15,19 @@
   z-index: 20;
 }
 
+/* Ensure each header cell is individually sticky so border-collapse doesn't
+   cause body rows to paint on top of the thead. */
+.theadSticky .th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+/* Corner cell: sticky both left and top — needs the highest z-index. */
+.theadSticky .thSticky {
+  z-index: 21;
+}
+
 .trHead {
   border-bottom: 2px solid #3b82f6; /* blue-500 */
 }
@@ -61,7 +74,7 @@
 /* Sticky body cells get a solid background; update on tr hover */
 .tdSticky {
   position: sticky;
-  z-index: 10;
+  z-index: 1;
   background-color: #ffffff;
 }
 
@@ -112,7 +125,7 @@
 
 .tdFootSticky {
   position: sticky;
-  z-index: 10;
+  z-index: 1;
 }
 
 /* variant: default — solid slate-100, thick blue border, bold */

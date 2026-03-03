@@ -17,7 +17,7 @@ const CompetitionList: React.FC<Props> = ({ competitions, selectedCompetitions, 
 	if (!competitions) return null;
 
 	return (
-		<div className="flex flex-col sm:flex-row gap-2 overflow-y-auto sm:overflow-x-auto no-scrollbar pr-2 items-start sm:items-center max-h-48 w-full">
+		<div className="flex flex-row flex-wrap gap-x-3 gap-y-1 items-center">
 			{competitions.map((competition) => (
 				<CompetitionSelectItem
 					key={String(competition.league_id)}

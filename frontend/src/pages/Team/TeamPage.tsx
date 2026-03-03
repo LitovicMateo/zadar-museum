@@ -7,6 +7,8 @@ import { GamesProvider } from '@/context/games-context';
 import { useTeamDetails } from '@/hooks/queries/team/useTeamDetails';
 
 import TeamContent from './TeamContent';
+import { TeamErrorBoundary } from './TeamErrorBoundary';
+import styles from './team.module.css';
 
 const TeamPage: React.FC = () => {
 	const { teamSlug } = useParams();
@@ -20,11 +22,24 @@ const TeamPage: React.FC = () => {
 		}
 	}, [isFetched, team, navigate]);
 
+	if (!team) return null;
+
 	return (
-		<GamesProvider>
-			<TeamHeader />
-			<TeamContent />
-		</GamesProvider>
+		<>
+			<a href="#team-content" className={styles.skipLink}>
+				Skip to team content
+			</a>
+			<GamesProvider>
+				<TeamErrorBoundary>
+					<TeamHeader />
+				</TeamErrorBoundary>
+				<main id="team-content" tabIndex={-1}>
+					<TeamErrorBoundary>
+						<TeamContent />
+					</TeamErrorBoundary>
+				</main>
+			</GamesProvider>
+		</>
 	);
 };
 

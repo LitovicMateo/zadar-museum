@@ -10,9 +10,17 @@
   background-color: #ffffff;
 }
 
+/* Used when the parent scroll container handles overflow (e.g. gamelog scroll area). */
+.wrapperNoOverflow {
+  overflow: visible;
+  width: fit-content;
+  max-width: 100%;
+}
+
 .table {
   font-family: 'Abel', sans-serif;
   font-size: 0.875rem; /* text-sm */
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }

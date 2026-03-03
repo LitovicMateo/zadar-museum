@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { InlineError } from '@/components/ui/inline-error/inline-error';
 import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
@@ -33,7 +34,7 @@ const SeasonAverage: React.FC = () => {
 	if (!hasAppearances) return null;
 
 	if (seasonAverageError || seasonLeagueAverageError) {
-		return <p>Something went wrong</p>;
+		return <InlineError message="Failed to load season averages." />;
 	}
 
 	return (
