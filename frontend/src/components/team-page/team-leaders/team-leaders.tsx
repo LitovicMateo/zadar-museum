@@ -20,6 +20,8 @@ const TeamLeaders = () => {
 	const { data: teamLeaders } = useTeamLeaders(teamSlug!, selected, stat, selectedCompetition);
 	const { data: competitions } = useTeamCompetitions(teamSlug!);
 
+	console.log(teamLeaders);
+	
 	useLayoutEffect(() => {
 		if (selected === 'player') {
 			setStat(playerOptions[0].value);

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { StatCardSkeleton } from '@/components/ui/skeletons';
-import StatCard from '@/components/ui/stat-card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { useAllTimeStats } from '@/hooks/queries/player/useAllTimeStats';
 
@@ -32,14 +31,17 @@ const AllTimeStats: React.FC = React.memo(() => {
 
 	if (isLoading || !data) {
 		return (
-			<section className={styles.section}>
-				<div className={styles.table}>
-					<div className={`${styles.tableHead} ${styles.tableHeadSkeleton}`}>
-						<span className={styles.tableHeadLabel}>Statistic</span>
-						<span className={styles.tableHeadLabel}>Record (Rank)</span>
-					</div>
+			<section className={styles.section}>			<h2 className={styles.sectionTitle}>Career Totals</h2>				<fieldset className={styles.filterBar}>
+					{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
+						<Skeleton key={loc} style={{ width: '60px', height: '28px', borderRadius: '9999px' }} />
+					))}
+				</fieldset>
+				<div className={styles.grid}>
 					{Array.from({ length: 6 }).map((_, i) => (
-						<StatCardSkeleton key={i} />
+						<div key={i} className={styles.cellSkeleton}>
+							<Skeleton style={{ width: '60px', height: '36px', borderRadius: '6px' }} />
+							<Skeleton style={{ width: '50px', height: '12px', borderRadius: '4px' }} />
+						</div>
 					))}
 				</div>
 			</section>
@@ -50,51 +52,34 @@ const AllTimeStats: React.FC = React.memo(() => {
 
 	return (
 		<section className={styles.section}>
-			<fieldset className={styles.filterRow}>
+			<h2 className={styles.sectionTitle}>Career Totals</h2>
+			<fieldset className={styles.filterBar} aria-label="Location filter">
 				{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
-					<label
+					<button
 						key={loc}
+						type="button"
+						role="radio"
+						aria-checked={location === loc}
+						disabled={loc === 'neutral' && !hasNeutral}
+						onClick={() => setLocation(loc)}
 						className={[
-							styles.filterLabel,
-							loc === 'neutral' && !hasNeutral ? styles.filterLabelDisabled : '',
-						].join(' ')}
+							styles.pill,
+							location === loc ? styles.pillActive : '',
+							loc === 'neutral' && !hasNeutral ? styles.pillDisabled : '',
+						].filter(Boolean).join(' ')}
 					>
-						<input
-							type="radio"
-							name="all-time-stats-location"
-							value={loc}
-							checked={location === loc}
-							onChange={() => setLocation(loc)}
-							disabled={loc === 'neutral' && !hasNeutral}
-							className={styles.filterRadio}
-						/>
-						<span className={styles.filterLabelText}>{loc}</span>
-					</label>
+						{loc}
+					</button>
 				))}
 			</fieldset>
-			<div
-				className={styles.table}
-				role="table"
-				aria-label="Career statistics"
-			>
-				<div
-					className={styles.tableHead}
-					role="row"
-				>
-					<span role="columnheader" className={styles.tableHeadLabel}>
-						Statistic
-					</span>
-					<span role="columnheader" className={styles.tableHeadLabel}>
-						Record (Rank)
-					</span>
-				</div>
+			<div className={styles.grid} aria-label="Career statistics">
 				{statsConfig.map((stat) => (
-					<div key={stat.key} role="row">
-						<StatCard
-							label={stat.label}
-							value={totalStats[stat.key] ?? '-'}
-							rank={(totalStats[stat.rankKey] ?? undefined) as number | undefined}
-						/>
+					<div key={stat.key} className={styles.cell}>
+						{totalStats[stat.rankKey] != null && (
+							<span className={styles.rankBadge}>#{totalStats[stat.rankKey]}</span>
+						)}
+						<span className={styles.cellValue}>{totalStats[stat.key] ?? '-'}</span>
+						<span className={styles.cellLabel}>{stat.label}</span>
 					</div>
 				))}
 			</div>
@@ -105,3 +90,4 @@ const AllTimeStats: React.FC = React.memo(() => {
 AllTimeStats.displayName = 'AllTimeStats';
 
 export default AllTimeStats;
+

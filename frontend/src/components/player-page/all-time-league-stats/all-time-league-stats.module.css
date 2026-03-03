@@ -4,6 +4,24 @@
   gap: 1rem;
 }
 
+/* Mobile-only: two react-select dropdowns side by side */
+.mobileControls {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+}
+
+.mobileControls > * {
+  flex: 1;
+}
+
+/* Desktop-only: original radio controls */
+.desktopControls {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .controls {
   display: flex;
   flex-direction: column;
@@ -50,7 +68,12 @@
 }
 
 @media (min-width: 640px) {
-  .controls {
+  .mobileControls {
+    display: none;
+  }
+
+  .desktopControls {
+    display: flex;
     flex-direction: row;
     align-items: flex-end;
     gap: 2rem;

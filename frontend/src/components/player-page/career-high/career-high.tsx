@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { StatCardSkeleton } from '@/components/ui/skeletons';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useBoxscore } from '@/hooks/context/useBoxscore';
 import { usePlayerCareerHigh } from '@/hooks/queries/player/usePlayerCareerHigh';
 import { PlayerCareerHighResponse } from '@/types/api/player';
@@ -37,17 +37,14 @@ const CareerHigh: React.FC = React.memo(() => {
 
 	if (isLoading || !careerHigh) {
 		return (
-			<div className={styles.section}>
-				<div className={styles.tableWrapper}>
-					<ul className={styles.list} role="table" aria-label="Career high statistics">
-						<li className={styles.listHead} role="row">
-							<span role="columnheader" className={styles.listHeadLabel}>Statistic</span>
-							<span role="columnheader" className={styles.listHeadLabel}>Record</span>
-						</li>
-						{Array.from({ length: 9 }).map((_, i) => (
-							<StatCardSkeleton key={i} />
-						))}
-					</ul>
+			<div className={styles.section}>			<h2 className={styles.sectionTitle}>Career Highs</h2>				<div className={styles.grid}>
+					{Array.from({ length: 9 }).map((_, i) => (
+						<div key={i} className={styles.skeletonCard}>
+							<Skeleton style={{ width: '55%', height: '11px', borderRadius: '4px' }} />
+							<Skeleton style={{ width: '40%', height: '40px', borderRadius: '6px' }} />
+							<Skeleton style={{ width: '70%', height: '11px', borderRadius: '4px' }} />
+						</div>
+					))}
 				</div>
 			</div>
 		);
@@ -55,21 +52,15 @@ const CareerHigh: React.FC = React.memo(() => {
 
 	return (
 		<div className={styles.section}>
-			<div className={styles.tableWrapper}>
-				<ul className={styles.list} role="table" aria-label="Career high statistics">
-					<li className={styles.listHead} role="row">
-						<span role="columnheader" className={styles.listHeadLabel}>Statistic</span>
-						<span className={styles.listHeadLabel} role="columnheader">Record</span>
-					</li>
-					{careerHighData.map((stat, index) => {
-						const value = careerHigh[stat.key];
-						const isLast = index === careerHighData.length - 1;
+			<h2 className={styles.sectionTitle}>Career Highs</h2>
+			<div className={styles.grid} aria-label="Career high statistics">
+				{careerHighData.map((stat) => {
+					const value = careerHigh[stat.key];
 
-						if (typeof value === 'string' || value == null) return null;
+					if (typeof value === 'string' || value == null) return null;
 
-						return <CareerHighRow key={stat.key} label={stat.label} stat={value} isLastItem={isLast} />;
-					})}
-				</ul>
+					return <CareerHighRow key={stat.key} label={stat.label} stat={value} />;
+				})}
 			</div>
 		</div>
 	);
@@ -77,3 +68,4 @@ const CareerHigh: React.FC = React.memo(() => {
 CareerHigh.displayName = 'CareerHigh';
 
 export default CareerHigh;
+

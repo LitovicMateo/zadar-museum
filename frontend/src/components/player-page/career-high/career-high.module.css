@@ -4,32 +4,45 @@
   gap: 1rem;
 }
 
-.tableWrapper {
-  overflow-x: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e2e8f0;
-  background: #ffffff;
-}
-
-.list {
-  font-size: 1.125rem;
-  min-width: 280px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.listHead {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
+.sectionTitle {
+  font-family: 'Abel', system-ui, sans-serif;
+  font-size: 0.95rem;
   font-weight: 600;
-  background-color: #f1f5f9;
-  border-bottom: 2px solid #3b82f6;
-  list-style: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1e293b;
+  border-left: 3px solid #3b82f6;
+  padding-left: 0.75rem;
+  margin: 0;
 }
 
-.listHeadLabel {
-  color: #374151;
+/* Responsive card grid: 1 col → 2 col → 3 col */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Skeleton placeholder card */
+.skeletonCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem 1rem 1.25rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  border-left: 3px solid #e2e8f0;
 }

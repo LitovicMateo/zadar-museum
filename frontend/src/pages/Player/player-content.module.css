@@ -68,7 +68,7 @@
 .tabsContent {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
   margin-top: 0;
 }
 

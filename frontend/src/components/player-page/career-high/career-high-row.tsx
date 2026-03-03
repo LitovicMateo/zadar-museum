@@ -10,24 +10,21 @@ import styles from './career-high-row.module.css';
 type CareerHighRowProps = {
 	label: string;
 	stat: Stat;
-	isLastItem: boolean;
 };
 
-const CareerHighRow: React.FC<CareerHighRowProps> = ({ label, stat, isLastItem }) => {
+const CareerHighRow: React.FC<CareerHighRowProps> = ({ label, stat }) => {
 	const { data: team } = useTeamDetails(stat.opponent_team_slug!);
 
 	return (
-		<li className={[styles.row, !isLastItem ? styles.rowBordered : ''].join(' ')}>
-			<Link to={APP_ROUTES.game(stat.game_id)} className={styles.link}>
-				<div>{label}</div>
-				<div className={styles.statInfo}>
-					<span className={styles.statValue}>{stat.stat_value}</span>
-					<span className={styles.statMeta}>
-						vs {team?.short_name} ({stat.game_date})
-					</span>
-				</div>
-			</Link>
-		</li>
+		<Link to={APP_ROUTES.game(stat.game_id)} className={styles.card}>
+			<div className={styles.label}>{label}</div>
+			<div className={styles.value}>{stat.stat_value}</div>
+			<div className={styles.meta}>
+				<span>vs {team?.short_name}</span>
+				<span className={styles.metaDot} aria-hidden="true" />
+				<span>{stat.game_date}</span>
+			</div>
+		</Link>
 	);
 };
 
