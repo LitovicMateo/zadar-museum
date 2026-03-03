@@ -68,29 +68,33 @@ const AllTimeLeagueStats: React.FC = React.memo(() => {
 			</div>
 			{/* Desktop: original radio controls */}
 			<div className={styles.desktopControls}>
-				<Buttons selected={view} setSelected={handleViewChange} />
-				<fieldset className={styles.radioGroup}>
-					{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
-						<label
-							key={loc}
-							className={[
-								styles.radioLabel,
-								loc === 'neutral' && !hasNeutral ? styles.radioLabelDisabled : '',
-							].join(' ')}
-						>
-							<input
-								type="radio"
-								name="league-stats-location"
-								value={loc}
-								checked={location === loc}
-								onChange={() => setLocation(loc)}
-								disabled={loc === 'neutral' && !hasNeutral}
-								className={styles.radio}
-							/>
-							<span>{loc}</span>
-						</label>
-					))}
-				</fieldset>
+				<div className={styles.controlBox}>
+					<Buttons selected={view} setSelected={handleViewChange} />
+				</div>
+				<div className={styles.controlBox}>
+					<fieldset className={styles.radioGroup}>
+						{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
+							<label
+								key={loc}
+								className={[
+									styles.radioLabel,
+									loc === 'neutral' && !hasNeutral ? styles.radioLabelDisabled : '',
+								].join(' ')}
+							>
+								<input
+									type="radio"
+									name="league-stats-location"
+									value={loc}
+									checked={location === loc}
+									onChange={() => setLocation(loc)}
+									disabled={loc === 'neutral' && !hasNeutral}
+									className={styles.radio}
+								/>
+								<span>{loc}</span>
+							</label>
+						))}
+					</fieldset>
+				</div>
 			</div>
 			<MainTable view={view} location={location} />
 		</section>

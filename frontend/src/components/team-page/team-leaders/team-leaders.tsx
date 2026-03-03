@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import NoContent from '@/components/no-content/no-content';
-import Heading from '@/components/ui/heading';
 import { APP_ROUTES } from '@/constants/routes';
 import { useTeamCompetitions } from '@/hooks/queries/team/useTeamCompetitions';
 import { useTeamLeaders } from '@/hooks/queries/team/useTeamLeaders';
@@ -20,8 +19,6 @@ const TeamLeaders = () => {
 	const { data: teamLeaders } = useTeamLeaders(teamSlug!, selected, stat, selectedCompetition);
 	const { data: competitions } = useTeamCompetitions(teamSlug!);
 
-	console.log(teamLeaders);
-	
 	useLayoutEffect(() => {
 		if (selected === 'player') {
 			setStat(playerOptions[0].value);
@@ -33,8 +30,7 @@ const TeamLeaders = () => {
 	if (!competitions) return null;
 
 	return (
-		<section className="w-full h-fit py-4 flex flex-col gap-4">
-			<Heading title={'Team Leaders'} />
+		<section className="w-full h-fit flex flex-col gap-4">
 			<Filters
 				selected={selected}
 				setSelected={setSelected}

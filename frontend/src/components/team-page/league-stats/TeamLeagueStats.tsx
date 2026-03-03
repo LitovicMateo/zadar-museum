@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Heading from '@/components/ui/heading';
 import TableWrapper from '@/components/ui/table-wrapper';
 import { useTeamLeagueStats } from '@/hooks/queries/team/useTeamLeagueStats';
 import { useTeamTotalStats } from '@/hooks/queries/team/useTeamTotalStats';
@@ -36,8 +35,7 @@ const TeamLeagueStats: React.FC = () => {
 	if (!leagueStats || !totalStats) return null;
 
 	return (
-		<section className="w-full h-fit py-4 flex flex-col gap-4 overflow-hidden">
-			<Heading title="All Time League Record" />
+		<section className="w-full h-fit flex flex-col gap-4 overflow-hidden">
 			<DatabaseSelect selected={selected} setSelected={setSelected} />
 			<TableWrapper>
 				<UniversalTableHead table={mainTable} />

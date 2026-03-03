@@ -32,8 +32,8 @@ const Boxscore: React.FC = () => {
 	}
 
 	return (
-		<TableWrapper>
-			<UniversalTableHead table={table} />
+		<TableWrapper noOverflow>
+			<UniversalTableHead table={table} stickyTop />
 			<UniversalTableBody table={table} />
 		</TableWrapper>
 	);
