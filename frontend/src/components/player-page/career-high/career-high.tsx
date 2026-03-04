@@ -37,7 +37,8 @@ const CareerHigh: React.FC = React.memo(() => {
 
 	if (isLoading || !careerHigh) {
 		return (
-			<div className={styles.section}>			<h2 className={styles.sectionTitle}>Career Highs</h2>				<div className={styles.grid}>
+			<div className={styles.section}>
+				<div className={styles.grid}>
 					{Array.from({ length: 9 }).map((_, i) => (
 						<div key={i} className={styles.skeletonCard}>
 							<Skeleton style={{ width: '55%', height: '11px', borderRadius: '4px' }} />
@@ -52,7 +53,6 @@ const CareerHigh: React.FC = React.memo(() => {
 
 	return (
 		<div className={styles.section}>
-			<h2 className={styles.sectionTitle}>Career Highs</h2>
 			<div className={styles.grid} aria-label="Career high statistics">
 				{careerHighData.map((stat) => {
 					const value = careerHigh[stat.key];
