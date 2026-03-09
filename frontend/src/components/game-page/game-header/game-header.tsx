@@ -116,7 +116,7 @@ const GameHeader: React.FC = () => {
 					</div>
 
 					{/* Game Info */}
-					<div className="border-t-2 border-gray-100">
+					<div className="border-t-2 border-gray-100 relative z-10">
 						<GameInfo />
 					</div>
 				</div>

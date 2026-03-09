@@ -55,6 +55,7 @@ export interface TeamScheduleResponse {
 	season: string;
 	stage: string;
 	round: string;
+	group_name?: string;
 
 	league_id: string;
 	league_name: string;
