@@ -16,6 +16,7 @@ import Forfieted from '../Fields/Forfeited';
 import ForfeitedBy from '../Fields/ForfeitedBy';
 import Gallery from '../Fields/Gallery';
 import GalleryPreview from '../Fields/GalleryPreview';
+import GroupName from '../Fields/GroupName';
 import HomeTeam from '../Fields/HomeTeam';
 import HomeTeamName from '../Fields/HomeTeamName';
 import MainReferee from '../Fields/MainReferee';
@@ -48,6 +49,7 @@ const GameFormContent: React.FC<GameFormContentProps> = ({ mode }) => {
 				<Season />
 				<Date />
 				<Stage />
+				<GroupName />
 				<Round />
 				<Venue />
 				<NeutralVenue />

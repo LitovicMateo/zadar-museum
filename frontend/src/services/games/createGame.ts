@@ -37,6 +37,7 @@ export const createGame = async (data: GameFormData) => {
 		data: {
 			season: data.season,
 			round: data.round,
+			group_name: data.group_name || null,
 			home_team: +data.home_team,
 			home_team_name: data.home_team_name,
 			home_team_short_name: data.home_team_short_name,

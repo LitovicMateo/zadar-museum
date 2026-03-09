@@ -9,6 +9,7 @@ export type GameDetailsResponse = {
 	id: number;
 	season: string;
 	round: string;
+	group_name?: string;
 	stage: 'league' | 'group' | 'playoff' | null;
 	home_team: TeamDetailsResponse;
 	home_team_name: string;

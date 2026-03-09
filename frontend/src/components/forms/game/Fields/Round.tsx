@@ -54,13 +54,13 @@ const Round: React.FC = () => {
 		);
 	}
 
-	// default to 'group'
+	// default to 'group' — round number within the group
 	return (
 		<Input
 			className="text-gray-700 placeholder:text-xs placeholder:text-gray-400"
 			type="text"
 			{...register('round', { required: 'Round is required' })}
-			placeholder="Round (e.g. A, B, C, etc.)"
+			placeholder="Round (e.g. 1, 2, etc.)"
 		/>
 	);
 };
