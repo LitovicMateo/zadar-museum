@@ -1,27 +1,46 @@
 import React, { useState } from 'react';
 
 import { API_ROUTES } from '@/constants/routes';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 import Button from '../ui/button';
 
 const RefreshDataButton: React.FC = () => {
 	const [loading, setLoading] = useState(false);
+	const queryClient = useQueryClient();
 
 	const handleRefresh = async () => {
 		setLoading(true);
+		const toastId = toast.loading('Refreshing materialized views…');
 
 		try {
 			const res = await axios.get(API_ROUTES.refresh.views);
 
-			if (!res.data.ok) {
+			if (!res.data.success) {
 				throw new Error(res.data?.message || 'Failed to refresh views');
 			}
 
-			const data = res.data;
-			return data;
+			const { count } = res.data as { count: number };
+
+			// Invalidate all React Query caches so the UI reflects the freshly
+			// refreshed materialized views without requiring a second refresh.
+			await queryClient.invalidateQueries();
+
+			toast.success(`Refreshed ${count} materialized view(s) successfully.`, {
+				id: toastId,
+				duration: 5000,
+			});
+
+			return res.data;
 		} catch (err) {
-			console.error(err);
+			const axiosErr = err as AxiosError<{ error?: { message?: string } }>;
+			const message =
+				axiosErr.response?.data?.error?.message ??
+				(err instanceof Error ? err.message : 'Failed to refresh views');
+
+			toast.error(message, { id: toastId, duration: 6000 });
 		} finally {
 			setLoading(false);
 		}
@@ -34,7 +53,7 @@ const RefreshDataButton: React.FC = () => {
 				disabled={loading}
 				className="bg-blue-600! text-white rounded hover:bg-blue-700! disabled:opacity-50 cursor-pointer w-full"
 			>
-				{loading ? 'Refreshing...' : 'Refresh Materialized Views'}
+				{loading ? 'Refreshing…' : 'Refresh Materialized Views'}
 			</Button>
 		</div>
 	);
