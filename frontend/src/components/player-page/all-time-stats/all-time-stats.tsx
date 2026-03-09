@@ -31,7 +31,8 @@ const AllTimeStats: React.FC = React.memo(() => {
 
 	if (isLoading || !data) {
 		return (
-			<section className={styles.section}>			<h2 className={styles.sectionTitle}>Career Totals</h2>				<fieldset className={styles.filterBar}>
+			<section className={styles.section}>
+				<fieldset className={styles.filterBar}>
 					{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
 						<Skeleton key={loc} style={{ width: '60px', height: '28px', borderRadius: '9999px' }} />
 					))}
@@ -52,7 +53,6 @@ const AllTimeStats: React.FC = React.memo(() => {
 
 	return (
 		<section className={styles.section}>
-			<h2 className={styles.sectionTitle}>Career Totals</h2>
 			<fieldset className={styles.filterBar} aria-label="Location filter">
 				{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
 					<button

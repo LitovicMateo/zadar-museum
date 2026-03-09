@@ -34,6 +34,7 @@ const GameFormProvider: React.FC<GameFormProviderProps> = ({ children, onSubmit,
 			methods.reset({
 				season: game.season,
 				round: game.round,
+				group_name: game.group_name || '',
 				date: game.date,
 				home_team: game.home_team.id.toString(),
 				home_team_name: game.home_team_name,
@@ -69,12 +70,22 @@ const GameFormProvider: React.FC<GameFormProviderProps> = ({ children, onSubmit,
 				season: currentValues.season,
 				competition: currentValues.competition,
 				league_name: currentValues.league_name,
-				league_short_name: currentValues.league_short_name
+				league_short_name: currentValues.league_short_name,
+				group_name: currentValues.group_name
 			});
 
 			methods.setFocus('date');
 		}
 	}, [isSuccess, defaultValues, methods]);
+
+	// Auto-clear group_name when stage changes away from 'group'
+	const stage = methods.watch('stage');
+	React.useEffect(() => {
+		if (stage !== 'group') {
+			methods.setValue('group_name', '');
+		}
+	}, [stage, methods]);
+
 	return (
 		<FormProvider {...methods}>
 			<form onSubmit={methods.handleSubmit(onSubmit, handleErrors)}>{children}</form>
