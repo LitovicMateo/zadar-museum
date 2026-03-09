@@ -5,13 +5,20 @@ import { AlertTriangle } from 'lucide-react';
 type Props = {
 	className?: string;
 	title?: string;
-	message?: string;
+	message?: React.ReactNode;
 };
 
 const EditGameWarning: React.FC<Props> = ({
 	className = '',
-	title = 'Warning — editing will erase stats',
-	message = 'Editing this game will delete all related player and team statistics. Please ensure you have a backup or are certain before continuing.'
+	title = 'Warning — team changes will erase stats',
+	message = (
+		<>
+			Changing the <strong>Home Team</strong> or <strong>Away Team</strong> will
+			delete all related player and team statistics. All other fields
+			(season, date, stage, round, competition, venue, names, nulled/forfeited,
+			neutral) are safe to edit — the data views refresh automatically on every save.
+		</>
+	)
 }) => {
 	return (
 		<div className={`my-4 ${className}`}>

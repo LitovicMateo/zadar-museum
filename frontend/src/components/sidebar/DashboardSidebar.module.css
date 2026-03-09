@@ -1,0 +1,119 @@
+/* ── Sidebar inner layout ───────────────────────────────── */
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	min-height: 100%;
+}
+
+/* ── Section label ──────────────────────────────────────── */
+.sectionLabel {
+	font-size: 0.65rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #6b7280;
+	padding: 0 0.5rem;
+	margin-bottom: 0.5rem;
+}
+
+/* ── Row list ───────────────────────────────────────────── */
+.list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+/* ── Single row ─────────────────────────────────────────── */
+.row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.35rem 0.5rem;
+	border-radius: 0.5rem;
+	border-bottom: 1px solid #f1f5f9;
+	transition: background-color 0.15s ease;
+}
+
+.row:last-child {
+	border-bottom: none;
+}
+
+.row:hover {
+	background-color: #f1f5f9;
+}
+
+/* ── Label ──────────────────────────────────────────────── */
+.rowLabel {
+	font-size: 0.8125rem;
+	font-weight: 500;
+	color: #374151;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	flex: 1;
+	min-width: 0;
+}
+
+/* ── Action buttons wrapper ─────────────────────────────── */
+.actions {
+	display: flex;
+	gap: 0.375rem;
+	flex-shrink: 0;
+	margin-left: 0.5rem;
+}
+
+/* ── Shared button base ─────────────────────────────────── */
+.btnCreate,
+.btnEdit {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.625rem;
+	height: 1.625rem;
+	border-radius: 0.375rem;
+	border: none;
+	cursor: pointer;
+	transition:
+		filter 0.15s ease,
+		box-shadow 0.15s ease,
+		transform 0.1s ease;
+}
+
+.btnCreate:hover,
+.btnEdit:hover {
+	filter: brightness(0.88);
+	transform: translateY(-1px);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.14);
+}
+
+/* ── Create (brand blue) ────────────────────────────────── */
+.btnCreate {
+	background-color: #3b82f6;
+	color: #fff;
+}
+
+.btnCreateActive {
+	background-color: #1d4ed8 !important;
+	box-shadow: 0 0 0 2px #bfdbfe;
+}
+
+/* ── Edit (amber) ───────────────────────────────────────── */
+.btnEdit {
+	background-color: #f59e0b;
+	color: #fff;
+}
+
+.btnEditActive {
+	background-color: #b45309 !important;
+	box-shadow: 0 0 0 2px #fde68a;
+}
+
+/* ── Section divider ────────────────────────────────────── */
+.divider {
+	height: 1px;
+	background-color: #e5e7eb;
+}
