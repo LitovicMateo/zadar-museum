@@ -1,0 +1,25 @@
+.layout {
+	display: flex;
+	gap: 1.5rem;
+	height: 100%;
+	background-color: #f8fafc;
+}
+
+.desktopSidebar {
+	display: none;
+}
+
+@media (min-width: 768px) {
+	.desktopSidebar {
+		display: block;
+	}
+}
+
+.content {
+	padding: 1.5rem 1rem;
+	width: 100%;
+}
+
+.mobileNav {
+	margin-bottom: 1.5rem;
+}

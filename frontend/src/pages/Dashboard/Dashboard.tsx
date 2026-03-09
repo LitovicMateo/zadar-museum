@@ -2,110 +2,26 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
-import Sidebar from '@/components/sidebar/sidebar';
+import DashboardSidebar from '@/components/sidebar/DashboardSidebar';
+import { type DashboardNavItem } from '@/components/sidebar/DashboardSidebarRow';
 import { APP_ROUTES } from '@/constants/routes';
 
-const sidebarGroups = [
-	{
-		label: 'Create ',
-		list: [
-			{
-				path: APP_ROUTES.dashboard.player.create,
-				label: 'Player'
-			},
-			{
-				path: APP_ROUTES.dashboard.staff.create,
-				label: 'Staff'
-			},
-			{
-				path: APP_ROUTES.dashboard.referee.create,
-				label: 'Referee'
-			},
-			{
-				path: APP_ROUTES.dashboard.team.create,
-				label: 'Team'
-			},
-			{
-				path: APP_ROUTES.dashboard.coach.create,
-				label: 'Coach'
-			},
-			{
-				path: APP_ROUTES.dashboard.game.create,
-				label: 'Game'
-			},
-			{
-				path: APP_ROUTES.dashboard.venue.create,
-				label: 'Venue'
-			},
-			{
-				path: APP_ROUTES.dashboard.competition.create,
-				label: 'Competition'
-			}
-		]
-	},
-	{
-		label: 'Edit',
-		list: [
-			{
-				path: APP_ROUTES.dashboard.player.edit,
-				label: 'Player'
-			},
-			{
-				path: APP_ROUTES.dashboard.staff.edit,
-				label: 'Staff'
-			},
-			{
-				path: APP_ROUTES.dashboard.referee.edit,
-				label: 'Referee'
-			},
-			{
-				path: APP_ROUTES.dashboard.team.edit,
-				label: 'Team'
-			},
-			{
-				path: APP_ROUTES.dashboard.coach.edit,
-				label: 'Coach'
-			},
-			{
-				path: APP_ROUTES.dashboard.game.edit,
-				label: 'Game'
-			},
-			{
-				path: APP_ROUTES.dashboard.venue.edit,
-				label: 'Venue'
-			},
-			{
-				path: APP_ROUTES.dashboard.competition.edit,
-				label: 'Competition'
-			}
-		]
-	},
-	{
-		label: 'Import ',
-		list: [
-			{
-				path: APP_ROUTES.dashboard.playerStats.create,
-				label: 'Player Stats'
-			},
-			{
-				path: APP_ROUTES.dashboard.teamStats.create,
-				label: 'Team Stats'
-			}
-		]
-	},
-	{
-		label: 'Edit ',
-		list: [
-			{
-				path: APP_ROUTES.dashboard.playerStats.edit,
-				label: 'Player Stats'
-			},
-			{
-				path: APP_ROUTES.dashboard.teamStats.edit,
-				label: 'Team Stats'
-			}
-		]
-	}
+import styles from './Dashboard.module.css';
+
+const navItems: DashboardNavItem[] = [
+	{ label: 'Player',      createPath: APP_ROUTES.dashboard.player.create,      editPath: APP_ROUTES.dashboard.player.edit },
+	{ label: 'Staff',       createPath: APP_ROUTES.dashboard.staff.create,        editPath: APP_ROUTES.dashboard.staff.edit },
+	{ label: 'Referee',     createPath: APP_ROUTES.dashboard.referee.create,      editPath: APP_ROUTES.dashboard.referee.edit },
+	{ label: 'Team',        createPath: APP_ROUTES.dashboard.team.create,         editPath: APP_ROUTES.dashboard.team.edit },
+	{ label: 'Coach',       createPath: APP_ROUTES.dashboard.coach.create,        editPath: APP_ROUTES.dashboard.coach.edit },
+	{ label: 'Game',        createPath: APP_ROUTES.dashboard.game.create,         editPath: APP_ROUTES.dashboard.game.edit },
+	{ label: 'Venue',       createPath: APP_ROUTES.dashboard.venue.create,        editPath: APP_ROUTES.dashboard.venue.edit },
+	{ label: 'Competition', createPath: APP_ROUTES.dashboard.competition.create,  editPath: APP_ROUTES.dashboard.competition.edit },
+];
+
+const statsItems: DashboardNavItem[] = [
+	{ label: 'Player Stats', createPath: APP_ROUTES.dashboard.playerStats.create, editPath: APP_ROUTES.dashboard.playerStats.edit },
+	{ label: 'Team Stats',   createPath: APP_ROUTES.dashboard.teamStats.create,   editPath: APP_ROUTES.dashboard.teamStats.edit },
 ];
 
 const Dashboard: React.FC = () => {
@@ -123,25 +39,26 @@ const Dashboard: React.FC = () => {
 	type Option = { value: string; label: string };
 
 	const options: Option[] = useMemo(() => {
-		return sidebarGroups.flatMap((group) =>
-			group.list.map((item) => ({ value: item.path, label: `${group.label} ${item.label}` }))
-		);
+		return [...navItems, ...statsItems].flatMap((item) => [
+			{ value: item.createPath, label: `Create ${item.label}` },
+			{ value: item.editPath,   label: `Edit ${item.label}` },
+		]);
 	}, []);
 
 	const currentOption: Option | null = options.find((o) => location.pathname.startsWith(o.value)) || null;
 
 	const handleChange = (selected: Option | null) => {
-		if (selected && selected.value) navigate(selected.value);
+		if (selected?.value) navigate(selected.value);
 	};
 
 	return (
-		<div className="flex gap-6 h-full bg-slate-50">
-			<div className="hidden md:block">
-				<Sidebar basePath="dashboard" title="Dashboard" groups={sidebarGroups} />
+		<div className={styles.layout}>
+			<div className={styles.desktopSidebar}>
+				<DashboardSidebar navItems={navItems} statsItems={statsItems} />
 			</div>
-			<div className="py-6 px-4 w-full">
+			<div className={styles.content}>
 				{isMobile && (
-					<div className="mb-6">
+					<div className={styles.mobileNav}>
 						<Select<Option, false>
 							options={options}
 							defaultValue={currentOption ?? undefined}
