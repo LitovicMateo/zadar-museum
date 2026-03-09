@@ -1,3 +1,18 @@
+.playerPage {
+  display: flex;
+  flex-direction: column;
+  height: 90svh;
+  overflow: hidden;
+}
+
+.playerMain {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .skipLink {
   position: absolute;
   width: 1px;

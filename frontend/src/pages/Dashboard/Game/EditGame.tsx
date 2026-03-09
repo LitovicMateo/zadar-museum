@@ -66,6 +66,7 @@ const EditGame = () => {
 						defaultValues={{
 							season: game.season,
 							round: game.round,
+							group_name: game.group_name || '',
 							date: game.date,
 							home_team: game.home_team.id.toString(),
 							home_team_name: game.home_team_name,

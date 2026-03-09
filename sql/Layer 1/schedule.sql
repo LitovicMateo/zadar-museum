@@ -9,6 +9,7 @@ SELECT
     g.season,
     g.stage,
     g.round,
+    g.group_name,
     g.attendance,
     g.forfeited,
     g.forfeited_by,

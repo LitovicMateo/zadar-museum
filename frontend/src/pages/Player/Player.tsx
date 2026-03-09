@@ -27,7 +27,7 @@ const Player: React.FC = () => {
 	if (!playerDetails) return null;
 
 	return (
-		<>
+		<div className={styles.playerPage}>
 			<a href="#player-content" className={styles.skipLink}>
 				Skip to player content
 			</a>
@@ -35,13 +35,13 @@ const Player: React.FC = () => {
 				<PlayerErrorBoundary>
 					<PlayerHeader />
 				</PlayerErrorBoundary>
-				<main id="player-content" tabIndex={-1}>
+				<main id="player-content" tabIndex={-1} className={styles.playerMain}>
 					<PlayerErrorBoundary>
 						<PlayerContent />
 					</PlayerErrorBoundary>
 				</main>
 			</BoxscoreProvider>
-		</>
+		</div>
 	);
 };
 

@@ -30,7 +30,7 @@ const GameInfo: React.FC = () => {
 						<span className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
 							{game.league_name}
 						</span>
-						<span className="text-xs text-gray-600">{getRoundLabel(game.stage, game.round)}</span>
+						<span className="text-xs text-gray-600">{getRoundLabel(game.stage, game.round, game.group_name)}</span>
 					</div>
 				</Link>
 

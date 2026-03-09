@@ -40,6 +40,9 @@
     "round": {
       "type": "string"
     },
+    "group_name": {
+      "type": "string"
+    },
     "home_team": {
       "type": "relation",
       "relation": "oneToOne",

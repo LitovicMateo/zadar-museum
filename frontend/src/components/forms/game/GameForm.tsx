@@ -18,6 +18,7 @@ type GameFormProps = {
 const emptyDefaults: GameFormData = {
 	season: '',
 	round: '',
+	group_name: '',
 	date: '',
 	home_team: '',
 	home_team_name: '',
