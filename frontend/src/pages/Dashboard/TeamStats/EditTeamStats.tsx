@@ -44,6 +44,7 @@ const EditTeamStats = () => {
 		mutation.mutate({ ...data, id: teamStatsId });
 	};
 
+
 	return (
 		<div>
 			<FormWrapper>
@@ -54,6 +55,7 @@ const EditTeamStats = () => {
 					<TeamFilter game={game} setTeam={setTeam} />
 				</Fieldset>
 			</FormWrapper>
+			{team && !teamStats && <p className="text-center text-red-500">No stats found for selected team and game.</p>}
 			{teamStats && (
 				<TeamStatsForm
 					onSubmit={handleSubmit}
