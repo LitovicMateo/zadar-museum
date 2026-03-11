@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import slugify from 'react-slugify';
 
-import NoContent from '@/components/no-content/no-content';
-import { APP_ROUTES } from '@/constants/routes';
-import { useStaffs } from '@/hooks/queries/staff/useStaffs';
-import { useSearch } from '@/hooks/useSearch';
+import NoContent from '@/components/no-content/NoContent';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useStaffs } from '@/hooks/queries/staff/UseStaffs';
+import { useSearch } from '@/hooks/UseSearch';
 
 const StaffsPage: React.FC = () => {
 	const { data: staffs } = useStaffs('last_name', 'asc');

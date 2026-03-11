@@ -1,10 +1,10 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/fieldset';
-import FormFieldsWrapper from '@/components/ui/form-fields-wrapper';
-import SubmitButton from '@/components/ui/submit-button';
-import { TeamStatsFormData } from '@/schemas/team-stats-schema';
+import Fieldset from '@/components/ui/Fieldset';
+import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
+import SubmitButton from '@/components/ui/SubmitButton';
+import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
 
 import AssistantCoach from '../Fields/AssistantCoach';
 import Competition from '../Fields/Competition';
@@ -18,6 +18,7 @@ import Score from '../Fields/Score';
 import Season from '../Fields/Season';
 import Shooting from '../Fields/Shooting';
 import Team from '../Fields/Team';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 type TeamStatsFormContentProps = {
 	mode: 'create' | 'edit';
@@ -57,7 +58,7 @@ const TeamStatsFormContent: React.FC<TeamStatsFormContentProps> = ({ mode }) => 
 			<Fieldset label="Misc">
 				<Misc />
 			</Fieldset>
-			<div className="w-full flex justify-center">
+			<div className={styles.centerWrapper}>
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Team Stats' : 'Create Team Stats'}

@@ -2,14 +2,14 @@ import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
-import DashboardList from '@/components/dasboard-list/dashboard-list';
+import DashboardList from '@/components/dasboard-list/DashboardList';
 import CoachForm from '@/components/forms/coach/CoachForm';
-import { APP_ROUTES } from '@/constants/routes';
-import { useCoaches } from '@/hooks/queries/coach/useCoaches';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useCoaches } from '@/hooks/queries/coach/UseCoaches';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import { CoachFormData } from '@/schemas/coach-schema';
-import { createCoach } from '@/services/coaches/createCoach';
-import { CoachDetailsResponse } from '@/types/api/coach';
+import { CoachFormData } from '@/schemas/CoachSchema';
+import { createCoach } from '@/services/coaches/CreateCoach';
+import { CoachDetailsResponse } from '@/types/api/Coach';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const defaultValues: CoachFormData = {

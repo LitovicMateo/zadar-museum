@@ -1,8 +1,9 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import CountrySelect from '@/components/country-select/country-select';
-import { PlayerFormData } from '@/schemas/player-schema';
+import CountrySelect from '@/components/country-select/CountrySelect';
+import { PlayerFormData } from '@/schemas/PlayerSchema';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const Nationality = () => {
 	const { control, setValue, register, watch } = useFormContext<PlayerFormData>();
@@ -13,7 +14,7 @@ const Nationality = () => {
 	}, [setValue, register]);
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
+			<span className={styles.label}>
 				Nationality:
 			</span>
 			<Controller

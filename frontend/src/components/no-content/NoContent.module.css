@@ -1,0 +1,79 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 36rem;
+  width: 100%;
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-sans);
+}
+
+.alignStart {
+  align-items: flex-start;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.iconWrapper {
+  flex-shrink: 0;
+}
+
+.iconTop {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.textWrapper {
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.textTitle {
+  font-weight: 500;
+}
+
+/* Type variants */
+.success {
+  background-color: #f0fdf4;
+  border: 1px solid #dcfce7;
+  color: #166534;
+}
+
+.error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.info {
+  background-color: #eff6ff;
+  border: 1px solid #dbeafe;
+  color: #1e40af;
+}
+
+/* Icon colors per type */
+.iconSuccess {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #22c55e;
+}
+
+.iconError {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #dc2626;
+}
+
+.iconInfo {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #3b82f6;
+}

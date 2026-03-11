@@ -1,8 +1,8 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/form-wrapper';
-import { PlayerFormData } from '@/schemas/player-schema';
-import { PlayerResponse } from '@/types/api/player';
+import FormWrapper from '@/components/ui/FormWrapper';
+import { PlayerFormData } from '@/schemas/PlayerSchema';
+import { PlayerResponse } from '@/types/api/Player';
 
 import PlayerFormContent from './Form/PlayerFormContent';
 import PlayerFormProvider from './Form/PlayerFormProvider';

@@ -1,11 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import TableWrapper from '@/components/ui/table-wrapper';
-import { useTeamTotalStats } from '@/hooks/queries/team/useTeamTotalStats';
+import TableWrapper from '@/components/ui/TableWrapper';
+import { useTeamTotalStats } from '@/hooks/queries/team/UseTeamTotalStats';
 
 import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
-import { useTeamAllTimeStatsTable } from './useTeamAllTimeStatsTable';
+import { useTeamAllTimeStatsTable } from './UseTeamAllTimeStatsTable';
 
 const TeamAllTimeStats: React.FC = () => {
 	const { teamSlug } = useParams();

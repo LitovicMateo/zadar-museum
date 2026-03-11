@@ -1,0 +1,22 @@
+.wrapper {
+  width: 100%;
+  max-width: 28rem;
+}
+.card {
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+.header {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(to right, #f8fafc, #fff);
+  border-bottom: 2px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.title { font-size: 1.125rem; font-weight: 700; color: #111827; }
+.subtitle { font-size: 0.75rem; color: #6b7280; margin-top: 0.125rem; }
+.body { padding: 0.75rem; }

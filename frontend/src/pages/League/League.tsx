@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import LeagueHeader from '@/components/league-page/league-header/league-header';
-import { APP_ROUTES } from '@/constants/routes';
-import { useLeagueDetails } from '@/hooks/queries/league/useLeagueDetails';
+import LeagueHeader from '@/components/league-page/league-header/LeagueHeader';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useLeagueDetails } from '@/hooks/queries/league/UseLeagueDetails';
 
 import LeagueContent from './LeagueContent';
+import styles from '@/pages/League/League.module.css';
 
 const League: React.FC = () => {
 	const { leagueSlug } = useParams();
@@ -20,7 +21,7 @@ const League: React.FC = () => {
 	}, [leagueDetails, isFetched, navigate]);
 
 	return (
-		<div className="flex flex-col gap-2">
+		<div className={styles.page}>
 			<LeagueHeader />
 			<LeagueContent />
 		</div>

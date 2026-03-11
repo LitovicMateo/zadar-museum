@@ -1,0 +1,20 @@
+import { API_ROUTES } from '@/constants/Routes';
+import apiClient from '@/lib/ApiClient';
+import { CoachFormData } from '@/schemas/CoachSchema';
+import { uploadSingleImage } from '@/utils/UploadSingleImage';
+
+export const updateCoach = async ({ id, ...data }: { id: string } & CoachFormData) => {
+	const uploadedImageId = await uploadSingleImage(data.image);
+	const res = await apiClient.put(API_ROUTES.edit.coach(id), {
+		data: {
+			first_name: data.first_name,
+			last_name: data.last_name,
+			date_of_birth: data.date_of_birth || null,
+			date_of_death: data.date_of_death || null,
+			image: uploadedImageId,
+			nationality: data.nationality
+		}
+	});
+
+	return res;
+};

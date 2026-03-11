@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Select, { SingleValue } from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useGameTeams } from '@/hooks/queries/game/useGameTeams';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useGameTeams } from '@/hooks/queries/game/UseGameTeams';
 
 type TeamFilterProps = {
 	game: string;

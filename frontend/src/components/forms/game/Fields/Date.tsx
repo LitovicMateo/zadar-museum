@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/input';
-import { GameFormData } from '@/schemas/game-schema';
+import { Input } from '@/components/ui/Input';
+import { GameFormData } from '@/schemas/GameSchema';
 
 const Date: React.FC = () => {
 	const { register } = useFormContext<GameFormData>();

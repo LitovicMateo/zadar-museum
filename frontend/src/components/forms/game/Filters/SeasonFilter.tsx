@@ -1,8 +1,8 @@
 import React from 'react';
 import Select from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useSeasons } from '@/hooks/queries/dasboard/useSeasons';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useSeasons } from '@/hooks/queries/dasboard/UseSeasons';
 
 type SeasonFilterProps = {
 	selectedSeason: string;

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useForm, FormProvider, FieldErrors } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { coachSchema, CoachFormData } from '@/schemas/coach-schema';
-import { CoachDetailsResponse } from '@/types/api/coach';
+import { coachSchema, CoachFormData } from '@/schemas/CoachSchema';
+import { CoachDetailsResponse } from '@/types/api/Coach';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type CoachFormProviderProps = {

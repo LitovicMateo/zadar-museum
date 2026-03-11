@@ -1,0 +1,22 @@
+.tableWrap {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+.table { width: 100%; table-layout: fixed; }
+.thead { background-color: #f1f5f9; }
+.theadRow { border-bottom: 2px solid #3b82f6; }
+.th {
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  color: #4b5563;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.thLeft  { text-align: left; }
+.thRight { text-align: right; }
+.tbody > * + * { border-top: 1px solid #f3f4f6; }
+.loading { color: #6b7280; }
+.error   { color: #dc2626; }
+.empty   { color: #6b7280; }

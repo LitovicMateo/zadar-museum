@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
-import Sidebar, { SidebarGroup } from '@/components/sidebar/sidebar';
+import Sidebar, { SidebarGroup } from '@/components/sidebar/Sidebar';
 
 const sidebarGroups: SidebarGroup[] = [
 	{

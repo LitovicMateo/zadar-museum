@@ -2,8 +2,8 @@ import React from 'react';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { RefereeFormData, refereeSchema } from '@/schemas/referee-schema';
-import { RefereeDetailsResponse } from '@/types/api/referee';
+import { RefereeFormData, refereeSchema } from '@/schemas/RefereeSchema';
+import { RefereeDetailsResponse } from '@/types/api/Referee';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type RefereeFormProviderProps = {

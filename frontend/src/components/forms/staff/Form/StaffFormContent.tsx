@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/fieldset';
-import FormFieldsWrapper from '@/components/ui/form-fields-wrapper';
-import SubmitButton from '@/components/ui/submit-button';
-import { StaffFormData } from '@/schemas/staff-schema';
+import Fieldset from '@/components/ui/Fieldset';
+import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
+import SubmitButton from '@/components/ui/SubmitButton';
+import { StaffFormData } from '@/schemas/StaffSchema';
 
 import FirstName from '../Fields/FirstName';
 import LastName from '../Fields/LastName';
 import Role from '../Fields/Role';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const StaffFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 	const { formState, setFocus } = useFormContext<StaffFormData>();
@@ -24,7 +25,7 @@ const StaffFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 				<LastName />
 				<Role />
 			</Fieldset>
-			<div className="w-full flex justify-center">
+			<div className={styles.centerWrapper}>
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Staff' : 'Create Staff'}

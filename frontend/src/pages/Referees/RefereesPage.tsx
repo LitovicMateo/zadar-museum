@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { APP_ROUTES } from '@/constants/routes';
-import { useReferees } from '@/hooks/queries/referee/useReferees';
-import { useSearch } from '@/hooks/useSearch';
-import { searchReferees } from '@/utils/search-functions';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useReferees } from '@/hooks/queries/referee/UseReferees';
+import { useSearch } from '@/hooks/UseSearch';
+import { searchReferees } from '@/utils/SearchFunctions';
 
 const RefereesPage: React.FC = () => {
 	const { data: referees } = useReferees('last_name', 'asc');

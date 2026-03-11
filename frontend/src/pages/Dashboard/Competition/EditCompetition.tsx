@@ -3,11 +3,12 @@ import { Toaster } from 'react-hot-toast';
 import Select from 'react-select';
 
 import CompetitionForm from '@/components/forms/competition/CompetitionForm';
-import { useCompetitions } from '@/hooks/queries/dasboard/useCompetitions';
-import { useLeagueDetails } from '@/hooks/queries/league/useLeagueDetails';
-import { CompetitionFormData } from '@/schemas/competition-schema';
-import { updateCompetition } from '@/services/competitions/updateCompetition';
+import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
+import { useLeagueDetails } from '@/hooks/queries/league/UseLeagueDetails';
+import { CompetitionFormData } from '@/schemas/CompetitionSchema';
+import { updateCompetition } from '@/services/competitions/UpdateCompetition';
 import { useMutation } from '@tanstack/react-query';
+import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditCompetition = () => {
 	const [competitionSlug, setCompetitionSlug] = React.useState('');
@@ -28,7 +29,7 @@ const EditCompetition = () => {
 
 	return (
 		<div>
-			<div className="max-w-[200px] w-full py-4">
+			<div className={styles.selectWrap}>
 				<Select
 					options={competitions?.map((competition) => ({
 						label: competition.name,

@@ -1,0 +1,39 @@
+.wrapper { padding: 1rem; }
+@media (min-width: 768px) { .wrapper { padding: 1.25rem 1rem; } }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+.cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  text-decoration: none;
+  color: inherit;
+  transition: color 200ms;
+}
+.cell:hover { color: #2563eb; }
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+  transition: background-color 200ms;
+}
+.iconBlue   { background: #eff6ff; }
+.iconGreen  { background: #f0fdf4; }
+.iconPurple { background: #faf5ff; }
+.iconOrange { background: #fff7ed; }
+.cell:hover .iconBlue   { background: #dbeafe; }
+.cell:hover .iconGreen  { background: #dcfce7; }
+.iconText { display: flex; flex-direction: column; }
+.iconLabel { font-size: 0.75rem; color: #6b7280; font-weight: 500; }
+.iconValue { font-weight: 600; color: #111827; transition: color 200ms; }
+.cell:hover .iconValue { color: #2563eb; }
+.iconSub   { font-size: 0.75rem; color: #4b5563; }

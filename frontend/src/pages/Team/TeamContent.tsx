@@ -1,16 +1,16 @@
 import React from 'react';
 
-import CompetitionList from '@/components/games-page/games-filter/competition-list';
-import GamesFilter from '@/components/games-page/games-filter/games-filter';
-import RightControls from '@/components/games-page/games-filter/right-controls';
-import GamesList from '@/components/games-page/games-list/games-list';
+import CompetitionList from '@/components/games-page/games-filter/CompetitionList';
+import GamesFilter from '@/components/games-page/games-filter/GamesFilter';
+import RightControls from '@/components/games-page/games-filter/RightControls';
+import GamesList from '@/components/games-page/games-list/GamesList';
 import TeamAllTimeStats from '@/components/team-page/all-time-stats/TeamAllTimeStats';
 import TeamLeagueStats from '@/components/team-page/league-stats/TeamLeagueStats';
-import TeamSeasonStats from '@/components/team-page/team-games/team-season-stats';
-import TeamLeaders from '@/components/team-page/team-leaders/team-leaders';
-import PageContentWrapper from '@/components/ui/page-content-wrapper';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useGamesContext } from '@/hooks/context/useGamesContext';
+import TeamSeasonStats from '@/components/team-page/team-games/TeamSeasonStats';
+import TeamLeaders from '@/components/team-page/team-leaders/TeamLeaders';
+import PageContentWrapper from '@/components/ui/PageContentWrapper';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { useGamesContext } from '@/hooks/context/UseGamesContext';
 
 import styles from './team-content.module.css';
 
@@ -52,7 +52,7 @@ const TeamContent: React.FC = React.memo(() => {
 				<TabsContent value="gamelog" className={styles.tabsContentGamelog}>
 					<div className={styles.gamelogControls}>
 						{scheduleLoading || !seasons ? (
-							<span className="text-sm text-gray-400">Loading...</span>
+							<span className={styles.loadingText}>Loading...</span>
 						) : (
 							<>
 								<div className={styles.gamelogSeasonSelect}>
@@ -76,7 +76,7 @@ const TeamContent: React.FC = React.memo(() => {
 							<GamesList key={slug} competitionSlug={slug} />
 						))}
 						{selectedCompetitions.length === 0 && (
-							<div className="text-2xl h-full flex items-center justify-center text-gray-400">
+							<div className={styles.emptyState}>
 								No competitions selected
 							</div>
 						)}

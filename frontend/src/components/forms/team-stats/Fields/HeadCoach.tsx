@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useCoaches } from '@/hooks/queries/coach/useCoaches';
-import { TeamStatsFormData } from '@/schemas/team-stats-schema';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useCoaches } from '@/hooks/queries/coach/UseCoaches';
+import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
 
 const HeadCoach: React.FC = () => {
 	const { control, watch, setValue } = useFormContext<TeamStatsFormData>();

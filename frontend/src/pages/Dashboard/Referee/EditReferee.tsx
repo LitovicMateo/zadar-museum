@@ -3,11 +3,12 @@ import toast, { Toaster } from 'react-hot-toast';
 import Select from 'react-select';
 
 import RefereeForm from '@/components/forms/referee/RefereeForm';
-import { useRefereeDetails } from '@/hooks/queries/referee/useRefereeDetails';
-import { useReferees } from '@/hooks/queries/referee/useReferees';
-import { RefereeFormData } from '@/schemas/referee-schema';
-import { updateReferee } from '@/services/referees/updateReferee';
+import { useRefereeDetails } from '@/hooks/queries/referee/UseRefereeDetails';
+import { useReferees } from '@/hooks/queries/referee/UseReferees';
+import { RefereeFormData } from '@/schemas/RefereeSchema';
+import { updateReferee } from '@/services/referees/UpdateReferee';
 import { useMutation } from '@tanstack/react-query';
+import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditReferee = () => {
 	const [refereeId, setRefereeId] = React.useState<string>('');
@@ -32,7 +33,7 @@ const EditReferee = () => {
 	};
 	return (
 		<div>
-			<div className="max-w-[200px] w-full py-4">
+			<div className={styles.selectWrap}>
 				<Select
 					options={referees?.map((coach) => ({
 						label: `${coach.first_name} ${coach.last_name}`,

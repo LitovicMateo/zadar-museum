@@ -4,10 +4,10 @@ import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import TeamStatsFilter from '@/components/team-stats/filter/TeamStatsFilter';
 import TeamStatsTable from '@/components/team-stats/table/TeamStatsTable';
-import { useTeamAllTimeStats } from '@/hooks/queries/stats/useTeamAllTimeStats';
-import usePagedSortedList from '@/hooks/usePagedSortedList';
-import { useSearch } from '@/hooks/useSearch';
-import { searchTeamStats } from '@/utils/search-functions';
+import { useTeamAllTimeStats } from '@/hooks/queries/stats/UseTeamAllTimeStats';
+import usePagedSortedList from '@/hooks/UsePagedSortedList';
+import { useSearch } from '@/hooks/UseSearch';
+import { searchTeamStats } from '@/utils/SearchFunctions';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';

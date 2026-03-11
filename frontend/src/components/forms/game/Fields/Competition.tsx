@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { selectStyle } from '@/constants/react-select-style';
-import { useCompetitions } from '@/hooks/queries/dasboard/useCompetitions';
-import { GameFormData } from '@/schemas/game-schema';
+import { selectStyle } from '@/constants/ReactSelectStyle';
+import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
+import { GameFormData } from '@/schemas/GameSchema';
 
 interface OptionType {
 	value: string;

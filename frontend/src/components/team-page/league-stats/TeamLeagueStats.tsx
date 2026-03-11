@@ -1,14 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import TableWrapper from '@/components/ui/table-wrapper';
-import { useTeamLeagueStats } from '@/hooks/queries/team/useTeamLeagueStats';
-import { useTeamTotalStats } from '@/hooks/queries/team/useTeamTotalStats';
+import TableWrapper from '@/components/ui/TableWrapper';
+import { useTeamLeagueStats } from '@/hooks/queries/team/UseTeamLeagueStats';
+import { useTeamTotalStats } from '@/hooks/queries/team/UseTeamTotalStats';
 import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
-import { useTeamLeagueStatsTable } from '@/hooks/useTeamLeagueStats';
-import { TeamStats } from '@/types/api/team';
+import { useTeamLeagueStatsTable } from '@/hooks/UseTeamLeagueStats';
+import { TeamStats } from '@/types/api/Team';
 
-import DatabaseSelect from './database-select';
+import DatabaseSelect from './DatabaseSelect';
+import styles from './TeamLeagueStats.module.css';
 
 const TeamLeagueStats: React.FC = () => {
 	const { teamSlug } = useParams();
@@ -35,7 +36,7 @@ const TeamLeagueStats: React.FC = () => {
 	if (!leagueStats || !totalStats) return null;
 
 	return (
-		<section className="w-full h-fit flex flex-col gap-4 overflow-hidden">
+		<section className={styles.section}>
 			<DatabaseSelect selected={selected} setSelected={setSelected} />
 			<TableWrapper>
 				<UniversalTableHead table={mainTable} />

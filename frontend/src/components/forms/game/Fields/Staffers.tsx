@@ -2,11 +2,11 @@ import React from 'react';
 import { FieldValues, useFieldArray, useFormContext, Controller, useWatch } from 'react-hook-form';
 import Select from 'react-select';
 
-import NoContent from '@/components/no-content/no-content';
-import Button from '@/components/ui/button';
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useStaffs } from '@/hooks/queries/staff/useStaffs';
-import { GameFormData } from '@/schemas/game-schema';
+import NoContent from '@/components/no-content/NoContent';
+import Button from '@/components/ui/Button';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useStaffs } from '@/hooks/queries/staff/UseStaffs';
+import { GameFormData } from '@/schemas/GameSchema';
 import { Plus, X } from 'lucide-react';
 
 const Staffers: React.FC = () => {

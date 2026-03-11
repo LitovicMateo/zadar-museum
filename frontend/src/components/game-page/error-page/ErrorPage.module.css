@@ -1,0 +1,8 @@
+.fullHeight {
+  font-size: 1.5rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+}

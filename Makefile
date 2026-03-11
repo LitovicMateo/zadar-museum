@@ -13,7 +13,7 @@ PROD_COMPOSE := docker-compose.prod.yml
 PROD_ENV := .env.prod
 
 
-.PHONY: dev dev-stop dev-mv staging staging-stop prod prod-stop load-dev-backup import-dev-backup load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod help
+.PHONY: dev dev-stop dev-mv staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod help
 
 help:
 	@echo "Usage: make <target>"	@echo "Note: several targets forward flags to underlying scripts (e.g. apply-mvs accepts --env-file)"
@@ -67,6 +67,10 @@ import-dev-backup:
 	@CONTAINER=$$($(COMPOSE_CMD) -f $(DEV_COMPOSE) ps -q postgres); \
 	if [ -z "$$CONTAINER" ]; then echo "No postgres container found (is the dev stack running?)"; exit 1; fi; \
 	docker exec -i "$$CONTAINER" sh -c "export PGCLIENTENCODING=UTF8; psql -U strapi -d strapi -f /tmp/zadar-backup.sql"
+
+## Restore the latest backup from backups/vps/ into the running dev stack
+restore-dev-from-vps:
+	bash scripts/backups/restore-dev-from-vps.sh
 
 load-staging-backup:
 	@CONTAINER=$$($(COMPOSE_CMD) -f $(STAGING_COMPOSE) ps -q postgres); \

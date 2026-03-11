@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import RefreshDataButton from '../refresh-data-button/refresh-data-button';
-import SidebarContent from './sidebar-content';
-import SidebarTitle from './sidebar-title';
-import SidebarToggle from './sidebar-toggle';
-import SidebarWrapper from './sidebar-wrapper';
+import RefreshDataButton from '../refresh-data-button/RefreshDataButton';
+import SidebarContent from './SidebarContent';
+import SidebarTitle from './SidebarTitle';
+import SidebarToggle from './SidebarToggle';
+import SidebarWrapper from './SidebarWrapper';
 import DashboardSidebarRow, { type DashboardNavItem } from './DashboardSidebarRow';
 
 import styles from './DashboardSidebar.module.css';
@@ -31,7 +31,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ navItems, statsItem
 	}, [isOpen]);
 
 	return (
-		<div className="relative inline-block">
+		<div className={styles.container}>
 			<SidebarWrapper isOpen={isOpen}>
 				{shouldRenderContent && (
 					<div className={styles.sidebar}>
@@ -64,7 +64,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ navItems, statsItem
 				)}
 			</SidebarWrapper>
 
-			<div className="absolute top-4 left-full ml-2">
+			<div className={styles.toggle}>
 				<SidebarToggle isOpen={isOpen} setIsOpen={setIsOpen} />
 			</div>
 		</div>

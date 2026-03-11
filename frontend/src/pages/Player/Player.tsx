@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import PlayerHeader from '@/components/player-page/player-header/player-header';
-import { APP_ROUTES } from '@/constants/routes';
-import { BoxscoreProvider } from '@/context/player-gamelog-context';
-import { usePlayerDetails } from '@/hooks/queries/player/usePlayerDetails';
+import PlayerHeader from '@/components/player-page/player-header/PlayerHeader';
+import { APP_ROUTES } from '@/constants/Routes';
+import { BoxscoreProvider } from '@/context/PlayerGamelogContext';
+import { usePlayerDetails } from '@/hooks/queries/player/UsePlayerDetails';
 
 import PlayerContent from './PlayerContent';
 import { PlayerErrorBoundary } from './PlayerErrorBoundary';
-import styles from './player.module.css';
+import styles from './Player.module.css';
 
 export type PlayerDB = 'zadar' | 'opponent';
 

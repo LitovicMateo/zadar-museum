@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
 import PlayerStatsTable from '@/components/player-stats/table/PlayerStatsTable';
-import { usePlayerAllTimeStats } from '@/hooks/queries/stats/usePlayerAllTimeStats';
-import usePagedSortedList from '@/hooks/usePagedSortedList';
-import { useSearch } from '@/hooks/useSearch';
+import { usePlayerAllTimeStats } from '@/hooks/queries/stats/UsePlayerAllTimeStats';
+import usePagedSortedList from '@/hooks/UsePagedSortedList';
+import { useSearch } from '@/hooks/UseSearch';
 import { PlayerDB } from '@/pages/Player/Player';
-import { PlayerAllTimeStats } from '@/types/api/player';
-import { searchPlayerStats } from '@/utils/search-functions';
+import { PlayerAllTimeStats } from '@/types/api/Player';
+import { searchPlayerStats } from '@/utils/SearchFunctions';
 import { SortingState } from '@tanstack/react-table';
 import { motion, AnimatePresence } from 'framer-motion';
 

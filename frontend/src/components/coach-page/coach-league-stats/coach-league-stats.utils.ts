@@ -1,4 +1,4 @@
-import { CoachStats } from '@/types/api/coach';
+import { CoachStats } from '@/types/api/Coach';
 
 export const computeHasNeutral = (coachLeagueStats: unknown[] | undefined, coachRole: string) => {
   if (!coachLeagueStats || coachLeagueStats.length === 0) return false;

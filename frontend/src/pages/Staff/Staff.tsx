@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import StaffHeader from '@/components/staff-page/staff-header/staff-header';
-import { APP_ROUTES } from '@/constants/routes';
-import { useStaffDetails } from '@/hooks/queries/staff/useStaffDetails';
+import StaffHeader from '@/components/staff-page/staff-header/StaffHeader';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useStaffDetails } from '@/hooks/queries/staff/UseStaffDetails';
 
 import StaffContent from './StaffContent';
+import styles from '@/pages/Staff/Staff.module.css';
 
 const Staff: React.FC = () => {
 	const { staffId } = useParams();
@@ -20,7 +21,7 @@ const Staff: React.FC = () => {
 	}, [isFetched, staffDetails, navigate]);
 
 	return (
-		<div className="flex flex-col gap-1">
+		<div className={styles.page}>
 			<StaffHeader />
 			<StaffContent />
 		</div>

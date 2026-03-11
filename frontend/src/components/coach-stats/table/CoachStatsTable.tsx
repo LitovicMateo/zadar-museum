@@ -1,12 +1,12 @@
 import React from 'react';
 
-import NoContent from '@/components/no-content/no-content';
+import NoContent from '@/components/no-content/NoContent';
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
-import AnimatedTableWrapper from '@/components/ui/animated-table-wrapper';
-import { CoachStatsRanking } from '@/types/api/coach';
+import AnimatedTableWrapper from '@/components/ui/AnimatedTableWrapper';
+import { CoachStatsRanking } from '@/types/api/Coach';
 import { SortingState } from '@tanstack/react-table';
 
-import { useCoachStatsTable } from './useCoachStatsTable';
+import { useCoachStatsTable } from './UseCoachStatsTable';
 
 type CoachStatsTableProps = {
 	stats: CoachStatsRanking[] | undefined;

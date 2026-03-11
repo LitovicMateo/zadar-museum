@@ -1,12 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import LeagueAllTime from '@/components/league-page/all-time/league-all-time';
-import PlayerRankings from '@/components/league-page/player-rankings/player-rankings';
-import NoContent from '@/components/no-content/no-content';
-import PageContentWrapper from '@/components/ui/page-content-wrapper';
-import SeasonData from '@/components/venue-page/season-data/season-data';
-import { useLeagueSeasons } from '@/hooks/queries/league/useLeagueSeasons';
+import LeagueAllTime from '@/components/league-page/all-time/LeagueAllTime';
+import PlayerRankings from '@/components/league-page/player-rankings/PlayerRankings';
+import NoContent from '@/components/no-content/NoContent';
+import PageContentWrapper from '@/components/ui/PageContentWrapper';
+import SeasonData from '@/components/venue-page/season-data/SeasonData';
+import { useLeagueSeasons } from '@/hooks/queries/league/UseLeagueSeasons';
 
 const LeagueContent: React.FC = () => {
 	const { leagueSlug } = useParams();

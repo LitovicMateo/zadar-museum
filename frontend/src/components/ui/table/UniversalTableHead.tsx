@@ -1,6 +1,6 @@
 import { flexRender, Table } from '@tanstack/react-table';
 
-import './types';
+import './Types';
 import styles from './table.module.css';
 
 type Props<TData> = {

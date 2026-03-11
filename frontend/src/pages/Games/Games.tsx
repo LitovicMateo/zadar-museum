@@ -1,10 +1,11 @@
 import React from 'react';
 
-import GamesFilter from '@/components/games-page/games-filter/games-filter';
-import GamesList from '@/components/games-page/games-list/games-list';
-import NoContent from '@/components/no-content/no-content';
-import PageContentWrapper from '@/components/ui/page-content-wrapper';
-import { useGamesContext } from '@/hooks/context/useGamesContext';
+import GamesFilter from '@/components/games-page/games-filter/GamesFilter';
+import GamesList from '@/components/games-page/games-list/GamesList';
+import NoContent from '@/components/no-content/NoContent';
+import PageContentWrapper from '@/components/ui/PageContentWrapper';
+import { useGamesContext } from '@/hooks/context/UseGamesContext';
+import styles from '@/pages/Games/Games.module.css';
 
 const GamesContent: React.FC = () => {
 	const { selectedCompetitions, schedule } = useGamesContext();
@@ -19,7 +20,7 @@ const GamesContent: React.FC = () => {
 
 	return (
 		<PageContentWrapper>
-			<div className="w-full flex flex-col gap-4 overflow-y-auto min-h-svh">
+			<div className={styles.page}>
 				<GamesFilter />
 				{selectedCompetitions.map((slug) => (
 					<GamesList key={slug} competitionSlug={slug} />

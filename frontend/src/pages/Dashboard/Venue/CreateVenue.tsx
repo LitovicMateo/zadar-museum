@@ -2,13 +2,13 @@ import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
-import DashboardList from '@/components/dasboard-list/dashboard-list';
+import DashboardList from '@/components/dasboard-list/DashboardList';
 import VenueForm from '@/components/forms/venue/VenueForm';
-import { APP_ROUTES } from '@/constants/routes';
-import { useVenues } from '@/hooks/queries/venue/useVenues';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useVenues } from '@/hooks/queries/venue/UseVenues';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import { VenueFormData } from '@/schemas/venue-schema';
-import { createVenue } from '@/services/venue/createVenue';
+import { VenueFormData } from '@/schemas/VenueSchema';
+import { createVenue } from '@/services/venue/CreateVenue';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const defaultValues: VenueFormData = {

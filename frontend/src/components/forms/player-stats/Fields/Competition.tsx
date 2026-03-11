@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useSeasonCompetitions } from '@/hooks/queries/dasboard/useSeasonCompetitions';
-import { PlayerStatsFormData } from '@/schemas/player-stats';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useSeasonCompetitions } from '@/hooks/queries/dasboard/UseSeasonCompetitions';
+import { PlayerStatsFormData } from '@/schemas/PlayerStats';
 
 const Competition: React.FC = () => {
 	const { watch, control, setValue } = useFormContext<PlayerStatsFormData>();

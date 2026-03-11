@@ -2,20 +2,20 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import CompetitionSelectItem from '@/components/games-page/games-filter/competition-select';
-import NoContent from '@/components/no-content/no-content';
-import AllTimeLeagueStats from '@/components/player-page/all-time-league-stats/all-time-league-stats';
-import AllTimeStats from '@/components/player-page/all-time-stats/all-time-stats';
-import CareerHigh from '@/components/player-page/career-high/career-high';
-import Menu from '@/components/player-page/menu/menu';
-import Boxscore from '@/components/player-page/player-boxscore/boxscore/boxscore';
-import BoxscoreFilter from '@/components/player-page/player-boxscore/filter/boxscore-filter';
-import SeasonAverage from '@/components/player-page/player-boxscore/season-average/season-average';
-import PageContentWrapper from '@/components/ui/page-content-wrapper';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useBoxscore } from '@/hooks/context/useBoxscore';
-import { useAllTimeStats } from '@/hooks/queries/player/useAllTimeStats';
-import { usePlayerProfileDatabase } from '@/hooks/queries/player/usePlayerProfileDatabase';
+import CompetitionSelectItem from '@/components/games-page/games-filter/CompetitionSelect';
+import NoContent from '@/components/no-content/NoContent';
+import AllTimeLeagueStats from '@/components/player-page/all-time-league-stats/AllTimeLeagueStats';
+import AllTimeStats from '@/components/player-page/all-time-stats/AllTimeStats';
+import CareerHigh from '@/components/player-page/career-high/CareerHigh';
+import Menu from '@/components/player-page/menu/Menu';
+import Boxscore from '@/components/player-page/player-boxscore/boxscore/Boxscore';
+import BoxscoreFilter from '@/components/player-page/player-boxscore/filter/BoxscoreFilter';
+import SeasonAverage from '@/components/player-page/player-boxscore/season-average/SeasonAverage';
+import PageContentWrapper from '@/components/ui/PageContentWrapper';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { useBoxscore } from '@/hooks/context/UseBoxscore';
+import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
+import { usePlayerProfileDatabase } from '@/hooks/queries/player/UsePlayerProfileDatabase';
 
 import styles from './player-content.module.css';
 

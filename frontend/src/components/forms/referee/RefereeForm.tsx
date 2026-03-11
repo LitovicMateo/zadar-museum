@@ -1,8 +1,8 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/form-wrapper';
-import { RefereeFormData } from '@/schemas/referee-schema';
-import { RefereeDetailsResponse } from '@/types/api/referee';
+import FormWrapper from '@/components/ui/FormWrapper';
+import { RefereeFormData } from '@/schemas/RefereeSchema';
+import { RefereeDetailsResponse } from '@/types/api/Referee';
 
 import RefereeFormContent from './Form/RefereeFormContent';
 import RefereeFormProvider from './Form/RefereeFormProvider';

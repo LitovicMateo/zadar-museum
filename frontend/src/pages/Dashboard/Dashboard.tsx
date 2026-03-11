@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 import DashboardSidebar from '@/components/sidebar/DashboardSidebar';
 import { type DashboardNavItem } from '@/components/sidebar/DashboardSidebarRow';
-import { APP_ROUTES } from '@/constants/routes';
+import { APP_ROUTES } from '@/constants/Routes';
 
 import styles from './Dashboard.module.css';
 

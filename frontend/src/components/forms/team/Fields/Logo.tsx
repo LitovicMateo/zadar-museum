@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import UploadButtonWrapper from '@/components/ui/upload-button-wrapper';
-import { TeamFormData } from '@/schemas/team-schema';
+import UploadButtonWrapper from '@/components/ui/UploadButtonWrapper';
+import { TeamFormData } from '@/schemas/TeamSchema';
 
 type LogoProps = {
 	fileInputRef: React.RefObject<HTMLInputElement | null> | null;

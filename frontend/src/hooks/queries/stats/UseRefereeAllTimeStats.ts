@@ -1,0 +1,27 @@
+import { API_ROUTES } from '@/constants/Routes';
+import { useQuery } from '@/hooks/UseQueryWithToast';
+import apiClient from '@/lib/ApiClient';
+import { RefereeStatsRanking } from '@/types/api/Referee';
+
+export const useRefereeAllTimeStats = (location: 'home' | 'away' | 'all', league: string, season: string) => {
+	return useQuery({
+		queryKey: ['referee-all-time-stats', location, league, season],
+		queryFn: getRefereeAllTimeStats.bind(null, location, league, season),
+		errorMessage: 'Failed to load referee statistics'
+	});
+};
+
+const getRefereeAllTimeStats = async (
+	location: 'home' | 'away' | 'all',
+	league: string,
+	season: string
+): Promise<RefereeStatsRanking[]> => {
+	const params = new URLSearchParams({
+		location,
+		league,
+		season
+	});
+	const res = await apiClient.get(API_ROUTES.stats.referee.allTime(params.toString()));
+
+	return res.data;
+};

@@ -1,7 +1,8 @@
 import React from 'react';
 
-import GlobalSearch from '@/components/global-search/global-search';
+import GlobalSearch from '@/components/global-search/GlobalSearch';
 import { AnimatePresence, motion } from 'framer-motion';
+import styles from './MobileInlineSearch.module.css';
 
 interface Props {
 	open: boolean;
@@ -17,10 +18,10 @@ const MobileInlineSearch: React.FC<Props> = ({ open }) => {
 					animate={{ height: 'auto', opacity: 1 }}
 					exit={{ height: 0, opacity: 0 }}
 					transition={{ duration: 0.18 }}
-					className="w-full bg-white border-b overflow-hidden"
+					className={styles.wrapper}
 				>
-					<div className="max-w-[900px] mx-auto px-4 py-2 flex justify-center">
-						<div className="w-full max-w-md">
+					<div className={styles.inner}>
+						<div className={styles.searchBox}>
 							<GlobalSearch />
 						</div>
 					</div>

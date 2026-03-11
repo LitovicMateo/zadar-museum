@@ -1,12 +1,12 @@
 import React from 'react';
 
-import NoContent from '@/components/no-content/no-content';
+import NoContent from '@/components/no-content/NoContent';
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
-import AnimatedTableWrapper from '@/components/ui/animated-table-wrapper';
-import { PlayerAllTimeStats } from '@/types/api/player';
+import AnimatedTableWrapper from '@/components/ui/AnimatedTableWrapper';
+import { PlayerAllTimeStats } from '@/types/api/Player';
 import { SortingState } from '@tanstack/react-table';
 
-import { usePlayerStatsTable } from './usePlayerStatsTable';
+import { usePlayerStatsTable } from './UsePlayerStatsTable';
 
 type PlayerStatsTableProps = {
 	stats: PlayerAllTimeStats[] | undefined;

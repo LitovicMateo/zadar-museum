@@ -2,14 +2,14 @@ import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
-import DashboardList from '@/components/dasboard-list/dashboard-list';
+import DashboardList from '@/components/dasboard-list/DashboardList';
 import TeamForm from '@/components/forms/team/TeamForm';
-import { APP_ROUTES } from '@/constants/routes';
-import { useTeams } from '@/hooks/queries/team/useTeams';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useTeams } from '@/hooks/queries/team/UseTeams';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import { TeamFormData } from '@/schemas/team-schema';
-import { createTeam } from '@/services/teams/createTeam';
-import { TeamDetailsResponse } from '@/types/api/team';
+import { TeamFormData } from '@/schemas/TeamSchema';
+import { createTeam } from '@/services/teams/CreateTeam';
+import { TeamDetailsResponse } from '@/types/api/Team';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const CreateTeam: React.FC = () => {

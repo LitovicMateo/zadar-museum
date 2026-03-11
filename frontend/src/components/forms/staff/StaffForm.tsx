@@ -1,8 +1,8 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/form-wrapper';
-import { StaffFormData } from '@/schemas/staff-schema';
-import { StaffDetailsResponse } from '@/types/api/staff';
+import FormWrapper from '@/components/ui/FormWrapper';
+import { StaffFormData } from '@/schemas/StaffSchema';
+import { StaffDetailsResponse } from '@/types/api/Staff';
 
 import StaffFormContent from './Form/StaffFormContent';
 import StaffFormProvider from './Form/StaffFormProvider';

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import CountrySelect from '@/components/country-select/country-select';
-import { RefereeFormData } from '@/schemas/referee-schema';
+import CountrySelect from '@/components/country-select/CountrySelect';
+import { RefereeFormData } from '@/schemas/RefereeSchema';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const Nationality: React.FC = () => {
 	const { control, register } = useFormContext<RefereeFormData>();
@@ -13,8 +14,8 @@ const Nationality: React.FC = () => {
 
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
-				Nationality: <span className="text-red-500">*</span>
+			<span className={styles.label}>
+				Nationality: <span className={styles.required}>*</span>
 			</span>
 			<Controller
 				control={control}

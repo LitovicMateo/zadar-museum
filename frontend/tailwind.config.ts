@@ -4,7 +4,8 @@ const config: Config = {
 	theme: {
 		extend: {
 			fontFamily: {
-				abel: ['"Abel"', 'sans-serif']
+				sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+				mono: ['"DM Mono"', '"Courier New"', 'monospace']
 			}
 		}
 	},

@@ -1,7 +1,7 @@
 import { Toaster } from 'react-hot-toast';
 
-import Header from './components/header/header';
-import AppRoutes from './components/routes/app-routes';
+import Header from './components/header/Header';
+import AppRoutes from './components/routes/AppRoutes';
 
 function App() {
 	const env = import.meta.env;

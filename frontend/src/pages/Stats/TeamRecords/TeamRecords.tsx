@@ -4,8 +4,8 @@ import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
 import TeamRecordsTable from '@/components/team-records/TeamRecordsTable';
-import { useTeamRecords } from '@/hooks/queries/stats/useTeamRecords';
-import usePagedSortedList from '@/hooks/usePagedSortedList';
+import { useTeamRecords } from '@/hooks/queries/stats/UseTeamRecords';
+import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { PlayerDB } from '@/pages/Player/Player';
 import { SortingState } from '@tanstack/react-table';
 

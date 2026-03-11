@@ -2,14 +2,14 @@ import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
-import DashboardList from '@/components/dasboard-list/dashboard-list';
+import DashboardList from '@/components/dasboard-list/DashboardList';
 import StaffForm from '@/components/forms/staff/StaffForm';
-import { APP_ROUTES } from '@/constants/routes';
-import { useStaffs } from '@/hooks/queries/staff/useStaffs';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useStaffs } from '@/hooks/queries/staff/UseStaffs';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import { StaffFormData } from '@/schemas/staff-schema';
-import { createStaff } from '@/services/staff/createStaff';
-import { StaffMemberDetailsResponse as StaffDetailsResponse } from '@/types/api/staff-member';
+import { StaffFormData } from '@/schemas/StaffSchema';
+import { createStaff } from '@/services/staff/CreateStaff';
+import { StaffMemberDetailsResponse as StaffDetailsResponse } from '@/types/api/StaffMember';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const defaultValues: StaffFormData = {

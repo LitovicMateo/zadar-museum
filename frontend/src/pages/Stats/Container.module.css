@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: baseline;
+  align-items: flex-start;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}

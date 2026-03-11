@@ -1,8 +1,8 @@
 import React from 'react';
 import Select from 'react-select';
 
-import { selectStyle } from '@/constants/react-select-style';
-import { useCompetitionGames } from '@/hooks/queries/dasboard/useCompetitionGames';
+import { selectStyle } from '@/constants/ReactSelectStyle';
+import { useCompetitionGames } from '@/hooks/queries/dasboard/UseCompetitionGames';
 
 type GameFilterProps = {
 	season: string;

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import NoContent from '@/components/no-content/no-content';
-import { APP_ROUTES } from '@/constants/routes';
-import { useTeams } from '@/hooks/queries/team/useTeams';
-import { useSearch } from '@/hooks/useSearch';
-import { searchTeams } from '@/utils/search-functions';
+import NoContent from '@/components/no-content/NoContent';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useTeams } from '@/hooks/queries/team/UseTeams';
+import { useSearch } from '@/hooks/UseSearch';
+import { searchTeams } from '@/utils/SearchFunctions';
 
 const TeamsPage: React.FC = () => {
 	const { data: teams } = useTeams('short_name', 'asc');

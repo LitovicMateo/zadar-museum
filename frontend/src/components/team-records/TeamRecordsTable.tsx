@@ -2,12 +2,12 @@ import React from 'react';
 
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
 import { PlayerDB } from '@/pages/Player/Player';
-import { TeamRecord } from '@/types/api/team-stats';
+import { TeamRecord } from '@/types/api/TeamStats';
 import { SortingState } from '@tanstack/react-table';
 
-import NoContent from '../no-content/no-content';
-import AnimatedTableWrapper from '../ui/animated-table-wrapper';
-import { useTeamRecordsTable } from './useTeamRecordsTable';
+import NoContent from '../no-content/NoContent';
+import AnimatedTableWrapper from '../ui/AnimatedTableWrapper';
+import { useTeamRecordsTable } from './UseTeamRecordsTable';
 
 type TeamRecordsTableProps = {
 	database: PlayerDB;

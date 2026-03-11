@@ -1,10 +1,11 @@
 import React from 'react';
 import { FieldValues, useFieldArray, useFormContext } from 'react-hook-form';
 
-import Button from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { CompetitionFormData } from '@/schemas/competition-schema';
+import Button from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { CompetitionFormData } from '@/schemas/CompetitionSchema';
 import { Plus, X } from 'lucide-react';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const WinningSeasons: React.FC = () => {
 	const { control, register } = useFormContext<CompetitionFormData>();
@@ -23,7 +24,7 @@ const WinningSeasons: React.FC = () => {
 	});
 	return (
 		<div className="space-y-2">
-			<span className="text-sm  text-gray-700 uppercase">Winning Seasons:</span>
+			<span className={styles.label}>Winning Seasons:</span>
 			{trophies.map((field, index) => (
 				<div key={field.id} className="flex items-center gap-2">
 					<Input

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import NoContent from '@/components/no-content/no-content';
-import { APP_ROUTES } from '@/constants/routes';
-import { usePlayers } from '@/hooks/queries/player/usePlayers';
-import { useSearch } from '@/hooks/useSearch';
-import { searchPlayers } from '@/utils/search-functions';
+import NoContent from '@/components/no-content/NoContent';
+import { APP_ROUTES } from '@/constants/Routes';
+import { usePlayers } from '@/hooks/queries/player/UsePlayers';
+import { useSearch } from '@/hooks/UseSearch';
+import { searchPlayers } from '@/utils/SearchFunctions';
+import styles from '@/pages/Players/PlayersPage.module.css';
 
 const PlayersPage: React.FC = () => {
 	const { data: players } = usePlayers('last_name', 'asc');
@@ -18,7 +19,7 @@ const PlayersPage: React.FC = () => {
 
 	return (
 		<div>
-			<div className="max-w-[200px]">{SearchInput}</div>
+			<div className={styles.searchWrap}>{SearchInput}</div>
 			<ul>
 				{filteredPlayers.map((player) => (
 					<li key={player.id}>

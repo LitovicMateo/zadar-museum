@@ -4,10 +4,10 @@ import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import RefereeStatsFilter from '@/components/referee-stats/filter/RefereeStatsFilter';
 import RefereeStatsTable from '@/components/referee-stats/table/RefereeStatsTable';
-import { useRefereeAllTimeStats } from '@/hooks/queries/stats/useRefereeAllTimeStats';
-import usePagedSortedList from '@/hooks/usePagedSortedList';
-import { useSearch } from '@/hooks/useSearch';
-import { searchRefereeStats } from '@/utils/search-functions';
+import { useRefereeAllTimeStats } from '@/hooks/queries/stats/UseRefereeAllTimeStats';
+import usePagedSortedList from '@/hooks/UsePagedSortedList';
+import { useSearch } from '@/hooks/UseSearch';
+import { searchRefereeStats } from '@/utils/SearchFunctions';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { APP_ROUTES } from '@/constants/routes';
-import { useVenues } from '@/hooks/queries/venue/useVenues';
-import { useSearch } from '@/hooks/useSearch';
-import { searchVenues } from '@/utils/search-functions';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useVenues } from '@/hooks/queries/venue/UseVenues';
+import { useSearch } from '@/hooks/UseSearch';
+import { searchVenues } from '@/utils/SearchFunctions';
 
 const VenuesPage: React.FC = () => {
 	const { data: venues } = useVenues('slug', 'desc');
