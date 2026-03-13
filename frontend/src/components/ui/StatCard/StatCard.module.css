@@ -1,0 +1,80 @@
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  transition: all 200ms;
+  background: var(--background);
+}
+
+/* dark mode */
+
+
+.card:hover {
+  background: linear-gradient(to right, #eff6ff, transparent);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  /* transform: translateX(0.25rem); */
+}
+
+.withBorder {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.label {
+  font-family: var(--font-abel);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  color: #374151;
+  transition: color 200ms;
+}
+
+.card:hover .label {
+  color: #111827;
+}
+
+.valueGroup {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.value {
+  font-weight: 700;
+  font-family: var(--font-abel);
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-variant-numeric: tabular-nums;
+  color: #111827;
+}
+
+.rank {
+  color: #2563eb;
+  outline: 1px solid var(--primary);
+  font-family: var(--font-abel);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  background-color: #eff6ff;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+
+@media (min-width: 640px) {
+  .card {
+    padding: 1rem 1rem;
+  }
+
+  .label {
+    font-size: 1.125rem;
+  }
+
+  .value {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .rank {
+    font-size: 0.75rem;
+  }
+}

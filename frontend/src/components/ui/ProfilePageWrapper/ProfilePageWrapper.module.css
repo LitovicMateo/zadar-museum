@@ -1,0 +1,23 @@
+.wrapper {
+	height: 100%;
+	overflow: hidden;
+
+	display: grid;
+	grid-template-rows: 150px auto;
+	gap: 2em;
+}
+
+.header {
+	overflow: hidden;
+}
+
+.content {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+	.wrapper {
+		grid-template-rows: 250px auto;
+	}
+}

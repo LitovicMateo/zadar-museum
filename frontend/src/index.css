@@ -59,6 +59,8 @@
 }
 
 :root {
+	--font-size-mobile: 0.7rem;
+	--font-size-desktop: 0.825rem;
 	--radius: 0.625rem;
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.145 0 0);

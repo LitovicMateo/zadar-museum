@@ -2,41 +2,45 @@ import * as React from 'react';
 
 import { cn } from '@/lib/Utils';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
+import { motion } from 'framer-motion';
+
+import styles from './Tabs.module.css';
 
 function Tabs({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Root>) {
-	return <TabsPrimitive.Root data-slot="tabs" className={cn('flex flex-col gap-2', className)} {...props} />;
+	return <TabsPrimitive.Root data-slot="tabs" className={cn(styles.tabs, className)} {...props} />;
 }
 
 function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
-	return (
-		<TabsPrimitive.List
-			data-slot="tabs-list"
-			className={cn(
-				'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
-				className
-			)}
-			{...props}
-		/>
-	);
+	return <TabsPrimitive.List data-slot="tabs-list" className={cn(styles.tabsList, className)} {...props} />;
 }
 
 function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
+	return <TabsPrimitive.Trigger data-slot="tabs-trigger" className={cn(styles.tabsTrigger, className)} {...props} />;
+}
+
+function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) {
+	return <TabsPrimitive.Content data-slot="tabs-content" className={cn(styles.tabsContent, className)} {...props} />;
+}
+
+function ActiveTab() {
 	return (
-		<TabsPrimitive.Trigger
-			data-slot="tabs-trigger"
-			className={cn(
-				"data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-				className
-			)}
-			{...props}
+		<motion.div
+			className={styles.activeIndicator}
+			initial={{ opacity: 0 }}
+			animate={{
+				opacity: 1,
+				background: '#ffffff'
+				// boxShadow: `inset 1px 1px 1px rgba(0, 0, 0, 0.1),
+				// 	 inset -1px -1px 1px rgba(0, 0, 0, 0.1)`
+			}}
+			exit={{ opacity: 0 }}
+			transition={{ duration: 0.25 }}
 		/>
 	);
 }
 
-function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) {
-	return (
-		<TabsPrimitive.Content data-slot="tabs-content" className={cn('flex-1 outline-none', className)} {...props} />
-	);
+function ActiveTabLabel({ className, label }: React.ComponentProps<'span'> & { label: string }) {
+	return <span className={cn(styles.tabsTriggerLabel, className)}>{label}</span>;
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent };
+export { Tabs, TabsList, TabsTrigger, TabsContent, ActiveTab, ActiveTabLabel };

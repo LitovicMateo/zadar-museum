@@ -20,8 +20,13 @@ const LeagueCell: React.FC<{ leagueSlug?: string }> = ({ leagueSlug }) => {
 };
 
 export const usePlayerLeagueStatsTable = (rows: GameStatsEntry[] | undefined) => {
+	const filteredRows = React.useMemo(() => {
+		if (!rows) return [];
+		return rows.filter((row) => row.games !== null);
+	}, [rows]);
+
 	const table = useReactTable<GameStatsEntry>({
-		data: rows || [],
+		data: filteredRows || [],
 		columns: [
 			{
 				header: 'League',

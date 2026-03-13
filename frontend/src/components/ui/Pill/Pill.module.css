@@ -1,0 +1,41 @@
+.pill {
+	padding: 0.35rem 0.9rem;
+	border-radius: 9999px;
+	border: 1px solid #cbd5e1;
+	background: #f8fafc;
+	font-size: 0.8rem;
+	font-weight: 500;
+	text-transform: capitalize;
+	color: #475569;
+	cursor: pointer;
+	transition:
+		background 0.15s ease,
+		color 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.pill:hover {
+	background: #e0e7ff;
+	border-color: #6366f1;
+	color: #4338ca;
+}
+
+.pillActive {
+	background: #1d4ed8;
+	border-color: #1d4ed8;
+	color: #fff;
+	outline: 2px solid white;
+	outline-offset: -4px;
+}
+
+.pillActive:hover {
+	background: #1e40af;
+	border-color: #1e40af;
+	color: #fff;
+}
+
+.pillDisabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+	pointer-events: none;
+}

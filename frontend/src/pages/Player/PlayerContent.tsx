@@ -1,21 +1,19 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 
-import CompetitionSelectItem from '@/components/games-page/games-filter/CompetitionSelect';
+import CareerHigh from '@/components/Player/Content/PlayerCareerHigh/CareerHigh';
+import AllTimeStats from '@/components/Player/Content/PlayerCareerStats/AllTimeStats';
+import AllTimeLeagueStats from '@/components/Player/Content/PlayerLeagueStats/PlayerLeagueStats';
+import Menu from '@/components/Player/menu/Menu';
 import NoContent from '@/components/no-content/NoContent';
-import AllTimeLeagueStats from '@/components/player-page/all-time-league-stats/AllTimeLeagueStats';
-import AllTimeStats from '@/components/player-page/all-time-stats/AllTimeStats';
-import CareerHigh from '@/components/player-page/career-high/CareerHigh';
-import Menu from '@/components/player-page/menu/Menu';
-import Boxscore from '@/components/player-page/player-boxscore/boxscore/Boxscore';
-import BoxscoreFilter from '@/components/player-page/player-boxscore/filter/BoxscoreFilter';
-import SeasonAverage from '@/components/player-page/player-boxscore/season-average/SeasonAverage';
-import PageContentWrapper from '@/components/ui/PageContentWrapper';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
 import { usePlayerProfileDatabase } from '@/hooks/queries/player/UsePlayerProfileDatabase';
+import { AnimatePresence, motion } from 'framer-motion';
+
+import GamelogTab from '../../components/Player/Content/PlayerGamelog/PlayerGamelog';
+import SeasonTab from './SeasonTab';
 
 import styles from './player-content.module.css';
 
@@ -24,12 +22,12 @@ const TABS = [
 	{ value: 'season', label: 'Season' },
 	{ value: 'league', label: 'League' },
 	{ value: 'gamelog', label: 'Gamelog' },
-	{ value: 'career-highs', label: 'Career Highs' },
+	{ value: 'career-highs', label: 'Career Highs' }
 ] as const;
 
 const PlayerContent: React.FC = React.memo(() => {
 	const { playerId } = useParams();
-	const { selectedDatabase, competitions, selectedCompetitions, toggleCompetition } = useBoxscore();
+	const { selectedDatabase } = useBoxscore();
 
 	const [activeTab, setActiveTab] = useState<string>('career');
 	const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -45,21 +43,12 @@ const PlayerContent: React.FC = React.memo(() => {
 	const data = usePlayerProfileDatabase(playerId!);
 	const { data: stats } = useAllTimeStats(playerId!, selectedDatabase!);
 
-	const uniqueCompetitions = useMemo(() => {
-		const seen = new Set<string>();
-		return competitions.filter((c) => {
-			if (seen.has(c.league_id)) return false;
-			seen.add(c.league_id);
-			return true;
-		});
-	}, [competitions]);
-
 	if (stats?.length === 0) {
 		return <NoContent type="info" description={<p>This player did not participate in any games.</p>} />;
 	}
 
 	return (
-		<PageContentWrapper fillHeight>
+		<div className={styles.wrapper}>
 			<Menu showMenu={data.enableSwitch} />
 			<Tabs value={activeTab} onValueChange={handleTabChange} className={styles.tabs}>
 				<TabsList className={styles.tabsList} aria-label="Player statistics sections">
@@ -68,7 +57,9 @@ const PlayerContent: React.FC = React.memo(() => {
 							key={tab.value}
 							value={tab.value}
 							className={styles.tabsTrigger}
-							ref={(el) => { tabRefs.current[tab.value] = el; }}
+							ref={(el) => {
+								tabRefs.current[tab.value] = el;
+							}}
 						>
 							<AnimatePresence>
 								{activeTab === tab.value && (
@@ -86,40 +77,13 @@ const PlayerContent: React.FC = React.memo(() => {
 					))}
 				</TabsList>
 
-			<TabsContent value="career" className={styles.tabsContentCentered}>
-				<AllTimeStats />
+				<TabsContent value="career" className={styles.tabsContentCentered}>
+					<AllTimeStats />
 				</TabsContent>
 
-				<TabsContent value="season" className={styles.tabsContent}>
-					<BoxscoreFilter />
-					<SeasonAverage />
-				</TabsContent>
+				<SeasonTab />
 
-				<TabsContent value="gamelog" className={styles.tabsContentGamelog}>
-					<div className={styles.gamelogControls}>
-						<div className={styles.gamelogSeasonSelect}>
-							<BoxscoreFilter />
-						</div>
-						{uniqueCompetitions.length > 1 && (
-							<div className={styles.competitionList}>
-								{uniqueCompetitions.map((c) => (
-									<CompetitionSelectItem
-										key={String(c.league_id)}
-										leagueId={String(c.league_id)}
-										leagueName={c.league_name}
-										onCompetitionChange={toggleCompetition}
-										selectedCompetitions={selectedCompetitions}
-									/>
-								))}
-							</div>
-						)}
-					</div>
-					<div className={styles.gamelogCard}>
-					<div className={styles.gamelogScrollArea}>
-						<Boxscore />
-					</div>
-					</div>
-				</TabsContent>
+				<GamelogTab />
 
 				<TabsContent value="league" className={styles.tabsContent}>
 					<AllTimeLeagueStats />
@@ -129,7 +93,7 @@ const PlayerContent: React.FC = React.memo(() => {
 					<CareerHigh />
 				</TabsContent>
 			</Tabs>
-		</PageContentWrapper>
+		</div>
 	);
 });
 

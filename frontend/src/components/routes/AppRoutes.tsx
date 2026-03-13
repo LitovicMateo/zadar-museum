@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 
+import Player from '@/components/Player/PlayerPage';
 import { GamesProvider } from '@/context/GamesContext';
 import { TeamGamesProvider } from '@/context/TeamContext';
 import Coach from '@/pages/Coach/Coach';
@@ -11,7 +12,6 @@ import Home from '@/pages/Home/Home';
 import League from '@/pages/League/League';
 import LeaguesPage from '@/pages/Leagues/LeaguesPage';
 import Login from '@/pages/Login/Login';
-import Player from '@/pages/Player/Player';
 import PlayersPage from '@/pages/Players/PlayersPage';
 import Referee from '@/pages/Referee/Referee';
 import RefereesPage from '@/pages/Referees/RefereesPage';
@@ -137,12 +137,11 @@ const AppRoutes: React.FC = () => {
 		{
 			...statsRoutes,
 			element: protect(statsRoutes.element)
-		}
-		,
+		},
 		// Catch-all: redirect unmatched routes to home
 		{
 			path: '*',
-			element: <Navigate to='/' replace />
+			element: <Navigate to="/" replace />
 		}
 	];
 
