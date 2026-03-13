@@ -8,6 +8,7 @@ import { getImageUrl } from '@/utils/GetImageUrl';
 import PlayerBio from './player-bio/PlayerBio';
 import PlayerImage from './player-image/PlayerImage';
 import PlayerNumber from './player-number/PlayerNumber';
+
 import styles from './PlayerHeader.module.css';
 
 const PlayerHeader: React.FC = React.memo(() => {
@@ -23,7 +24,11 @@ const PlayerHeader: React.FC = React.memo(() => {
 	return (
 		<section className={styles.section}>
 			<div className={styles.inner}>
-				<PlayerImage imageUrl={imageUrl} name={`${player.first_name} ${player.last_name}`} nationality={player.nationality} />
+				<PlayerImage
+					imageUrl={imageUrl}
+					name={`${player.first_name} ${player.last_name}`}
+					nationality={player.nationality}
+				/>
 				<PlayerBio player={player} />
 				<PlayerNumber />
 			</div>

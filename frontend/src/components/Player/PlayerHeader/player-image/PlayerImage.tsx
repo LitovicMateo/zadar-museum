@@ -20,16 +20,10 @@ const PlayerImage: React.FC<PlayerImage> = ({ imageUrl, name, nationality }) => 
 						<User size={180} color="#fff" strokeWidth={1} />
 					</div>
 				) : (
-					<img
-						src={imageUrl}
-						alt={name}
-						className={styles.img}
-					/>
+					<img src={imageUrl} alt={name} className={styles.img} />
 				)}
 			</div>
-			{nationality && (
-				<Flag className={styles.flagBadge} code={nationality} aria-label={nationality} />
-			)}
+			{nationality && <Flag className={styles.flagBadge} code={nationality} aria-label={nationality} />}
 		</div>
 	);
 };

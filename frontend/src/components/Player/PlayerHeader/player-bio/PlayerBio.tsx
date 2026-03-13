@@ -1,9 +1,9 @@
 import React from 'react';
 import Flag from 'react-world-flags';
-import { format } from 'date-fns';
 
 import { PlayerResponse } from '@/types/api/Player';
 import { calculateAge } from '@/utils/CalculateAge';
+import { format } from 'date-fns';
 
 import styles from './PlayerBio.module.css';
 
@@ -12,14 +12,13 @@ type PlayerBio = {
 };
 
 const PlayerBio: React.FC<PlayerBio> = ({ player }) => {
-	const birthDateStr =
-		!!player.date_of_birth &&
-		format(new Date(player.date_of_birth), 'd MMM yyyy');
+	const birthDateStr = !!player.date_of_birth && format(new Date(player.date_of_birth), 'd MMM yyyy');
 
 	const deathDateStr = !!player.date_of_death && format(new Date(player.date_of_death), 'd MMM yyyy');
 
 	const age = player.date_of_birth ? calculateAge(player.date_of_birth) : null;
-	const ageAtDeath = player.date_of_birth && player.date_of_death ? calculateAge(player.date_of_birth, player.date_of_death) : null;
+	const ageAtDeath =
+		player.date_of_birth && player.date_of_death ? calculateAge(player.date_of_birth, player.date_of_death) : null;
 	return (
 		<div className={styles.bio}>
 			<div className={styles.nameBlock}>
@@ -43,7 +42,10 @@ const PlayerBio: React.FC<PlayerBio> = ({ player }) => {
 					Position:
 					<span className={styles.positionValue}>
 						{player.primary_position ? (
-							<>{player.primary_position}{player.secondary_position ? ` / ${player.secondary_position}` : ''}</>
+							<>
+								{player.primary_position}
+								{player.secondary_position ? ` / ${player.secondary_position}` : ''}
+							</>
 						) : (
 							<span className={styles.muted}>-</span>
 						)}
