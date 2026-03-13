@@ -1,0 +1,4 @@
+.teamMain {
+	display: flex;
+	flex-direction: column;
+}

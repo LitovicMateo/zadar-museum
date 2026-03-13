@@ -1,10 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Select from 'react-select';
 
 import Radio from '@/components/ui/Radio/Radio';
 import RadioGroup from '@/components/ui/RadioGroup';
-import { selectStyle, OptionType } from '@/constants/ReactSelectStyle';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useAllTimeLeagueStats } from '@/hooks/queries/player/UseAllTimeLeagueStats';
 import { usePlayerHasAppearances } from '@/utils/PlayerHasAppearances';
@@ -13,18 +11,6 @@ import MobileControls from './Controls/MobileControls';
 import MainTable from './main-table/MainTable';
 
 import styles from './PlayerLeagueStats.module.css';
-
-const viewOptions: OptionType[] = [
-	{ value: 'total', label: 'Total' },
-	{ value: 'average', label: 'Average' }
-];
-
-const locationOptions: OptionType[] = [
-	{ value: 'total', label: 'Total' },
-	{ value: 'home', label: 'Home' },
-	{ value: 'away', label: 'Away' },
-	{ value: 'neutral', label: 'Neutral' }
-];
 
 const PlayerLeagueStats: React.FC = React.memo(() => {
 	const { playerId } = useParams();

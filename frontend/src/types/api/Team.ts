@@ -188,7 +188,7 @@ export interface TeamStatsResponse {
 	total: TeamStats;
 	home: TeamStats;
 	away: TeamStats;
-	neutral?: TeamStats;
+	neutral: TeamStats;
 	stats: TeamStats[];
 }
 

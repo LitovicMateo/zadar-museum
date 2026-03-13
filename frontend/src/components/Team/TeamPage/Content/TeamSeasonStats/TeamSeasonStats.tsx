@@ -1,21 +1,24 @@
 import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Heading from '@/components/ui/Heading';
+import GamesFilter from '@/components/games-page/games-filter/GamesFilter';
+import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
+import Pill from '@/components/ui/Pill';
 import TableWrapper from '@/components/ui/TableWrapper';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
+import { useTeamLeagueStatsTable } from '@/hooks/UseTeamLeagueStats';
 import { useGamesContext } from '@/hooks/context/UseGamesContext';
 import { useTeamSeasonLeagueStats } from '@/hooks/queries/team/UseTeamSeasonLeagueStats';
 import { useTeamSeasonStats } from '@/hooks/queries/team/UseTeamSeasonStats';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
-import { useTeamLeagueStatsTable } from '@/hooks/UseTeamLeagueStats';
 import { TeamStats } from '@/types/api/Team';
+
 import styles from './TeamSeasonStats.module.css';
 
 type View = 'total' | 'home' | 'away' | 'neutral';
 
 const TeamSeasonStats: React.FC = () => {
 	const { teamSlug } = useParams();
-	const { selectedSeason } = useGamesContext();
+	const { selectedSeason, seasons, setSelectedSeason } = useGamesContext();
 
 	const [selected, setSelected] = useState<View>('total');
 
@@ -42,67 +45,46 @@ const TeamSeasonStats: React.FC = () => {
 	const { table: mainTable } = useTeamLeagueStatsTable(leagueStatsRow);
 	const { table: footTable } = useTeamLeagueStatsTable(selectTotalStats);
 
-	if (!seasonStats || !seasonLeagueStats) return null;
+	if (!seasonStats || !seasonLeagueStats || !seasons) return null;
 
 	return (
-		<>
-			<Heading title="Season Stats" type="secondary" />
-
-			<form action="">
+		<section className={styles.section}>
+			<div className={styles.controls}>
+				<SeasonSelect
+					seasons={seasons}
+					selectedSeason={selectedSeason}
+					compact
+					onSeasonChange={(season) => {
+						setSelectedSeason(season);
+					}}
+				/>
 				<fieldset className={styles.fieldset}>
-					<label className={styles.radioLabel}>
-						<input
-							type="radio"
-							name="view"
-							value={'total'}
-							checked={effectiveSelected === 'total'}
-							onChange={(e) => setSelected(e.target.value as View)}
-						/>
+					<Pill label="total" isActive={effectiveSelected === 'total'} onClick={() => setSelected('total')}>
 						Total
-					</label>
-					<label className={styles.radioLabel}>
-						<input
-							type="radio"
-							name="view"
-							value={'home'}
-							checked={effectiveSelected === 'home'}
-							onChange={(e) => setSelected(e.target.value as View)}
-						/>
+					</Pill>
+					<Pill label="home" isActive={effectiveSelected === 'home'} onClick={() => setSelected('home')}>
 						Home
-					</label>
-					<label className={styles.radioLabel}>
-						<input
-							type="radio"
-							name="view"
-							value={'away'}
-							checked={effectiveSelected === 'away'}
-							onChange={(e) => setSelected(e.target.value as View)}
-						/>
+					</Pill>
+					<Pill label="away" isActive={effectiveSelected === 'away'} onClick={() => setSelected('away')}>
 						Away
-					</label>
-					<label
-						htmlFor=""
-						className={!hasNeutral ? styles.radioLabelDisabled : styles.radioLabel}
+					</Pill>
+					<Pill
+						label="neutral"
+						isActive={effectiveSelected === 'neutral'}
+						onClick={() => setSelected('neutral')}
+						disabled={!hasNeutral}
 					>
-						<input
-							type="radio"
-							name="view"
-							value={'neutral'}
-							checked={effectiveSelected === 'neutral'}
-							disabled={!hasNeutral}
-							onChange={(e) => setSelected(e.target.value as View)}
-						/>
 						Neutral
-					</label>
+					</Pill>
 				</fieldset>
-			</form>
+			</div>
 
 			<TableWrapper>
 				<UniversalTableHead table={mainTable} />
 				<UniversalTableBody table={mainTable} />
 				<UniversalTableFooter table={footTable} variant="light" />
 			</TableWrapper>
-		</>
+		</section>
 	);
 };
 

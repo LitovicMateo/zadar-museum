@@ -5,7 +5,7 @@ function Pill({
 	isDisabled,
 	isActive,
 	...props
-}: { label: string; isDisabled: boolean; isActive: boolean } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+}: { label: string; isDisabled?: boolean; isActive: boolean } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
 	return (
 		<button
 			type="button"

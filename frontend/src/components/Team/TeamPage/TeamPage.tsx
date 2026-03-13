@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import TeamContent from '@/components/Team/TeamPage/Content/TeamContent';
 import TeamHeader from '@/components/Team/TeamPage/TeamHeader/TeamHeader';
+import ProfilePageWrapper from '@/components/ui/ProfilePageWrapper/ProfilePageWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
 import { GamesProvider } from '@/context/GamesContext';
 import { useTeamDetails } from '@/hooks/queries/team/UseTeamDetails';
+import { TeamErrorBoundary } from '@/pages/Team/TeamErrorBoundary';
 
-import TeamContent from '../../components/Team/TeamPage/Content/TeamContent';
-import { TeamErrorBoundary } from './TeamErrorBoundary';
-
-import styles from './Team.module.css';
+import styles from './TeamPage.module.css';
 
 const TeamPage: React.FC = () => {
 	const { teamSlug } = useParams();
@@ -26,21 +26,22 @@ const TeamPage: React.FC = () => {
 	if (!team) return null;
 
 	return (
-		<>
-			<a href="#team-content" className={styles.skipLink}>
-				Skip to team content
-			</a>
-			<GamesProvider>
-				<TeamErrorBoundary>
-					<TeamHeader />
-				</TeamErrorBoundary>
-				<main id="team-content" tabIndex={-1}>
+		<GamesProvider>
+			<ProfilePageWrapper
+				header={
 					<TeamErrorBoundary>
-						<TeamContent />
+						<TeamHeader />
 					</TeamErrorBoundary>
-				</main>
-			</GamesProvider>
-		</>
+				}
+				content={
+					<main id="team-content" tabIndex={-1} className={styles.teamMain}>
+						<TeamErrorBoundary>
+							<TeamContent />
+						</TeamErrorBoundary>
+					</main>
+				}
+			/>
+		</GamesProvider>
 	);
 };
 

@@ -5,7 +5,8 @@ import GamesFilter from '@/components/games-page/games-filter/GamesFilter';
 import GamesList from '@/components/games-page/games-list/GamesList';
 import { useGamesContext } from '@/hooks/context/UseGamesContext';
 
-import TeamSeasonStats from './TeamSeasonStats';
+import TeamSeasonStats from '../../Team/TeamPage/Content/TeamSeasonStats/TeamSeasonStats';
+
 import styles from './TeamGames.module.css';
 
 const TeamGames: React.FC = () => {
@@ -23,11 +24,7 @@ const TeamGames: React.FC = () => {
 			{selectedCompetitions.map((slug) => (
 				<GamesList key={slug} competitionSlug={slug} />
 			))}
-			{selectedCompetitions.length === 0 && (
-				<div className={styles.empty}>
-					No competitions selected
-				</div>
-			)}
+			{selectedCompetitions.length === 0 && <div className={styles.empty}>No competitions selected</div>}
 		</div>
 	);
 };

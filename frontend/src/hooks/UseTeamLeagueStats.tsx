@@ -1,14 +1,10 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import '@/components/ui/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
 import { TeamStats } from '@/types/api/Team';
-import {
-	CellContext,
-	getCoreRowModel,
-	getSortedRowModel,
-	useReactTable
-} from '@tanstack/react-table';
+import { CellContext, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
 import { useLeagueDetails } from './queries/league/UseLeagueDetails';
 
@@ -33,9 +29,13 @@ const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData,
 // ---------------------------------------------------------------------------
 
 export const useTeamLeagueStatsTable = (data: TeamStats[] | undefined) => {
-	
+	const filteredRows = React.useMemo(() => {
+		if (!data) return [];
+		return data.filter((row) => row.games !== null);
+	}, [data]);
+
 	const table = useReactTable<TeamStats>({
-		data: data || [],
+		data: filteredRows,
 		columns: [
 			{
 				header: 'League',

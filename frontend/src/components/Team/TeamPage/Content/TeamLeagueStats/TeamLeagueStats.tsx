@@ -2,18 +2,19 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import TableWrapper from '@/components/ui/TableWrapper';
-import { useTeamLeagueStats } from '@/hooks/queries/team/UseTeamLeagueStats';
-import { useTeamTotalStats } from '@/hooks/queries/team/UseTeamTotalStats';
 import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import { useTeamLeagueStatsTable } from '@/hooks/UseTeamLeagueStats';
+import { useTeamLeagueStats } from '@/hooks/queries/team/UseTeamLeagueStats';
+import { useTeamTotalStats } from '@/hooks/queries/team/UseTeamTotalStats';
 import { TeamStats } from '@/types/api/Team';
 
 import DatabaseSelect from './DatabaseSelect';
+
 import styles from './TeamLeagueStats.module.css';
 
 const TeamLeagueStats: React.FC = () => {
 	const { teamSlug } = useParams();
-	const [selected, setSelected] = useState<'total' | 'home' | 'away'>('total');
+	const [selected, setSelected] = useState<'total' | 'home' | 'away' | 'neutral'>('total');
 
 	const { data: leagueStats } = useTeamLeagueStats(teamSlug!);
 	const { data: totalStats } = useTeamTotalStats(teamSlug!);

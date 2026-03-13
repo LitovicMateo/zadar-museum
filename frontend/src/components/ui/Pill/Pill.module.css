@@ -1,5 +1,6 @@
 .pill {
-	padding: 0.35rem 0.9rem;
+	height: 30px;
+	padding: 0.35em 0.9em;
 	border-radius: 9999px;
 	border: 1px solid #cbd5e1;
 	background: #f8fafc;
@@ -24,8 +25,6 @@
 	background: #1d4ed8;
 	border-color: #1d4ed8;
 	color: #fff;
-	outline: 2px solid white;
-	outline-offset: -4px;
 }
 
 .pillActive:hover {

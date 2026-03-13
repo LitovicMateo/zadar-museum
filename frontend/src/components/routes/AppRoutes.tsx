@@ -2,6 +2,7 @@ import React from 'react';
 import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 
 import Player from '@/components/Player/PlayerPage';
+import TeamPage from '@/components/Team/TeamPage';
 import { GamesProvider } from '@/context/GamesContext';
 import { TeamGamesProvider } from '@/context/TeamContext';
 import Coach from '@/pages/Coach/Coach';
@@ -17,7 +18,6 @@ import Referee from '@/pages/Referee/Referee';
 import RefereesPage from '@/pages/Referees/RefereesPage';
 import Staff from '@/pages/Staff/Staff';
 import StaffsPage from '@/pages/Staffs/StaffsPage';
-import TeamPage from '@/pages/Team/TeamPage';
 import TeamsPage from '@/pages/Teams/TeamsPage';
 import Venue from '@/pages/Venue/Venue';
 import VenuesPage from '@/pages/Venues/VenuesPage';
