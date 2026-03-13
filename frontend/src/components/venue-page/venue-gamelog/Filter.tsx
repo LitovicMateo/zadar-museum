@@ -5,6 +5,7 @@ import CompetitionSelectItem from '@/components/games-page/games-filter/Competit
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import { useVenueSeasonCompetitions } from '@/hooks/queries/venue/UseVenueSeasonCompetitions';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
+
 import styles from './Filter.module.css';
 
 type FiltersProps = {
@@ -51,6 +52,7 @@ const Filters: React.FC<FiltersProps> = ({
 						key={c.league_id}
 						leagueId={c.league_id}
 						leagueName={c.league_name}
+						leagueShortName={c.league_short_name}
 						onCompetitionChange={toggleCompetition}
 						selectedCompetitions={selectedCompetitions}
 					/>

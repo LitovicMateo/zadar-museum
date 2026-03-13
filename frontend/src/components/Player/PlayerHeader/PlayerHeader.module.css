@@ -1,7 +1,6 @@
 .section {
 	max-height: 250px;
 	overflow: hidden;
-	filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.15)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.1));
 	background: linear-gradient(to bottom right, #1e40af, #1e3a8a);
 }
 

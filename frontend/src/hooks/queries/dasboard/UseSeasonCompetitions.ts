@@ -13,7 +13,7 @@ export const useSeasonCompetitions = (season: string) => {
 
 const getAllCompetitionsInSeason = async (
 	season: string
-): Promise<{ league_id: string; league_name: string; competition_slug: string }[]> => {
+): Promise<{ league_id: string; league_name: string; league_short_name: string; competition_slug: string }[]> => {
 	const res = await apiClient.get(API_ROUTES.dashboard.seasonCompetitions(season));
 
 	return res.data;

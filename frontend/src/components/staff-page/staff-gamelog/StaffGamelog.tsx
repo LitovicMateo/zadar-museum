@@ -6,8 +6,8 @@ import SearchBar from '@/components/games-page/games-filter/SearchBar';
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import NoContent from '@/components/no-content/NoContent';
 import Heading from '@/components/ui/Heading';
-import { useStaffGamelog } from '@/hooks/queries/staff/UseStaffGamelog';
 import { ScheduleList } from '@/hooks/UseScheduleTable';
+import { useStaffGamelog } from '@/hooks/queries/staff/UseStaffGamelog';
 import { TeamScheduleResponse } from '@/types/api/Team';
 
 import styles from './StaffGamelog.module.css';
@@ -60,8 +60,7 @@ const StaffGamelog: React.FC = () => {
 	const filteredGames = useMemo(() => {
 		return seasonGames.filter((g) => {
 			const matchesCompetition =
-				selectedCompetitions.length === 0 ||
-				selectedCompetitions.includes(String(g.league_id));
+				selectedCompetitions.length === 0 || selectedCompetitions.includes(String(g.league_id));
 
 			const matchesSearch =
 				searchTerm.trim().length === 0 ||
@@ -106,6 +105,7 @@ const StaffGamelog: React.FC = () => {
 							key={String(g.league_id)}
 							leagueId={String(g.league_id)}
 							leagueName={g.league_name}
+							leagueShortName={g.league_short_name}
 							onCompetitionChange={toggleCompetition}
 							selectedCompetitions={selectedCompetitions}
 						/>

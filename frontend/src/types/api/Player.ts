@@ -40,6 +40,7 @@ export interface PlayerCompetitionResponse {
 	league_name: string;
 	league_id: string;
 	league_slug: string;
+	league_short_name: string;
 }
 
 export type PlayerSeasonsResponse = string[];

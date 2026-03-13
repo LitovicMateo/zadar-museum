@@ -25,7 +25,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
   async findTeamCompetitions(teamSlug) {
     const knex = strapi.db.connection;
     return knex("schedule")
-      .select("league_id", "league_name", "league_slug")
+      .select("league_id", "league_name", "league_slug", "league_short_name")
       .distinct("league_id")
       .where(function () {
         this.where("home_team_slug", teamSlug).orWhere(
@@ -43,7 +43,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
 
     // find unique competitions team played in during the season
     const data = await knex("schedule")
-      .select("league_id", "league_name", "league_slug")
+      .select("league_id", "league_name", "league_slug", "league_short_name")
       .distinct("league_id")
       .where("season", validatedSeason)
       .andWhere(function () {
@@ -67,8 +67,6 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       return null;
     }
 
-    
-    
     const team = data.map((team) => {
       const total = JSON.parse(team.total);
       const home = JSON.parse(team.home);
@@ -197,7 +195,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
             qb.where("league_slug", competitionSlug);
           }
         })
-        .orderByRaw('?? desc nulls last', [statKey])
+        .orderByRaw("?? desc nulls last", [statKey])
         .limit(5);
     } catch (err) {
       throw new Error(`Failed to fetch team leaders: ${err.message}`);

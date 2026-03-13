@@ -7,6 +7,7 @@ import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import Boxscore from './boxscore/Boxscore';
 import BoxscoreFilter from './filter/BoxscoreFilter';
 import SeasonAverage from './season-average/SeasonAverage';
+
 import styles from './PlayerBoxscore.module.css';
 
 const PlayerBoxscore: React.FC = () => {
@@ -34,6 +35,7 @@ const PlayerBoxscore: React.FC = () => {
 							key={String(c.league_id)}
 							leagueId={String(c.league_id)}
 							leagueName={c.league_name}
+							leagueShortName={c.league_short_name}
 							onCompetitionChange={toggleCompetition}
 							selectedCompetitions={selectedCompetitions}
 						/>

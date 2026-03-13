@@ -1,11 +1,13 @@
 import React from 'react';
 
 import CompetitionSelectItem from '@/components/games-page/games-filter/CompetitionSelect';
+
 import styles from './CompetitionList.module.css';
 
 interface Competition {
 	league_id: string | number;
 	league_name: string;
+	league_short_name?: string;
 }
 
 interface Props {
@@ -24,6 +26,7 @@ const CompetitionList: React.FC<Props> = ({ competitions, selectedCompetitions, 
 					key={String(competition.league_id)}
 					leagueName={competition.league_name}
 					leagueId={String(competition.league_id)}
+					leagueShortName={competition.league_short_name}
 					selectedCompetitions={selectedCompetitions}
 					onCompetitionChange={toggleCompetition}
 				/>

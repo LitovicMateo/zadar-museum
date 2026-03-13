@@ -33,6 +33,7 @@ const PlayerGamelog: React.FC = () => {
 								key={String(c.league_id)}
 								leagueId={String(c.league_id)}
 								leagueName={c.league_name}
+								leagueShortName={c.league_short_name}
 								onCompetitionChange={toggleCompetition}
 								selectedCompetitions={selectedCompetitions}
 							/>

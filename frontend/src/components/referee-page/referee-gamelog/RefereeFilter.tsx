@@ -5,9 +5,10 @@ import CompetitionSelectItem from '@/components/games-page/games-filter/Competit
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import { API_ROUTES } from '@/constants/Routes';
 import { useRefereeSeasons } from '@/hooks/queries/referee/UseRefereeSeasons';
-import styles from './RefereeFilter.module.css';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+
+import styles from './RefereeFilter.module.css';
 
 type RefereeFilterProps = {
 	season: string;
@@ -27,7 +28,9 @@ const RefereeFilter: React.FC<RefereeFilterProps> = ({
 	const { data: competitions } = useQuery({
 		queryKey: ['referee-competitions', refereeId, season],
 		enabled: !!season,
-		queryFn: async (): Promise<{ league_id: string; league_name: string; competition_slug: string }[]> => {
+		queryFn: async (): Promise<
+			{ league_id: string; league_name: string; league_short_name: string; competition_slug: string }[]
+		> => {
 			const res = await axios.get(API_ROUTES.referee.competitions(refereeId!, season));
 			return res.data;
 		}
@@ -61,6 +64,7 @@ const RefereeFilter: React.FC<RefereeFilterProps> = ({
 						key={c.league_id}
 						leagueId={c.league_id}
 						leagueName={c.league_name}
+						leagueShortName={c.league_short_name}
 						onCompetitionChange={toggleCompetition}
 						selectedCompetitions={selectedCompetitions}
 					/>

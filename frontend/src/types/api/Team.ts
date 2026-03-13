@@ -33,6 +33,7 @@ export interface TeamCompetitionsResponse {
 	league_name: string;
 	league_id: string;
 	league_slug: string;
+	league_short_name: string;
 }
 
 export type TeamSeasonsResponse = string[];
@@ -59,6 +60,7 @@ export interface TeamScheduleResponse {
 
 	league_id: string;
 	league_name: string;
+	league_short_name?: string;
 	competition_slug: string;
 
 	home_team_id: string;
