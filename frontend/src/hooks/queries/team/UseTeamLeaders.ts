@@ -1,4 +1,4 @@
-import { playerKeys, coachKeys } from '@/components/team-page/team-leaders/Options';
+import { playerKeys, coachKeys } from '@/components/Team/TeamPage/Content/TeamLeaders/Options';
 import { API_ROUTES } from '@/constants/Routes';
 import { useQuery } from '@/hooks/UseQueryWithToast';
 import apiClient from '@/lib/ApiClient';

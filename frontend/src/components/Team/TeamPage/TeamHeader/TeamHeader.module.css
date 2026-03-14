@@ -21,6 +21,10 @@
 	padding: 1rem;
 }
 
+.logoContainer {
+	position: relative;
+}
+
 .circle {
 	height: 100px;
 	width: 100px;
@@ -28,6 +32,7 @@
 	background: white;
 	position: relative;
 	padding: 0.5em;
+	overflow: hidden;
 }
 
 .logo {

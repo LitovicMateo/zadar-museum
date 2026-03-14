@@ -20,8 +20,10 @@ const TeamHeader: React.FC = () => {
 	return (
 		<section className={styles.section}>
 			<div className={styles.inner}>
-				<div className={styles.circle}>
-					<img src={imageUrl} alt={data.name} className={styles.logo} />
+				<div className={styles.logoContainer}>
+					<div className={styles.circle}>
+						<img src={imageUrl} alt={data.name} className={styles.logo} />
+					</div>
 					{data?.country && (
 						<div className={styles.flag}>
 							<Flag code={data.country} className={styles.flagImg} />

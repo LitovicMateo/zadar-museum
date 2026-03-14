@@ -1,14 +1,14 @@
 import { useLayoutEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
 import NoContent from '@/components/no-content/NoContent';
-import { APP_ROUTES } from '@/constants/Routes';
 import { useTeamCompetitions } from '@/hooks/queries/team/UseTeamCompetitions';
 import { useTeamLeaders } from '@/hooks/queries/team/UseTeamLeaders';
 
 import Filters from './Filters';
+import LeadersList from './LeadersList';
 import { coachOptions, playerOptions } from './Options';
+
 import styles from './TeamLeaders.module.css';
 
 const TeamLeaders = () => {
@@ -43,34 +43,7 @@ const TeamLeaders = () => {
 			{!teamLeaders?.length ? (
 				<NoContent type="info" description="No leaders found" />
 			) : (
-				<div className={styles.card}>
-					<ul className={styles.list}>
-						<li className={styles.header}>
-							<span className={styles.headerCell}>Player Name</span>
-							<span className={styles.headerCell}>Statistic</span>
-						</li>
-						{teamLeaders?.map((leader, index) => {
-							if (stat === null || leader[stat] === null) return null;
-
-							const url =
-								selected === 'player' ? APP_ROUTES.player(leader.id) : APP_ROUTES.coach(leader.id);
-							return (
-								<li
-									key={leader.id}
-									className={`${styles.item} ${index === teamLeaders.length - 1 ? "" : styles.itemBorder}`}
-								>
-									<Link
-										to={url}
-										className={styles.link}
-									>
-										{leader.first_name} {leader.last_name}
-									</Link>
-									<span className={styles.value}>{leader[stat]}</span>
-								</li>
-							);
-						})}
-					</ul>
-				</div>
+				<LeadersList teamLeaders={teamLeaders} stat={stat} selected={selected} />
 			)}
 		</section>
 	);

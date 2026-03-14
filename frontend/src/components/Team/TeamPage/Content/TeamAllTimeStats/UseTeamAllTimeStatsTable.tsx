@@ -30,8 +30,10 @@ export const useTeamAllTimeStatsTable = (data: TeamStats[] | undefined) => {
 		[data]
 	);
 
+	const filtered = useMemo(() => normalized.filter((row) => row.games > 0), [normalized]);
+
 	const table = useReactTable<TeamStats>({
-		data: normalized,
+		data: filtered,
 		columns: [
 			{
 				header: 'League',

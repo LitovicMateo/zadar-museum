@@ -1,17 +1,19 @@
 import React, { useCallback, useRef, useState } from 'react';
 
 import TeamAllTimeStats from '@/components/Team/TeamPage/Content/TeamAllTimeStats/TeamAllTimeStats';
+import TeamLeaders from '@/components/Team/TeamPage/Content/TeamLeaders/TeamLeaders';
 import TeamLeagueStats from '@/components/Team/TeamPage/Content/TeamLeagueStats/TeamLeagueStats';
 import TeamSeasonStats from '@/components/Team/TeamPage/Content/TeamSeasonStats/TeamSeasonStats';
 import CompetitionList from '@/components/games-page/games-filter/CompetitionList';
 import GamesFilter from '@/components/games-page/games-filter/GamesFilter';
 import RightControls from '@/components/games-page/games-filter/RightControls';
 import GamesList from '@/components/games-page/games-list/GamesList';
-import TeamLeaders from '@/components/team-page/team-leaders/TeamLeaders';
 import PageContentWrapper from '@/components/ui/PageContentWrapper';
 import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { useGamesContext } from '@/hooks/context/UseGamesContext';
 import { AnimatePresence } from 'framer-motion';
+
+import TeamGamelog from './TeamGamelog/TeamGamelog';
 
 import styles from './TeamContent.module.css';
 
@@ -28,7 +30,9 @@ type TabValue = (typeof TABS)[number]['value'];
 const TAB_PANELS: { value: TabValue; content: React.ReactNode }[] = [
 	{ value: 'alltime', content: <TeamAllTimeStats /> },
 	{ value: 'league', content: <TeamLeagueStats /> },
-	{ value: 'season', content: <TeamSeasonStats /> }
+	{ value: 'season', content: <TeamSeasonStats /> },
+	{ value: 'gamelog', content: <TeamGamelog /> },
+	{ value: 'leaders', content: <TeamLeaders /> }
 ];
 
 const TeamContent: React.FC = React.memo(() => {
@@ -42,16 +46,6 @@ const TeamContent: React.FC = React.memo(() => {
 			el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
 		}
 	}, []);
-
-	const {
-		selectedCompetitions,
-		competitions,
-		toggleCompetition,
-		seasons,
-		selectedSeason,
-		setSelectedSeason,
-		scheduleLoading
-	} = useGamesContext();
 
 	return (
 		<PageContentWrapper>
@@ -100,37 +94,6 @@ const TeamContent: React.FC = React.memo(() => {
 					<TeamSeasonStats />
 				</TabsContent>
 
-				<TabsContent value="gamelog" className={styles.tabsContentGamelog}>
-					<div className={styles.gamelogControls}>
-						{scheduleLoading || !seasons ? (
-							<span className={styles.loadingText}>Loading...</span>
-						) : (
-							<>
-								<div className={styles.gamelogSeasonSelect}>
-									<RightControls
-										seasons={seasons}
-										selectedSeason={selectedSeason}
-										onSeasonChange={setSelectedSeason}
-										compact
-									/>
-								</div>
-								<CompetitionList
-									competitions={competitions}
-									selectedCompetitions={selectedCompetitions}
-									toggleCompetition={toggleCompetition}
-								/>
-							</>
-						)}
-					</div>
-					<div className={styles.gamelogScrollArea}>
-						{selectedCompetitions.map((slug) => (
-							<GamesList key={slug} competitionSlug={slug} />
-						))}
-						{selectedCompetitions.length === 0 && (
-							<div className={styles.emptyState}>No competitions selected</div>
-						)}
-					</div>
-				</TabsContent>
 
 				<TabsContent value="leaders" className={styles.tabsContent}>
 					<TeamLeaders />

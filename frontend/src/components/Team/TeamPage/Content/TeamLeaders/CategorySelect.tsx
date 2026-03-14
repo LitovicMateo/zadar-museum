@@ -21,7 +21,7 @@ const CategorySelect: React.FC<CategorySelectProps> = ({ selected, stat, setStat
 			options={options}
 			value={options.find((option) => option.value === stat)}
 			onChange={(option) => setStat(option?.value.toString() || '')}
-			styles={selectStyle('fit-content')}
+			styles={selectStyle('w-full text-sm shadow-sm')}
 		/>
 	);
 };

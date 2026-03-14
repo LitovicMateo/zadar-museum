@@ -3,6 +3,7 @@ import React from 'react';
 import CategorySelect from './CategorySelect';
 import CompetitionSelect from './CompetitionSelect';
 import RadioButtons from './RadioButtons';
+
 import styles from './Filters.module.css';
 
 type FiltersProps = {

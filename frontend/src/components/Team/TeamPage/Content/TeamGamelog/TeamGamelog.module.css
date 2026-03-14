@@ -1,0 +1,21 @@
+.gamelogControls {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 16px;
+}
+
+.gamelogContent {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+@media (min-width: 768px) {
+	.gamelogControls {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+}
