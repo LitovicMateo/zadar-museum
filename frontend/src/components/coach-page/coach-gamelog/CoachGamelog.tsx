@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import Heading from '@/components/ui/Heading';
-import { useCoachGamelog } from '@/hooks/queries/coach/UseCoachGamelog';
-import { useCoachProfileDatabase } from '@/hooks/queries/player/UseCoachProfileDatabase';
-import { useCoachSeasons } from '@/hooks/queries/coach/UseCoachSeasons';
-import { ScheduleList } from '@/hooks/UseScheduleTable';
-
 import Separator from '@/components/ui/Separator';
-import CoachSeasonStats from './season-stats/CoachSeasonStats';
+import { useCoachGamelog } from '@/hooks/queries/coach/UseCoachGamelog';
+import { useCoachSeasons } from '@/hooks/queries/coach/UseCoachSeasons';
+import { useCoachProfileDatabase } from '@/hooks/queries/player/UseCoachProfileDatabase';
+
 import Filters from './filters/Filters';
+import CoachSeasonStats from './season-stats/CoachSeasonStats';
+
 import styles from './CoachGamelog.module.css';
 
 const CoachGamelog: React.FC = () => {
@@ -37,8 +38,7 @@ const CoachGamelog: React.FC = () => {
 
 		return coachGamelog.filter((game) => {
 			const matchesCompetition =
-				selectedCompetitions.length === 0 ||
-				selectedCompetitions.includes(String(game.league_id));
+				selectedCompetitions.length === 0 || selectedCompetitions.includes(String(game.league_id));
 
 			const matchesSearch =
 				searchTerm.trim().length === 0 ||

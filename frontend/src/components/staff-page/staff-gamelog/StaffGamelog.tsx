@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import CompetitionSelectItem from '@/components/games-page/games-filter/CompetitionSelect';
 import SearchBar from '@/components/games-page/games-filter/SearchBar';
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import NoContent from '@/components/no-content/NoContent';
 import Heading from '@/components/ui/Heading';
-import { ScheduleList } from '@/hooks/UseScheduleTable';
 import { useStaffGamelog } from '@/hooks/queries/staff/UseStaffGamelog';
 import { TeamScheduleResponse } from '@/types/api/Team';
 

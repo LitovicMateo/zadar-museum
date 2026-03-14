@@ -1,38 +1,47 @@
 import React, { useCallback, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import TeamAllTimeStats from '@/components/Team/TeamPage/Content/TeamAllTimeStats/TeamAllTimeStats';
-import TeamLeaders from '@/components/Team/TeamPage/Content/TeamLeaders/TeamLeaders';
-import TeamLeagueStats from '@/components/Team/TeamPage/Content/TeamLeagueStats/TeamLeagueStats';
-import TeamSeasonStats from '@/components/Team/TeamPage/Content/TeamSeasonStats/TeamSeasonStats';
+import LeagueAllTime from '@/components/League/LeaguePage/Content/LeagueAllTimeStats/LeagueAllTimeStats';
+import NoContent from '@/components/no-content/NoContent';
 import PageContentWrapper from '@/components/ui/PageContentWrapper';
 import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { useLeagueSeasons } from '@/hooks/queries/league/UseLeagueSeasons';
 import { AnimatePresence } from 'framer-motion';
 
-import TeamGamelog from './TeamGamelog/TeamGamelog';
+import LeagueGamelog from './LeagueGamelog/LeagueGamelog';
+import LeaguePlayerRankings from './LeaguePlayerRankings/LeaguePlayerRankings';
+import LeaguePlayerStats from './LeaguePlayerStats/LeaguePlayerStats';
+import LeagueSeasonStats from './LeagueSeasonStats/LeagueSeasonStats';
 
-import styles from './TeamContent.module.css';
+import styles from './LeagueContent.module.css';
 
 const TABS = [
 	{ value: 'alltime', label: 'All Time' },
-	{ value: 'league', label: 'League' },
-	{ value: 'season', label: 'Season' },
+	{ value: 'season', label: 'Season Data' },
+	{ value: 'playerStats', label: 'Player Stats' },
 	{ value: 'gamelog', label: 'Gamelog' },
-	{ value: 'leaders', label: 'Leaders' }
+	{ value: 'playerRankings', label: 'Player Rankings' },
+	{ value: 'coachRankings', label: 'Coach Rankings' }
 ] as const;
 
 type TabValue = (typeof TABS)[number]['value'];
 
 const TAB_PANELS: { value: TabValue; content: React.ReactNode }[] = [
-	{ value: 'alltime', content: <TeamAllTimeStats /> },
-	{ value: 'league', content: <TeamLeagueStats /> },
-	{ value: 'season', content: <TeamSeasonStats /> },
-	{ value: 'gamelog', content: <TeamGamelog /> },
-	{ value: 'leaders', content: <TeamLeaders /> }
+	{ value: 'alltime', content: <LeagueAllTime /> },
+	{ value: 'season', content: <LeagueSeasonStats /> },
+	{ value: 'playerStats', content: <LeaguePlayerStats /> },
+	{ value: 'gamelog', content: <LeagueGamelog /> },
+	{ value: 'playerRankings', content: <LeaguePlayerRankings /> },
+	{ value: 'coachRankings', content: <div>Coach Rankings coming soon!</div> }
 ];
 
-const TeamContent: React.FC = React.memo(() => {
+const LeagueContent: React.FC = () => {
+	const { leagueSlug } = useParams();
+
 	const [activeTab, setActiveTab] = useState<string>('alltime');
 	const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+	const { data: leagueSeasons } = useLeagueSeasons(leagueSlug!);
 
 	const handleTabChange = useCallback((value: string) => {
 		setActiveTab(value);
@@ -41,6 +50,9 @@ const TeamContent: React.FC = React.memo(() => {
 			el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
 		}
 	}, []);
+
+	if (leagueSeasons && leagueSeasons.length === 0)
+		return <NoContent type="info" description="No games have been played in this competition." />;
 
 	return (
 		<PageContentWrapper>
@@ -68,8 +80,6 @@ const TeamContent: React.FC = React.memo(() => {
 			</Tabs>
 		</PageContentWrapper>
 	);
-});
+};
 
-TeamContent.displayName = 'TeamContent';
-
-export default TeamContent;
+export default LeagueContent;

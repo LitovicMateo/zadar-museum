@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 
+import League from '@/components/League/LeaguePage/LeaguePage';
 import Player from '@/components/Player/PlayerPage';
 import TeamPage from '@/components/Team/TeamPage';
 import { GamesProvider } from '@/context/GamesContext';
@@ -10,7 +11,6 @@ import CoachesPage from '@/pages/Coaches/CoachesPage';
 import Game from '@/pages/Game/Game';
 import Games from '@/pages/Games/Games';
 import Home from '@/pages/Home/Home';
-import League from '@/pages/League/League';
 import LeaguesPage from '@/pages/Leagues/LeaguesPage';
 import Login from '@/pages/Login/Login';
 import PlayersPage from '@/pages/Players/PlayersPage';

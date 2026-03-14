@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 
+import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import Heading from '@/components/ui/Heading';
 import { useGamesContext } from '@/hooks/context/UseGamesContext';
-import { ScheduleList } from '@/hooks/UseScheduleTable';
+
 import styles from './GamesList.module.css';
 
 type GamesListProps = {

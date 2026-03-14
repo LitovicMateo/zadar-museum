@@ -1,0 +1,139 @@
+.wrapper {
+	overflow-x: auto;
+}
+
+.list {
+	width: 100%;
+	background-color: #fff;
+}
+
+.row {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 0.5rem 0;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.row:last-child {
+	border-bottom: none;
+}
+
+/* ── Round column ─────────────────────────────────────────── */
+.roundCell {
+	flex: none;
+	width: 1rem;
+	text-align: center;
+	font-size: 0.7rem;
+	color: #6b7280;
+	white-space: nowrap;
+}
+
+/* ── Date column ──────────────────────────────────────────── */
+.dateCell {
+	flex: none;
+	width: 5rem;
+	font-size: 0.7rem;
+	color: #6b7280;
+	text-align: center;
+	white-space: nowrap;
+}
+
+/* ── Teams column ─────────────────────────────────────────── */
+.teamsCell {
+	flex: 1;
+	min-width: 0;
+	padding: 0 1rem;
+}
+
+.teamsLink {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.7rem;
+	color: #1f2937;
+	min-width: 0;
+	text-decoration: none;
+}
+
+.teamsLink:hover {
+	text-decoration: underline;
+}
+
+.teamName {
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 0;
+}
+
+/* Full name: hidden on mobile, visible on sm+ */
+.teamNameFull {
+	display: none;
+}
+
+@media (min-width: 640px) {
+	.teamNameFull {
+		display: inline;
+	}
+}
+
+/* Short name: visible on mobile, hidden on sm+ */
+.teamNameShort {
+	display: inline;
+}
+
+.vs {
+	color: #9ca3af;
+	flex-shrink: 0;
+}
+
+/* ── Score column ─────────────────────────────────────────── */
+.scoreCell {
+	flex: none;
+	width: 8ch;
+	text-align: center;
+}
+
+.scoreBadge {
+	display: inline-block;
+	width: 100%;
+	font-size: 0.7rem;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.5rem;
+	text-align: center;
+}
+
+.neutral {
+	background-color: #f3f4f6;
+	color: #1f2937;
+}
+
+.win {
+	background-color: #dcfce7;
+	color: #15803d;
+}
+
+.loss {
+	background-color: #fee2e2;
+	color: #b91c1c;
+}
+
+.draw {
+	background-color: #fef9c3;
+	color: #a16207;
+}
+
+@media (min-width: 640px) {
+	.teamNameShort {
+		display: none;
+	}
+
+	.dateCell,
+	.roundCell,
+	.scoreBadge,
+	.teamName {
+		font-size: 0.875rem;
+	}
+}

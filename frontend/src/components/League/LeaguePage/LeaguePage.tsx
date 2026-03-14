@@ -6,7 +6,7 @@ import ProfilePageWrapper from '@/components/ui/ProfilePageWrapper/ProfilePageWr
 import { APP_ROUTES } from '@/constants/Routes';
 import { useLeagueDetails } from '@/hooks/queries/league/UseLeagueDetails';
 
-import LeagueContent from './LeagueContent';
+import LeagueContent from './Content/LeagueContent';
 
 import styles from '@/pages/League/League.module.css';
 

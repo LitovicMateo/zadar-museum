@@ -1,12 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import Heading from '@/components/ui/Heading';
 import { useRefereeGamelog } from '@/hooks/queries/referee/UseRefereeGamelog';
-import { ScheduleList } from '@/hooks/UseScheduleTable';
 
 import RefereeFilter from './RefereeFilter';
 import RefereeSeasonStats from './RefereeSeasonStats';
+
 import styles from './RefereeGamelog.module.css';
 
 const RefereeGamelog: React.FC = () => {
@@ -35,7 +36,7 @@ const RefereeGamelog: React.FC = () => {
 			/>
 			<RefereeSeasonStats season={selectedSeason} />
 			<Heading title="Gamelog" type="secondary" />
-		<ScheduleList schedule={filteredGames} />
+			<ScheduleList schedule={filteredGames} />
 		</section>
 	);
 };

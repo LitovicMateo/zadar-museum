@@ -43,7 +43,7 @@ const SeasonSelect: React.FC<SeasonSelectProps> = ({ seasons, selectedSeason, on
 				className={styles.wrapperCompact}
 				style={{ opacity: isPending ? 0.6 : 1, transition: 'opacity 0.15s ease' }}
 			>
-				<Select<SeasonOption, false> {...selectProps} styles={selectStyle('160px')} />
+				<Select<SeasonOption, false> {...selectProps} styles={selectStyle('160px ')} />
 			</div>
 		);
 	}

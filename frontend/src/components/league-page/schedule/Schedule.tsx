@@ -1,11 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import Heading from '@/components/ui/Heading';
 import { useLeagueGames } from '@/hooks/queries/league/UseLeagueGames';
 import { useLeagueSeasons } from '@/hooks/queries/league/UseLeagueSeasons';
-import { ScheduleList } from '@/hooks/UseScheduleTable';
+
 import styles from './Schedule.module.css';
 
 const Schedule = () => {

@@ -1,13 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import NoContent from '@/components/no-content/NoContent';
 import Heading from '@/components/ui/Heading';
 import { useVenueGamelog } from '@/hooks/queries/venue/UseVenueGamelog';
-import { ScheduleList } from '@/hooks/UseScheduleTable';
 
 import Filters from './Filter';
 import SeasonStats from './SeasonStats';
+
 import styles from './VenueGamelog.module.css';
 
 const VenueGamelog: React.FC = () => {
