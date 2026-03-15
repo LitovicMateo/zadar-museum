@@ -6,12 +6,12 @@ import GameFilter from '@/components/forms/game/Filters/GameFilter';
 import SeasonFilter from '@/components/forms/game/Filters/SeasonFilter';
 import EditGameWarning from '@/components/forms/game/Form/EditGameWarning';
 import GameForm from '@/components/forms/game/GameForm';
-import Fieldset from '@/components/ui/fieldset';
-import FormWrapper from '@/components/ui/form-wrapper';
-import { useGameDetails } from '@/hooks/queries/game/useGameDetails';
-import { GameFormData } from '@/schemas/game-schema';
-import { updateGame } from '@/services/games/updateGame';
-import { refreshSchedule } from '@/utils/refreshSchedule';
+import Fieldset from '@/components/ui/Fieldset';
+import FormWrapper from '@/components/ui/FormWrapper';
+import { useGameDetails } from '@/hooks/queries/game/UseGameDetails';
+import { GameFormData } from '@/schemas/GameSchema';
+import { updateGame } from '@/services/games/UpdateGame';
+import { refreshSchedule } from '@/utils/RefreshSchedule';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const EditGame = () => {

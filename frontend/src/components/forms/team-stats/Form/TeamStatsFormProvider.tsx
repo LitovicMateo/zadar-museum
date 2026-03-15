@@ -2,8 +2,8 @@ import React from 'react';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { TeamStatsFormData, teamStatsSchema } from '@/schemas/team-stats-schema';
-import { TeamStatsResponse } from '@/types/api/team-stats';
+import { TeamStatsFormData, teamStatsSchema } from '@/schemas/TeamStatsSchema';
+import { TeamStatsResponse } from '@/types/api/TeamStats';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type TeamStatsFormProviderProps = {

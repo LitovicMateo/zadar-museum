@@ -6,11 +6,11 @@ import SeasonFilter from '@/components/forms/game/Filters/SeasonFilter';
 import GameFilter from '@/components/forms/team-stats/Filter/GameFilter';
 import TeamFilter from '@/components/forms/team-stats/Filter/TeamFilter';
 import TeamStatsForm from '@/components/forms/team-stats/TeamStatsForm';
-import Fieldset from '@/components/ui/fieldset';
-import FormWrapper from '@/components/ui/form-wrapper';
-import { useSingleTeamStats } from '@/hooks/queries/team-stats/useSingleTeamStats';
-import { TeamStatsFormData } from '@/schemas/team-stats-schema';
-import { updateTeamStats } from '@/services/team-stats/updateTeamStats';
+import Fieldset from '@/components/ui/Fieldset';
+import FormWrapper from '@/components/ui/FormWrapper';
+import { useSingleTeamStats } from '@/hooks/queries/team-stats/UseSingleTeamStats';
+import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
+import { updateTeamStats } from '@/services/team-stats/UpdateTeamStats';
 import { useMutation } from '@tanstack/react-query';
 
 const EditTeamStats = () => {
@@ -44,6 +44,7 @@ const EditTeamStats = () => {
 		mutation.mutate({ ...data, id: teamStatsId });
 	};
 
+
 	return (
 		<div>
 			<FormWrapper>
@@ -54,6 +55,7 @@ const EditTeamStats = () => {
 					<TeamFilter game={game} setTeam={setTeam} />
 				</Fieldset>
 			</FormWrapper>
+			{team && !teamStats && <p className="text-center text-red-500">No stats found for selected team and game.</p>}
 			{teamStats && (
 				<TeamStatsForm
 					onSubmit={handleSubmit}

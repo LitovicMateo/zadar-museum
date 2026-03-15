@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
-import { PlayerRecords } from '@/types/api/player-stats';
+import { PlayerRecords } from '@/types/api/PlayerStats';
 import { SortingState } from '@tanstack/react-table';
 
-import NoContent from '../no-content/no-content';
-import AnimatedTableWrapper from '../ui/animated-table-wrapper';
-import { usePlayerRecordsTable } from './usePlayerRecordsTable';
+import NoContent from '../no-content/NoContent';
+import AnimatedTableWrapper from '../ui/AnimatedTableWrapper';
+import { usePlayerRecordsTable } from './UsePlayerRecordsTable';
 
 type PlayerRecordsTableProps = {
 	data: PlayerRecords[] | undefined;

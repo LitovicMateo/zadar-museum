@@ -1,5 +1,5 @@
 import React, { useId } from 'react';
-import Radio from '@/components/ui/radio';
+import Radio from '@/components/ui/Radio';
 import RadioGroup from '@/components/ui/radio-group/RadioGroup';
 
 export type MatchLocation = 'total' | 'home' | 'away' | 'neutral';

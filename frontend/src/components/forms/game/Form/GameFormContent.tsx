@@ -1,10 +1,10 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/fieldset';
-import FormFieldsWrapper from '@/components/ui/form-fields-wrapper';
-import SubmitButton from '@/components/ui/submit-button';
-import { GameFormData } from '@/schemas/game-schema';
+import Fieldset from '@/components/ui/Fieldset';
+import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
+import SubmitButton from '@/components/ui/SubmitButton';
+import { GameFormData } from '@/schemas/GameSchema';
 
 import Attendance from '../Fields/Attendance';
 import AwayTeam from '../Fields/AwayTeam';

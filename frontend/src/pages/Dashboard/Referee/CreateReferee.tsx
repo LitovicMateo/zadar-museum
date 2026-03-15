@@ -2,13 +2,13 @@ import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
-import DashboardList from '@/components/dasboard-list/dashboard-list';
+import DashboardList from '@/components/dasboard-list/DashboardList';
 import RefereeForm from '@/components/forms/referee/RefereeForm';
-import { APP_ROUTES } from '@/constants/routes';
-import { useReferees } from '@/hooks/queries/referee/useReferees';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useReferees } from '@/hooks/queries/referee/UseReferees';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import { RefereeFormData } from '@/schemas/referee-schema';
-import { createReferee } from '@/services/referees/createReferee';
+import { RefereeFormData } from '@/schemas/RefereeSchema';
+import { createReferee } from '@/services/referees/CreateReferee';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const CreateReferee: React.FC = () => {

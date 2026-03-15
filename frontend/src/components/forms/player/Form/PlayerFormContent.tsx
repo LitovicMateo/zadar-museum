@@ -1,10 +1,10 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/fieldset';
-import FormFieldsWrapper from '@/components/ui/form-fields-wrapper';
-import SubmitButton from '@/components/ui/submit-button';
-import { PlayerFormData } from '@/schemas/player-schema';
+import Fieldset from '@/components/ui/Fieldset';
+import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
+import SubmitButton from '@/components/ui/SubmitButton';
+import { PlayerFormData } from '@/schemas/PlayerSchema';
 
 import ProfileImage from '../../coach/Fields/ProfileImage';
 import ProfileImagePreview from '../../coach/Fields/ProfileImagePreview';
@@ -17,6 +17,7 @@ import LastName from '../Fields/LastName';
 import Nationality from '../Fields/Nationality';
 import PrimaryPosition from '../Fields/PrimaryPosition';
 import { SecondaryPosition } from '../Fields/SecondaryPosition';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 type PlayerFormContentProps = {
 	mode: 'create' | 'edit';
@@ -49,7 +50,7 @@ const PlayerFormContent: React.FC<PlayerFormContentProps> = ({ mode }) => {
 			<Fieldset label="Picture Preview">
 				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
 			</Fieldset>
-			<div className="w-full flex justify-center">
+			<div className={styles.centerWrapper}>
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Player' : 'Create Player'}

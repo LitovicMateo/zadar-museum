@@ -1,15 +1,16 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/input';
-import { VenueFormData } from '@/schemas/venue-schema';
+import { Input } from '@/components/ui/Input';
+import { VenueFormData } from '@/schemas/VenueSchema';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const Name: React.FC = () => {
 	const { register } = useFormContext<VenueFormData>();
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
-				Venue Name: <span className="text-red-500">*</span>
+			<span className={styles.label}>
+				Venue Name: <span className={styles.required}>*</span>
 			</span>
 			<Input
 				type="text"

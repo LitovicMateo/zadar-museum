@@ -1,15 +1,16 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/input';
-import { CompetitionFormData } from '@/schemas/competition-schema';
+import { Input } from '@/components/ui/Input';
+import { CompetitionFormData } from '@/schemas/CompetitionSchema';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const Name: React.FC = () => {
 	const { register } = useFormContext<CompetitionFormData>();
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
-				Competition Name: <span className="text-red-500">*</span>
+			<span className={styles.label}>
+				Competition Name: <span className={styles.required}>*</span>
 			</span>
 			<Input
 				type="text"

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import CoachHeader from '@/components/coach-page/coach-header/coach-header';
-import { APP_ROUTES } from '@/constants/routes';
-import { useCoachDetails } from '@/hooks/queries/coach/useCoachDetails';
+import CoachHeader from '@/components/coach-page/coach-header/CoachHeader';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useCoachDetails } from '@/hooks/queries/coach/UseCoachDetails';
 
 import CoachContent from './CoachContent';
+import styles from '@/pages/Coach/Coach.module.css';
 
 const Coach: React.FC = () => {
 	const { coachId } = useParams();
@@ -25,7 +26,7 @@ const Coach: React.FC = () => {
 				Skip to content
 			</a>
 			<CoachHeader />
-			<main id="coach-content" className="flex flex-col gap-1">
+			<main id="coach-content" className={styles.main}>
 				<CoachContent />
 			</main>
 		</>

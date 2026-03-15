@@ -1,0 +1,47 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.btn {
+  background-color: #4f46e5 !important;
+  color: #fff !important;
+  padding: 0.25rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  border: none;
+  cursor: pointer;
+}
+.btn:hover  { background-color: #4338ca !important; }
+.btn:active { background-color: #3730a3 !important; }
+.btn:focus  { outline: none; box-shadow: 0 0 0 2px #a5b4fc !important; }
+.searchSlot { flex: 1; }
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+}
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+}
+.sheet {
+  position: relative;
+  width: 100%;
+  background: #fff;
+  border-radius: 0.75rem 0.75rem 0 0;
+  padding: 1rem;
+  max-height: 80vh;
+  overflow: auto;
+}
+.sheetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.sheetTitle { font-size: 1.125rem; font-weight: 500; }

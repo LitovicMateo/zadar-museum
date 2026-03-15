@@ -2,17 +2,18 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { selectStyle } from '@/constants/react-select-style';
-import { PlayerFormData } from '@/schemas/player-schema';
+import { selectStyle } from '@/constants/ReactSelectStyle';
+import { PlayerFormData } from '@/schemas/PlayerSchema';
 
-import { PositionOption, positionOptions } from '../Constants/player-positions';
+import { PositionOption, positionOptions } from '../Constants/PlayerPositions';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const PrimaryPosition: React.FC = () => {
 	const { control } = useFormContext<PlayerFormData>();
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
-				Primary Position: <span className="text-red-500">*</span>
+			<span className={styles.label}>
+				Primary Position: <span className={styles.required}>*</span>
 			</span>
 			<Controller
 				control={control}

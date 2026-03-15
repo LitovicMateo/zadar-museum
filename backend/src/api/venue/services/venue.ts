@@ -41,7 +41,7 @@ export default factories.createCoreService(
     async findVenueSeasonCompetitions(venueSlug, season) {
       const knex = strapi.db.connection;
       return await knex("schedule")
-        .select("league_slug", "league_name", "league_id")
+        .select("league_slug", "league_name", "league_id", "league_short_name")
         .distinct("league_slug")
         .where("venue_slug", venueSlug)
         .andWhere("season", season);
@@ -62,5 +62,5 @@ export default factories.createCoreService(
         .where("venue_slug", venueSlug)
         .andWhere("season", season);
     },
-  })
+  }),
 );

@@ -1,12 +1,12 @@
 import React from 'react';
 
-import NoContent from '@/components/no-content/no-content';
+import NoContent from '@/components/no-content/NoContent';
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
-import AnimatedTableWrapper from '@/components/ui/animated-table-wrapper';
-import { TeamStatsRanking } from '@/types/api/team';
+import AnimatedTableWrapper from '@/components/ui/AnimatedTableWrapper';
+import { TeamStatsRanking } from '@/types/api/Team';
 import { SortingState } from '@tanstack/react-table';
 
-import { useTeamStatsTable } from './useTeamStatsTable';
+import { useTeamStatsTable } from './UseTeamStatsTable';
 
 type TeamStatsTableProps = {
 	stats: TeamStatsRanking[] | undefined;

@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import TeamHeader from '@/components/team-page/team-header/team-header';
-import { APP_ROUTES } from '@/constants/routes';
-import { GamesProvider } from '@/context/games-context';
-import { useTeamDetails } from '@/hooks/queries/team/useTeamDetails';
+import TeamHeader from '@/components/Team/TeamPage/TeamHeader/TeamHeader';
+import { APP_ROUTES } from '@/constants/Routes';
+import { GamesProvider } from '@/context/GamesContext';
+import { useTeamDetails } from '@/hooks/queries/team/UseTeamDetails';
 
-import TeamContent from './TeamContent';
+import TeamContent from '../../components/Team/TeamPage/Content/TeamContent';
 import { TeamErrorBoundary } from './TeamErrorBoundary';
-import styles from './team.module.css';
+
+import styles from './Team.module.css';
 
 const TeamPage: React.FC = () => {
 	const { teamSlug } = useParams();

@@ -1,7 +1,8 @@
 import React from 'react';
+import styles from './Container.module.css';
 
 const Container: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-	return <div className="flex flex-col gap-2 w-full justify-baseline items-start font-abel ">{children}</div>;
+	return <div className={styles.container}>{children}</div>;
 };
 
 export default Container;

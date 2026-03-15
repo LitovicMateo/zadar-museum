@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { Input } from '@/components/ui/input';
-import SubmitButton from '@/components/ui/submit-button';
-import { useAuth } from '@/context/auth-context';
+import { Input } from '@/components/ui/Input';
+import SubmitButton from '@/components/ui/SubmitButton';
+import { useAuth } from '@/context/AuthContext';
+import styles from '@/pages/Login/Login.module.css';
 
 export default function Login() {
 	const { login } = useAuth();
@@ -21,10 +22,10 @@ export default function Login() {
 	};
 
 	return (
-		<main className="flex justify-center items-center h-svh">
+		<main className={styles.page}>
 			<form
 				onSubmit={handleSubmit}
-				className="flex flex-col gap-2 "
+				className={styles.form}
 			>
 				<Input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Email" />
 

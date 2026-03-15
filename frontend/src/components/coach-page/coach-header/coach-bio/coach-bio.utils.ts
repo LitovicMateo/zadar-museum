@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import type { CoachDetailsResponse } from '@/types/api/coach';
+import type { CoachDetailsResponse } from '@/types/api/Coach';
 
 export function calculateAge(dateOfBirth: string | Date, referenceDate?: string | Date): number {
     const dob = new Date(dateOfBirth);

@@ -1,0 +1,121 @@
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	max-width: 560px;
+	width: 100%;
+	min-height: 0;
+	margin-inline: auto;
+	overflow-y: auto;
+}
+
+.sectionTitle {
+	font-family: 'Abel', system-ui, sans-serif;
+	font-size: 0.95rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #1e293b;
+	border-left: 3px solid #3b82f6;
+	padding-left: 0.75rem;
+	margin: 0;
+}
+
+.scroll {
+	height: 100%;
+	min-height: 0;
+	overflow-y: auto;
+}
+
+/* Filter pill bar */
+.filterBar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+
+/* Stats grid */
+.grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 0.75rem;
+}
+
+@media (min-width: 500px) {
+	.grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+/* Individual stat cell */
+.cell {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.25rem;
+	padding: 1.25rem 0.75rem 1rem;
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	border-radius: 10px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	text-align: center;
+	transition:
+		box-shadow 0.15s ease,
+		transform 0.15s ease;
+}
+
+.cell:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	transform: translateY(-1px);
+}
+
+.cellValue {
+	font-family: 'Oswald', system-ui, sans-serif;
+	font-size: 2.25rem;
+	font-weight: 700;
+	color: #0f172a;
+	line-height: 1;
+	letter-spacing: -0.01em;
+}
+
+.cellLabel {
+	font-family: 'Abel', system-ui, sans-serif;
+	font-size: 0.8rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.07em;
+	color: #334155;
+}
+
+.rankBadge {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	padding: 0.2rem 0.55rem;
+	border-radius: 9999px;
+	background: #1e3a8a;
+	color: #ffffff;
+	font-family: 'Abel', system-ui, sans-serif;
+	font-size: 0.8rem;
+	font-weight: 400;
+	line-height: 1.5;
+	letter-spacing: 0.03em;
+}
+
+/* Skeleton cells */
+.cellSkeleton {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 1.25rem 0.75rem 1rem;
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	border-radius: 10px;
+}

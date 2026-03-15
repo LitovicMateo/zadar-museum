@@ -2,8 +2,9 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { StaffFormData } from '@/schemas/staff-schema';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { StaffFormData } from '@/schemas/StaffSchema';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const options: OptionType[] = [
 	{ value: 'Assistant coach', label: 'Assistant Coach' },
@@ -17,8 +18,8 @@ const Role: React.FC = () => {
 
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
-				Role: <span className="text-red-500">*</span>
+			<span className={styles.label}>
+				Role: <span className={styles.required}>*</span>
 			</span>
 			<Controller
 				name="role"

@@ -1,11 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import NoContent from '@/components/no-content/no-content';
-import RefereeAllTime from '@/components/referee-page/referee-all-time/referee-all-time';
-import RefereeGamelog from '@/components/referee-page/referee-gamelog/referee-gamelog';
-import PageContentWrapper from '@/components/ui/page-content-wrapper';
-import { useRefereeGamelog } from '@/hooks/queries/referee/useRefereeGamelog';
+import NoContent from '@/components/no-content/NoContent';
+import RefereeAllTime from '@/components/referee-page/referee-all-time/RefereeAllTime';
+import RefereeGamelog from '@/components/referee-page/referee-gamelog/RefereeGamelog';
+import PageContentWrapper from '@/components/ui/PageContentWrapper';
+import { useRefereeGamelog } from '@/hooks/queries/referee/UseRefereeGamelog';
 
 const RefereeContent: React.FC = () => {
 	const { refereeId } = useParams();

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import UploadButtonWrapper from '@/components/ui/upload-button-wrapper';
-import { GameFormData } from '@/schemas/game-schema';
+import UploadButtonWrapper from '@/components/ui/UploadButtonWrapper';
+import { GameFormData } from '@/schemas/GameSchema';
 
 type GalleryProps = {
 	ref: React.RefObject<HTMLInputElement | null>;

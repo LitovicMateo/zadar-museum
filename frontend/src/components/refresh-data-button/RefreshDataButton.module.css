@@ -1,0 +1,13 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  background-color: #2563eb !important;
+  color: #fff;
+  border-radius: 0.25rem;
+  width: 100%;
+  cursor: pointer;
+}
+.btn:hover { background-color: #1d4ed8 !important; }
+.btn:disabled { opacity: 0.5; cursor: default; }

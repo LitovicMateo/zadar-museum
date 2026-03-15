@@ -1,9 +1,9 @@
 import React from 'react';
 
-import ImagePreview from '@/components/image-preview/image-preview';
-import NoImage from '@/components/image-preview/no-image';
-import Fieldset from '@/components/ui/fieldset';
-import UploadButtonWrapper from '@/components/ui/upload-button-wrapper';
+import ImagePreview from '@/components/image-preview/ImagePreview';
+import NoImage from '@/components/image-preview/NoImage';
+import Fieldset from '@/components/ui/Fieldset';
+import UploadButtonWrapper from '@/components/ui/UploadButtonWrapper';
 
 type ImageUploadSectionProps = {
 	preview: string | null;

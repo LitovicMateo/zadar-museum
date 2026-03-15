@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useVenues } from '@/hooks/queries/venue/useVenues';
-import { GameFormData } from '@/schemas/game-schema';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useVenues } from '@/hooks/queries/venue/UseVenues';
+import { GameFormData } from '@/schemas/GameSchema';
 
 const Venue: React.FC = () => {
 	const { control } = useFormContext<GameFormData>();

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { LogOut } from 'lucide-react';
+import styles from './MobileMenuPanel.module.css';
 
 interface NavItem {
 	name: string;
@@ -28,7 +29,7 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 						exit={{ opacity: 0 }}
 						transition={{ duration: 0.2 }}
 						onClick={() => setOpen(false)}
-						className="fixed inset-0 bg-black/30 md:hidden z-60"
+						className={styles.overlay}
 					/>
 
 					<motion.aside
@@ -38,15 +39,15 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 						animate={{ x: 0 }}
 						exit={{ x: '-100%' }}
 						transition={{ type: 'tween', duration: 0.25 }}
-						className="fixed top-0 left-0 h-full w-[80%] max-w-xs bg-white shadow-lg md:hidden z-70"
+						className={styles.panel}
 					>
-						<div className="flex items-center justify-between px-4 py-3 border-b">
-							<h2 className="font-abel uppercase text-base">Menu</h2>
-							<div className="flex items-center gap-2">
+						<div className={styles.panelHeader}>
+							<h2 className={styles.panelTitle}>Menu</h2>
+							<div className={styles.panelActions}>
 								<button
 									aria-label="Close menu"
 									onClick={() => setOpen(false)}
-									className="p-2 rounded hover:bg-gray-100"
+									className={styles.closeBtn}
 								>
 									<svg
 										width="20"
@@ -74,13 +75,13 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 							</div>
 						</div>
 
-						<nav className="px-4 py-4">
-							<ul className="flex flex-col gap-3 text-base">
+						<nav className={styles.nav}>
+							<ul className={styles.navList}>
 								{navItems.map((item) => (
 									<li key={item.name}>
 										<Link
 											to={item.link}
-											className="block py-2 hover:underline"
+											className={styles.navLink}
 											onClick={() => setOpen(false)}
 										>
 											{item.name}
@@ -90,13 +91,13 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 							</ul>
 						</nav>
 
-						<div className="mt-auto px-4 py-4 border-t">
+						<div className={styles.footer}>
 							<button
 								onClick={() => {
 									setOpen(false);
 									logout();
 								}}
-								className="w-full flex items-center gap-3 text-left text-base text-gray-700 hover:bg-gray-100 p-2 rounded"
+								className={styles.logoutBtn}
 							>
 								<LogOut size={22} color="#364153" />
 								<span>Logout</span>

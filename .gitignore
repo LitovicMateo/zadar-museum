@@ -52,6 +52,7 @@ backend/public/uploads/*
 *.sqlite
 postgres_data/
 postgres_prod_data/
+backups
 
 # SSL
 certbot/nginx/nginx.ssl-init.conf

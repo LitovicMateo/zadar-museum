@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
 import PlayerStatsTable from '@/components/player-stats/table/PlayerStatsTable';
-import { usePlayerAllTimeStats } from '@/hooks/queries/stats/usePlayerAllTimeStats';
-import usePagedSortedList from '@/hooks/usePagedSortedList';
-import { useSearch } from '@/hooks/useSearch';
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
+import usePagedSortedList from '@/hooks/UsePagedSortedList';
+import { useSearch } from '@/hooks/UseSearch';
+import { usePlayerAllTimeStats } from '@/hooks/queries/stats/UsePlayerAllTimeStats';
 import { PlayerDB } from '@/pages/Player/Player';
-import { PlayerAllTimeStats } from '@/types/api/player';
-import { searchPlayerStats } from '@/utils/search-functions';
+import { PlayerAllTimeStats } from '@/types/api/Player';
+import { searchPlayerStats } from '@/utils/SearchFunctions';
 import { SortingState } from '@tanstack/react-table';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -107,7 +108,14 @@ const PlayerStats: React.FC = () => {
 				onPageSizeChange={setPageSize}
 			/>
 
-			<PlayerStatsTable stats={paginatedPlayers} prev={paginatedPrev} sorting={sorting} setSorting={setSorting} />
+			<DynamicContentWrapper>
+				<PlayerStatsTable
+					stats={paginatedPlayers}
+					prev={paginatedPrev}
+					sorting={sorting}
+					setSorting={setSorting}
+				/>
+			</DynamicContentWrapper>
 
 			{/* Mobile bottom-sheet modal for filters with framer-motion animations */}
 			<AnimatePresence>

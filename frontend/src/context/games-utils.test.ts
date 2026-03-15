@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { filterSchedule } from './games-utils';
-import type { TeamScheduleResponse } from '@/types/api/team';
+import { filterSchedule } from './GamesUtils';
+import type { TeamScheduleResponse } from '@/types/api/Team';
 
 const sampleSchedule = [
   {

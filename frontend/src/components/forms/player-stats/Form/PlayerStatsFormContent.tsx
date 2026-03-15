@@ -1,10 +1,10 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/fieldset';
-import FormFieldsWrapper from '@/components/ui/form-fields-wrapper';
-import SubmitButton from '@/components/ui/submit-button';
-import { PlayerStatsFormData } from '@/schemas/player-stats';
+import Fieldset from '@/components/ui/Fieldset';
+import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
+import SubmitButton from '@/components/ui/SubmitButton';
+import { PlayerStatsFormData } from '@/schemas/PlayerStats';
 
 import Captain from '../Fields/Captain';
 import Competition from '../Fields/Competition';
@@ -22,6 +22,7 @@ import Seconds from '../Fields/Seconds';
 import Shooting from '../Fields/Shooting';
 import Status from '../Fields/Status';
 import Team from '../Fields/Team';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 type PlayerStatsFormContentProps = {
 	mode: 'create' | 'edit';
@@ -43,7 +44,7 @@ const PlayerStatsFormContent: React.FC<PlayerStatsFormContentProps> = ({ mode })
 				<Player />
 			</Fieldset>
 			<Fieldset label="Details">
-				<div className="grid grid-cols-3 gap-2">
+				<div className={styles.statsGrid3}>
 					<Status />
 					<Number />
 					<Captain />
@@ -67,7 +68,7 @@ const PlayerStatsFormContent: React.FC<PlayerStatsFormContentProps> = ({ mode })
 			<Fieldset label="Misc">
 				<Misc />
 			</Fieldset>
-			<div className="w-full flex justify-center">
+			<div className={styles.centerWrapper}>
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Player Stats' : 'Create Player Stats'}

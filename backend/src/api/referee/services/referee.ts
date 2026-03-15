@@ -71,7 +71,7 @@ export default factories.createCoreService(
     async findRefereeSeasonCompetitions(refereeId, season) {
       const knex = await strapi.db.connection;
       return knex("schedule")
-        .select("league_slug", "league_name", "league_id")
+        .select("league_slug", "league_name", "league_id", "league_short_name")
         .distinct("league_slug")
         .where("main_referee_id", refereeId)
         .orWhere("second_referee_id", refereeId)
@@ -120,5 +120,5 @@ export default factories.createCoreService(
 
       return referee;
     },
-  })
+  }),
 );

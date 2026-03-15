@@ -1,0 +1,29 @@
+.radioLabel {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+	transition: color 0.15s ease;
+	font-size: 0.875rem;
+	font-weight: 500;
+	text-transform: capitalize;
+}
+
+.radioLabel:hover {
+	color: #1d4ed8;
+}
+
+.radioLabelDisabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
+.radioLabelDisabled:hover {
+	color: inherit;
+}
+
+.radio {
+	width: 1rem;
+	height: 1rem;
+	accent-color: #2563eb;
+}

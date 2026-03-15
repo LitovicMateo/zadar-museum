@@ -7,12 +7,12 @@ import PlayerFilter from '@/components/forms/player-stats/Filter/PlayerFilter';
 import PlayerStatsForm from '@/components/forms/player-stats/PlayerStatsForm';
 import GameFilter from '@/components/forms/team-stats/Filter/GameFilter';
 import TeamFilter from '@/components/forms/team-stats/Filter/TeamFilter';
-import Fieldset from '@/components/ui/fieldset';
-import FormWrapper from '@/components/ui/form-wrapper';
-import { useGamePlayerStats } from '@/hooks/queries/player-stats/useGamePlayerStats';
-import { PlayerStatsFormData } from '@/schemas/player-stats';
-import { updatePlayerStats } from '@/services/player-stats/updatePlayerStats';
-import { PlayerStatsResponse } from '@/types/api/player-stats';
+import Fieldset from '@/components/ui/Fieldset';
+import FormWrapper from '@/components/ui/FormWrapper';
+import { useGamePlayerStats } from '@/hooks/queries/player-stats/UseGamePlayerStats';
+import { PlayerStatsFormData } from '@/schemas/PlayerStats';
+import { updatePlayerStats } from '@/services/player-stats/UpdatePlayerStats';
+import { PlayerStatsResponse } from '@/types/api/PlayerStats';
 import { useMutation } from '@tanstack/react-query';
 
 const EditPlayerStats = () => {

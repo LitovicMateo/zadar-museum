@@ -1,0 +1,4 @@
+.borderRow { border-bottom: 1px solid #94a3b8; }
+.th { padding: 0.5rem 1rem; text-align: center; background: #f8fafc; }
+.thSticky { text-align: left; white-space: nowrap; position: sticky; left: 0; z-index: 10; }
+.thSortable { user-select: none; cursor: pointer; }

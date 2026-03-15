@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateAge } from './calculateAge';
+import { calculateAge } from './CalculateAge';
 
 describe('calculateAge', () => {
     it('calculates age relative to reference date when birthday not yet occurred', () => {

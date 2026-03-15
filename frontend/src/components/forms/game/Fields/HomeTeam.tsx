@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useTeams } from '@/hooks/queries/team/useTeams';
-import { GameFormData } from '@/schemas/game-schema';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useTeams } from '@/hooks/queries/team/UseTeams';
+import { GameFormData } from '@/schemas/GameSchema';
 
 const HomeTeam = () => {
 	const { control, setValue, watch } = useFormContext<GameFormData>();

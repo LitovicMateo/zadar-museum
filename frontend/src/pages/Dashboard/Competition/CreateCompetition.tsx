@@ -2,13 +2,13 @@ import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
-import DashboardList from '@/components/dasboard-list/dashboard-list';
+import DashboardList from '@/components/dasboard-list/DashboardList';
 import CompetitionForm from '@/components/forms/competition/CompetitionForm';
-import { APP_ROUTES } from '@/constants/routes';
-import { useCompetitions } from '@/hooks/queries/dasboard/useCompetitions';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import { CompetitionFormData } from '@/schemas/competition-schema';
-import { createCompetiton } from '@/services/competitions/createCompetition';
+import { CompetitionFormData } from '@/schemas/CompetitionSchema';
+import { createCompetiton } from '@/services/competitions/CreateCompetition';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const defaultValues: CompetitionFormData = {

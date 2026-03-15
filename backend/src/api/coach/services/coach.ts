@@ -131,7 +131,7 @@ export default factories.createCoreService(
 
       const knex = strapi.db.connection;
       return await knex("schedule")
-        .select("league_slug", "league_name", "league_id")
+        .select("league_slug", "league_name", "league_id", "league_short_name")
         .distinct("league_slug")
         .where(function () {
           this.where("home_head_coach_id", coachId).orWhere(

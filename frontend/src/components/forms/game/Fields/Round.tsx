@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { Input } from '@/components/ui/input';
-import { selectStyle, OptionType } from '@/constants/react-select-style';
-import { GameFormData } from '@/schemas/game-schema';
+import { Input } from '@/components/ui/Input';
+import { selectStyle, OptionType } from '@/constants/ReactSelectStyle';
+import { GameFormData } from '@/schemas/GameSchema';
 
 const playoffRounds: OptionType[] = [
 	{ label: 'Round of 64', value: 'R64' },

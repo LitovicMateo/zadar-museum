@@ -1,8 +1,9 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import CountrySelect from '@/components/country-select/country-select';
-import { TeamFormData } from '@/schemas/team-schema';
+import CountrySelect from '@/components/country-select/CountrySelect';
+import { TeamFormData } from '@/schemas/TeamSchema';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const Country = () => {
 	const { control, register } = useFormContext<TeamFormData>();
@@ -12,8 +13,8 @@ const Country = () => {
 	}, [register]);
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
-				Country: <span className="text-red-500">*</span>
+			<span className={styles.label}>
+				Country: <span className={styles.required}>*</span>
 			</span>
 			<Controller
 				control={control}

@@ -1,0 +1,19 @@
+.wrapper { display: flex; flex-direction: column; gap: 0.75rem; }
+@media (min-width: 640px) { .wrapper { flex-direction: row; } }
+.link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 2px solid #e5e7eb;
+  text-decoration: none;
+  color: inherit;
+  transition: all 200ms;
+}
+.link:hover { border-color: #60a5fa; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07); }
+.info { display: flex; flex-direction: column; }
+.role { font-size: 0.75rem; color: #6b7280; font-weight: 500; text-transform: uppercase; }
+.name { font-weight: 600; color: #111827; transition: color 200ms; }
+.link:hover .name { color: #2563eb; }

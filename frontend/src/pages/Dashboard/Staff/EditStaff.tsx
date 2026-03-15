@@ -3,11 +3,12 @@ import toast, { Toaster } from 'react-hot-toast';
 import Select from 'react-select';
 
 import StaffForm from '@/components/forms/staff/StaffForm';
-import { useStaffDetails } from '@/hooks/queries/staff/useStaffDetails';
-import { useStaffs } from '@/hooks/queries/staff/useStaffs';
-import { StaffFormData } from '@/schemas/staff-schema';
-import { updateStaff } from '@/services/staff/updateStaff';
+import { useStaffDetails } from '@/hooks/queries/staff/UseStaffDetails';
+import { useStaffs } from '@/hooks/queries/staff/UseStaffs';
+import { StaffFormData } from '@/schemas/StaffSchema';
+import { updateStaff } from '@/services/staff/UpdateStaff';
 import { useMutation } from '@tanstack/react-query';
+import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditStaff: React.FC = () => {
 	const [staffId, setStaffId] = React.useState<string>('');
@@ -33,7 +34,7 @@ const EditStaff: React.FC = () => {
 
 	return (
 		<div>
-			<div className="max-w-[200px] w-full py-4">
+			<div className={styles.selectWrap}>
 				<Select
 					options={staffs?.map((s) => ({ label: `${s.first_name} ${s.last_name}`, value: s.documentId }))}
 					onChange={(e) => setStaffId(e!.value.toString())}

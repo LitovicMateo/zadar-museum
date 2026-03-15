@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 
-import CoachBio from './coach-bio';
+import CoachBio from './CoachBio';
 
 describe('CoachBio', () => {
     it('shows birth date and Age label when coach is alive', () => {

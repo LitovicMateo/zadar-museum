@@ -1,10 +1,11 @@
 import React from 'react';
 import { FieldValues, useFieldArray, useFormContext } from 'react-hook-form';
 
-import Button from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { TeamFormData } from '@/schemas/team-schema';
+import Button from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { TeamFormData } from '@/schemas/TeamSchema';
 import { Plus, X } from 'lucide-react';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const AlternateNames: React.FC = () => {
 	const { control, register } = useFormContext<TeamFormData>();
@@ -20,7 +21,7 @@ const AlternateNames: React.FC = () => {
 
 	return (
 		<div className="space-y-2">
-			<span className="text-sm  text-gray-700 uppercase">Alternate Names:</span>
+			<span className={styles.label}>Alternate Names:</span>
 			{fields.map((field, index) => (
 				<div key={field.id} className="flex items-center gap-2">
 					<Input

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import UploadButtonWrapper from '@/components/ui/upload-button-wrapper';
-import { CoachFormData } from '@/schemas/coach-schema';
-import { getImageUrl } from '@/utils/getImageUrl';
+import UploadButtonWrapper from '@/components/ui/UploadButtonWrapper';
+import { CoachFormData } from '@/schemas/CoachSchema';
+import { getImageUrl } from '@/utils/GetImageUrl';
 
 type ProfileImageProps = {
 	fileInputRef: React.RefObject<HTMLInputElement | null>;

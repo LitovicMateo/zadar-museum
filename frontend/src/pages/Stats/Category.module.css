@@ -1,0 +1,14 @@
+.category {
+  padding: 0 0.5rem;
+  height: 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  border-radius: 0.125rem;
+}

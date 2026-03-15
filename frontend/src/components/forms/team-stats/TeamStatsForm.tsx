@@ -1,8 +1,8 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/form-wrapper';
-import { TeamStatsFormData } from '@/schemas/team-stats-schema';
-import { TeamStatsResponse } from '@/types/api/team-stats';
+import FormWrapper from '@/components/ui/FormWrapper';
+import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
+import { TeamStatsResponse } from '@/types/api/TeamStats';
 
 import TeamStatsFormContent from './Form/TeamStatsFormContent';
 import TeamStatsFormProvider from './Form/TeamStatsFormProvider';

@@ -2,8 +2,8 @@ import React from 'react';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { VenueFormData, venueSchema } from '@/schemas/venue-schema';
-import { VenueDetailsResponse } from '@/types/api/venue';
+import { VenueFormData, venueSchema } from '@/schemas/VenueSchema';
+import { VenueDetailsResponse } from '@/types/api/Venue';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type VenueFormProviderProps = {

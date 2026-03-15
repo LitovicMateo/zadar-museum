@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import LeagueHeader from '@/components/league-page/league-header/league-header';
-import { APP_ROUTES } from '@/constants/routes';
-import { useLeagueDetails } from '@/hooks/queries/league/useLeagueDetails';
+import LeagueHeader from '@/components/League/LeaguePage/Header/LeagueHeader';
+import ProfilePageWrapper from '@/components/ui/ProfilePageWrapper/ProfilePageWrapper';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useLeagueDetails } from '@/hooks/queries/league/UseLeagueDetails';
 
 import LeagueContent from './LeagueContent';
 
@@ -19,12 +20,7 @@ const League: React.FC = () => {
 		}
 	}, [leagueDetails, isFetched, navigate]);
 
-	return (
-		<div className="flex flex-col gap-2">
-			<LeagueHeader />
-			<LeagueContent />
-		</div>
-	);
+	return <ProfilePageWrapper header={<LeagueHeader />} content={<LeagueContent />} />;
 };
 
 export default League;

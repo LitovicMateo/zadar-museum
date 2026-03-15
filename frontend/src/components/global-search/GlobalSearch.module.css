@@ -1,0 +1,7 @@
+.wrapper {
+  display: flex;
+  gap: 1rem;
+  position: relative;
+  justify-content: center;
+}
+.inputWrap { width: 100%; display: flex; justify-content: center; }

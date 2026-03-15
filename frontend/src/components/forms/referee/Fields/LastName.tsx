@@ -1,15 +1,16 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/input';
-import { RefereeFormData } from '@/schemas/referee-schema';
+import { Input } from '@/components/ui/Input';
+import { RefereeFormData } from '@/schemas/RefereeSchema';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const LastName: React.FC = () => {
 	const { register } = useFormContext<RefereeFormData>();
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
-				Last Name: <span className="text-red-500">*</span>
+			<span className={styles.label}>
+				Last Name: <span className={styles.required}>*</span>
 			</span>
 			<Input
 				type="text"

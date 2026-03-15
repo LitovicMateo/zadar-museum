@@ -1,15 +1,16 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/input';
-import { CoachFormData } from '@/schemas/coach-schema';
+import { Input } from '@/components/ui/Input';
+import { CoachFormData } from '@/schemas/CoachSchema';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const LastName: React.FC = () => {
 	const { register } = useFormContext<CoachFormData>();
 	return (
 		<label>
-			<span className="text-sm  text-gray-700 uppercase">
-				Last Name: <span className="text-red-500">*</span>
+			<span className={styles.label}>
+				Last Name: <span className={styles.required}>*</span>
 			</span>
 			<Input
 				type="text"
