@@ -1,10 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
-import GameHeader from '@/components/game-page/game-header/game-header';
-import { APP_ROUTES } from '@/constants/routes';
-import { useGameDetails } from '@/hooks/queries/game/useGameDetails';
+import GameHeader from '@/components/game-page/game-header/GameHeader';
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useGameDetails } from '@/hooks/queries/game/UseGameDetails';
 
 import GameContent from './GameContent';
+
+import styles from '@/pages/Game/Game.module.css';
 
 const Game = () => {
 	const { gameId } = useParams();
@@ -18,10 +21,12 @@ const Game = () => {
 	}
 
 	return (
-		<section className="w-full flex flex-col gap-6 justify-start overflow-y-auto pt-6">
-			<GameHeader />
-			<GameContent />
-		</section>
+		<DynamicContentWrapper>
+			<section className={styles.page}>
+				<GameHeader />
+				<GameContent />
+			</section>
+		</DynamicContentWrapper>
 	);
 };
 

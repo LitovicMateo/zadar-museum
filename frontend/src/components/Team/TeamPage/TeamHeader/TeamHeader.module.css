@@ -1,0 +1,93 @@
+.section {
+	height: 150px;
+	overflow: hidden;
+	background: linear-gradient(to bottom right, #1e40af, #1e3a8a);
+}
+
+.inner {
+	/* background: lime; */
+	height: 100%;
+	width: 100%;
+	position: relative;
+	z-index: 1;
+	max-width: 800px;
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+	justify-content: center;
+	align-items: center;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 1rem;
+}
+
+.logoContainer {
+	position: relative;
+}
+
+.circle {
+	height: 100px;
+	width: 100px;
+	border-radius: 50%;
+	background: white;
+	position: relative;
+	padding: 0.5em;
+	overflow: hidden;
+}
+
+.logo {
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+}
+
+.flag {
+	height: 28px;
+	width: 28px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 9999;
+	border: 2px solid white;
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+.flagImg {
+	height: 100%;
+	object-fit: cover;
+}
+
+.teamName {
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: white;
+}
+
+@media (min-width: 768px) {
+	.section {
+		height: 250px;
+	}
+
+	.inner {
+		max-width: 600px;
+		flex-direction: row;
+		gap: 1.5rem;
+		justify-content: flex-start;
+		padding: 0;
+	}
+
+	.circle {
+		height: 180px;
+		width: 180px;
+	}
+
+	.flag {
+		height: 40px;
+		width: 40px;
+	}
+
+	.teamName {
+		font-size: 2.5rem;
+	}
+}

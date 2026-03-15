@@ -2,10 +2,10 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { usePlayers } from '@/hooks/queries/player/usePlayers';
-import { PlayerStatsFormData } from '@/schemas/player-stats';
-import { PlayerResponse } from '@/types/api/player';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { usePlayers } from '@/hooks/queries/player/UsePlayers';
+import { PlayerStatsFormData } from '@/schemas/PlayerStats';
+import { PlayerResponse } from '@/types/api/Player';
 
 const Player: React.FC = () => {
 	const { control, watch } = useFormContext<PlayerStatsFormData>();

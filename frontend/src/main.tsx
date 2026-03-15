@@ -6,11 +6,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import App from './App.tsx';
 import ErrorBoundary from './components/ui/ErrorBoundary.tsx';
-import { AuthProvider } from './providers/auth-provider.tsx';
+import { AuthProvider } from './providers/AuthProvider.tsx';
 
 import './index.css';
-// load the Abel font from the installed @fontsource package
-import '@fontsource/abel/400.css';
 
 const queryClient = new QueryClient();
 

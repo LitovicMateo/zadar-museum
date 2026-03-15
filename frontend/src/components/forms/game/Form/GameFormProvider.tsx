@@ -2,8 +2,8 @@ import React from 'react';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { GameFormData, gameSchema } from '@/schemas/game-schema';
-import { GameDetailsResponse } from '@/types/api/game';
+import { GameFormData, gameSchema } from '@/schemas/GameSchema';
+import { GameDetailsResponse } from '@/types/api/Game';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type GameFormProviderProps = {

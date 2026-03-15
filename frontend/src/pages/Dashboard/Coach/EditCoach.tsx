@@ -3,11 +3,12 @@ import toast, { Toaster } from 'react-hot-toast';
 import Select from 'react-select';
 
 import CoachForm from '@/components/forms/coach/CoachForm';
-import { useCoachDetails } from '@/hooks/queries/coach/useCoachDetails';
-import { useCoaches } from '@/hooks/queries/coach/useCoaches';
-import { CoachFormData } from '@/schemas/coach-schema';
-import { updateCoach } from '@/services/coaches/updateCoach';
+import { useCoachDetails } from '@/hooks/queries/coach/UseCoachDetails';
+import { useCoaches } from '@/hooks/queries/coach/UseCoaches';
+import { CoachFormData } from '@/schemas/CoachSchema';
+import { updateCoach } from '@/services/coaches/UpdateCoach';
 import { useMutation } from '@tanstack/react-query';
+import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditCoach = () => {
 	const [coachId, setCoachId] = React.useState<string>('');
@@ -31,7 +32,7 @@ const EditCoach = () => {
 
 	return (
 		<div>
-			<div className="max-w-[200px] w-full py-4">
+			<div className={styles.selectWrap}>
 				<Select
 					options={coaches?.map((coach) => ({
 						label: `${coach.first_name} ${coach.last_name}`,

@@ -2,14 +2,14 @@ import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
-import DashboardList from '@/components/dasboard-list/dashboard-list';
+import DashboardList from '@/components/dasboard-list/DashboardList';
 import PlayerForm from '@/components/forms/player/PlayerForm';
-import { APP_ROUTES } from '@/constants/routes';
-import { usePlayers } from '@/hooks/queries/player/usePlayers';
+import { APP_ROUTES } from '@/constants/Routes';
+import { usePlayers } from '@/hooks/queries/player/UsePlayers';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import { PlayerFormData } from '@/schemas/player-schema';
-import { createPlayer } from '@/services/players/createPlayer';
-import { PlayerResponse } from '@/types/api/player';
+import { PlayerFormData } from '@/schemas/PlayerSchema';
+import { createPlayer } from '@/services/players/CreatePlayer';
+import { PlayerResponse } from '@/types/api/Player';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const CreatePlayer: React.FC = () => {

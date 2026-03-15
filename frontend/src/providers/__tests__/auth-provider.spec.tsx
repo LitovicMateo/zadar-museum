@@ -2,8 +2,8 @@ import React from 'react';
 import { useContext } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { AuthContext } from '@/context/auth-context';
-import { AuthProvider } from '@/providers/auth-provider';
+import { AuthContext } from '@/context/AuthContext';
+import { AuthProvider } from '@/providers/AuthProvider';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, describe, it, expect, beforeEach } from 'vitest';

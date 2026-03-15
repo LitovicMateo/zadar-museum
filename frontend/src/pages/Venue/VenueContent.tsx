@@ -1,8 +1,8 @@
 import React from 'react';
 
-import PageContentWrapper from '@/components/ui/page-content-wrapper';
-import VenueAllTime from '@/components/venue-page/venue-all-time/venue-all-time';
-import VenueGamelog from '@/components/venue-page/venue-gamelog/venue-gamelog';
+import PageContentWrapper from '@/components/ui/PageContentWrapper';
+import VenueAllTime from '@/components/venue-page/venue-all-time/VenueAllTime';
+import VenueGamelog from '@/components/venue-page/venue-gamelog/VenueGamelog';
 
 const VenueContent: React.FC = () => {
 	return (

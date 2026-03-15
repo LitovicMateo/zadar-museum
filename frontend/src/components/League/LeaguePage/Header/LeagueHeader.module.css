@@ -1,0 +1,15 @@
+.section {
+	width: 100%;
+	height: 150px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100px;
+}
+.name {
+	color: #eff6ff;
+	font-size: 1.5rem;
+	font-family: monospace;
+	text-transform: uppercase;
+	letter-spacing: 0.15em;
+}

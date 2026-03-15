@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Select, { SingleValue } from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useCompetitionGames } from '@/hooks/queries/dasboard/useCompetitionGames';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useCompetitionGames } from '@/hooks/queries/dasboard/UseCompetitionGames';
 
 type GameFilterProps = {
 	season: string;

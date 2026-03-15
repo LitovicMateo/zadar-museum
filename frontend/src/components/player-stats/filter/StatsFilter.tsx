@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 
-import { selectStyle } from '@/constants/react-select-style';
+import { selectStyle } from '@/constants/ReactSelectStyle';
 
 import Category from '../../../pages/Stats/Category';
 import Container from '../../../pages/Stats/Container';

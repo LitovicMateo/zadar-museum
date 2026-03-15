@@ -1,0 +1,7 @@
+.container { position: relative; display: inline-block; }
+.toggle {
+  position: absolute;
+  top: 1rem;
+  left: 100%;
+  margin-left: 0.5rem;
+}

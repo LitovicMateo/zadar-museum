@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/fieldset';
-import FormFieldsWrapper from '@/components/ui/form-fields-wrapper';
-import SubmitButton from '@/components/ui/submit-button';
-import { CoachFormData } from '@/schemas/coach-schema';
+import Fieldset from '@/components/ui/Fieldset';
+import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
+import SubmitButton from '@/components/ui/SubmitButton';
+import { CoachFormData } from '@/schemas/CoachSchema';
 
 import DateOfBirth from '../Fields/DateOfBirth';
 import DateOfDeath from '../Fields/DateOfDeath';
@@ -13,6 +13,7 @@ import LastName from '../Fields/LastName';
 import Nationality from '../Fields/Nationality';
 import ProfileImage from '../Fields/ProfileImage';
 import ProfileImagePreview from '../Fields/ProfileImagePreview';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const CoachFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 	const { setFocus, formState } = useFormContext<CoachFormData>();
@@ -40,7 +41,7 @@ const CoachFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
 			</Fieldset>
 
-			<div className="w-full flex justify-center">
+			<div className={styles.centerWrapper}>
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Coach' : 'Create Coach'}

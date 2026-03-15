@@ -19,6 +19,10 @@ export default defineConfig({
 			'/admin': {
 				target: 'http://backend:1337',
 				changeOrigin: true
+			},
+			'/uploads': {
+				target: 'http://backend:1337',
+				changeOrigin: true
 			}
 		}
 	}

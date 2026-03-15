@@ -3,11 +3,12 @@ import toast, { Toaster } from 'react-hot-toast';
 import Select from 'react-select';
 
 import TeamForm from '@/components/forms/team/TeamForm';
-import { useTeamDetails } from '@/hooks/queries/team/useTeamDetails';
-import { useTeams } from '@/hooks/queries/team/useTeams';
-import { TeamFormData } from '@/schemas/team-schema';
-import { updateTeam } from '@/services/teams/updateTeam';
+import { useTeamDetails } from '@/hooks/queries/team/UseTeamDetails';
+import { useTeams } from '@/hooks/queries/team/UseTeams';
+import { TeamFormData } from '@/schemas/TeamSchema';
+import { updateTeam } from '@/services/teams/UpdateTeam';
 import { useMutation } from '@tanstack/react-query';
+import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditTeam: React.FC = () => {
 	const [teamSlug, setTeamSlug] = React.useState<string>('');
@@ -31,7 +32,7 @@ const EditTeam: React.FC = () => {
 
 	return (
 		<div>
-			<div className="max-w-[200px] w-full py-4">
+			<div className={styles.selectWrap}>
 				<Select
 					options={teams?.map((team) => ({
 						label: team?.name,

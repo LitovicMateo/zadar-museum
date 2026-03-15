@@ -136,7 +136,7 @@ export default factories.createCoreService(
 
       const knex = strapi.db.connection;
       return knex("player_boxscore")
-        .select("league_id", "league_name", "league_slug")
+        .select("league_id", "league_name", "league_slug", "league_short_name")
         .distinct("league_id")
         .where("player_id", playerId)
         .andWhere("season", validatedSeason);

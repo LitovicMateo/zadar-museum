@@ -3,11 +3,12 @@ import toast, { Toaster } from 'react-hot-toast';
 import Select from 'react-select';
 
 import PlayerForm from '@/components/forms/player/PlayerForm';
-import { usePlayerDetails } from '@/hooks/queries/player/usePlayerDetails';
-import { usePlayers } from '@/hooks/queries/player/usePlayers';
-import { PlayerFormData } from '@/schemas/player-schema';
-import { updatePlayer } from '@/services/players/updatePlayer';
+import { usePlayerDetails } from '@/hooks/queries/player/UsePlayerDetails';
+import { usePlayers } from '@/hooks/queries/player/UsePlayers';
+import { PlayerFormData } from '@/schemas/PlayerSchema';
+import { updatePlayer } from '@/services/players/UpdatePlayer';
 import { useMutation } from '@tanstack/react-query';
+import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditPlayer = () => {
 	const [playerId, setPlayerId] = React.useState('');
@@ -31,7 +32,7 @@ const EditPlayer = () => {
 
 	return (
 		<div>
-			<div className="max-w-[200px] w-full py-4">
+			<div className={styles.selectWrap}>
 				<Select
 					options={players?.map((player) => ({
 						label: `${player.first_name} ${player.last_name}`,

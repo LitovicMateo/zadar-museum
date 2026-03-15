@@ -1,15 +1,16 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/input';
-import { PlayerStatsFormData } from '@/schemas/player-stats';
+import { Input } from '@/components/ui/Input';
+import { PlayerStatsFormData } from '@/schemas/PlayerStats';
+import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const Shooting: React.FC = () => {
 	const { register, watch } = useFormContext<PlayerStatsFormData>();
 
 	const team = watch('teamId');
 	return (
-		<div className="grid grid-cols-2 gap-2">
+		<div className={styles.statsGrid2}>
 			<Input {...register('fieldGoalsMade')} disabled={!team} placeholder="FGM" />
 			<Input {...register('fieldGoalsAttempted')} disabled={!team} placeholder="FGA" />
 			<Input {...register('threePointersMade')} disabled={!team} placeholder="3PM" />

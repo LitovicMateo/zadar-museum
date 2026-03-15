@@ -2,17 +2,17 @@ import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
-import DashboardList from '@/components/dasboard-list/dashboard-list';
+import DashboardList from '@/components/dasboard-list/DashboardList';
 import GameForm from '@/components/forms/game/GameForm';
-import { APP_ROUTES } from '@/constants/routes';
-import { useGames } from '@/hooks/queries/game/useGames';
-import { useTeams } from '@/hooks/queries/team/useTeams';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useGames } from '@/hooks/queries/game/UseGames';
+import { useTeams } from '@/hooks/queries/team/UseTeams';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import { GameFormData } from '@/schemas/game-schema';
-import { createGame } from '@/services/games/createGame';
-import { GameDetailsResponse } from '@/types/api/game';
-import { TeamDetailsResponse } from '@/types/api/team';
-import { refreshSchedule } from '@/utils/refreshSchedule';
+import { GameFormData } from '@/schemas/GameSchema';
+import { createGame } from '@/services/games/CreateGame';
+import { GameDetailsResponse } from '@/types/api/Game';
+import { TeamDetailsResponse } from '@/types/api/Team';
+import { refreshSchedule } from '@/utils/RefreshSchedule';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const CreateGame: React.FC = () => {

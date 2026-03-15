@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/input';
-import { PlayerFormData } from '@/schemas/player-schema';
+import { Input } from '@/components/ui/Input';
+import { PlayerFormData } from '@/schemas/PlayerSchema';
 
 const ActivePlayer: React.FC = () => {
 	const { register, setValue, watch } = useFormContext<PlayerFormData>();

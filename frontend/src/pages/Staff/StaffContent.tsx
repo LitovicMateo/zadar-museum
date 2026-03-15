@@ -1,7 +1,7 @@
 import React from 'react';
 
-import StaffGamelog from '@/components/staff-page/staff-gamelog/staff-gamelog';
-import PageContentWrapper from '@/components/ui/page-content-wrapper';
+import StaffGamelog from '@/components/staff-page/staff-gamelog/StaffGamelog';
+import PageContentWrapper from '@/components/ui/PageContentWrapper';
 
 const StaffContent: React.FC = () => {
 	// The staff page should only show the list of games the staff member was involved in.

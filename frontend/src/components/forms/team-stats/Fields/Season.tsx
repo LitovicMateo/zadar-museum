@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { selectStyle } from '@/constants/react-select-style';
-import { useSeasons } from '@/hooks/queries/dasboard/useSeasons';
-import { TeamStatsFormData } from '@/schemas/team-stats-schema';
+import { selectStyle } from '@/constants/ReactSelectStyle';
+import { useSeasons } from '@/hooks/queries/dasboard/UseSeasons';
+import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
 
 const Season: React.FC = () => {
 	const { control, setValue } = useFormContext<TeamStatsFormData>();

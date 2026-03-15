@@ -18,7 +18,7 @@ export default ({ strapi }: FactoryArgs) => ({
   async findSeasonCompetitions(season) {
     const knex = strapi.db.connection;
     return await knex("schedule")
-      .select("league_id", "league_name", "league_slug")
+      .select("league_id", "league_name", "league_slug", "league_short_name")
       .distinct("league_id")
       .where("season", season);
   },
@@ -43,7 +43,7 @@ export default ({ strapi }: FactoryArgs) => ({
         "home_team_id",
         "home_team_name",
         "away_team_id",
-        "away_team_name"
+        "away_team_name",
       )
       .where("game_id", gameId);
 
@@ -132,7 +132,7 @@ export default ({ strapi }: FactoryArgs) => ({
   async findGames(sortKey, direction) {
     const games = await strapi.db.query("api::game.game").findMany({
       select: ["*"],
-      
+
       populate: ["home_team", "away_team"],
       orderBy: {
         [sortKey]: direction,

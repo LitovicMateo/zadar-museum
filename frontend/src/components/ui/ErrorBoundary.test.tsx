@@ -1,4 +1,4 @@
-import { render, screen } from '@/test/test-utils';
+import { render, screen } from '@/test/TestUtils';
 import { describe, it, expect, vi } from 'vitest';
 
 import ErrorBoundary from './ErrorBoundary';

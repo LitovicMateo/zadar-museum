@@ -1,8 +1,8 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/form-wrapper';
-import { CoachFormData } from '@/schemas/coach-schema';
-import { CoachDetailsResponse } from '@/types/api/coach';
+import FormWrapper from '@/components/ui/FormWrapper';
+import { CoachFormData } from '@/schemas/CoachSchema';
+import { CoachDetailsResponse } from '@/types/api/Coach';
 
 import CoachFormContent from './Form/CoachFormContent';
 import CoachFormProvider from './Form/CoachFormProvider';

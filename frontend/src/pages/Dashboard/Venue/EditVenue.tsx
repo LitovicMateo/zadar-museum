@@ -3,11 +3,12 @@ import { Toaster } from 'react-hot-toast';
 import Select from 'react-select';
 
 import VenueForm from '@/components/forms/venue/VenueForm';
-import { useVenueDetails } from '@/hooks/queries/venue/useVenueDetails';
-import { useVenues } from '@/hooks/queries/venue/useVenues';
-import { VenueFormData } from '@/schemas/venue-schema';
-import { updateVenue } from '@/services/venue/updateVenue';
+import { useVenueDetails } from '@/hooks/queries/venue/UseVenueDetails';
+import { useVenues } from '@/hooks/queries/venue/UseVenues';
+import { VenueFormData } from '@/schemas/VenueSchema';
+import { updateVenue } from '@/services/venue/UpdateVenue';
 import { useMutation } from '@tanstack/react-query';
+import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditVenue: React.FC = () => {
 	const [venueSlug, setVenueSlug] = useState('');
@@ -28,7 +29,7 @@ const EditVenue: React.FC = () => {
 
 	return (
 		<div>
-			<div className="max-w-[200px] w-full py-4">
+			<div className={styles.selectWrap}>
 				<Select
 					options={venues?.map((venue) => ({
 						label: venue.name,

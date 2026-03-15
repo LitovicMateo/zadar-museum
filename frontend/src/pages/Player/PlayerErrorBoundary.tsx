@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { InlineError } from '@/components/ui/inline-error/inline-error';
+import { InlineError } from '@/components/ui/inline-error/InlineError';
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;

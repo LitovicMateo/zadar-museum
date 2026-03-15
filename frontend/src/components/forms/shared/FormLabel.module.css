@@ -1,0 +1,11 @@
+.label {
+  font-size: 0.875rem;
+  color: #374151;
+  text-transform: uppercase;
+}
+.required { color: #ef4444; }
+.centerWrapper { width: 100%; display: flex; justify-content: center; }
+.statsGrid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+.statsGrid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+.statsGrid5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+.statsGrid  { display: grid; gap: 0.5rem; }

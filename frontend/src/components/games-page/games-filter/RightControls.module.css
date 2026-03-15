@@ -1,0 +1,2 @@
+.wrapper { display: flex; align-items: center; gap: 0.5rem; margin-top: 0; }
+@media (min-width: 640px) { .wrapper { margin-top: 0; } }

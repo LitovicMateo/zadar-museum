@@ -1,0 +1,2 @@
+.item { display: flex; height: 4rem; justify-content: center; gap: 0.5rem; }
+.img { aspect-ratio: 1/1; object-fit: cover; height: 100%; border-radius: 9999px; }

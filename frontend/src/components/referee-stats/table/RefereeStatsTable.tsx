@@ -1,12 +1,12 @@
 import React from 'react';
 
-import NoContent from '@/components/no-content/no-content';
+import NoContent from '@/components/no-content/NoContent';
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
-import AnimatedTableWrapper from '@/components/ui/animated-table-wrapper';
-import { RefereeStatsRanking } from '@/types/api/referee';
+import AnimatedTableWrapper from '@/components/ui/AnimatedTableWrapper';
+import { RefereeStatsRanking } from '@/types/api/Referee';
 import { SortingState } from '@tanstack/react-table';
 
-import { useRefereeStatsTable } from './useRefereeStatsTable';
+import { useRefereeStatsTable } from './UseRefereeStatsTable';
 
 type RefereeStatsTableProps = {
 	stats: RefereeStatsRanking[] | undefined;

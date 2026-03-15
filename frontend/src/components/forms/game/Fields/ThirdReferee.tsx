@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useReferees } from '@/hooks/queries/referee/useReferees';
-import { GameFormData } from '@/schemas/game-schema';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useReferees } from '@/hooks/queries/referee/UseReferees';
+import { GameFormData } from '@/schemas/GameSchema';
 
 const ThirdReferee: React.FC = () => {
 	const { control, watch } = useFormContext<GameFormData>();

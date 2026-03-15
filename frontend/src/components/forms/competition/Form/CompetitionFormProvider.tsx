@@ -2,8 +2,8 @@ import React from 'react';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { CompetitionFormData, competitionSchema } from '@/schemas/competition-schema';
-import { CompetitionDetailsResponse } from '@/types/api/competition';
+import { CompetitionFormData, competitionSchema } from '@/schemas/CompetitionSchema';
+import { CompetitionDetailsResponse } from '@/types/api/Competition';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type CompetitionFormProviderProps = {

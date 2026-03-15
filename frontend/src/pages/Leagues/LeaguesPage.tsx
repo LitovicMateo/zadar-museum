@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import NoContent from '@/components/no-content/no-content';
-import { APP_ROUTES } from '@/constants/routes';
-import { useCompetitions } from '@/hooks/queries/dasboard/useCompetitions';
-import { useSearch } from '@/hooks/useSearch';
-import { searchLeagues } from '@/utils/search-functions';
+import NoContent from '@/components/no-content/NoContent';
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
+import { APP_ROUTES } from '@/constants/Routes';
+import { useSearch } from '@/hooks/UseSearch';
+import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
+import { searchLeagues } from '@/utils/SearchFunctions';
 
 const LeaguesPage: React.FC = () => {
 	const { data: leagues } = useCompetitions('name', 'asc');
@@ -22,13 +23,15 @@ const LeaguesPage: React.FC = () => {
 	return (
 		<div>
 			{SearchInput}
-			<ul>
-				{filteredLeagues.map((league) => (
-					<li key={league.id}>
-						<Link to={APP_ROUTES.league(league.slug)}>{league.name}</Link>
-					</li>
-				))}
-			</ul>
+			<DynamicContentWrapper>
+				<ul>
+					{filteredLeagues.map((league) => (
+						<li key={league.id}>
+							<Link to={APP_ROUTES.league(league.slug)}>{league.name}</Link>
+						</li>
+					))}
+				</ul>
+			</DynamicContentWrapper>
 		</div>
 	);
 };

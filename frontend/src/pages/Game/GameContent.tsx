@@ -1,14 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import GameGallery from '@/components/game-page/game-gallery/game-gallery';
-import GameReferees from '@/components/game-page/game-referees/game-referees';
-import GameStats from '@/components/game-page/game-stats/game-stats';
-import NoContent from '@/components/no-content/no-content';
-import PageContentWrapper from '@/components/ui/page-content-wrapper';
-import { useGameBoxscore } from '@/hooks/queries/game/useGameBoxscore';
-import { useGameDetails } from '@/hooks/queries/game/useGameDetails';
-import { useGameTeamStats } from '@/hooks/queries/game/useGameTeamStats';
+import GameGallery from '@/components/game-page/game-gallery/GameGallery';
+import GameReferees from '@/components/game-page/game-referees/GameReferees';
+import GameStats from '@/components/game-page/game-stats/GameStats';
+import NoContent from '@/components/no-content/NoContent';
+import PageContentWrapper from '@/components/ui/PageContentWrapper';
+import { useGameBoxscore } from '@/hooks/queries/game/UseGameBoxscore';
+import { useGameDetails } from '@/hooks/queries/game/UseGameDetails';
+import { useGameTeamStats } from '@/hooks/queries/game/UseGameTeamStats';
 
 const GameContent: React.FC = () => {
 	const { gameId } = useParams();

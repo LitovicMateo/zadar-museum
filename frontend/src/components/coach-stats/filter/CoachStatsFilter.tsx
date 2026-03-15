@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { useCompetitions } from '@/hooks/queries/dasboard/useCompetitions';
-import { useSeasons } from '@/hooks/queries/dasboard/useSeasons';
+import DatabaseFilter from '@/components/shared/filters/DatabaseFilter';
+import LeagueFilter from '@/components/shared/filters/LeagueFilter';
+import LocationFilter from '@/components/shared/filters/LocationFilter';
+import SeasonFilter from '@/components/shared/filters/SeasonFilter';
+import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
+import { useSeasons } from '@/hooks/queries/dasboard/UseSeasons';
 import { PlayerDB } from '@/pages/Player/Player';
 import FilterWrapper from '@/pages/Stats/UI/FilterWrapper';
 
-import DatabaseFilter from './DatabaseFilter';
-import LeagueFilter from './LeagueFilter';
-import LocationFilter from './LocationFilter';
 import RoleFilter from './RoleFilter';
-import SeasonFilter from './SeasonFilter';
 
 type CoachStatsFilterProps = {
 	database: PlayerDB;
@@ -51,7 +51,7 @@ const CoachStatsFilter: React.FC<CoachStatsFilterProps> = ({
 			<RoleFilter role={role} setRole={setRole} />
 			<LocationFilter location={location} setLocation={setLocation} />
 			<LeagueFilter league={league} setLeague={setLeague} competitions={competitions} />
-			<SeasonFilter seasons={seasons} selectedSeason={season} onSeasonChange={setSeason} />
+			<SeasonFilter seasons={seasons} season={season} onSeasonChange={setSeason} />
 		</FilterWrapper>
 	);
 };

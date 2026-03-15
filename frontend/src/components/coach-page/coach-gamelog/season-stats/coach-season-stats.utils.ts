@@ -1,4 +1,4 @@
-import { CoachStatsResponse, CoachStats } from '@/types/api/coach';
+import { CoachStatsResponse, CoachStats } from '@/types/api/Coach';
 
 export type CoachRole = 'total' | 'headCoach' | 'assistantCoach';
 export type MatchLocation = 'total' | 'home' | 'away' | 'neutral';

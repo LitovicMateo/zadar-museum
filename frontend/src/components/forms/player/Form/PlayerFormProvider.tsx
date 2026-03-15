@@ -2,8 +2,8 @@ import React from 'react';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { PlayerFormData, playerSchema } from '@/schemas/player-schema';
-import { PlayerResponse } from '@/types/api/player';
+import { PlayerFormData, playerSchema } from '@/schemas/PlayerSchema';
+import { PlayerResponse } from '@/types/api/Player';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type PlayerFormProviderProps = {

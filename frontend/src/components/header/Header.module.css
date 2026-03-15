@@ -1,0 +1,137 @@
+.header {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	width: 100vw;
+	background: #fff;
+	border-bottom: 1px solid #e5e7eb;
+}
+.inner {
+	max-width: 900px;
+	width: 100%;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.75rem 1rem;
+}
+.logoGroup {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+.title {
+	font-family: var(--font-sans);
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	font-size: 0.7rem;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	width: fit-content;
+}
+
+@media (min-width: 768px) {
+	.title {
+		font-size: 1.2rem;
+		position: relative;
+	}
+}
+.menuBtn {
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+}
+.menuBtn:hover {
+	background: #f3f4f6;
+}
+/* Show hamburger only below md */
+.mobileOnly {
+	display: flex;
+	align-items: center;
+}
+@media (min-width: 768px) {
+	.mobileOnly {
+		display: none;
+	}
+}
+/* Desktop search+logout — hidden below md */
+.desktopNav {
+	display: none;
+	align-items: center;
+	gap: 1rem;
+}
+@media (min-width: 768px) {
+	.desktopNav {
+		display: flex;
+	}
+}
+.logoutBtn {
+	cursor: pointer;
+}
+/* Nav bar */
+.hamburgerBtn {
+	display: block;
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+}
+.hamburgerBtn:hover {
+	background: #f3f4f6;
+}
+@media (min-width: 768px) {
+	.hamburgerBtn {
+		display: none;
+	}
+}
+.mobileSearch {
+	display: flex;
+	align-items: center;
+}
+@media (min-width: 768px) {
+	.mobileSearch {
+		display: none;
+	}
+}
+.menuBtn {
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+}
+.menuBtn:hover {
+	background: #f3f4f6;
+}
+.nav {
+	border-top: 1px solid #f3f4f6;
+}
+.navList {
+	display: none;
+	justify-content: space-between;
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 0.5rem 1rem;
+	font-size: 1rem;
+	list-style: none;
+}
+@media (min-width: 768px) {
+	.navList {
+		display: flex;
+	}
+}
+.navItem {
+	padding: 0 0.5rem;
+}
+.navLink {
+	text-decoration: none;
+	color: inherit;
+}
+.navLink:hover {
+	text-decoration: underline;
+}

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Select, { SingleValue } from 'react-select';
 
-import { OptionType, selectStyle } from '@/constants/react-select-style';
-import { useGamePlayerStats } from '@/hooks/queries/player-stats/useGamePlayerStats';
-import { PlayerStatsResponse } from '@/types/api/player-stats';
+import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
+import { useGamePlayerStats } from '@/hooks/queries/player-stats/UseGamePlayerStats';
+import { PlayerStatsResponse } from '@/types/api/PlayerStats';
 
 type PlayerFilterProps = {
 	game: string;

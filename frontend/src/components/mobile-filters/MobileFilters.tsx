@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { motion, AnimatePresence } from 'framer-motion';
+import styles from '@/components/mobile-filters/MobileFilters.module.css';
 
 type Props = {
 	children: React.ReactNode; // filter component
@@ -22,27 +23,27 @@ const MobileFilters: React.FC<Props> = ({ children, SearchInput, title = 'Filter
 
 	return (
 		<div>
-			<div className="flex items-center gap-2 mb-2">
+			<div className={styles.trigger}>
 				<button
-					className="bg-indigo-600! hover:bg-indigo-700! active:bg-indigo-800! text-white! px-4 py-1 rounded-lg shadow-sm focus:outline-none focus:ring-2! focus:ring-indigo-300!"
+					className={styles.btn}
 					onClick={() => setShow(true)}
 					aria-expanded={show}
 				>
 					{title}
 				</button>
-				<div className="flex-1">{SearchInput}</div>
+				<div className={styles.searchSlot}>{SearchInput}</div>
 			</div>
 
 			<AnimatePresence>
 				{show && (
 					<motion.div
-						className="fixed inset-0 z-50 flex items-end"
+						className={styles.overlay}
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
 					>
 						<motion.div
-							className="absolute inset-0 bg-black/50"
+							className={styles.backdrop}
 							onClick={() => setShow(false)}
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
@@ -51,17 +52,17 @@ const MobileFilters: React.FC<Props> = ({ children, SearchInput, title = 'Filter
 						/>
 
 						<motion.div
-							className="relative w-full bg-white rounded-t-xl p-4 max-h-[80vh] overflow-auto mobile-filters-modal"
+							className={`${styles.sheet} mobile-filters-modal`}
 							initial={{ y: '100%' }}
 							animate={{ y: 0 }}
 							exit={{ y: '100%' }}
 							transition={{ type: 'spring', stiffness: 300, damping: 30 }}
 						>
 							<style>{`.mobile-filters-modal button{background-color:#4f46e5 !important;color:#fff !important;border-radius:4px !important}`}</style>
-							<div className="flex items-center justify-between mb-3">
-								<h3 className="text-lg font-medium">{title}</h3>
+							<div className={styles.sheetHeader}>
+								<h3 className={styles.sheetTitle}>{title}</h3>
 								<button
-									className="bg-indigo-600! hover:bg-indigo-700! active:bg-indigo-800! text-white! px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:ring-2! focus:ring-indigo-300!"
+									className={styles.btn}
 									onClick={() => setShow(false)}
 									aria-label="Close filters"
 								>

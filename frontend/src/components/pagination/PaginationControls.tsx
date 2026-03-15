@@ -1,13 +1,14 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/Button';
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue
-} from '@/components/ui/select';
+} from '@/components/ui/Select';
+import styles from '@/components/pagination/PaginationControls.module.css';
 
 type Props = {
 	total: number;
@@ -32,10 +33,10 @@ const PaginationControls: React.FC<Props> = ({
 
 	return (
 		<div
-			className={`flex flex-col gap-3 py-2 sm:flex-row sm:items-center sm:justify-between ${className}`}
+			className={`${styles.wrapper} ${className}`}
 		>
 			{/* Left: count + per-page selector */}
-			<div className="flex items-center gap-3 text-sm text-muted-foreground">
+			<div className={styles.left}>
 				{total > 0 ? (
 					<span>
 						Showing{' '}
@@ -48,7 +49,7 @@ const PaginationControls: React.FC<Props> = ({
 					<span>No items to show</span>
 				)}
 
-				<div className="flex items-center gap-1.5">
+				<div className={styles.perPage}>
 					<span className="text-muted-foreground">Per page:</span>
 					<Select
 						value={String(pageSize)}
@@ -72,7 +73,7 @@ const PaginationControls: React.FC<Props> = ({
 			</div>
 
 			{/* Right: prev / page input / total / next */}
-			<div className="flex items-center gap-2">
+			<div className={styles.right}>
 				<Button
 					variant="outline"
 					size="sm"
@@ -81,12 +82,12 @@ const PaginationControls: React.FC<Props> = ({
 					aria-label="Previous page"
 				>
 					<ChevronLeft className="size-4" />
-					<span className="hidden sm:inline">Prev</span>
+					<span className={styles.hiddenMobile}>Prev</span>
 				</Button>
 
-				<span className="flex items-center gap-1.5 text-sm text-muted-foreground select-none tabular-nums">
+				<span className={styles.pageInfo}>
 					<span>Page</span>
-					<span className="inline-flex h-7 min-w-[1.75rem] items-center justify-center rounded border border-border bg-background px-1.5 font-medium text-foreground shadow-xs">
+					<span className={styles.pageNum}>
 						{page}
 					</span>
 					<span>/ {totalPages}</span>
@@ -99,7 +100,7 @@ const PaginationControls: React.FC<Props> = ({
 					disabled={page >= totalPages}
 					aria-label="Next page"
 				>
-					<span className="hidden sm:inline">Next</span>
+					<span className={styles.hiddenMobile}>Next</span>
 					<ChevronRight className="size-4" />
 				</Button>
 			</div>

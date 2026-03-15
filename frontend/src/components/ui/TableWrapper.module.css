@@ -1,0 +1,30 @@
+.wrapper {
+	overflow-x: auto;
+	width: fit-content;
+	max-width: 100%;
+	border-radius: 0.5rem;
+	border: 1px solid #e5e7eb; /* gray-200 */
+	background-color: #ffffff;
+}
+
+/* Used when the parent scroll container handles overflow (e.g. gamelog scroll area). */
+.wrapperNoOverflow {
+	overflow: visible;
+	width: fit-content;
+	max-width: 100%;
+}
+
+.table {
+	font-family: var(--font-sans);
+	font-variant-numeric: tabular-nums;
+	font-size: 20px; /* text-sm */
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+@media (min-width: 768px) {
+	.table {
+		font-size: 1rem; /* text-base */
+	}
+}

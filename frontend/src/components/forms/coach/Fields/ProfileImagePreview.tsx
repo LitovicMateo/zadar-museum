@@ -1,9 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import ImagePreview from '@/components/image-preview/image-preview';
-import NoImage from '@/components/image-preview/no-image';
-import { CoachFormData } from '@/schemas/coach-schema';
+import ImagePreview from '@/components/image-preview/ImagePreview';
+import NoImage from '@/components/image-preview/NoImage';
+import { CoachFormData } from '@/schemas/CoachSchema';
 
 type ImagePreviewProps = {
 	preview: string | null;

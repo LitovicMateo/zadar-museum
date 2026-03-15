@@ -1,0 +1,19 @@
+.row {
+  transition: background-color 200ms;
+  cursor: pointer;
+}
+.row:hover { background-color: #eff6ff; }
+.tdMain { padding: 0.75rem 1rem; vertical-align: middle; }
+.content {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: min(46ch, 100%);
+  transition: color 200ms;
+}
+.content:hover { color: #2563eb; }
+.tdDate { padding: 0.75rem 1rem; text-align: right; vertical-align: middle; width: 7rem; }
+.date { font-size: 0.75rem; color: #6b7280; font-weight: 500; }

@@ -4,10 +4,11 @@ import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import TeamStatsFilter from '@/components/team-stats/filter/TeamStatsFilter';
 import TeamStatsTable from '@/components/team-stats/table/TeamStatsTable';
-import { useTeamAllTimeStats } from '@/hooks/queries/stats/useTeamAllTimeStats';
-import usePagedSortedList from '@/hooks/usePagedSortedList';
-import { useSearch } from '@/hooks/useSearch';
-import { searchTeamStats } from '@/utils/search-functions';
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
+import usePagedSortedList from '@/hooks/UsePagedSortedList';
+import { useSearch } from '@/hooks/UseSearch';
+import { useTeamAllTimeStats } from '@/hooks/queries/stats/UseTeamAllTimeStats';
+import { searchTeamStats } from '@/utils/SearchFunctions';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';
@@ -50,8 +51,9 @@ const TeamStats: React.FC = () => {
 				onPageChange={setPage}
 				onPageSizeChange={setPageSize}
 			/>
-
-			<TeamStatsTable stats={paginated} isFetching={isFetching} sorting={sorting} setSorting={setSorting} />
+			<DynamicContentWrapper>
+				<TeamStatsTable stats={paginated} isFetching={isFetching} sorting={sorting} setSorting={setSorting} />
+			</DynamicContentWrapper>
 		</PageWrapper>
 	);
 };

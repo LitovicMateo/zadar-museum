@@ -1,10 +1,10 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/fieldset';
-import FormFieldsWrapper from '@/components/ui/form-fields-wrapper';
-import SubmitButton from '@/components/ui/submit-button';
-import { VenueFormData } from '@/schemas/venue-schema';
+import Fieldset from '@/components/ui/Fieldset';
+import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
+import SubmitButton from '@/components/ui/SubmitButton';
+import { VenueFormData } from '@/schemas/VenueSchema';
 
 import City from '../Fields/City';
 import Country from '../Fields/Country';
