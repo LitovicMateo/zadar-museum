@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
 import Sidebar, { SidebarGroup } from '@/components/sidebar/Sidebar';
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 
 const sidebarGroups: SidebarGroup[] = [
 	{

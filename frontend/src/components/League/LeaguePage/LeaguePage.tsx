@@ -8,8 +8,6 @@ import { useLeagueDetails } from '@/hooks/queries/league/UseLeagueDetails';
 
 import LeagueContent from './Content/LeagueContent';
 
-import styles from '@/pages/League/League.module.css';
-
 const League: React.FC = () => {
 	const { leagueSlug } = useParams();
 	const navigate = useNavigate();

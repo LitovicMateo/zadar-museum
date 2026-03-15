@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
-import { useVenues } from '@/hooks/queries/venue/UseVenues';
 import { useSearch } from '@/hooks/UseSearch';
+import { useVenues } from '@/hooks/queries/venue/UseVenues';
 import { searchVenues } from '@/utils/SearchFunctions';
 
 const VenuesPage: React.FC = () => {
@@ -21,13 +22,15 @@ const VenuesPage: React.FC = () => {
 	return (
 		<div>
 			{SearchInput}
-			<ul>
-				{filteredVenues.map((venue) => (
-					<li key={venue.id}>
-						<Link to={APP_ROUTES.venue(venue.slug)}>{venue.name}</Link>
-					</li>
-				))}
-			</ul>
+			<DynamicContentWrapper>
+				<ul>
+					{filteredVenues.map((venue) => (
+						<li key={venue.id}>
+							<Link to={APP_ROUTES.venue(venue.slug)}>{venue.name}</Link>
+						</li>
+					))}
+				</ul>
+			</DynamicContentWrapper>
 		</div>
 	);
 };

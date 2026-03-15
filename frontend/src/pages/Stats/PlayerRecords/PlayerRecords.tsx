@@ -4,8 +4,9 @@ import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerRecordsTable from '@/components/player-records/PlayerRecordsTable';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
-import { usePlayerRecords } from '@/hooks/queries/stats/UsePlayerRecords';
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
+import { usePlayerRecords } from '@/hooks/queries/stats/UsePlayerRecords';
 import { PlayerDB } from '@/pages/Player/Player';
 import { SortingState } from '@tanstack/react-table';
 
@@ -52,8 +53,9 @@ const PlayerRecords = () => {
 				onPageChange={setPage}
 				onPageSizeChange={setPageSize}
 			/>
-
-			<PlayerRecordsTable data={paginated} sorting={sorting} setSorting={setSorting} />
+			<DynamicContentWrapper>
+				<PlayerRecordsTable data={paginated} sorting={sorting} setSorting={setSorting} />
+			</DynamicContentWrapper>
 		</PageWrapper>
 	);
 };

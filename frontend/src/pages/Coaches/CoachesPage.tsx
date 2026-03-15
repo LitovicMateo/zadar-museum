@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import NoContent from '@/components/no-content/NoContent';
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
-import { useCoaches } from '@/hooks/queries/coach/UseCoaches';
 import { useSearch } from '@/hooks/UseSearch';
+import { useCoaches } from '@/hooks/queries/coach/UseCoaches';
 import { searchCoaches } from '@/utils/SearchFunctions';
 
 const CoachesPage: React.FC = () => {
@@ -21,15 +22,17 @@ const CoachesPage: React.FC = () => {
 	return (
 		<div>
 			{SearchInput}
-			<ul>
-				{filteredCoaches.map((coach) => (
-					<li key={coach.id}>
-						<Link to={APP_ROUTES.coach(coach.documentId)}>
-							{coach.first_name} {coach.last_name}
-						</Link>
-					</li>
-				))}
-			</ul>
+			<DynamicContentWrapper>
+				<ul>
+					{filteredCoaches.map((coach) => (
+						<li key={coach.id}>
+							<Link to={APP_ROUTES.coach(coach.documentId)}>
+								{coach.first_name} {coach.last_name}
+							</Link>
+						</li>
+					))}
+				</ul>
+			</DynamicContentWrapper>
 		</div>
 	);
 };

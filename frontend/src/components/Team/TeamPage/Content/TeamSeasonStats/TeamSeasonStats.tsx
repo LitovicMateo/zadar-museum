@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import GamesFilter from '@/components/games-page/games-filter/GamesFilter';
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import Pill from '@/components/ui/Pill';
 import TableWrapper from '@/components/ui/TableWrapper';

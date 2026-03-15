@@ -4,9 +4,10 @@ import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import RefereeStatsFilter from '@/components/referee-stats/filter/RefereeStatsFilter';
 import RefereeStatsTable from '@/components/referee-stats/table/RefereeStatsTable';
-import { useRefereeAllTimeStats } from '@/hooks/queries/stats/UseRefereeAllTimeStats';
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
+import { useRefereeAllTimeStats } from '@/hooks/queries/stats/UseRefereeAllTimeStats';
 import { searchRefereeStats } from '@/utils/SearchFunctions';
 import { SortingState } from '@tanstack/react-table';
 
@@ -55,7 +56,9 @@ const RefereeStats: React.FC = () => {
 						onPageChange={setPage}
 						onPageSizeChange={setPageSize}
 					/>
-					<RefereeStatsTable stats={paginated} sorting={sorting} setSorting={setSorting} />
+					<DynamicContentWrapper>
+						<RefereeStatsTable stats={paginated} sorting={sorting} setSorting={setSorting} />
+					</DynamicContentWrapper>
 				</>
 			)}
 		</PageWrapper>

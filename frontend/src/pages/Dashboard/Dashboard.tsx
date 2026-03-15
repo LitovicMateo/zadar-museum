@@ -4,24 +4,37 @@ import Select from 'react-select';
 
 import DashboardSidebar from '@/components/sidebar/DashboardSidebar';
 import { type DashboardNavItem } from '@/components/sidebar/DashboardSidebarRow';
+import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
 
 import styles from './Dashboard.module.css';
 
 const navItems: DashboardNavItem[] = [
-	{ label: 'Player',      createPath: APP_ROUTES.dashboard.player.create,      editPath: APP_ROUTES.dashboard.player.edit },
-	{ label: 'Staff',       createPath: APP_ROUTES.dashboard.staff.create,        editPath: APP_ROUTES.dashboard.staff.edit },
-	{ label: 'Referee',     createPath: APP_ROUTES.dashboard.referee.create,      editPath: APP_ROUTES.dashboard.referee.edit },
-	{ label: 'Team',        createPath: APP_ROUTES.dashboard.team.create,         editPath: APP_ROUTES.dashboard.team.edit },
-	{ label: 'Coach',       createPath: APP_ROUTES.dashboard.coach.create,        editPath: APP_ROUTES.dashboard.coach.edit },
-	{ label: 'Game',        createPath: APP_ROUTES.dashboard.game.create,         editPath: APP_ROUTES.dashboard.game.edit },
-	{ label: 'Venue',       createPath: APP_ROUTES.dashboard.venue.create,        editPath: APP_ROUTES.dashboard.venue.edit },
-	{ label: 'Competition', createPath: APP_ROUTES.dashboard.competition.create,  editPath: APP_ROUTES.dashboard.competition.edit },
+	{ label: 'Player', createPath: APP_ROUTES.dashboard.player.create, editPath: APP_ROUTES.dashboard.player.edit },
+	{ label: 'Staff', createPath: APP_ROUTES.dashboard.staff.create, editPath: APP_ROUTES.dashboard.staff.edit },
+	{ label: 'Referee', createPath: APP_ROUTES.dashboard.referee.create, editPath: APP_ROUTES.dashboard.referee.edit },
+	{ label: 'Team', createPath: APP_ROUTES.dashboard.team.create, editPath: APP_ROUTES.dashboard.team.edit },
+	{ label: 'Coach', createPath: APP_ROUTES.dashboard.coach.create, editPath: APP_ROUTES.dashboard.coach.edit },
+	{ label: 'Game', createPath: APP_ROUTES.dashboard.game.create, editPath: APP_ROUTES.dashboard.game.edit },
+	{ label: 'Venue', createPath: APP_ROUTES.dashboard.venue.create, editPath: APP_ROUTES.dashboard.venue.edit },
+	{
+		label: 'Competition',
+		createPath: APP_ROUTES.dashboard.competition.create,
+		editPath: APP_ROUTES.dashboard.competition.edit
+	}
 ];
 
 const statsItems: DashboardNavItem[] = [
-	{ label: 'Player Stats', createPath: APP_ROUTES.dashboard.playerStats.create, editPath: APP_ROUTES.dashboard.playerStats.edit },
-	{ label: 'Team Stats',   createPath: APP_ROUTES.dashboard.teamStats.create,   editPath: APP_ROUTES.dashboard.teamStats.edit },
+	{
+		label: 'Player Stats',
+		createPath: APP_ROUTES.dashboard.playerStats.create,
+		editPath: APP_ROUTES.dashboard.playerStats.edit
+	},
+	{
+		label: 'Team Stats',
+		createPath: APP_ROUTES.dashboard.teamStats.create,
+		editPath: APP_ROUTES.dashboard.teamStats.edit
+	}
 ];
 
 const Dashboard: React.FC = () => {
@@ -41,7 +54,7 @@ const Dashboard: React.FC = () => {
 	const options: Option[] = useMemo(() => {
 		return [...navItems, ...statsItems].flatMap((item) => [
 			{ value: item.createPath, label: `Create ${item.label}` },
-			{ value: item.editPath,   label: `Edit ${item.label}` },
+			{ value: item.editPath, label: `Edit ${item.label}` }
 		]);
 	}, []);
 
@@ -69,7 +82,9 @@ const Dashboard: React.FC = () => {
 						/>
 					</div>
 				)}
-				<Outlet />
+				<DynamicContentWrapper>
+					<Outlet />
+				</DynamicContentWrapper>
 			</div>
 		</div>
 	);
