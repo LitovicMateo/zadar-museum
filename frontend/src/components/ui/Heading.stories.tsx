@@ -36,6 +36,9 @@ export const Secondary: Story = {
 };
 
 export const BothTypes: Story = {
+	args: {
+		title: 'Season Statistics'
+	},
 	render: () => (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
 			<Heading title="Season Statistics" type="main" />

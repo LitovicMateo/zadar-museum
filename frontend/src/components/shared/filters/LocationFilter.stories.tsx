@@ -18,6 +18,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const AllLocations: Story = {
+	args: {
+		location: 'all',
+		setLocation: (location: LocationValue) => {
+			void location;
+		}
+	},
 	render: () => {
 		const [location, setLocation] = useState<LocationValue>('all');
 		return <LocationFilter location={location} setLocation={setLocation} />;
@@ -25,6 +31,12 @@ export const AllLocations: Story = {
 };
 
 export const HomeSelected: Story = {
+	args: {
+		location: 'home',
+		setLocation: (location: LocationValue) => {
+			void location;
+		}
+	},
 	render: () => {
 		const [location, setLocation] = useState<LocationValue>('home');
 		return <LocationFilter location={location} setLocation={setLocation} />;
@@ -32,6 +44,12 @@ export const HomeSelected: Story = {
 };
 
 export const AwaySelected: Story = {
+	args: {
+		location: 'away',
+		setLocation: (location: LocationValue) => {
+			void location;
+		}
+	},
 	render: () => {
 		const [location, setLocation] = useState<LocationValue>('away');
 		return <LocationFilter location={location} setLocation={setLocation} />;

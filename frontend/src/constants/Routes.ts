@@ -161,7 +161,8 @@ export const API_ROUTES = {
 		competitions: (params: string) => `${root}/dashboard/competitions?${params}`,
 		games: (params: string) => `${root}/dashboard/games?${params}`,
 		playerStats: (params: string) => `${root}/dashboard/player-stats?${params}`,
-		teamStats: (params: string) => `${root}/dashboard/team-stats?${params}`
+		teamStats: (params: string) => `${root}/dashboard/team-stats?${params}`,
+		teamsWithStats: (gameId: string) => `${root}/game/team-stats/${gameId}`
 	}
 };
 
