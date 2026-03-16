@@ -6,7 +6,8 @@
 
 .filterBar {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	width: 100%;
 	justify-content: center;
 	gap: 1rem;
 }

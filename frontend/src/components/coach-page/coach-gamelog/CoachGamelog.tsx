@@ -9,7 +9,7 @@ import { useCoachGamelog } from '@/hooks/queries/coach/UseCoachGamelog';
 import { useCoachSeasons } from '@/hooks/queries/coach/UseCoachSeasons';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/UseCoachProfileDatabase';
 
-import Filters from './filters/Filters';
+import Filters from '../../Coach/CoachPage/Content/CoachGamelog/filters/Filters';
 import CoachSeasonStats from './season-stats/CoachSeasonStats';
 
 import styles from './CoachGamelog.module.css';

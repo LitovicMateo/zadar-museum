@@ -1,0 +1,14 @@
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+}
+
+.gamelogCard {
+	margin: 5px;
+	border-radius: 4px;
+	overflow: hidden;
+	outline: 1px solid rgb(197, 197, 197);
+	outline-offset: 2px;
+	padding-inline: 1em;
+}

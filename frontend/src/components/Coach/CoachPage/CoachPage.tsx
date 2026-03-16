@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import ProfilePageWrapper from '@/components/ui/ProfilePageWrapper/ProfilePageWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
+import { GamesProvider } from '@/context/GamesContext';
 import { useCoachDetails } from '@/hooks/queries/coach/UseCoachDetails';
 
 import CoachContent from './Content/CoachContent';
@@ -20,7 +21,11 @@ const Coach: React.FC = () => {
 		}
 	}, [isFetched, coachDetails, navigate]);
 
-	return <ProfilePageWrapper header={<CoachHeader />} content={<CoachContent />} />;
+	return (
+		<GamesProvider>
+			<ProfilePageWrapper header={<CoachHeader />} content={<CoachContent />} />
+		</GamesProvider>
+	);
 };
 
 export default Coach;

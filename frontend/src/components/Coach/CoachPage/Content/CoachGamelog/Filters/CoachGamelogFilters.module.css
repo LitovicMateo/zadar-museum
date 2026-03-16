@@ -1,0 +1,13 @@
+.topFilters {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 1em;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}

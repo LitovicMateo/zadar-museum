@@ -5,7 +5,9 @@ import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } f
 import { AnimatePresence } from 'framer-motion';
 
 import CoachCareerStats from './CoachCareerStats/CoachCareerStats';
+import CoachGamelog from './CoachGamelog/CoachGamelog';
 import CoachLeagueStats from './CoachLeagueStats/CoachLeagueStats';
+import CoachSeasonStats from './CoachSeasonStats/CoachSeasonStats';
 
 import styles from './CoachContent.module.css';
 
@@ -21,8 +23,8 @@ type TabValue = (typeof TABS)[number]['value'];
 const TAB_PANELS: { value: TabValue; content: React.ReactNode }[] = [
 	{ value: 'alltime', content: <CoachCareerStats /> },
 	{ value: 'league', content: <CoachLeagueStats /> },
-	{ value: 'season', content: <></> },
-	{ value: 'gamelog', content: <></> }
+	{ value: 'season', content: <CoachSeasonStats /> },
+	{ value: 'gamelog', content: <CoachGamelog /> }
 ];
 
 const CoachContent = () => {
