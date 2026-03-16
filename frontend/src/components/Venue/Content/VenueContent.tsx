@@ -5,6 +5,11 @@ import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } f
 import { AnimatePresence } from 'framer-motion';
 
 import VenueAllTimeStats from './VenueAllTimeStats/VenueAllTimeStats';
+import VenueGamelog from './VenueGamelog/VenueGamelog';
+import VenueLeagueStats from './VenueLeagueStats/VenueLeagueStats';
+import VenuePlayerRecords from './VenuePlayerRecords/VenuePlayerRecords';
+import VenueSeasonStats from './VenueSeasonStats/VenueSeasonStats';
+import VenueTeamRecords from './VenueTeamRecords/VenueTeamRecords';
 
 import styles from './VenueContent.module.css';
 
@@ -21,10 +26,11 @@ type TabValue = (typeof TABS)[number]['value'];
 
 const TAB_PANELS: { value: TabValue; content: React.ReactNode }[] = [
 	{ value: 'alltime', content: <VenueAllTimeStats /> },
-	{ value: 'league', content: <></> },
-	{ value: 'season', content: <></> },
-	{ value: 'gamelog', content: <></> },
-	{ value: 'player records', content: <></> }
+	{ value: 'league', content: <VenueLeagueStats /> },
+	{ value: 'season', content: <VenueSeasonStats /> },
+	{ value: 'gamelog', content: <VenueGamelog /> },
+	{ value: 'player records', content: <VenuePlayerRecords /> },
+	{ value: 'team records', content: <VenueTeamRecords /> }
 ];
 
 const VenueContent: React.FC = React.memo(() => {
