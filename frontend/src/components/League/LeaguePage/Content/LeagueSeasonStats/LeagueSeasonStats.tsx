@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useTeamLeagueStatsTable } from '@/components/League/LeaguePage/Content/LeagueSeasonStats/UseTeamLeagueStatsTable';
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
-import { useTeamLeagueStatsTable } from '@/components/league-page/league-season/UseTeamLeagueStatsTable';
 import { UniversalTableBody, UniversalTableFooter } from '@/components/ui/table';
 import { UniversalTableHead } from '@/components/ui/table/UniversalTableHead';
 import { useLeagueGames } from '@/hooks/queries/league/UseLeagueGames';

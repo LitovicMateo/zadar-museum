@@ -11,7 +11,7 @@ export const useCoachSeasonCompetitions = (coachId: string, season: string) => {
 	});
 };
 
-type Competition = {
+export type Competition = {
 	league_id: string;
 	league_name: string;
 	league_short_name: string;

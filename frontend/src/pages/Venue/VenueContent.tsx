@@ -1,7 +1,7 @@
 import React from 'react';
 
+import VenueAllTime from '@/components/Venue/Content/VenueAllTimeStats/VenueAllTimeStats';
 import PageContentWrapper from '@/components/ui/PageContentWrapper';
-import VenueAllTime from '@/components/venue-page/venue-all-time/VenueAllTime';
 import VenueGamelog from '@/components/venue-page/venue-gamelog/VenueGamelog';
 
 const VenueContent: React.FC = () => {

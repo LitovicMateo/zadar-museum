@@ -1,0 +1,18 @@
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	align-items: center;
+}
+
+.filterBar {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: center;
+	gap: 1rem;
+}
+
+.content {
+	margin: 0 auto;
+}

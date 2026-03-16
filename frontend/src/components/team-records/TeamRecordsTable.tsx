@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
-import { PlayerDB } from '@/pages/Player/Player';
 import { TeamRecord } from '@/types/api/TeamStats';
 import { SortingState } from '@tanstack/react-table';
 

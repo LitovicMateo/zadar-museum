@@ -1,16 +1,10 @@
 import { Link } from 'react-router-dom';
 
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import '@/components/ui/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
-import { PlayerDB } from '@/pages/Player/Player';
 import { TeamRecord } from '@/types/api/TeamStats';
-import {
-	CellContext,
-	getCoreRowModel,
-	getSortedRowModel,
-	SortingState,
-	useReactTable
-} from '@tanstack/react-table';
+import { CellContext, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from '@tanstack/react-table';
 
 export const useTeamRecordsTable = (
 	database: PlayerDB,

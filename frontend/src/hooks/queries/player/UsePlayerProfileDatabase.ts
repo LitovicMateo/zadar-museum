@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { PlayerDB } from '@/pages/Player/Player';
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 
 import { usePlayerTeams } from './UsePlayerTeams';
 

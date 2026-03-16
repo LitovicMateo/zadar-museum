@@ -13,6 +13,9 @@ export const useVenueSeasonStats = (venueSlug: string, season: string) => {
 };
 
 const getVenueSeasonStats = async (venueSlug: string, season: string): Promise<VenueSeasonStats[]> => {
+	if (!venueSlug || !season) {
+		throw new Error('Venue slug and season are required to fetch season stats');
+	}
 	const res = await apiClient.get(API_ROUTES.venue.seasonStats(venueSlug, season));
 	const raw = res.data;
 	return raw;
