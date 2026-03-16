@@ -62,5 +62,31 @@ export default factories.createCoreService(
         .where("venue_slug", venueSlug)
         .andWhere("season", season);
     },
+
+    async findVenueLeagueStats(venueSlug) {
+      const knex = strapi.db.connection;
+      return await knex("zadar_venue_league_record as vlr")
+        .join(
+          knex("schedule")
+            .select("league_slug", "league_name")
+            .distinctOn("league_slug")
+            .as("l"),
+          "vlr.league_slug",
+          "l.league_slug"
+        )
+        .select(
+          "vlr.venue_slug",
+          "vlr.league_id",
+          "vlr.league_slug",
+          "l.league_name",
+          "vlr.games",
+          "vlr.wins",
+          "vlr.losses",
+          "vlr.win_percentage",
+          "vlr.avg_attendance"
+        )
+        .where("vlr.venue_slug", venueSlug)
+        .orderBy("vlr.games", "desc");
+    },
   }),
 );

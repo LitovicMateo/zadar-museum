@@ -2,12 +2,12 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import Heading from '@/components/ui/Heading';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import TableWrapper from '@/components/ui/TableWrapper';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import { useVenueSeasonLeagueStats } from '@/hooks/queries/venue/UseVenueSeasonLeagueStats';
 import { useVenueSeasonStats } from '@/hooks/queries/venue/UseVenueSeasonStats';
 
-import { useVenueSeasonStatsTable } from './UseVenueSeasonStatsTable';
+import { useVenueSeasonStatsTable } from '../../Venue/Content/VenueSeasonStats/UseVenueSeasonStatsTable';
 
 type SeasonStatsProps = {
 	season: string;

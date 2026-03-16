@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useVenueSeasonStatsTable } from '@/components/Venue/Content/VenueSeasonStats/UseVenueSeasonStatsTable';
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import TableWrapper from '@/components/ui/TableWrapper';
 import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
-import { useVenueSeasonStatsTable } from '@/components/venue-page/venue-gamelog/UseVenueSeasonStatsTable';
 import { useVenueSeasonLeagueStats } from '@/hooks/queries/venue/UseVenueSeasonLeagueStats';
 import { useVenueSeasonStats } from '@/hooks/queries/venue/UseVenueSeasonStats';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
@@ -28,11 +28,10 @@ const VenueSeasonStats = () => {
 		}
 	}, [seasons, setSelectedSeason]);
 
-	if (!seasonStats || !seasonLeagueStats || seasonStats.length === 0) {
+	if (!seasons || seasons.length === 0) {
 		return null;
 	}
-
-	if (!seasons || seasons.length === 0) {
+	if (!seasonStats || !seasonLeagueStats || seasonStats.length === 0) {
 		return null;
 	}
 
