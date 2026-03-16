@@ -1,7 +1,7 @@
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import { API_ROUTES } from '@/constants/Routes';
 import { useQuery } from '@/hooks/UseQueryWithToast';
 import apiClient from '@/lib/ApiClient';
-import { PlayerDB } from '@/pages/Player/Player';
 import { PlayerCareerStats } from '@/types/api/Player';
 
 export const useAllTimeLeagueStats = (playerId: string, db: PlayerDB) => {

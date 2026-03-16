@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import Heading from '@/components/ui/Heading';
 import { useVenueTeamRecord } from '@/hooks/queries/venue/UseVenueTeamRecord';
 
 import VenueStats from './VenueStats';
-import styles from './VenueAllTime.module.css';
 
-const VenueAllTime: React.FC = () => {
+import styles from './VenueAllTimeStats.module.css';
+
+const VenueAllTimeStats: React.FC = () => {
 	const { venueSlug } = useParams();
 
 	const { data: record } = useVenueTeamRecord(venueSlug!);
@@ -18,10 +18,9 @@ const VenueAllTime: React.FC = () => {
 
 	return (
 		<section className={styles.section}>
-			<Heading title="All Time Record" />
 			<VenueStats record={record} />
 		</section>
 	);
 };
 
-export default VenueAllTime;
+export default VenueAllTimeStats;

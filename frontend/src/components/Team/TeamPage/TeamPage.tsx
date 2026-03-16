@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import TeamContent from '@/components/Team/TeamPage/Content/TeamContent';
+import { TeamErrorBoundary } from '@/components/Team/TeamPage/TeamErrorBoundary';
 import TeamHeader from '@/components/Team/TeamPage/TeamHeader/TeamHeader';
 import ProfilePageWrapper from '@/components/ui/ProfilePageWrapper/ProfilePageWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
 import { GamesProvider } from '@/context/GamesContext';
 import { useTeamDetails } from '@/hooks/queries/team/UseTeamDetails';
-import { TeamErrorBoundary } from '@/pages/Team/TeamErrorBoundary';
 
 import styles from './TeamPage.module.css';
 

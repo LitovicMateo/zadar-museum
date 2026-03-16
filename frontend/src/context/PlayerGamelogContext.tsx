@@ -2,10 +2,10 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import { usePlayerCompetitions } from '@/hooks/queries/player/UsePlayerCompetitions';
 import { usePlayerProfileDatabase } from '@/hooks/queries/player/UsePlayerProfileDatabase';
 import { usePlayerSeasons } from '@/hooks/queries/player/UsePlayerSeasons';
-import { PlayerDB } from '@/pages/Player/Player';
 import { PlayerCompetitionResponse } from '@/types/api/Player';
 
 type BoxscoreContextType = {

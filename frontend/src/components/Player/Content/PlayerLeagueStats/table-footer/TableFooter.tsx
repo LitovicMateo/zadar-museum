@@ -1,10 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import { UniversalTableFooter } from '@/components/ui/table';
 import '@/components/ui/table/Types';
 import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
-import { PlayerDB } from '@/pages/Player/Player';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 type TableFooterProps = {

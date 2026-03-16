@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
 import PlayerStatsTable from '@/components/player-stats/table/PlayerStatsTable';
@@ -7,7 +8,6 @@ import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
 import { usePlayerAllTimeStats } from '@/hooks/queries/stats/UsePlayerAllTimeStats';
-import { PlayerDB } from '@/pages/Player/Player';
 import { PlayerAllTimeStats } from '@/types/api/Player';
 import { searchPlayerStats } from '@/utils/SearchFunctions';
 import { SortingState } from '@tanstack/react-table';

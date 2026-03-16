@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { PlayerErrorBoundary } from '@/components/Player/PlayerErrorBoundary';
 import PlayerHeader from '@/components/Player/PlayerHeader/PlayerHeader';
 import ProfilePageWrapper from '@/components/ui/ProfilePageWrapper/ProfilePageWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
 import { BoxscoreProvider } from '@/context/PlayerGamelogContext';
 import { usePlayerDetails } from '@/hooks/queries/player/UsePlayerDetails';
-import { PlayerErrorBoundary } from '@/pages/Player/PlayerErrorBoundary';
 
 import PlayerContent from '../Content/PlayerContent';
 

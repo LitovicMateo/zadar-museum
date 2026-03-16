@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import CoachStatsFilter from '@/components/coach-stats/filter/CoachStatsFilter';
 import CoachStatsTable from '@/components/coach-stats/table/CoachStatsTable';
 import MobileFilters from '@/components/mobile-filters/MobileFilters';
@@ -8,7 +9,6 @@ import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
 import { useCoachAllTimeStats } from '@/hooks/queries/stats/UseCoachAllTimeStats';
-import { PlayerDB } from '@/pages/Player/Player';
 import { searchCoachStats } from '@/utils/SearchFunctions';
 import { SortingState } from '@tanstack/react-table';
 

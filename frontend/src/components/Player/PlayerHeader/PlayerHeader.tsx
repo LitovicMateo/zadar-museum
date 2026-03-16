@@ -10,8 +10,6 @@ import { getImageUrl } from '@/utils/GetImageUrl';
 import PlayerBio from './player-bio/PlayerBio';
 import PlayerNumber from './player-number/PlayerNumber';
 
-import styles from './PlayerHeader.module.css';
-
 const PlayerHeader: React.FC = React.memo(() => {
 	const { playerId } = useParams();
 

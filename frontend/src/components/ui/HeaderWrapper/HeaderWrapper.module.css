@@ -1,5 +1,5 @@
 .section {
-	max-height: 250px;
+	height: 150px;
 	overflow: hidden;
 	background: linear-gradient(to bottom right, #1e40af, #1e3a8a);
 }
@@ -21,6 +21,9 @@
 }
 
 @media (min-width: 640px) {
+	.section {
+		height: 250px;
+	}
 	.inner {
 		flex-direction: row;
 		gap: 1.5rem;

@@ -5,6 +5,7 @@ import Coach from '@/components/Coach/CoachPage/CoachPage';
 import League from '@/components/League/LeaguePage/LeaguePage';
 import Player from '@/components/Player/PlayerPage';
 import TeamPage from '@/components/Team/TeamPage';
+import Venue from '@/components/Venue//VenuePage';
 import { GamesProvider } from '@/context/GamesContext';
 import { TeamGamesProvider } from '@/context/TeamContext';
 import CoachesPage from '@/pages/Coaches/CoachesPage';
@@ -19,7 +20,6 @@ import RefereesPage from '@/pages/Referees/RefereesPage';
 import Staff from '@/pages/Staff/Staff';
 import StaffsPage from '@/pages/Staffs/StaffsPage';
 import TeamsPage from '@/pages/Teams/TeamsPage';
-import Venue from '@/pages/Venue/Venue';
 import VenuesPage from '@/pages/Venues/VenuesPage';
 
 import ProtectedRoute from '../protected-route/ProtectedRoute';

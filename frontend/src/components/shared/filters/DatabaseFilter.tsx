@@ -1,8 +1,8 @@
 import React from 'react';
 import Select from 'react-select';
 
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import { selectStyle } from '@/constants/ReactSelectStyle';
-import { PlayerDB } from '@/pages/Player/Player';
 import Category from '@/pages/Stats/Category';
 import Container from '@/pages/Stats/Container';
 
