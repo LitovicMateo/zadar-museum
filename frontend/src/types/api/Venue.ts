@@ -35,3 +35,19 @@ export interface VenueLeagueStats extends VenueTeamRecordResponse {
 	league_id: string;
 	league_slug: string;
 }
+
+export interface VenuePlayerRecord {
+	game_id: string;
+	first_name: string;
+	last_name: string;
+	season: string;
+	stat_value: number;
+}
+
+export interface VenueTeamRecord {
+	game_id: string;
+	opponent_name: string;
+	opponent_slug: string;
+	season: string;
+	stat_value: number;
+}
