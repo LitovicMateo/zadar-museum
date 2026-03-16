@@ -1,0 +1,17 @@
+.section {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	gap: 1rem;
+	width: fit-content;
+	max-width: 100%;
+}
+
+.pillContainer {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.content {
+	margin: 0 auto;
+}

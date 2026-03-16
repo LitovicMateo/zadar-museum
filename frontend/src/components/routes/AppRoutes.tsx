@@ -1,12 +1,12 @@
 import React from 'react';
 import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 
+import Coach from '@/components/Coach/CoachPage/CoachPage';
 import League from '@/components/League/LeaguePage/LeaguePage';
 import Player from '@/components/Player/PlayerPage';
 import TeamPage from '@/components/Team/TeamPage';
 import { GamesProvider } from '@/context/GamesContext';
 import { TeamGamesProvider } from '@/context/TeamContext';
-import Coach from '@/pages/Coach/Coach';
 import CoachesPage from '@/pages/Coaches/CoachesPage';
 import Game from '@/pages/Game/Game';
 import Games from '@/pages/Games/Games';

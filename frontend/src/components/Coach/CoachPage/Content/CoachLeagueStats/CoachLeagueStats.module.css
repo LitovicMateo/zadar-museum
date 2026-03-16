@@ -1,0 +1,35 @@
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.filterBar {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1rem;
+}
+
+.content {
+	margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+	.filterBar {
+		flex-direction: row;
+		gap: 2rem;
+		align-items: center;
+	}
+}
+
+.fontAbel {
+	font-family:
+		'Abel',
+		system-ui,
+		-apple-system,
+		'Segoe UI',
+		Roboto,
+		'Helvetica Neue',
+		Arial;
+}

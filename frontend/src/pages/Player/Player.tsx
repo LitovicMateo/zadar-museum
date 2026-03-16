@@ -5,8 +5,6 @@ import { APP_ROUTES } from '@/constants/Routes';
 import { BoxscoreProvider } from '@/context/PlayerGamelogContext';
 import { usePlayerDetails } from '@/hooks/queries/player/UsePlayerDetails';
 
-
-
 export type PlayerDB = 'zadar' | 'opponent';
 
 const Player: React.FC = () => {
@@ -25,9 +23,7 @@ const Player: React.FC = () => {
 
 	return (
 		<>
-			<BoxscoreProvider>
-				{null}
-			</BoxscoreProvider>
+			<BoxscoreProvider>{null}</BoxscoreProvider>
 		</>
 	);
 };

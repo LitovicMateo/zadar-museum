@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import CoachBio from '@/components/Coach/CoachPage/Header/Bio/CoachBio';
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
+import HeaderWrapper from '@/components/ui/HeaderWrapper/HeaderWrapper';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { zadarBg } from '@/constants/PlayerBg';
 import { useCoachDetails } from '@/hooks/queries/coach/UseCoachDetails';
 import { getImageUrl } from '@/utils/GetImageUrl';
-
-import CoachBio from '../../Coach/CoachPage/Header/Bio/CoachBio';
 
 import styles from './CoachHeader.module.css';
 
@@ -37,15 +37,17 @@ const CoachHeader: React.FC = () => {
 	}
 
 	const imagePath = coach.image?.url;
-	const imageUrl = imagePath ? getImageUrl(imagePath) : null;
+	const imageUrl = getImageUrl(imagePath);
 
 	return (
-		<section className={`${styles.section} ${zadarBg}`}>
-			<div className={styles.inner}>
-				<ProfileImage imageUrl={imageUrl} name={`${coach.first_name} ${coach.last_name}`} />
-				<CoachBio coach={coach} />
-			</div>
-		</section>
+		<HeaderWrapper>
+			<ProfileImage
+				imageUrl={imageUrl}
+				name={`${coach.first_name} ${coach.last_name}`}
+				nationality={coach.nationality}
+			/>
+			<CoachBio coach={coach} />
+		</HeaderWrapper>
 	);
 };
 
