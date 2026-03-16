@@ -1,7 +1,7 @@
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import { API_ROUTES } from '@/constants/Routes';
 import { useQuery } from '@/hooks/UseQueryWithToast';
 import apiClient from '@/lib/ApiClient';
-import { PlayerDB } from '@/pages/Player/Player';
 import { PlayerRecords } from '@/types/api/PlayerStats';
 
 export const usePlayerRecords = (

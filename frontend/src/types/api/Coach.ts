@@ -20,24 +20,27 @@ export interface CoachDetailsResponse {
 	documentId: string;
 }
 
-export type CoachRecordRow = {
-	name: string; // e.g., "Total", "Home", "Away"
+type CoachRecordStats = {
 	games: number;
 	wins: number;
 	losses: number;
-	winPercentage: number;
-	pointsScored: number;
-	pointsReceived: number;
-	pointsDiff: number;
+	win_percentage: number;
+	points_scored: number;
+	points_received: number;
+	points_difference: number;
 };
+
+type CoachRecordViewData = Record<string, CoachRecordStats>;
+
+export type CoachRecordRow = CoachRecordStats & { name: string };
 
 export type CoachRecordResponse = {
 	coachId: string;
 	firstName: string;
 	lastName: string;
-	total: CoachRecordRow[];
-	headCoach: CoachRecordRow[];
-	assistantCoach: CoachRecordRow[];
+	total: CoachRecordViewData;
+	headCoach: CoachRecordViewData;
+	assistantCoach: CoachRecordViewData;
 };
 
 export interface CoachLeagueStatsResponse {

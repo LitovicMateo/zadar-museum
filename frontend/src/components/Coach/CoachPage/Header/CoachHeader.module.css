@@ -1,0 +1,69 @@
+.section {
+	max-height: 250px;
+	overflow: hidden;
+	box-shadow:
+		0 10px 15px -3px rgba(0, 0, 0, 0.1),
+		0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.inner {
+	height: 100%;
+	width: 100%;
+	position: relative;
+	max-width: 800px;
+	display: flex;
+	gap: 1.5rem;
+	justify-content: flex-start;
+	align-items: flex-end;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* ── Skeleton loading state ─────────────────────────────── */
+.skeletonImage {
+	height: 250px;
+	min-width: 180px;
+	flex-shrink: 0;
+	border-radius: 0;
+	opacity: 0.2;
+}
+
+.skeletonBio {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	padding-bottom: 1.5rem;
+	width: 100%;
+}
+
+.skeletonName {
+	height: 1rem;
+	width: 6rem;
+	opacity: 0.2;
+}
+
+.skeletonNameLg {
+	height: 2.5rem;
+	width: 12rem;
+	opacity: 0.2;
+}
+
+.skeletonDetails {
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.skeletonLine {
+	height: 1rem;
+	width: 8rem;
+	opacity: 0.2;
+}
+
+.skeletonLineLg {
+	height: 1rem;
+	width: 10rem;
+	opacity: 0.2;
+}

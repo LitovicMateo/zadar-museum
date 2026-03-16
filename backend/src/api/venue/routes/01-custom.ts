@@ -54,8 +54,35 @@ export default {
 
     {
       method: "GET",
+      path: "/venue/stats/league/:venueSlug",
+      handler: "venue.getVenueLeagueStats",
+      config: {
+        auth: false,
+      },
+    },
+
+    {
+      method: "GET",
       path: "/venue/stats/:season/league/:venueSlug",
       handler: "venue.getVenueSeasonLeagueStats",
+      config: {
+        auth: false,
+      },
+    },
+
+    {
+      method: "GET",
+      path: "/venue/records/players/:venueSlug",
+      handler: "venue.getVenuePlayerRecords",
+      config: {
+        auth: false,
+      },
+    },
+
+    {
+      method: "GET",
+      path: "/venue/records/teams/:venueSlug",
+      handler: "venue.getVenueTeamRecords",
       config: {
         auth: false,
       },

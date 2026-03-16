@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 import MobileFilters from '@/components/mobile-filters/MobileFilters';
 import PaginationControls from '@/components/pagination/PaginationControls';
 import PlayerStatsFilter from '@/components/player-stats/filter/PlayerStatsFilter';
@@ -7,7 +8,6 @@ import TeamRecordsTable from '@/components/team-records/TeamRecordsTable';
 import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useTeamRecords } from '@/hooks/queries/stats/UseTeamRecords';
-import { PlayerDB } from '@/pages/Player/Player';
 import { SortingState } from '@tanstack/react-table';
 
 import PageWrapper from '../UI/PageWrapper';

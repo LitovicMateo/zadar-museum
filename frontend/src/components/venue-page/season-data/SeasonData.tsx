@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ScheduleList } from '@/components/Schedule/ScheduleList';
+import TeamLeagueStats from '@/components/Team/TeamPage/Content/TeamLeagueStats/TeamLeagueStats';
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import Heading from '@/components/ui/Heading';
 import { useLeagueGames } from '@/hooks/queries/league/UseLeagueGames';
 import { useLeagueSeasons } from '@/hooks/queries/league/UseLeagueSeasons';
 
-import TeamLeagueStats from '../../league-page/league-season/TeamLeagueStats';
 import PlayerLeagueStats from './PlayerLeagueStats';
 
 import styles from './SeasonData.module.css';
@@ -29,7 +29,7 @@ const SeasonData = () => {
 	return (
 		<section className={styles.section}>
 			<SeasonSelect seasons={seasons!} selectedSeason={selectedSeason} onSeasonChange={setSelectedSeason} />
-			<TeamLeagueStats season={selectedSeason} />
+			<TeamLeagueStats />
 			<Heading title="Player Stats" type="secondary" />
 			<PlayerLeagueStats season={selectedSeason} />
 			<Heading title="Schedule" type="secondary" />

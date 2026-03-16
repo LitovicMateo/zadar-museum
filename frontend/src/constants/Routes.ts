@@ -1,4 +1,4 @@
-import { PlayerDB } from '@/pages/Player/Player';
+import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
 
 const root = '/api';
 
@@ -127,7 +127,12 @@ export const API_ROUTES = {
 		seasons: (slug: string) => `${root}/venue/seasons/${slug}`,
 		competitions: (venueSlug: string, seasons: string) => `${root}/venue/competitions/${seasons}/${venueSlug}`,
 		seasonStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/total/${venueSlug}`,
-		seasonLeagueStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/league/${venueSlug}`
+		seasonLeagueStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/league/${venueSlug}`,
+		leagueStats: (venueSlug: string) => `${root}/venue/stats/league/${venueSlug}`,
+		playerRecords: (venueSlug: string, statKey: string) =>
+			`${root}/venue/records/players/${venueSlug}?statKey=${statKey}`,
+		teamRecords: (venueSlug: string, statKey: string) =>
+			`${root}/venue/records/teams/${venueSlug}?statKey=${statKey}`
 	},
 	stats: {
 		player: {
