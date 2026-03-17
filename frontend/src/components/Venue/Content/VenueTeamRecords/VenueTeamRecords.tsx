@@ -7,8 +7,8 @@ import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import NoContent from '@/components/no-content/NoContent';
 import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import { selectStyle } from '@/constants/ReactSelectStyle';
-import { useVenueTeamRecords } from '@/hooks/queries/venue/UseVenueTeamRecords';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
+import { useVenueTeamRecords } from '@/hooks/queries/venue/UseVenueTeamRecords';
 
 import { teamRecordOptions } from './Options';
 

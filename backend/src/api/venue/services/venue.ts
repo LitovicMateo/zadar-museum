@@ -118,7 +118,9 @@ export default factories.createCoreService(
         .where("pb.team_slug", "kk-zadar")
         .whereNot("pb.is_nulled", true)
         .whereNotNull(`pb.${statKey}`)
-        .modify((qb) => { if (season) qb.where("pb.season", season); })
+        .modify((qb) => {
+          if (season) qb.where("pb.season", season);
+        })
         .orderByRaw(`pb.?? desc`, [statKey])
         .limit(20);
     },
@@ -154,7 +156,9 @@ export default factories.createCoreService(
         .where("tb.team_slug", "kk-zadar")
         .whereNot("tb.is_nulled", true)
         .whereNotNull(`tb.${statKey}`)
-        .modify((qb) => { if (season) qb.where("tb.season", season); })
+        .modify((qb) => {
+          if (season) qb.where("tb.season", season);
+        })
         .orderByRaw(`tb.?? desc`, [statKey])
         .limit(20);
     },

@@ -19,7 +19,13 @@ type SeasonSelectProps = {
 	showAll?: boolean;
 };
 
-const SeasonSelect: React.FC<SeasonSelectProps> = ({ seasons, selectedSeason, onSeasonChange, compact = false, showAll = false }) => {
+const SeasonSelect: React.FC<SeasonSelectProps> = ({
+	seasons,
+	selectedSeason,
+	onSeasonChange,
+	compact = false,
+	showAll = false
+}) => {
 	const { selectSeason, isPending } = useSeasonTransition(onSeasonChange ?? (() => {}));
 
 	const options: SeasonOption[] = useMemo(() => {

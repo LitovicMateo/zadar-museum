@@ -12,7 +12,11 @@ export const useVenuePlayerRecords = (venueSlug: string, statKey: string, season
 	});
 };
 
-const getVenuePlayerRecords = async (venueSlug: string, statKey: string, season?: string): Promise<VenuePlayerRecord[]> => {
+const getVenuePlayerRecords = async (
+	venueSlug: string,
+	statKey: string,
+	season?: string
+): Promise<VenuePlayerRecord[]> => {
 	const res = await apiClient.get(API_ROUTES.venue.playerRecords(venueSlug, statKey, season));
 	return res.data;
 };
