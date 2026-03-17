@@ -118,7 +118,8 @@ export const API_ROUTES = {
 		seasons: (id: string) => `${root}/referee/seasons/${id}`,
 		competitions: (refereeId: string, seasons: string) => `${root}/referee/competitions/${seasons}/${refereeId}`,
 		seasonStats: (refereeId: string, season: string) => `${root}/referee/stats/${season}/total/${refereeId}`,
-		seasonLeagueStats: (refereeId: string, season: string) => `${root}/referee/stats/${season}/league/${refereeId}`
+		seasonLeagueStats: (refereeId: string, season: string) => `${root}/referee/stats/${season}/league/${refereeId}`,
+		leagueStats: (refereeId: string) => `${root}/referee/stats/league/${refereeId}`
 	},
 	venue: {
 		details: (slug: string) => `${root}/venue/${slug}`,

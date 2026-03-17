@@ -16,8 +16,7 @@ const TABS = [
 	{ value: 'alltime', label: 'All Time' },
 	{ value: 'league', label: 'League' },
 	{ value: 'season', label: 'Season' },
-	{ value: 'gamelog', label: 'Gamelog' },
-	{ value: 'leaders', label: 'Leaders' }
+	{ value: 'gamelog', label: 'Gamelog' }
 ] as const;
 
 type TabValue = (typeof TABS)[number]['value'];

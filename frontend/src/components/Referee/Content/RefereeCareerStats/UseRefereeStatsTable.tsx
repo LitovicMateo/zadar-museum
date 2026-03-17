@@ -1,3 +1,5 @@
+import React from 'react';
+
 import '@/components/ui/table/Types';
 import { RefereeStats } from '@/types/api/Referee';
 import { CellContext, getCoreRowModel, useReactTable } from '@tanstack/react-table';
@@ -8,8 +10,13 @@ const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData,
 };
 
 export const useRefereeStatsTable = (data: RefereeStats[] | undefined) => {
+	const filteredRows = React.useMemo(() => {
+		if (!data) return [];
+		return data.filter((row) => row.games !== null);
+	}, [data]);
+
 	const table = useReactTable<RefereeStats>({
-		data: data || [],
+		data: filteredRows,
 		columns: [
 			{
 				header: '',

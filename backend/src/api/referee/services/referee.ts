@@ -46,12 +46,13 @@ export default factories.createCoreService(
       const totalStats = JSON.parse(referee.total);
       const homeStats = JSON.parse(referee.home);
       const awayStats = JSON.parse(referee.away);
+      const neutralStats = referee.neutral ? JSON.parse(referee.neutral) : null;
 
       const stats = {
         refereeId: referee.referee_id,
         firstName: referee.first_name,
         lastName: referee.last_name,
-        stats: [homeStats, awayStats, totalStats],
+        stats: [homeStats, awayStats, neutralStats, totalStats].filter(Boolean),
       };
 
       return stats;
@@ -103,6 +104,8 @@ export default factories.createCoreService(
         const homeStats = JSON.parse(r.home);
         const awayStats = JSON.parse(r.away);
 
+        const neutralStats = r.neutral ? JSON.parse(r.neutral) : null;
+
         return {
           refereeId: r.referee_id,
           firstName: r.first_name,
@@ -114,11 +117,35 @@ export default factories.createCoreService(
             total: totalStats,
             home: homeStats,
             away: awayStats,
+            neutral: neutralStats,
           },
         };
       });
 
       return referee;
+    },
+
+    async findRefereeLeagueStats(refereeId) {
+      const knex = strapi.db.connection;
+      const data = await knex("referee_league_record_full")
+        .select("*")
+        .where("referee_id", refereeId);
+
+      if (!data.length) {
+        return null;
+      }
+
+      return data.map((r) => ({
+        refereeId: r.referee_id,
+        firstName: r.first_name,
+        lastName: r.last_name,
+        leagueId: r.league_id,
+        leagueSlug: r.league_slug,
+        total: JSON.parse(r.total),
+        home: JSON.parse(r.home),
+        away: JSON.parse(r.away),
+        neutral: r.neutral ? JSON.parse(r.neutral) : null,
+      }));
     },
   }),
 );
