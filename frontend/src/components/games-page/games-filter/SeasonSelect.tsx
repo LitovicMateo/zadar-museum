@@ -16,13 +16,17 @@ type SeasonSelectProps = {
 	selectedSeason: string | null;
 	onSeasonChange?: (season: string) => void;
 	compact?: boolean;
+	showAll?: boolean;
 };
 
-const SeasonSelect: React.FC<SeasonSelectProps> = ({ seasons, selectedSeason, onSeasonChange, compact = false }) => {
+const SeasonSelect: React.FC<SeasonSelectProps> = ({ seasons, selectedSeason, onSeasonChange, compact = false, showAll = false }) => {
 	const { selectSeason, isPending } = useSeasonTransition(onSeasonChange ?? (() => {}));
 
-	const options: SeasonOption[] = useMemo(() => seasons.map((s) => ({ value: s, label: s })), [seasons]);
-	const selectedOption = options.find((o) => o.value === selectedSeason) ?? null;
+	const options: SeasonOption[] = useMemo(() => {
+		const mapped = seasons.map((s) => ({ value: s, label: s }));
+		return showAll ? [{ value: '', label: 'All' }, ...mapped] : mapped;
+	}, [seasons, showAll]);
+	const selectedOption = options.find((o) => o.value === (selectedSeason ?? '')) ?? null;
 
 	const selectProps = {
 		placeholder: 'Select season',
