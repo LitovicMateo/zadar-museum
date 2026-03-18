@@ -74,7 +74,11 @@ export const API_ROUTES = {
 		schedule: (season: string, teamSlug: string) => `${root}/team/schedule/${season}/${teamSlug}`,
 		seasons: (teamSlug: string) => `${root}/team/seasons/${teamSlug}`,
 		competitions: (params: string) => `${root}/team/competitions?${params}`,
-		teamCompetitions: (teamSlug: string) => `${root}/team/competitions/${teamSlug}`
+		teamCompetitions: (teamSlug: string) => `${root}/team/competitions/${teamSlug}`,
+		playerRecords: (teamSlug: string, statKey: string, season?: string) =>
+			`${root}/team/records/players/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`,
+		teamRecords: (teamSlug: string, statKey: string, season?: string) =>
+			`${root}/team/records/teams/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`
 	},
 	game: {
 		details: (id: string) =>

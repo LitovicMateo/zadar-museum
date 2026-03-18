@@ -5,6 +5,7 @@ import { APP_ROUTES } from '@/constants/Routes';
 import styles from './RecordsRow.module.css';
 
 type RecordsRowProps = {
+	rank: number;
 	name: string;
 	season: string;
 	statValue: number;
@@ -12,9 +13,10 @@ type RecordsRowProps = {
 	isLast: boolean;
 };
 
-const RecordsRow = ({ name, season, statValue, gameId, isLast }: RecordsRowProps) => {
+const RecordsRow = ({ rank, name, season, statValue, gameId, isLast }: RecordsRowProps) => {
 	return (
 		<li className={`${styles.item} ${isLast ? '' : styles.itemBorder}`}>
+			<span className={styles.rank}>{rank}</span>
 			<Link to={APP_ROUTES.game(gameId)} className={styles.link}>
 				{name}
 			</Link>

@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Select from 'react-select';
 
-import RecordsList from '@/components/Venue/Content/VenueRecords/RecordsList';
 import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
 import NoContent from '@/components/no-content/NoContent';
 import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
+import RecordsCard from '@/components/ui/RecordsList/RecordsCard';
+import RecordsList from '@/components/ui/RecordsList/RecordsList';
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useVenuePlayerRecords } from '@/hooks/queries/venue/UseVenuePlayerRecords';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
@@ -53,9 +54,11 @@ const VenuePlayerRecords = () => {
 			{!normalized?.length ? (
 				<NoContent type="info" description="No records found" />
 			) : (
-				<DynamicContentWrapper>
-					<RecordsList records={normalized} nameLabel="Player" />
-				</DynamicContentWrapper>
+				<RecordsCard>
+					<DynamicContentWrapper>
+						<RecordsList records={normalized} nameLabel="Player" />
+					</DynamicContentWrapper>
+				</RecordsCard>
 			)}
 		</section>
 	);

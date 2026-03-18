@@ -1,12 +1,3 @@
-.card {
-	border-radius: 0.5rem;
-	box-shadow:
-		0 4px 6px -1px rgb(0 0 0 / 0.1),
-		0 2px 4px -2px rgb(0 0 0 / 0.1);
-	border: 1px solid #e5e7eb;
-	overflow: hidden;
-	background: #fff;
-}
 .list {
 	font-family: var(--font-abel, 'Abel', sans-serif);
 	list-style: none;
@@ -15,7 +6,7 @@
 }
 .header {
 	display: grid;
-	grid-template-columns: 1fr auto auto;
+	grid-template-columns: auto 1fr auto auto;
 	gap: 1rem;
 	padding: 0.75rem 1rem;
 	font-weight: 600;

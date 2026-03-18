@@ -20,7 +20,7 @@
 	padding: 1rem;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
 	.section {
 		height: 250px;
 	}

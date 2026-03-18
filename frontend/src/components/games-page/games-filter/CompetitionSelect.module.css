@@ -43,7 +43,7 @@
 .label:hover .shortName {
 	color: #111827;
 }
-@media (max-width: 640px) {
+@media (max-width: 768px) {
 	.fullName {
 		display: none;
 	}

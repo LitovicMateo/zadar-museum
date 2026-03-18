@@ -101,3 +101,13 @@ export const teamRecordParamsSchema = z.object({
   teamSlug: slugSchema,
   season: seasonSchema,
 });
+
+/**
+ * GET /team/records/players/:teamSlug
+ * GET /team/records/teams/:teamSlug
+ * Query params: statKey (required), season (optional)
+ */
+export const teamRecordsQuerySchema = z.object({
+  statKey: statKeySchema,
+  season: seasonSchema,
+});

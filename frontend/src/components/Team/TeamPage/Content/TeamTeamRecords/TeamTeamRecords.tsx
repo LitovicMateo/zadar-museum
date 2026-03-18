@@ -8,22 +8,22 @@ import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import RecordsCard from '@/components/ui/RecordsList/RecordsCard';
 import RecordsList from '@/components/ui/RecordsList/RecordsList';
 import { selectStyle } from '@/constants/ReactSelectStyle';
-import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
-import { useVenueTeamRecords } from '@/hooks/queries/venue/UseVenueTeamRecords';
+import { useTeamSeasons } from '@/hooks/queries/team/UseTeamSeasons';
+import { useTeamTeamRecords } from '@/hooks/queries/team/UseTeamTeamRecords';
 
 import { teamRecordOptions } from './Options';
 
-import styles from './VenueTeamRecords.module.css';
+import styles from './TeamTeamRecords.module.css';
 
 type Option = { value: string; label: string };
 
-const VenueTeamRecords = () => {
-	const { venueSlug } = useParams();
+const TeamTeamRecords = () => {
+	const { teamSlug } = useParams();
 	const [statKey, setStatKey] = useState<string>(teamRecordOptions[0].value);
 	const [selectedSeason, setSelectedSeason] = useState<string>('');
 
-	const { data: seasons } = useVenueSeasons(venueSlug!);
-	const { data: records } = useVenueTeamRecords(venueSlug!, statKey, selectedSeason);
+	const { data: seasons } = useTeamSeasons(teamSlug!);
+	const { data: records } = useTeamTeamRecords(teamSlug!, statKey, selectedSeason);
 
 	const normalized = records?.map((r) => ({
 		game_id: r.game_id,
@@ -64,4 +64,4 @@ const VenueTeamRecords = () => {
 	);
 };
 
-export default VenueTeamRecords;
+export default TeamTeamRecords;

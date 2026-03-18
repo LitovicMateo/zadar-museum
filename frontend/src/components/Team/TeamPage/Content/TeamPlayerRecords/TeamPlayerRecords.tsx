@@ -8,26 +8,26 @@ import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
 import RecordsCard from '@/components/ui/RecordsList/RecordsCard';
 import RecordsList from '@/components/ui/RecordsList/RecordsList';
 import { selectStyle } from '@/constants/ReactSelectStyle';
-import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
-import { useVenueTeamRecords } from '@/hooks/queries/venue/UseVenueTeamRecords';
+import { useTeamPlayerRecords } from '@/hooks/queries/team/UseTeamPlayerRecords';
+import { useTeamSeasons } from '@/hooks/queries/team/UseTeamSeasons';
 
-import { teamRecordOptions } from './Options';
+import { playerRecordOptions } from './Options';
 
-import styles from './VenueTeamRecords.module.css';
+import styles from './TeamPlayerRecords.module.css';
 
 type Option = { value: string; label: string };
 
-const VenueTeamRecords = () => {
-	const { venueSlug } = useParams();
-	const [statKey, setStatKey] = useState<string>(teamRecordOptions[0].value);
+const TeamPlayerRecords = () => {
+	const { teamSlug } = useParams();
+	const [statKey, setStatKey] = useState<string>(playerRecordOptions[0].value);
 	const [selectedSeason, setSelectedSeason] = useState<string>('');
 
-	const { data: seasons } = useVenueSeasons(venueSlug!);
-	const { data: records } = useVenueTeamRecords(venueSlug!, statKey, selectedSeason);
+	const { data: seasons } = useTeamSeasons(teamSlug!);
+	const { data: records } = useTeamPlayerRecords(teamSlug!, statKey, selectedSeason);
 
 	const normalized = records?.map((r) => ({
 		game_id: r.game_id,
-		name: r.opponent_name,
+		name: `${r.first_name} ${r.last_name}`,
 		season: r.season,
 		stat_value: Number(r.stat_value)
 	}));
@@ -36,8 +36,8 @@ const VenueTeamRecords = () => {
 		<section className={styles.section}>
 			<div className={styles.filters}>
 				<Select<Option>
-					options={teamRecordOptions as unknown as Option[]}
-					value={teamRecordOptions.find((o) => o.value === statKey) as unknown as Option}
+					options={playerRecordOptions as unknown as Option[]}
+					value={playerRecordOptions.find((o) => o.value === statKey) as unknown as Option}
 					onChange={(opt) => opt && setStatKey(opt.value)}
 					isSearchable={false}
 					styles={selectStyle('200px')}
@@ -56,7 +56,7 @@ const VenueTeamRecords = () => {
 			) : (
 				<RecordsCard>
 					<DynamicContentWrapper>
-						<RecordsList records={normalized} nameLabel="Opponent" />
+						<RecordsList records={normalized} nameLabel="Player" />
 					</DynamicContentWrapper>
 				</RecordsCard>
 			)}
@@ -64,4 +64,4 @@ const VenueTeamRecords = () => {
 	);
 };
 
-export default VenueTeamRecords;
+export default TeamPlayerRecords;
