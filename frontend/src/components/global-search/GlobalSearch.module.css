@@ -9,6 +9,18 @@
 	display: flex;
 	justify-content: center;
 }
+
+.inputWrap input {
+	width: 100%;
+	max-width: 28rem;
+	padding: 0.5rem 0.75rem;
+	border-radius: 7px;
+	border: 1.5px solid rgba(255, 255, 255, 0.45);
+	background: rgba(255, 255, 255, 0.97);
+	transition:
+		border-color 0.15s,
+		background 0.15s;
+}
 .message {
 	padding: 0.5rem 0.75rem;
 	font-size: 0.8125rem;
