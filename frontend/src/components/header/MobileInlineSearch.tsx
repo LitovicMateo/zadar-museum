@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 
 import GlobalSearch from '@/components/global-search/GlobalSearch';
 import { AnimatePresence, motion } from 'framer-motion';

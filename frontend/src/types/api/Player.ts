@@ -20,7 +20,7 @@ export type PlayerResponse = {
 	last_name: string;
 	date_of_birth: string; // ISO 8601 date
 	date_of_death: string; // ISO 8601 date
-	isActivePlayer: boolean;
+	is_active_player: boolean;
 	primary_position: string; // e.g. "pg"
 	secondary_position: string | null; // e.g. "sg"
 	nationality?: string | null; // ISO country code like "ME"
@@ -287,3 +287,23 @@ export interface GameAverages {
  * GameStats = GameAverages + GameRanks
  */
 export type GameStats = GameAverages & GameRanks;
+
+/**
+ * Combined bio + career stats entry used on the Players directory page.
+ */
+export interface PlayerDirectoryEntry {
+	id: number;
+	documentId: string;
+	first_name: string;
+	last_name: string;
+	primary_position: string;
+	secondary_position: string | null;
+	nationality?: string | null;
+	height?: string;
+	isActivePlayer: boolean;
+	image: StrapiImage;
+	games: number | null;
+	points: number | null;
+	rebounds: number | null;
+	assists: number | null;
+}
