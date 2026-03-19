@@ -18,6 +18,8 @@
 .content {
 	padding: 1.5rem 1rem;
 	width: 100%;
+	overflow: auto;
+	height: 100svh;
 }
 
 .mobileNav {

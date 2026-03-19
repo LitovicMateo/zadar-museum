@@ -74,7 +74,11 @@ export const API_ROUTES = {
 		schedule: (season: string, teamSlug: string) => `${root}/team/schedule/${season}/${teamSlug}`,
 		seasons: (teamSlug: string) => `${root}/team/seasons/${teamSlug}`,
 		competitions: (params: string) => `${root}/team/competitions?${params}`,
-		teamCompetitions: (teamSlug: string) => `${root}/team/competitions/${teamSlug}`
+		teamCompetitions: (teamSlug: string) => `${root}/team/competitions/${teamSlug}`,
+		playerRecords: (teamSlug: string, statKey: string, season?: string) =>
+			`${root}/team/records/players/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`,
+		teamRecords: (teamSlug: string, statKey: string, season?: string) =>
+			`${root}/team/records/teams/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`
 	},
 	game: {
 		details: (id: string) =>
@@ -118,7 +122,8 @@ export const API_ROUTES = {
 		seasons: (id: string) => `${root}/referee/seasons/${id}`,
 		competitions: (refereeId: string, seasons: string) => `${root}/referee/competitions/${seasons}/${refereeId}`,
 		seasonStats: (refereeId: string, season: string) => `${root}/referee/stats/${season}/total/${refereeId}`,
-		seasonLeagueStats: (refereeId: string, season: string) => `${root}/referee/stats/${season}/league/${refereeId}`
+		seasonLeagueStats: (refereeId: string, season: string) => `${root}/referee/stats/${season}/league/${refereeId}`,
+		leagueStats: (refereeId: string) => `${root}/referee/stats/league/${refereeId}`
 	},
 	venue: {
 		details: (slug: string) => `${root}/venue/${slug}`,
@@ -129,10 +134,10 @@ export const API_ROUTES = {
 		seasonStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/total/${venueSlug}`,
 		seasonLeagueStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/league/${venueSlug}`,
 		leagueStats: (venueSlug: string) => `${root}/venue/stats/league/${venueSlug}`,
-		playerRecords: (venueSlug: string, statKey: string) =>
-			`${root}/venue/records/players/${venueSlug}?statKey=${statKey}`,
-		teamRecords: (venueSlug: string, statKey: string) =>
-			`${root}/venue/records/teams/${venueSlug}?statKey=${statKey}`
+		playerRecords: (venueSlug: string, statKey: string, season?: string) =>
+			`${root}/venue/records/players/${venueSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`,
+		teamRecords: (venueSlug: string, statKey: string, season?: string) =>
+			`${root}/venue/records/teams/${venueSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`
 	},
 	stats: {
 		player: {

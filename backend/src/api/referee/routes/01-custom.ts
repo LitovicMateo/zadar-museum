@@ -52,5 +52,14 @@ export default {
         auth: false,
       },
     },
+
+    {
+      method: "GET",
+      path: "/referee/stats/league/:refereeId",
+      handler: "referee.getRefereeLeagueStats",
+      config: {
+        auth: false,
+      },
+    },
   ],
 };

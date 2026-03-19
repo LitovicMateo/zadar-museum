@@ -3,7 +3,9 @@ import React, { useCallback, useRef, useState } from 'react';
 import TeamAllTimeStats from '@/components/Team/TeamPage/Content/TeamAllTimeStats/TeamAllTimeStats';
 import TeamLeaders from '@/components/Team/TeamPage/Content/TeamLeaders/TeamLeaders';
 import TeamLeagueStats from '@/components/Team/TeamPage/Content/TeamLeagueStats/TeamLeagueStats';
+import TeamPlayerRecords from '@/components/Team/TeamPage/Content/TeamPlayerRecords/TeamPlayerRecords';
 import TeamSeasonStats from '@/components/Team/TeamPage/Content/TeamSeasonStats/TeamSeasonStats';
+import TeamTeamRecords from '@/components/Team/TeamPage/Content/TeamTeamRecords/TeamTeamRecords';
 import PageContentWrapper from '@/components/ui/PageContentWrapper';
 import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { AnimatePresence } from 'framer-motion';
@@ -17,7 +19,9 @@ const TABS = [
 	{ value: 'league', label: 'League' },
 	{ value: 'season', label: 'Season' },
 	{ value: 'gamelog', label: 'Gamelog' },
-	{ value: 'leaders', label: 'Leaders' }
+	{ value: 'leaders', label: 'Leaders' },
+	{ value: 'player records', label: 'Player Records' },
+	{ value: 'team records', label: 'Team Records' }
 ] as const;
 
 type TabValue = (typeof TABS)[number]['value'];
@@ -27,7 +31,9 @@ const TAB_PANELS: { value: TabValue; content: React.ReactNode }[] = [
 	{ value: 'league', content: <TeamLeagueStats /> },
 	{ value: 'season', content: <TeamSeasonStats /> },
 	{ value: 'gamelog', content: <TeamGamelog /> },
-	{ value: 'leaders', content: <TeamLeaders /> }
+	{ value: 'leaders', content: <TeamLeaders /> },
+	{ value: 'player records', content: <TeamPlayerRecords /> },
+	{ value: 'team records', content: <TeamTeamRecords /> }
 ];
 
 const TeamContent: React.FC = React.memo(() => {

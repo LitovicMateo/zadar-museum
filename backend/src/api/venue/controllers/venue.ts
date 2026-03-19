@@ -73,17 +73,31 @@ export default factories.createCoreController(
 
     async getVenuePlayerRecords(ctx) {
       const { venueSlug } = ctx.params;
-      const { statKey } = ctx.query as { statKey: string };
+      const { statKey, season } = ctx.query as {
+        statKey: string;
+        season?: string;
+      };
       const service = strapi.service("api::venue.venue");
-      const data = await service.findVenuePlayerRecords(venueSlug, statKey);
+      const data = await service.findVenuePlayerRecords(
+        venueSlug,
+        statKey,
+        season,
+      );
       ctx.body = data;
     },
 
     async getVenueTeamRecords(ctx) {
       const { venueSlug } = ctx.params;
-      const { statKey } = ctx.query as { statKey: string };
+      const { statKey, season } = ctx.query as {
+        statKey: string;
+        season?: string;
+      };
       const service = strapi.service("api::venue.venue");
-      const data = await service.findVenueTeamRecords(venueSlug, statKey);
+      const data = await service.findVenueTeamRecords(
+        venueSlug,
+        statKey,
+        season,
+      );
       ctx.body = data;
     },
   }),

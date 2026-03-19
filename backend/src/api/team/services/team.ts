@@ -267,4 +267,86 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
 
     return team;
   },
+
+  async findTeamPlayerRecords(
+    teamSlug: string,
+    statKey: string,
+    season?: string,
+  ) {
+    const ALLOWED = [
+      "points",
+      "rebounds",
+      "assists",
+      "steals",
+      "blocks",
+      "three_pointers_made",
+      "free_throws_made",
+      "field_goals_made",
+      "plus_minus",
+      "efficiency",
+    ];
+    if (!ALLOWED.includes(statKey)) throw new Error("Invalid stat key");
+
+    const knex = strapi.db.connection;
+    return await knex("player_boxscore as pb")
+      .join("schedule as s", "pb.game_id", "s.game_document_id")
+      .select(
+        "pb.game_id",
+        "pb.first_name",
+        "pb.last_name",
+        "pb.season",
+        knex.raw(`pb.?? as stat_value`, [statKey]),
+      )
+      .where("pb.team_slug", teamSlug)
+      .whereNot("pb.is_nulled", true)
+      .whereNotNull(`pb.${statKey}`)
+      .modify((qb) => {
+        if (season) qb.where("pb.season", season);
+      })
+      .orderByRaw(`pb.?? desc`, [statKey])
+      .limit(20);
+  },
+
+  async findTeamTeamRecords(
+    teamSlug: string,
+    statKey: string,
+    season?: string,
+  ) {
+    const ALLOWED = [
+      "score",
+      "field_goals_made",
+      "three_pointers_made",
+      "free_throws_made",
+      "rebounds",
+      "assists",
+      "steals",
+      "blocks",
+    ];
+    if (!ALLOWED.includes(statKey)) throw new Error("Invalid stat key");
+
+    const knex = strapi.db.connection;
+    return await knex("team_boxscore as tb")
+      .join("schedule as s", "tb.game_id", "s.game_document_id")
+      .select(
+        "tb.game_id",
+        "tb.season",
+        knex.raw(
+          `CASE WHEN s.home_team_slug = ? THEN s.away_team_name ELSE s.home_team_name END AS opponent_name`,
+          [teamSlug],
+        ),
+        knex.raw(
+          `CASE WHEN s.home_team_slug = ? THEN s.away_team_slug ELSE s.home_team_slug END AS opponent_slug`,
+          [teamSlug],
+        ),
+        knex.raw(`tb.?? as stat_value`, [statKey]),
+      )
+      .where("tb.team_slug", teamSlug)
+      .whereNot("tb.is_nulled", true)
+      .whereNotNull(`tb.${statKey}`)
+      .modify((qb) => {
+        if (season) qb.where("tb.season", season);
+      })
+      .orderByRaw(`tb.?? desc`, [statKey])
+      .limit(20);
+  },
 }));

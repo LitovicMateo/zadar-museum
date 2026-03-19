@@ -224,3 +224,19 @@ export type TeamStatsRanking = {
 	attendance: number;
 	attendance_rank: number;
 };
+
+export interface TeamPlayerRecord {
+	game_id: string;
+	first_name: string;
+	last_name: string;
+	season: string;
+	stat_value: number;
+}
+
+export interface TeamTeamRecord {
+	game_id: string;
+	opponent_name: string;
+	opponent_slug: string;
+	season: string;
+	stat_value: number;
+}

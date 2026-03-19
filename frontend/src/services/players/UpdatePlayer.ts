@@ -6,6 +6,8 @@ import { uploadSingleImage } from '@/utils/UploadSingleImage';
 export const updatePlayer = async ({ id, ...data }: { id: string } & PlayerFormData) => {
 	const uploadedImageId = await uploadSingleImage(data.image);
 
+	console.log(data);
+
 	const res = await apiClient.put(API_ROUTES.edit.player(id), {
 		data: {
 			first_name: data.first_name,

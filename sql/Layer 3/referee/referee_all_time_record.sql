@@ -37,7 +37,18 @@ SELECT
         'fouls_for', away.fouls_for,
         'fouls_against', away.fouls_against,
         'foul_difference', away.foul_difference
-    ) as away    
+    ) as away,
+
+    jsonb_build_object(
+        'key', 'Neutral',
+        'games', neutral.games,
+        'wins', neutral.wins,
+        'losses', neutral.losses,
+        'win_percentage', neutral.win_percentage,
+        'fouls_for', neutral.fouls_for,
+        'fouls_against', neutral.fouls_against,
+        'foul_difference', neutral.foul_difference
+    ) as neutral
 
 
 
@@ -57,3 +68,8 @@ LEFT JOIN (
   FROM public.referee_stats_away
   ORDER BY referee_id
 ) away ON total.referee_id = away.referee_id
+LEFT JOIN (
+  SELECT DISTINCT ON (referee_id) *
+  FROM public.referee_stats_neutral
+  ORDER BY referee_id
+) neutral ON total.referee_id = neutral.referee_id
