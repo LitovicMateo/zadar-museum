@@ -1,37 +1,119 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
+import PlayerCard from '@/components/Players/PlayerCard/PlayerCard';
+import PlayersFilterBar from '@/components/Players/PlayersFilterBar/PlayersFilterBar';
+import PlayersLeaders from '@/components/Players/PlayersLeaders/PlayersLeaders';
 import NoContent from '@/components/no-content/NoContent';
-import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
-import { APP_ROUTES } from '@/constants/Routes';
+import PaginationControls from '@/components/pagination/PaginationControls';
+import DynamicContentWrapper, { DynamicContentWrapperHandle } from '@/components/ui/DynamicContentWrapper';
+import { Skeleton } from '@/components/ui/Skeleton';
+import usePagedSortedList from '@/hooks/UsePagedSortedList';
+import { usePlayersFilters } from '@/hooks/UsePlayersFilters';
 import { useSearch } from '@/hooks/UseSearch';
-import { usePlayers } from '@/hooks/queries/player/UsePlayers';
-import { searchPlayers } from '@/utils/SearchFunctions';
+import { usePlayersDirectory } from '@/hooks/queries/player/UsePlayersDirectory';
 
 import styles from '@/pages/Players/PlayersPage.module.css';
 
+const PAGE_SIZE = 12;
+
 const PlayersPage: React.FC = () => {
-	const { data: players } = usePlayers('last_name', 'asc');
+	const wrapperRef = React.useRef<DynamicContentWrapperHandle>(null);
+	const { directory, allTimeStats, isLoading } = usePlayersDirectory();
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search players...' });
 
-	if (!players) return null;
+	const { filtered, position, setPosition, status, setStatus, clearFilters, hasActiveFilters } = usePlayersFilters(
+		directory || [],
+		searchTerm
+	);
 
-	if (players && players.length === 0) return <NoContent type="info" description="No players in database." />;
-	const filteredPlayers = searchPlayers(players, searchTerm);
+	console.log(directory);
+
+	const { paginated, total, page, pageSize, setPage, setPageSize } = usePagedSortedList(filtered, undefined, {
+		initialPageSize: PAGE_SIZE,
+		resetDeps: [searchTerm, position, status]
+	});
+
+	React.useEffect(() => {
+		wrapperRef.current?.scrollToTop();
+	}, [page]);
+
+	if (isLoading) {
+		return (
+			<div className={styles.page}>
+				<PlayersFilterBar
+					SearchInput={SearchInput}
+					position={position}
+					onPositionChange={setPosition}
+					status={status}
+					onStatusChange={setStatus}
+				/>
+				<DynamicContentWrapper>
+					<div className={styles.layout}>
+						<div className={styles.loadingGrid}>
+							{Array.from({ length: 8 }).map((_, i) => (
+								<Skeleton key={i} className={styles.skeletonCard} />
+							))}
+						</div>
+						<div>
+							{Array.from({ length: 3 }).map((_, i) => (
+								<Skeleton key={i} className={styles.skeletonLeader} />
+							))}
+						</div>
+					</div>
+				</DynamicContentWrapper>
+			</div>
+		);
+	}
+
+	if (!directory || directory.length === 0) {
+		return <NoContent type="info" description="No players in database." />;
+	}
+
+	const hasResults = paginated && paginated.length > 0;
 
 	return (
-		<div>
-			<div className={styles.searchWrap}>{SearchInput}</div>
-			<DynamicContentWrapper>
-				<ul>
-					{filteredPlayers.map((player) => (
-						<li key={player.id}>
-							<Link to={APP_ROUTES.player(player.documentId)}>
-								{player.first_name} {player.last_name}
-							</Link>
-						</li>
-					))}
-				</ul>
+		<div className={styles.page}>
+			<DynamicContentWrapper ref={wrapperRef}>
+				<PlayersFilterBar
+					SearchInput={SearchInput}
+					position={position}
+					onPositionChange={setPosition}
+					status={status}
+					onStatusChange={setStatus}
+				/>
+
+				<div className={styles.layout}>
+					<div className={styles.main}>
+						{hasResults ? (
+							<>
+								<div className={styles.grid}>
+									{paginated.map((player) => (
+										<PlayerCard key={player.id} player={player} />
+									))}
+								</div>
+								<PaginationControls
+									total={total}
+									page={page}
+									pageSize={pageSize}
+									onPageChange={setPage}
+									onPageSizeChange={setPageSize}
+									pageSizeOptions={[12, 24, 48]}
+								/>
+							</>
+						) : (
+							<div className={styles.noResults}>
+								<NoContent type="info" description="No players match the current filters." />
+								{hasActiveFilters && (
+									<button type="button" onClick={clearFilters}>
+										Clear filters
+									</button>
+								)}
+							</div>
+						)}
+					</div>
+
+					<PlayersLeaders stats={allTimeStats} />
+				</div>
 			</DynamicContentWrapper>
 		</div>
 	);

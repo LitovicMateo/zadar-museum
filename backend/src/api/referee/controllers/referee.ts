@@ -45,7 +45,7 @@ export default factories.createCoreController(
       const service = strapi.service("api::referee.referee");
       const data = await service.findRefereeSeasonCompetitions(
         refereeId,
-        season
+        season,
       );
       ctx.body = data;
     },
@@ -62,9 +62,16 @@ export default factories.createCoreController(
       const service = strapi.service("api::referee.referee");
       const data = await service.findRefereeSeasonLeagueStats(
         refereeId,
-        season
+        season,
       );
       ctx.body = data;
     },
-  })
+
+    async getRefereeLeagueStats(ctx) {
+      const { refereeId } = ctx.params;
+      const service = strapi.service("api::referee.referee");
+      const data = await service.findRefereeLeagueStats(refereeId);
+      ctx.body = data;
+    },
+  }),
 );

@@ -1,7 +1,28 @@
 .wrapper {
-  display: flex;
-  gap: 1rem;
-  position: relative;
-  justify-content: center;
+	display: flex;
+	gap: 1rem;
+	position: relative;
+	justify-content: center;
 }
-.inputWrap { width: 100%; display: flex; justify-content: center; }
+.inputWrap {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.inputWrap input {
+	width: 100%;
+	max-width: 28rem;
+	padding: 0.5rem 0.75rem;
+	border-radius: 7px;
+	border: 1.5px solid rgba(255, 255, 255, 0.45);
+	background: rgba(255, 255, 255, 0.97);
+	transition:
+		border-color 0.15s,
+		background 0.15s;
+}
+.message {
+	padding: 0.5rem 0.75rem;
+	font-size: 0.8125rem;
+	color: #6b7280;
+}

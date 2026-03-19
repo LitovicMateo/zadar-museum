@@ -1,14 +1,28 @@
-import React from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 
 import GlobalSearch from '@/components/global-search/GlobalSearch';
 import { AnimatePresence, motion } from 'framer-motion';
+
 import styles from './MobileInlineSearch.module.css';
+
+export interface MobileInlineSearchHandle {
+	focus: () => void;
+}
 
 interface Props {
 	open: boolean;
 }
 
-const MobileInlineSearch: React.FC<Props> = ({ open }) => {
+const MobileInlineSearch = forwardRef<MobileInlineSearchHandle, Props>(({ open }, ref) => {
+	const wrapperRef = useRef<HTMLDivElement>(null);
+
+	useImperativeHandle(ref, () => ({
+		focus: () => {
+			const input = wrapperRef.current?.querySelector<HTMLInputElement>('input');
+			input?.focus();
+		}
+	}));
+
 	return (
 		<AnimatePresence>
 			{open && (
@@ -20,7 +34,7 @@ const MobileInlineSearch: React.FC<Props> = ({ open }) => {
 					transition={{ duration: 0.18 }}
 					className={styles.wrapper}
 				>
-					<div className={styles.inner}>
+					<div ref={wrapperRef} className={styles.inner}>
 						<div className={styles.searchBox}>
 							<GlobalSearch />
 						</div>
@@ -29,6 +43,8 @@ const MobileInlineSearch: React.FC<Props> = ({ open }) => {
 			)}
 		</AnimatePresence>
 	);
-};
+});
+
+MobileInlineSearch.displayName = 'MobileInlineSearch';
 
 export default MobileInlineSearch;

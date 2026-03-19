@@ -92,7 +92,7 @@ export default factories.createCoreController(
           team,
           db,
           statKey,
-          competitionSlug
+          competitionSlug,
         );
         ctx.body = data;
       } catch (err) {
@@ -121,5 +121,43 @@ export default factories.createCoreController(
         ctx.throw(500, err);
       }
     },
-  })
+
+    async getTeamPlayerRecords(ctx) {
+      const { teamSlug } = ctx.params;
+      const { statKey, season } = ctx.query as {
+        statKey: string;
+        season?: string;
+      };
+      try {
+        const service = strapi.service("api::team.team");
+        const data = await service.findTeamPlayerRecords(
+          teamSlug,
+          statKey,
+          season,
+        );
+        ctx.body = data;
+      } catch (err) {
+        ctx.throw(500, err);
+      }
+    },
+
+    async getTeamTeamRecords(ctx) {
+      const { teamSlug } = ctx.params;
+      const { statKey, season } = ctx.query as {
+        statKey: string;
+        season?: string;
+      };
+      try {
+        const service = strapi.service("api::team.team");
+        const data = await service.findTeamTeamRecords(
+          teamSlug,
+          statKey,
+          season,
+        );
+        ctx.body = data;
+      } catch (err) {
+        ctx.throw(500, err);
+      }
+    },
+  }),
 );

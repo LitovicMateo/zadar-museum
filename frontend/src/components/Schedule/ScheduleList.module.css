@@ -73,7 +73,7 @@
 	display: none;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
 	.teamNameFull {
 		display: inline;
 	}
@@ -125,7 +125,7 @@
 	color: #a16207;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
 	.teamNameShort {
 		display: none;
 	}

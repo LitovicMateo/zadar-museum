@@ -8,7 +8,7 @@
 	flex: 1;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
 	.mobileControls {
 		display: none;
 	}

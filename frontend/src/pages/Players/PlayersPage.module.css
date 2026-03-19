@@ -1,1 +1,79 @@
-.searchWrap { max-width: 200px; }
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	/* padding: 2em; */
+}
+
+.layout {
+	display: grid;
+	grid-template-columns: 1fr 260px;
+	gap: 24px;
+	align-items: start;
+	padding: 2em;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	min-width: 0;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+}
+
+.noResults {
+	grid-column: 1 / -1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	padding: 40px 16px;
+}
+
+.loadingGrid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+}
+
+.skeletonCard {
+	border-radius: 8px;
+	height: 320px;
+}
+
+.skeletonLeader {
+	border-radius: 8px;
+	height: 200px;
+}
+
+@media (max-width: 1200px) {
+	.grid,
+	.loadingGrid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media (max-width: 1023px) {
+	.layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 900px) {
+	.grid,
+	.loadingGrid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 500px) {
+	.grid,
+	.loadingGrid {
+		grid-template-columns: 1fr;
+	}
+}

@@ -8,6 +8,7 @@ import { usePlayers } from '@/hooks/queries/player/UsePlayers';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
 import { updatePlayer } from '@/services/players/UpdatePlayer';
 import { useMutation } from '@tanstack/react-query';
+
 import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditPlayer = () => {
@@ -52,7 +53,7 @@ const EditPlayer = () => {
 						last_name: player.last_name,
 						date_of_birth: player.date_of_birth || undefined,
 						date_of_death: player.date_of_death || undefined,
-						active_player: player.isActivePlayer,
+						active_player: player.is_active_player,
 						image: player.image ? player.image.id : null,
 						nationality: player.nationality,
 						primary_position: player.primary_position,

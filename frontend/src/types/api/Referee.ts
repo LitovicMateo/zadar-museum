@@ -33,7 +33,20 @@ export interface RefereSeasonStatsResponse {
 		total: RefereeStats;
 		home: RefereeStats;
 		away: RefereeStats;
+		neutral: RefereeStats | null;
 	};
+}
+
+export interface RefereeLeagueStatsResponse {
+	refereeId: string;
+	firstName: string;
+	lastName: string;
+	leagueId: string;
+	leagueSlug: string;
+	total: RefereeStats;
+	home: RefereeStats;
+	away: RefereeStats;
+	neutral: RefereeStats | null;
 }
 
 export type RefereeStats = {

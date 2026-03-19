@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, useCallback } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, KeyboardEvent, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { Input } from '@/components/ui/Input';
@@ -6,59 +6,69 @@ import { Input } from '@/components/ui/Input';
 interface UseSearchOptions {
 	placeholder?: string;
 	className?: string;
+	onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
-export function useSearch({ placeholder = 'Search...', className = '' }: UseSearchOptions = {}) {
+export function useSearch({ placeholder = 'Search...', className = '', onKeyDown }: UseSearchOptions = {}) {
 	const [searchTerm, setSearchTerm] = useState('');
+	const [debouncedTerm, setDebouncedTerm] = useState('');
 	const [isFocused, setIsFocused] = useState(false);
 	const [showPortal, setShowPortal] = useState(false);
+	const inputRef = useRef<HTMLInputElement>(null);
 
-	const location = useLocation(); // Detects URL/path changes
+	const location = useLocation();
 
-	// Handle input changes
 	const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(e.target.value);
 	}, []);
 
-	// Handle focus and blur
 	const handleFocus = useCallback(() => setIsFocused(true), []);
 	const handleBlur = useCallback(() => {
 		// Slight delay so clicks on the portal aren't lost
 		setTimeout(() => setIsFocused(false), 150);
 	}, []);
 
-	// Control when the portal should be visible
+	// Debounce: propagate to debouncedTerm 300 ms after the last keystroke
 	useEffect(() => {
-		if (isFocused && searchTerm.trim().length > 1) {
+		const id = setTimeout(() => setDebouncedTerm(searchTerm), 300);
+		return () => clearTimeout(id);
+	}, [searchTerm]);
+
+	// Show portal only after the debounced term has at least 2 meaningful chars
+	useEffect(() => {
+		if (isFocused && debouncedTerm.trim().length > 1) {
 			setShowPortal(true);
 		} else {
 			setShowPortal(false);
 		}
-	}, [isFocused, searchTerm]);
+	}, [isFocused, debouncedTerm]);
 
-	// Clear search when URL changes
+	// Clear search when navigating to a new route
 	useEffect(() => {
 		setSearchTerm('');
+		setDebouncedTerm('');
 		setShowPortal(false);
 	}, [location.pathname]);
 
-	// Manually clear search (e.g., on item click)
 	const clearSearch = useCallback(() => {
 		setSearchTerm('');
+		setDebouncedTerm('');
 		setShowPortal(false);
 	}, []);
 
 	const SearchInput = (
 		<Input
+			ref={inputRef}
 			type="text"
 			value={searchTerm}
 			onChange={handleChange}
 			onFocus={handleFocus}
 			onBlur={handleBlur}
+			onKeyDown={onKeyDown}
 			placeholder={placeholder}
 			className={className}
 		/>
 	);
 
-	return { searchTerm, showPortal, clearSearch, SearchInput };
+	return { searchTerm, debouncedTerm, showPortal, clearSearch, SearchInput, inputRef };
 }

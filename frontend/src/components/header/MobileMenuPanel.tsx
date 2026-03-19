@@ -2,12 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { LogOut } from 'lucide-react';
+import { LogOut, LucideIcon, X } from 'lucide-react';
+
 import styles from './MobileMenuPanel.module.css';
 
 interface NavItem {
 	name: string;
 	link: string;
+	icon?: LucideIcon;
 }
 
 interface Props {
@@ -49,45 +51,28 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 									onClick={() => setOpen(false)}
 									className={styles.closeBtn}
 								>
-									<svg
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											d="M18 6L6 18"
-											stroke="#374151"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-										<path
-											d="M6 6L18 18"
-											stroke="#374151"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-									</svg>
+									<X size={20} />
 								</button>
 							</div>
 						</div>
 
 						<nav className={styles.nav}>
 							<ul className={styles.navList}>
-								{navItems.map((item) => (
-									<li key={item.name}>
-										<Link
-											to={item.link}
-											className={styles.navLink}
-											onClick={() => setOpen(false)}
-										>
-											{item.name}
-										</Link>
-									</li>
-								))}
+								{navItems.map((item) => {
+									const Icon = item.icon;
+									return (
+										<li key={item.name}>
+											<Link
+												to={item.link}
+												className={styles.navLink}
+												onClick={() => setOpen(false)}
+											>
+												{Icon && <Icon size={18} strokeWidth={1.75} />}
+												{item.name}
+											</Link>
+										</li>
+									);
+								})}
 							</ul>
 						</nav>
 
@@ -99,7 +84,7 @@ const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) =
 								}}
 								className={styles.logoutBtn}
 							>
-								<LogOut size={22} color="#364153" />
+								<LogOut size={18} strokeWidth={1.75} />
 								<span>Logout</span>
 							</button>
 						</div>
