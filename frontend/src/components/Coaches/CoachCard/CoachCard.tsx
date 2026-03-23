@@ -53,6 +53,10 @@ const CoachCard: React.FC<CoachCardProps> = ({ coach }) => {
 						<span className={styles.statValue}>{coach.wins ?? '-'}</span>
 					</div>
 					<div className={styles.stat}>
+						<span className={styles.statLabel}>L</span>
+						<span className={styles.statValue}>{coach.losses ?? '-'}</span>
+					</div>
+					<div className={styles.stat}>
 						<span className={styles.statLabel}>%</span>
 						<span className={styles.statValue}>{coach.win_percentage ?? '-'}</span>
 					</div>
