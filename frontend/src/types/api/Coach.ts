@@ -126,3 +126,16 @@ export type CoachStatsRanking = {
 	points_difference: number;
 	points_difference_rank: number;
 };
+
+export interface CoachDirectoryEntry {
+	id: number;
+	documentId: string;
+	first_name: string;
+	last_name: string;
+	nationality?: string | null;
+	image: StrapiImage;
+	games: number | null;
+	wins: number | null;
+	losses: number | null;
+	win_percentage: number | null;
+}

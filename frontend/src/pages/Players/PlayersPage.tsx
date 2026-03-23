@@ -26,8 +26,6 @@ const PlayersPage: React.FC = () => {
 		searchTerm
 	);
 
-	console.log(directory);
-
 	const { paginated, total, page, pageSize, setPage, setPageSize } = usePagedSortedList(filtered, undefined, {
 		initialPageSize: PAGE_SIZE,
 		resetDeps: [searchTerm, position, status]
