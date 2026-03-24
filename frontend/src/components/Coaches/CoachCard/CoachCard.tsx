@@ -17,8 +17,6 @@ const CoachCard: React.FC<CoachCardProps> = ({ coach }) => {
 	const imageUrl = coach.image?.url ? getImageUrl(coach.image.url) : '';
 	const hasImage = !!imageUrl && !imageUrl.includes('undefined');
 
-	console.log(coach);
-
 	return (
 		<Link to={APP_ROUTES.coach(coach.documentId)} className={styles.card}>
 			<div className={styles.imageWrapper}>

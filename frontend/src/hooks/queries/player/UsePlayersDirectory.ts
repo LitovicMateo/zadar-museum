@@ -51,8 +51,6 @@ export function usePlayersDirectory() {
 			});
 	}, [players, averageStatsData]);
 
-	console.log(directory);
-
 	return {
 		directory,
 		allTimeStats,

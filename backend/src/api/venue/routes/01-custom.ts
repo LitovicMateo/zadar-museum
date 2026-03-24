@@ -2,14 +2,6 @@ export default {
   routes: [
     {
       method: "GET",
-      path: "/venue/:venueSlug",
-      handler: "venue.getVenueDetails",
-      config: {
-        auth: false,
-      },
-    },
-    {
-      method: "GET",
       path: "/venue/gamelog/:venueSlug/:season",
       handler: "venue.getVenueGamelog",
       config: {
@@ -20,6 +12,15 @@ export default {
       method: "GET",
       path: "/venue/team-record/:venueSlug",
       handler: "venue.getVenueTeamRecord",
+      config: {
+        auth: false,
+      },
+    },
+
+    {
+      method: "GET",
+      path: "/venue/team-records",
+      handler: "venue.getVenuesTeamRecord",
       config: {
         auth: false,
       },
@@ -83,6 +84,14 @@ export default {
       method: "GET",
       path: "/venue/records/teams/:venueSlug",
       handler: "venue.getVenueTeamRecords",
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: "GET",
+      path: "/venue/:venueSlug",
+      handler: "venue.getVenueDetails",
       config: {
         auth: false,
       },

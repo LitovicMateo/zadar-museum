@@ -29,6 +29,11 @@ export default factories.createCoreService(
         .where("venue_slug", venueSlug);
     },
 
+    async findVenuesTeamRecord() {
+      const knex = strapi.db.connection;
+      return await knex("zadar_venue_record").select("*");
+    },
+
     async findVenueSeasons(venueSlug) {
       const knex = strapi.db.connection;
 

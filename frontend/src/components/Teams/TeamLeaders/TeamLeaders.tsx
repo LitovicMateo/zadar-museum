@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { APP_ROUTES } from '@/constants/Routes';
-import { TeamStatsRanking } from '@/types/api/Team';
+import { TeamDirectoryEntry } from '@/types/api/Team';
 
 import styles from './TeamLeaders.module.css';
 
@@ -10,7 +10,7 @@ const LEADER_CATEGORIES = [
 	{ key: 'games', label: 'Games Played' },
 	{ key: 'losses', label: 'Wins' },
 	{ key: 'wins', label: 'Losses' },
-	{ key: 'win_pct', label: 'Win Percentage' }
+	{ key: 'win_percentage', label: 'Win Percentage' }
 ] as const;
 
 type StatKey = (typeof LEADER_CATEGORIES)[number]['key'];
@@ -18,7 +18,7 @@ type StatKey = (typeof LEADER_CATEGORIES)[number]['key'];
 const TOP_N = 5;
 
 interface TeamLeadersProps {
-	stats: TeamStatsRanking[] | undefined;
+	stats: TeamDirectoryEntry[] | undefined;
 }
 
 const TeamLeaders: React.FC<TeamLeadersProps> = ({ stats }) => {
@@ -26,7 +26,7 @@ const TeamLeaders: React.FC<TeamLeadersProps> = ({ stats }) => {
 		if (!stats) return null;
 
 		return LEADER_CATEGORIES.map(({ key, label }) => {
-			if (key === 'win_pct') {
+			if (key === 'win_percentage') {
 				// For win percentage, we want to sort in ascending order to get the lowest percentages
 				// If teams have the same win percentage, we can further sort by games played to break ties (more games = more impressive)
 				const sorted = [...stats]
@@ -38,9 +38,9 @@ const TeamLeaders: React.FC<TeamLeadersProps> = ({ stats }) => {
 					})
 					.slice(0, TOP_N);
 
-				// Deduct win_pct from 100 to get the loss percentage for display
+				// Deduct win_percentage from 100 to get the loss percentage for display
 				sorted.forEach((team) => {
-					(team as any).win_pct = 100 - Number(team.win_pct);
+					(team as any).win_percentage = 100 - Number(team.win_percentage);
 				});
 				return { key, label, leaders: sorted };
 			}
@@ -59,10 +59,10 @@ const TeamLeaders: React.FC<TeamLeadersProps> = ({ stats }) => {
 					<h4 className={styles.categoryTitle}>{label}</h4>
 					<ol className={styles.list}>
 						{leaders.map((team, index) => (
-							<li key={team.team_id} className={styles.row}>
+							<li key={team.id} className={styles.row}>
 								<span className={styles.rank}>{index + 1}</span>
-								<Link to={APP_ROUTES.team(team.team_slug)} className={styles.teamName}>
-									{team.team_name}
+								<Link to={APP_ROUTES.team(team.slug)} className={styles.teamName}>
+									{team.name}
 								</Link>
 								<span className={styles.statValue}>{team[key as StatKey].toLocaleString()}</span>
 							</li>

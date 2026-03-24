@@ -57,7 +57,7 @@
 	flex-shrink: 0;
 }
 
-.teamName {
+.venueName {
 	flex: 1;
 	color: var(--foreground);
 	text-decoration: none;
@@ -67,7 +67,7 @@
 	text-overflow: ellipsis;
 }
 
-.teamName:hover {
+.venueName:hover {
 	text-decoration: underline;
 }
 

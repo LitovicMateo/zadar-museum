@@ -40,11 +40,8 @@ export const useTeamsDirectory = () => {
 			.sort((a, b) => a.short_name.localeCompare(b.short_name));
 	}, [teams, statsData]);
 
-	console.log(directory);
-
 	return {
 		directory,
-		allTimeStats: statsData,
 		isLoading: teamsLoading || statsLoading
 	};
 };

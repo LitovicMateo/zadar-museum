@@ -19,7 +19,7 @@ const PAGE_SIZE = 12;
 const TeamsPage: React.FC = () => {
 	const wrapperRef = React.useRef<DynamicContentWrapperHandle>(null);
 
-	const { directory, isLoading, allTimeStats } = useTeamsDirectory();
+	const { directory, isLoading } = useTeamsDirectory();
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search teams...' });
 
 	const filteredTeams = useTeamsFilter(directory, searchTerm);
@@ -66,9 +66,8 @@ const TeamsPage: React.FC = () => {
 
 	return (
 		<div className={styles.page}>
+			<TeamFilterBar SearchInput={SearchInput} />
 			<DynamicContentWrapper ref={wrapperRef}>
-				<TeamFilterBar SearchInput={SearchInput} />
-
 				<div className={styles.layout}>
 					<div className={styles.main}>
 						{hasResults ? (
@@ -94,7 +93,7 @@ const TeamsPage: React.FC = () => {
 						)}
 					</div>
 
-					<TeamLeaders stats={allTimeStats} />
+					<TeamLeaders stats={directory} />
 				</div>
 			</DynamicContentWrapper>
 		</div>

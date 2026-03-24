@@ -1,38 +1,96 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
-import { APP_ROUTES } from '@/constants/Routes';
+import VenueCard from '@/components/Venues/VenueCard/VenueCard';
+import VenueFilterBar from '@/components/Venues/VenueFilterBar/VenueFilterBar';
+import VenueLeaders from '@/components/Venues/VenueLeaders/VenueLeaders';
+import NoContent from '@/components/no-content/NoContent';
+import PaginationControls from '@/components/pagination/PaginationControls';
+import DynamicContentWrapper, { DynamicContentWrapperHandle } from '@/components/ui/DynamicContentWrapper';
+import { Skeleton } from '@/components/ui/Skeleton';
+import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
-import { useVenues } from '@/hooks/queries/venue/UseVenues';
+import { useVenuesDirectory } from '@/hooks/queries/venue/useVenuesDirectory';
+import { VenueDirectoryEntry } from '@/types/api/Venue';
 import { searchVenues } from '@/utils/SearchFunctions';
 
+import styles from '@/pages/Venues/VenuesPage.module.css';
+
+const PAGE_SIZE = 12;
+
 const VenuesPage: React.FC = () => {
-	const { data: venues } = useVenues('slug', 'desc');
-	const { SearchInput, searchTerm } = useSearch({
-		className: 'max-w-[200px]'
+	const wrapperRef = React.useRef<DynamicContentWrapperHandle>(null);
+
+	const { directory, isLoading } = useVenuesDirectory();
+	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search venues...' });
+
+	const filteredVenues = searchVenues(directory as never[], searchTerm) as unknown as VenueDirectoryEntry[];
+	const { paginated, page, pageSize, total, setPage, setPageSize } = usePagedSortedList(filteredVenues, undefined, {
+		initialPageSize: PAGE_SIZE,
+		resetDeps: [searchTerm]
 	});
 
-	if (!venues) return null;
+	React.useEffect(() => {
+		wrapperRef.current?.scrollToTop();
+	}, []);
 
-	if (venues && venues.length === 0) return <div>No venues in database.</div>;
+	if (isLoading) {
+		return (
+			<div className={styles.page}>
+				<VenueFilterBar SearchInput={SearchInput} />
+				<DynamicContentWrapper>
+					<div className={styles.layout}>
+						<div className={styles.loadingGrid}>
+							{Array.from({ length: 8 }).map((_, i) => (
+								<Skeleton key={i} className={styles.skeletonCard} />
+							))}
+						</div>
+					</div>
+				</DynamicContentWrapper>
+			</div>
+		);
+	}
 
-	const filteredVenues = searchVenues(venues, searchTerm);
+	if (!directory || directory.length === 0) {
+		return <NoContent type="info" description="No venues in database." />;
+	}
+
+	const hasResults = paginated && paginated.length > 0;
 
 	return (
-		<div>
-			{SearchInput}
-			<DynamicContentWrapper>
-				<ul>
-					{filteredVenues.map((venue) => (
-						<li key={venue.id}>
-							<Link to={APP_ROUTES.venue(venue.slug)}>{venue.name}</Link>
-						</li>
-					))}
-				</ul>
+		<div className={styles.page}>
+			<VenueFilterBar SearchInput={SearchInput} />
+			<DynamicContentWrapper ref={wrapperRef}>
+				<div className={styles.layout}>
+					<div className={styles.main}>
+						{hasResults ? (
+							<>
+								<div className={styles.grid}>
+									{paginated.map((venue) => (
+										<VenueCard key={venue.id} venue={venue} />
+									))}
+								</div>
+								<PaginationControls
+									page={page}
+									pageSize={pageSize}
+									total={total}
+									onPageChange={setPage}
+									onPageSizeChange={setPageSize}
+								/>
+							</>
+						) : (
+							<div className={styles.noResults}>
+								<NoContent type="info" description="No venues match the current filters." />
+							</div>
+						)}
+					</div>
+
+					<VenueLeaders stats={directory} />
+				</div>
 			</DynamicContentWrapper>
 		</div>
 	);
+
+	return <div></div>;
 };
 
 export default VenuesPage;

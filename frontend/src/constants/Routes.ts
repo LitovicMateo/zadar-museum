@@ -129,6 +129,7 @@ export const API_ROUTES = {
 		details: (slug: string) => `${root}/venue/${slug}`,
 		gamelog: (slug: string, season: string) => `${root}/venue/gamelog/${slug}/${season}`,
 		teamRecord: (slug: string) => `${root}/venue/team-record/${slug}`,
+		venueRecords: () => `${root}/venue/team-records`,
 		seasons: (slug: string) => `${root}/venue/seasons/${slug}`,
 		competitions: (venueSlug: string, seasons: string) => `${root}/venue/competitions/${seasons}/${venueSlug}`,
 		seasonStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/total/${venueSlug}`,

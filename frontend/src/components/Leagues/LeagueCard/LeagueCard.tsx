@@ -16,8 +16,6 @@ const LeagueCard: React.FC<LeagueCardProps> = ({ league }) => {
 	const imageUrl = league.logo?.url ? getImageUrl(league.logo.url) : '';
 	const hasImage = !!imageUrl && !imageUrl.includes('undefined');
 
-	console.log(league);
-
 	return (
 		<Link to={APP_ROUTES.league(league.slug)} className={styles.card}>
 			<div className={styles.imageWrapper}>

@@ -1,3 +1,5 @@
+import { StrapiImage } from './Strapi';
+
 export type VenueFormData = {
 	name: string;
 	city: string;
@@ -50,4 +52,17 @@ export interface VenueTeamRecord {
 	opponent_slug: string;
 	season: string;
 	stat_value: number;
+}
+
+export interface VenueDirectoryEntry {
+	id: number;
+	name: string;
+	slug: string;
+	nation?: string;
+	city?: string;
+	image?: StrapiImage;
+	games: string;
+	wins: string;
+	losses: string;
+	win_percentage: string;
 }

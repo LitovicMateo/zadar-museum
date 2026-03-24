@@ -60,9 +60,6 @@ const CoachesPage: React.FC = () => {
 		return <NoContent type="info" description="No coaches in database." />;
 	}
 
-	console.log(filtered);
-	console.log(paginated);
-
 	const hasResults = paginated && paginated.length > 0;
 
 	return (

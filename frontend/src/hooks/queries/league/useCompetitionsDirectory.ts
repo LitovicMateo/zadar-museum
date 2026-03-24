@@ -15,8 +15,6 @@ export const useCompetitionsDirectory = () => {
 		return statsMap;
 	}, [teamStats]);
 
-	console.log(stats);
-
 	const directory = useMemo<CompetitionDirectoryEntry[] | undefined>(() => {
 		if (!competitions) return undefined;
 

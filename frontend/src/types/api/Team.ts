@@ -250,8 +250,8 @@ export interface TeamDirectoryEntry {
 	slug: string;
 	logo: StrapiImage;
 	nation: string;
-	games: string | null;
-	wins: string | null;
-	losses: string | null;
-	win_percentage: string | null;
+	games: string;
+	wins: string;
+	losses: string;
+	win_percentage: string;
 }

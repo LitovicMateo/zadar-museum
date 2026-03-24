@@ -39,8 +39,6 @@ export const useCoachesDirectory = (role: RoleFilter = 'all') => {
 			});
 	}, [coaches, allTimeStats]);
 
-	console.log(directory);
-
 	return {
 		directory,
 		allTimeStats,

@@ -17,8 +17,6 @@ const TeamCard: React.FC<TeamCardProps> = ({ team }) => {
 	const imageUrl = team.logo?.url ? getImageUrl(team.logo.url) : '';
 	const hasImage = !!imageUrl && !imageUrl.includes('undefined');
 
-	console.log(team);
-
 	return (
 		<Link to={APP_ROUTES.team(team.slug)} className={styles.card}>
 			<div className={styles.imageWrapper}>
