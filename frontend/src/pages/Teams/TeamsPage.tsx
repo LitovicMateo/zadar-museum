@@ -34,7 +34,7 @@ const TeamsPage: React.FC = () => {
 
 	React.useEffect(() => {
 		wrapperRef.current?.scrollToTop();
-	}, []);
+	}, [page, pageSize, searchTerm]);
 
 	if (isLoading) {
 		return (

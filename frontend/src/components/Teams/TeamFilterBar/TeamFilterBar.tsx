@@ -2,11 +2,11 @@ import React from 'react';
 
 import styles from './TeamFilterBar.module.css';
 
-interface CoachesFilterBarProps {
+interface TeamsFilterBarProps {
 	SearchInput: React.ReactNode;
 }
 
-const TeamFilterBar: React.FC<CoachesFilterBarProps> = ({ SearchInput }) => {
+const TeamFilterBar: React.FC<TeamsFilterBarProps> = ({ SearchInput }) => {
 	return (
 		<div className={styles.filterBar}>
 			<div className={styles.searchWrap}>{SearchInput}</div>
