@@ -240,3 +240,18 @@ export interface TeamTeamRecord {
 	season: string;
 	stat_value: number;
 }
+
+export interface TeamDirectoryEntry {
+	id: number;
+	documentId: string;
+	name: string;
+	alternate_names: AlternateName[];
+	short_name: string;
+	slug: string;
+	logo: StrapiImage;
+	nation: string;
+	games: string | null;
+	wins: string | null;
+	losses: string | null;
+	win_percentage: string | null;
+}
