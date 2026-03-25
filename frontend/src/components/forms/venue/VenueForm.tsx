@@ -17,7 +17,8 @@ type VenueFormProps = {
 const emptyDefaults: VenueFormData = {
 	name: '',
 	city: '',
-	country: ''
+	country: '',
+	image: null
 };
 
 const VenueForm: React.FC<VenueFormProps> = ({ onSubmit, defaultValues = emptyDefaults, mode, venue, isSuccess }) => {

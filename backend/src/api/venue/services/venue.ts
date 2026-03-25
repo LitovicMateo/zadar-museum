@@ -10,6 +10,7 @@ export default factories.createCoreService(
     async findVenueDetails(venueSlug) {
       return await strapi.db.query("api::venue.venue").findOne({
         where: { slug: venueSlug },
+        populate: ["image"],
       });
     },
 

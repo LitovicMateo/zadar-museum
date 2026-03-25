@@ -5,6 +5,7 @@ export type CompetitionFormData = {
 	short_name: string;
 	alternate_names: { name: string; short_name: string }[];
 	trophies: string[];
+	image?: File | StrapiImage | null;
 };
 
 export type CompetitionDetailsResponse = {
@@ -14,6 +15,7 @@ export type CompetitionDetailsResponse = {
 	slug: string;
 	alternate_names: { name: string; short_name: string }[];
 	trophies: string[];
+	image?: StrapiImage | null;
 	documentId: string;
 	createdAt: string;
 };

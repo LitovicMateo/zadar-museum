@@ -4,6 +4,7 @@ export type VenueFormData = {
 	name: string;
 	city: string;
 	country: string;
+	image?: File | StrapiImage | null;
 };
 
 export interface VenueDetailsResponse {
@@ -12,6 +13,7 @@ export interface VenueDetailsResponse {
 	slug: string;
 	city: string;
 	country: string;
+	image?: StrapiImage | null;
 	createdAt: string;
 	documentId: string;
 }

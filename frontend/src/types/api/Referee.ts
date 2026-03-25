@@ -5,6 +5,7 @@ export type RefereeFormData = {
 	first_name: string;
 	last_name: string;
 	nationality?: string | null;
+	image?: File | StrapiImage | null;
 };
 
 export interface RefereeDetailsResponse {

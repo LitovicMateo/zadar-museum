@@ -85,6 +85,7 @@ export default ({ strapi }: FactoryArgs) => ({
   async findReferees(sortKey, direction) {
     const referees = await strapi.db.query("api::referee.referee").findMany({
       select: ["*"],
+      populate: ["image"],
       orderBy: {
         [sortKey]: direction,
       },
@@ -96,6 +97,7 @@ export default ({ strapi }: FactoryArgs) => ({
   async findVenues(sortKey, direction) {
     const venues = await strapi.db.query("api::venue.venue").findMany({
       select: ["*"],
+      populate: ["image"],
       orderBy: {
         [sortKey]: direction,
       },
@@ -124,6 +126,7 @@ export default ({ strapi }: FactoryArgs) => ({
         orderBy: {
           [sortKey]: direction,
         },
+        populate: ["image"],
       });
 
     return competitions;
@@ -177,6 +180,7 @@ export default ({ strapi }: FactoryArgs) => ({
   async findStaff(sortKey, direction) {
     const staff = await strapi.db.query("api::staff.staff").findMany({
       select: ["*"],
+      populate: ["image"],
       orderBy: {
         [sortKey]: direction,
       },

@@ -43,7 +43,8 @@ const CompetitionFormProvider: React.FC<CompetitionFormProviderProps> = ({
 				name: competition.name,
 				short_name: competition.short_name,
 				alternate_names: competition.alternate_names,
-				trophies: competition.trophies
+				trophies: competition.trophies,
+				image: competition.image || null
 			});
 		}
 	}, [competition, reset]);

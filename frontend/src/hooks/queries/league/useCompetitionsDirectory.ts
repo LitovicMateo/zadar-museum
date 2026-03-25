@@ -29,6 +29,7 @@ export const useCompetitionsDirectory = () => {
 					alternate_names: comp.alternate_names,
 					trophies: comp.trophies,
 					documentId: comp.documentId,
+					logo: comp.image,
 					games: teamStats?.games || null,
 					wins: teamStats?.wins || null,
 					losses: teamStats?.losses || null,

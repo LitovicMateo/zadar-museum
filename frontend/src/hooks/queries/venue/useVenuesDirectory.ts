@@ -27,6 +27,7 @@ export const useVenuesDirectory = () => {
 				name: venue.name,
 				slug: venue.slug,
 				nation: venue.country,
+				image: venue.image,
 				city: venue.city,
 				games: stats ? String(stats.games) : null,
 				wins: stats ? String(stats.wins) : null,

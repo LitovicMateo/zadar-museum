@@ -40,7 +40,8 @@ const StaffFormProvider: React.FC<StaffFormProviderProps> = ({
 			methods.reset({
 				first_name: staff.first_name,
 				last_name: staff.last_name,
-				role: staff.role as StaffFormData['role']
+				role: staff.role as StaffFormData['role'],
+				image: staff.image || null
 			});
 		}
 	}, [staff, methods]);

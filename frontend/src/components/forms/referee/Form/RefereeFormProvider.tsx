@@ -40,7 +40,8 @@ const RefereeFormProvider: React.FC<RefereeFormProviderProps> = ({
 			methods.reset({
 				first_name: referee.first_name,
 				last_name: referee.last_name,
-				nationality: referee.nationality
+				nationality: referee.nationality,
+				image: referee.image || null
 			});
 		}
 	}, [referee, methods]);

@@ -8,6 +8,7 @@ import { useLeagueDetails } from '@/hooks/queries/league/UseLeagueDetails';
 import { CompetitionFormData } from '@/schemas/CompetitionSchema';
 import { updateCompetition } from '@/services/competitions/UpdateCompetition';
 import { useMutation } from '@tanstack/react-query';
+
 import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditCompetition = () => {
@@ -48,7 +49,8 @@ const EditCompetition = () => {
 						name: competition.name,
 						short_name: competition.short_name,
 						alternate_names: competition.alternate_names,
-						trophies: competition.trophies
+						trophies: competition.trophies,
+						image: competition.image || null
 					}}
 				/>
 			)}

@@ -8,6 +8,7 @@ import { useVenues } from '@/hooks/queries/venue/UseVenues';
 import { VenueFormData } from '@/schemas/VenueSchema';
 import { updateVenue } from '@/services/venue/UpdateVenue';
 import { useMutation } from '@tanstack/react-query';
+
 import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditVenue: React.FC = () => {
@@ -47,7 +48,8 @@ const EditVenue: React.FC = () => {
 					defaultValues={{
 						name: venue.name,
 						city: venue.city,
-						country: venue.country
+						country: venue.country,
+						image: venue.image || null
 					}}
 				/>
 			)}

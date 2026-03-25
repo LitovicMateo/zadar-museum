@@ -42,7 +42,8 @@ const VenueFormProvider: React.FC<VenueFormProviderProps> = ({
 			reset({
 				city: venue.city,
 				country: venue.country,
-				name: venue.name
+				name: venue.name,
+				image: venue.image || null
 			});
 		}
 	}, [venue, reset]);
