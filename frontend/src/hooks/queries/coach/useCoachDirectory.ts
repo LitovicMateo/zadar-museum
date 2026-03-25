@@ -23,6 +23,7 @@ export const useCoachesDirectory = (role: RoleFilter = 'all') => {
 				return {
 					id: coach.id,
 					documentId: coach.documentId,
+					image: coach.image || null,
 					first_name: coach.first_name,
 					last_name: coach.last_name,
 					games: stat.games ?? null,

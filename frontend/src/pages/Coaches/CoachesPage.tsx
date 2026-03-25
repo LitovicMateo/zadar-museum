@@ -26,13 +26,12 @@ const CoachesPage: React.FC = () => {
 	const { filtered, clearFilters, hasActiveFilters } = useCoachesFilters(directory, searchTerm, role, setRole);
 	const { paginated, total, page, pageSize, setPage, setPageSize } = usePagedSortedList(filtered || [], undefined, {
 		initialPageSize: PAGE_SIZE,
-
-		resetDeps: [searchTerm]
+		resetDeps: [searchTerm, role]
 	});
 
 	React.useEffect(() => {
 		wrapperRef.current?.scrollToTop();
-	}, []);
+	}, [page, role]);
 
 	if (isLoading) {
 		return (

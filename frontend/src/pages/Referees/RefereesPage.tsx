@@ -32,7 +32,7 @@ const RefereesPage: React.FC = () => {
 
 	React.useEffect(() => {
 		wrapperRef.current?.scrollToTop();
-	}, []);
+	}, [page]);
 
 	if (isLoading) {
 		return (

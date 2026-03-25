@@ -31,7 +31,7 @@ const VenuesPage: React.FC = () => {
 
 	React.useEffect(() => {
 		wrapperRef.current?.scrollToTop();
-	}, []);
+	}, [page]);
 
 	if (isLoading) {
 		return (

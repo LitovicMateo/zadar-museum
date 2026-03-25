@@ -133,7 +133,7 @@ export interface CoachDirectoryEntry {
 	first_name: string;
 	last_name: string;
 	nationality?: string | null;
-	image: StrapiImage;
+	image: StrapiImage | null;
 	games: number | null;
 	wins: number | null;
 	losses: number | null;
