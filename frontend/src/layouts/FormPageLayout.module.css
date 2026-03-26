@@ -1,0 +1,13 @@
+.layout {
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+	align-items: center;
+}
+
+@media (min-width: 768px) {
+	.layout {
+		display: grid;
+		grid-template-columns: 450px 1fr;
+	}
+}
