@@ -22,6 +22,11 @@
       "type": "enumeration",
       "enum": ["Assistant coach", "Fitness coach", "Doctor", "Physio"],
       "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
     }
   }
 }

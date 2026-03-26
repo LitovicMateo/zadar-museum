@@ -1,0 +1,96 @@
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.title {
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--foreground);
+	margin: 0;
+}
+
+.category {
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	padding: 12px;
+	background: var(--card);
+}
+
+.categoryTitle {
+	font-size: 0.8rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--muted-foreground);
+	margin: 0 0 8px 0;
+}
+
+.list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 0.82rem;
+	padding: 4px 0;
+}
+
+.row:not(:last-child) {
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 6px;
+}
+
+.rank {
+	width: 18px;
+	font-weight: 600;
+	color: var(--muted-foreground);
+	text-align: center;
+	flex-shrink: 0;
+}
+
+.refereeName {
+	flex: 1;
+	color: var(--foreground);
+	text-decoration: none;
+	font-weight: 500;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.refereeName:hover {
+	text-decoration: underline;
+}
+
+.statValue {
+	font-weight: 700;
+	color: var(--foreground);
+	flex-shrink: 0;
+}
+
+@media (max-width: 1023px) {
+	.sidebar {
+		flex-direction: row;
+		overflow-x: auto;
+		gap: 12px;
+		padding-bottom: 4px;
+	}
+
+	.title {
+		display: none;
+	}
+
+	.category {
+		min-width: 220px;
+		flex-shrink: 0;
+	}
+}

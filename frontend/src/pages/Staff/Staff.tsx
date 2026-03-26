@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import StaffHeader from '@/components/staff-page/staff-header/StaffHeader';
+import StaffHeader from '@/components/Staff/StaffContent/StaffHeader/StaffHeader';
 import { APP_ROUTES } from '@/constants/Routes';
 import { useStaffDetails } from '@/hooks/queries/staff/UseStaffDetails';
 
 import StaffContent from './StaffContent';
+
 import styles from '@/pages/Staff/Staff.module.css';
 
 const Staff: React.FC = () => {

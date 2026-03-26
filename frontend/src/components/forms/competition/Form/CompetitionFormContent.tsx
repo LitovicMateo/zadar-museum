@@ -6,6 +6,8 @@ import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
 import SubmitButton from '@/components/ui/SubmitButton';
 import { CompetitionFormData } from '@/schemas/CompetitionSchema';
 
+import ProfileImage from '../../coach/Fields/ProfileImage';
+import ProfileImagePreview from '../../coach/Fields/ProfileImagePreview';
 import AlternateNames from '../Fields/AlternateNames';
 import Name from '../Fields/Name';
 import ShortName from '../Fields/ShortName';
@@ -18,6 +20,9 @@ type CompetitionFormContentProps = {
 const CompetitionFormContent: React.FC<CompetitionFormContentProps> = ({ mode }) => {
 	const { formState } = useFormContext<CompetitionFormData>();
 
+	const [preview, setPreview] = React.useState<string | null>(null);
+	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+
 	return (
 		<FormFieldsWrapper>
 			<Fieldset label="Competition Information">
@@ -25,6 +30,12 @@ const CompetitionFormContent: React.FC<CompetitionFormContentProps> = ({ mode })
 				<ShortName />
 				<AlternateNames />
 				<WinningSeasons />
+			</Fieldset>
+			<Fieldset label="Competition Logo">
+				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
+			</Fieldset>
+			<Fieldset label="Logo Preview">
+				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
 			</Fieldset>
 			<div>
 				<SubmitButton

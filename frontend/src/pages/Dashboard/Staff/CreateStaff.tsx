@@ -15,7 +15,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 const defaultValues: StaffFormData = {
 	first_name: '',
 	last_name: '',
-	role: 'Assistant coach'
+	role: 'Assistant coach',
+	image: null
 };
 
 const CreateStaff: React.FC = () => {

@@ -82,14 +82,14 @@ export const API_ROUTES = {
 	},
 	game: {
 		details: (id: string) =>
-			`${root}/games/${id}?populate[home_team][populate][0]=image&populate[away_team][populate][0]=image`,
+			`${root}/games/${id}?populate[home_team][populate][0]=image&populate[away_team][populate][0]=image&populate[staffers][populate]=*&populate[referees][populate]=*&populate[venue][populate]=*`,
 		score: (id: string) => `${root}/game/score/${id}`,
 		teamStats: (gameId: string) => `${root}/game/team-stats/${gameId}`,
 		boxscore: (gameId: string, teamSlug: string) => `${root}/game/boxscore/${gameId}/${teamSlug}`,
 		coaches: (gameId: string, teamSlug: string) => `${root}/game/coaches/${gameId}/${teamSlug}`
 	},
 	coach: {
-		details: (id: string) => `${root}/coach/${id}`,
+		details: (id: string) => `${root}/coach/${id}?populate=*`,
 		seasons: (id: string) => `${root}/coach/seasons/${id}`,
 		competitions: (coachId: string, seasons: string) => `${root}/coach/competitions/${seasons}/${coachId}`,
 		gamelog: (id: string, db: PlayerDB) => `${root}/coach/gamelog/${id}/${db}`,
@@ -104,10 +104,10 @@ export const API_ROUTES = {
 	staff: {
 		details: (id: string) => `${root}/staffs/${id}?populate=*`,
 		gamelog: (id: string) => `${root}/staff/gamelog/${id}`,
-		list: (params?: string) => `${root}/staffs?${params}`
+		list: (params?: string) => `${root}/staffs?${params}&populate=*`
 	},
 	league: {
-		details: (slug: string) => `${root}/league/${slug}?populate=*`,
+		details: (slug: string) => `${root}/league/${slug}`,
 		gamelog: (slug: string, season: string) => `${root}/league/games/${slug}/${season}`,
 		seasons: (slug: string) => `${root}/league/seasons/${slug}`,
 		playerRankings: (slug: string, stat: string) => `${root}/league/player-rankings/${slug}/${stat}`,
@@ -129,6 +129,7 @@ export const API_ROUTES = {
 		details: (slug: string) => `${root}/venue/${slug}`,
 		gamelog: (slug: string, season: string) => `${root}/venue/gamelog/${slug}/${season}`,
 		teamRecord: (slug: string) => `${root}/venue/team-record/${slug}`,
+		venueRecords: () => `${root}/venue/team-records`,
 		seasons: (slug: string) => `${root}/venue/seasons/${slug}`,
 		competitions: (venueSlug: string, seasons: string) => `${root}/venue/competitions/${seasons}/${venueSlug}`,
 		seasonStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/total/${venueSlug}`,

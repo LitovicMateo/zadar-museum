@@ -1,10 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import HeaderWrapper from '@/components/ui/HeaderWrapper/HeaderWrapper';
+import ProfileImage from '@/components/ui/ProfileImage/ProfileImage';
 import { useTeamDetails } from '@/hooks/queries/team/UseTeamDetails';
 import { getImageUrl } from '@/utils/GetImageUrl';
+import { Shield } from 'lucide-react';
 
 import styles from './TeamHeader.module.css';
 
@@ -20,7 +21,13 @@ const TeamHeader: React.FC = () => {
 
 	return (
 		<HeaderWrapper>
-			<ProfileImage imageUrl={imageUrl} name={data.name} nationality={data.country} />
+			<ProfileImage
+				fallback={<Shield size={180} color="#fff" strokeWidth={1} />}
+				imageUrl={imageUrl}
+				name={data.name}
+				nationality={data.country}
+				variant="logo"
+			/>
 			<h2 className={styles.teamName}>{data.name}</h2>
 		</HeaderWrapper>
 	);

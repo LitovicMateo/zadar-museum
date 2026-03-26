@@ -10,6 +10,7 @@ export default factories.createCoreService(
     async findVenueDetails(venueSlug) {
       return await strapi.db.query("api::venue.venue").findOne({
         where: { slug: venueSlug },
+        populate: ["image"],
       });
     },
 
@@ -27,6 +28,11 @@ export default factories.createCoreService(
       return await knex("zadar_venue_record")
         .select("*")
         .where("venue_slug", venueSlug);
+    },
+
+    async findVenuesTeamRecord() {
+      const knex = strapi.db.connection;
+      return await knex("zadar_venue_record").select("*");
     },
 
     async findVenueSeasons(venueSlug) {

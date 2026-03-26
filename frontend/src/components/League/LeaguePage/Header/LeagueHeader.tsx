@@ -1,8 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { zadarBg } from '@/constants/PlayerBg';
+import HeaderWrapper from '@/components/ui/HeaderWrapper/HeaderWrapper';
 import { useLeagueDetails } from '@/hooks/queries/league/UseLeagueDetails';
+import { getImageUrl } from '@/utils/GetImageUrl';
+
+import LeagueLogo from './LeagueLogo/LeagueLogo';
+
 import styles from './LeagueHeader.module.css';
 
 const LeagueHeader: React.FC = () => {
@@ -10,10 +14,14 @@ const LeagueHeader: React.FC = () => {
 
 	const { data: leagueDetails } = useLeagueDetails(leagueSlug!);
 
+	const imagePath = leagueDetails?.image?.url;
+	const imageUrl = getImageUrl(imagePath);
+
 	return (
-		<section className={`${styles.section} ${zadarBg}`}>
+		<HeaderWrapper>
+			<LeagueLogo imageUrl={imageUrl} name={leagueDetails?.name || 'League'} />
 			<h2 className={styles.name}>{leagueDetails?.name}</h2>
-		</section>
+		</HeaderWrapper>
 	);
 };
 

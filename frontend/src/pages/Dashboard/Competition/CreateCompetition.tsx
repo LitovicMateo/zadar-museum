@@ -15,7 +15,8 @@ const defaultValues: CompetitionFormData = {
 	name: '',
 	short_name: '',
 	alternate_names: [],
-	trophies: []
+	trophies: [],
+	image: null
 };
 
 const CreateCompetition: React.FC = () => {

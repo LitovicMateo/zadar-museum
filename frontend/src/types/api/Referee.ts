@@ -1,9 +1,11 @@
 // API response
+import { StrapiImage } from './Strapi';
 
 export type RefereeFormData = {
 	first_name: string;
 	last_name: string;
 	nationality?: string | null;
+	image?: File | StrapiImage | null;
 };
 
 export interface RefereeDetailsResponse {
@@ -11,6 +13,7 @@ export interface RefereeDetailsResponse {
 	first_name: string;
 	last_name: string;
 	nationality?: string | null;
+	image?: StrapiImage | null;
 	createdAt: string;
 	documentId: string;
 }
@@ -80,4 +83,19 @@ export type RefereeStatsRanking = {
 	fouls_against_rank: number;
 	foul_difference: number;
 	foul_difference_rank: number;
+};
+
+export type RefereeDirectoryEntry = {
+	id: number;
+	document_id: string;
+	first_name: string;
+	last_name: string;
+	name: string;
+	nation?: string | null;
+	image?: StrapiImage | null;
+	games: string | null;
+	fouls_for: string | null;
+	fouls_against: string | null;
+	foul_difference_best: string | null;
+	foul_difference_worst: string | null;
 };

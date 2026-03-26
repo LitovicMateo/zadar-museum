@@ -22,5 +22,7 @@ const getAllVenues = async (sortKey?: VenueKey, direction: 'asc' | 'desc' = 'asc
 
 	const res = await apiClient.get(API_ROUTES.dashboard.venues(params.toString()));
 
+	console.log(res.data);
+
 	return res.data;
 };

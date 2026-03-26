@@ -8,6 +8,7 @@ import { useStaffs } from '@/hooks/queries/staff/UseStaffs';
 import { StaffFormData } from '@/schemas/StaffSchema';
 import { updateStaff } from '@/services/staff/UpdateStaff';
 import { useMutation } from '@tanstack/react-query';
+
 import styles from '@/pages/Dashboard/shared/EditPage.module.css';
 
 const EditStaff: React.FC = () => {
@@ -48,7 +49,8 @@ const EditStaff: React.FC = () => {
 					defaultValues={{
 						first_name: staff.first_name,
 						last_name: staff.last_name,
-						role: staff.role as StaffFormData['role']
+						role: staff.role as StaffFormData['role'],
+						image: staff.image || null
 					}}
 				/>
 			)}

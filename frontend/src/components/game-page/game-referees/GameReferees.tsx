@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { APP_ROUTES } from '@/constants/Routes';
 import { useGameReferees } from '@/hooks/queries/game/UseGameReferees';
+
 import styles from './GameReferees.module.css';
 
 const GameReferees: React.FC = () => {
@@ -28,11 +29,7 @@ const GameReferees: React.FC = () => {
 
 				<div className={styles.refList}>
 					{refs?.map((ref) => (
-						<Link
-							key={ref.id}
-							to={APP_ROUTES.referee(ref.documentId)}
-							className={styles.refLink}
-						>
+						<Link key={ref.id} to={APP_ROUTES.referee(ref.documentId)} className={styles.refLink}>
 							<div className={styles.refInner}>
 								<div className={styles.refDot}></div>
 								<span className={styles.refName}>
