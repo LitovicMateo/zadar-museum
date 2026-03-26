@@ -13,6 +13,7 @@ export interface StaffMemberDetailsResponse {
 	last_name: string;
 	role: string;
 	image?: StrapiImage | null;
+	nationality?: string | null;
 	createdAt: string;
 	documentId: string;
 }

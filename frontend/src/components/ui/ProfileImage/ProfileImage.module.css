@@ -14,23 +14,24 @@
 	align-items: center;
 	object-fit: cover;
 	object-position: top;
-	border-left: 6px solid #ffffff;
-	border-right: 6px solid #ffffff;
-	box-shadow:
-		0 4px 6px -1px rgba(0, 0, 0, 0.1),
-		0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.logoFrame {
+	height: 250px;
+	min-width: 180px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	object-fit: contain;
+	filter: drop-shadow(1px 1px 5px rgba(255, 255, 255, 0.1));
 }
 
 .img {
 	height: 250px;
 	object-fit: cover;
 	object-position: top;
-	border-left: 6px solid #ffffff;
-	border-right: 6px solid #ffffff;
-	box-shadow:
-		0 4px 6px -1px rgba(0, 0, 0, 0.1),
-		0 2px 4px -1px rgba(0, 0, 0, 0.06);
 	display: block;
+	filter: drop-shadow(1px 1px 5px rgba(255, 255, 255, 0.1));
 }
 
 .flagBadge {
@@ -76,6 +77,16 @@
 	}
 
 	.imageFrame {
+		height: 110px;
+		min-width: 110px;
+		width: 110px;
+		border-radius: 50%;
+		border-left: none;
+		border-right: none;
+		box-shadow: none;
+	}
+
+	.logoFrame {
 		height: 110px;
 		min-width: 110px;
 		width: 110px;

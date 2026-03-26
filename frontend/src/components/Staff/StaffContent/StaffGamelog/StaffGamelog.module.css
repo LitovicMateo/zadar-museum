@@ -1,0 +1,35 @@
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+}
+
+.gamelogCard {
+	margin: 5px;
+	border-radius: 4px;
+	overflow: hidden;
+	outline: 1px solid rgb(197, 197, 197);
+	outline-offset: 2px;
+	padding-inline: 1em;
+}
+
+.topFilters {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 1em;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.empty {
+	font-style: italic;
+	color: #6b7280;
+	text-align: center;
+	padding-block: 2em;
+}

@@ -2,8 +2,8 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import CoachBio from '@/components/Coach/CoachPage/Header/Bio/CoachBio';
-import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import HeaderWrapper from '@/components/ui/HeaderWrapper/HeaderWrapper';
+import ProfileImage from '@/components/ui/ProfileImage/ProfileImage';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { zadarBg } from '@/constants/PlayerBg';
 import { useCoachDetails } from '@/hooks/queries/coach/UseCoachDetails';

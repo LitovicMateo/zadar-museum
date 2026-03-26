@@ -82,7 +82,7 @@ export const API_ROUTES = {
 	},
 	game: {
 		details: (id: string) =>
-			`${root}/games/${id}?populate[home_team][populate][0]=image&populate[away_team][populate][0]=image`,
+			`${root}/games/${id}?populate[home_team][populate][0]=image&populate[away_team][populate][0]=image&populate[staffers][populate]=*&populate[referees][populate]=*&populate[venue][populate]=*`,
 		score: (id: string) => `${root}/game/score/${id}`,
 		teamStats: (gameId: string) => `${root}/game/team-stats/${gameId}`,
 		boxscore: (gameId: string, teamSlug: string) => `${root}/game/boxscore/${gameId}/${teamSlug}`,

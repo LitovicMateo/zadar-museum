@@ -17,7 +17,5 @@ const getVenueDetails = async (venueSlug: string): Promise<VenueDetailsResponse>
 
 	const raw = res.data;
 
-	console.log(raw);
-
 	return raw;
 };

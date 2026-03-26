@@ -11,6 +11,7 @@ export interface StaffDetailsResponse {
 	first_name: string;
 	last_name: string;
 	image?: StrapiImage | null;
+	nationality?: string | null;
 	role: string;
 	createdAt: string;
 	documentId: string;

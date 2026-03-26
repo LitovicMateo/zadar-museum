@@ -4,6 +4,7 @@
 	justify-content: center;
 	align-items: center;
 	object-fit: cover;
+	aspect-ratio: 1/1;
 }
 
 .imageFrame {
