@@ -1,8 +1,9 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { useGameDetails } from '@/hooks/queries/game/UseGameDetails';
 import { Users } from 'lucide-react';
+
 import styles from './Staffers.module.css';
 
 type StaffersProps = {
@@ -11,6 +12,7 @@ type StaffersProps = {
 
 type Staffer = {
 	id: number;
+	documentId: string;
 	first_name: string;
 	last_name: string;
 	role: string;
@@ -55,8 +57,10 @@ const Staffers: React.FC<StaffersProps> = ({ teamSlug }) => {
 						<div className={styles.staffList}>
 							{staffers.map((staffer, index) => (
 								<span key={staffer.id} className={styles.staffName}>
-									{staffer.first_name} {staffer.last_name}
-									{index < staffers.length - 1 && ','}
+									<Link to={`/staff/${staffer.documentId}`} className={styles.staffLink}>
+										{staffer.first_name} {staffer.last_name}
+										{index < staffers.length - 1 && ','}
+									</Link>
 								</span>
 							))}
 						</div>

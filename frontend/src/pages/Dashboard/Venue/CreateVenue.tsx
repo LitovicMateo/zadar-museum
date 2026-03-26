@@ -14,7 +14,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 const defaultValues: VenueFormData = {
 	name: '',
 	city: '',
-	country: ''
+	country: '',
+	image: null
 };
 
 const CreateVenue: React.FC = () => {

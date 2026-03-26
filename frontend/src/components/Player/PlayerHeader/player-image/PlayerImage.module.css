@@ -42,7 +42,7 @@
 	width: 100%;
 }
 
-@media (max-width: 639px) {
+@media (max-width: 768px) {
 	.wrapper {
 		position: relative;
 		height: 110px;

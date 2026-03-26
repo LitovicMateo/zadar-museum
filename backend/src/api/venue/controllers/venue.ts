@@ -32,6 +32,16 @@ export default factories.createCoreController(
       ctx.body = data[0];
     },
 
+    async getVenuesTeamRecord(ctx) {
+      const service = strapi.service("api::venue.venue");
+      const data = await service.findVenuesTeamRecord();
+
+      // log the data to verify its structure
+      console.log("Venues Team Record Data:", data);
+
+      ctx.body = data;
+    },
+
     async getVenueSeasons(ctx) {
       const { venueSlug } = ctx.params;
       const service = strapi.service("api::venue.venue");

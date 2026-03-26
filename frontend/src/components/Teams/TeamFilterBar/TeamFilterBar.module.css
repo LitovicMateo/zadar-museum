@@ -1,0 +1,26 @@
+.filterBar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+	margin: 0 auto;
+	width: fit-content;
+	padding: 1em 0;
+}
+
+.searchWrap {
+	min-width: 200px;
+	max-width: 280px;
+	flex: 1;
+}
+
+.filters {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.statusGroup {
+	display: flex;
+	gap: 4px;
+}

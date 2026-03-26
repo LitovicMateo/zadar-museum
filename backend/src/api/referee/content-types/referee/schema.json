@@ -21,6 +21,11 @@
       "type": "string",
       "required": false,
       "default": null
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
     }
   }
 }

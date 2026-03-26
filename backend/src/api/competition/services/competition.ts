@@ -12,6 +12,7 @@ export default factories.createCoreService(
         .query("api::competition.competition")
         .findOne({
           where: { slug: leagueSlug },
+          populate: ["image"],
         });
 
       return league;
@@ -123,5 +124,5 @@ export default factories.createCoreService(
         console.log(err);
       }
     },
-  })
+  }),
 );

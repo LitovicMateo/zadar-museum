@@ -6,13 +6,19 @@ import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
 import SubmitButton from '@/components/ui/SubmitButton';
 import { StaffFormData } from '@/schemas/StaffSchema';
 
+import ProfileImage from '../../coach/Fields/ProfileImage';
+import ProfileImagePreview from '../../coach/Fields/ProfileImagePreview';
 import FirstName from '../Fields/FirstName';
 import LastName from '../Fields/LastName';
 import Role from '../Fields/Role';
+
 import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const StaffFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 	const { formState, setFocus } = useFormContext<StaffFormData>();
+
+	const [preview, setPreview] = React.useState<string | null>(null);
+	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
 		if (formState.isSubmitSuccessful) setFocus('first_name');
@@ -24,6 +30,12 @@ const StaffFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 				<FirstName />
 				<LastName />
 				<Role />
+			</Fieldset>
+			<Fieldset label="Profile Picture">
+				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
+			</Fieldset>
+			<Fieldset label="Picture Preview">
+				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
 			</Fieldset>
 			<div className={styles.centerWrapper}>
 				<SubmitButton

@@ -1,0 +1,12 @@
+.wrapper {
+	/* background: lime; */
+	max-width: calc(100vw);
+	margin: 0 auto;
+	padding-inline: 0.5em;
+}
+
+@media (min-width: 768px) {
+	.wrapper {
+		padding-inline: 2em;
+	}
+}

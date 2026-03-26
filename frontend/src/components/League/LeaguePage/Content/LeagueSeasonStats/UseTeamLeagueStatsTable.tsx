@@ -8,8 +8,9 @@ const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData,
 };
 
 export const useTeamLeagueStatsTable = (data: TeamStats[] | undefined) => {
+	const filteredData = data?.filter((record) => +record.games > 0) ?? [];
 	const table = useReactTable<TeamStats>({
-		data: data || [],
+		data: filteredData,
 		columns: [
 			{
 				header: '',

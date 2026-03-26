@@ -4,7 +4,8 @@ import * as z from 'zod';
 export const staffSchema = z.object({
 	first_name: z.string().min(1),
 	last_name: z.string().min(1),
-	role: z.enum(['Assistant coach', 'Fitness coach', 'Doctor', 'Physio'])
+	role: z.enum(['Assistant coach', 'Fitness coach', 'Doctor', 'Physio']),
+	image: z.any().nullable().optional()
 });
 
 export type StaffFormData = z.infer<typeof staffSchema>;

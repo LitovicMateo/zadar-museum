@@ -57,7 +57,7 @@
 	flex-shrink: 0;
 }
 
-.playerName {
+.coachName {
 	flex: 1;
 	color: var(--foreground);
 	text-decoration: none;
@@ -67,7 +67,7 @@
 	text-overflow: ellipsis;
 }
 
-.playerName:hover {
+.coachName:hover {
 	text-decoration: underline;
 }
 

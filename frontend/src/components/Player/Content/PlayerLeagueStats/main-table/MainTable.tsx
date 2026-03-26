@@ -29,8 +29,6 @@ const MainTable: React.FC<MainTableProps> = ({ view, location }) => {
 		});
 	}, [league, view, location]);
 
-	console.log(leagueStats);
-
 	const careerStats = useMemo(() => {
 		if (!career) return [];
 		return career.map((league) => {

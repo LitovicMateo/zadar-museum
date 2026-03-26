@@ -17,8 +17,6 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player }) => {
 	const imageUrl = player.image?.url ? getImageUrl(player.image.url) : '';
 	const hasImage = !!imageUrl && !imageUrl.includes('undefined');
 
-	console.log(player);
-
 	return (
 		<Link to={APP_ROUTES.player(player.documentId)} className={styles.card}>
 			<div className={styles.imageWrapper}>

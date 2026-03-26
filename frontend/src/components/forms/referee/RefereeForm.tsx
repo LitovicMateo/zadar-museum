@@ -18,7 +18,8 @@ type RefereeFormProps = {
 const emptyDefaults: RefereeFormData = {
 	first_name: '',
 	last_name: '',
-	nationality: ''
+	nationality: '',
+	image: null
 };
 
 const RefereeForm: React.FC<RefereeFormProps> = ({

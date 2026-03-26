@@ -19,7 +19,8 @@ const emptyDefaults: CompetitionFormData = {
 	name: '',
 	short_name: '',
 	alternate_names: [],
-	trophies: []
+	trophies: [],
+	image: null
 };
 
 const CompetitionForm: React.FC<CompetitionFormProps> = ({

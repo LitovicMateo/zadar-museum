@@ -18,7 +18,8 @@ type StaffFormProps = {
 const emptyDefaults: StaffFormData = {
 	first_name: '',
 	last_name: '',
-	role: 'Assistant coach'
+	role: 'Assistant coach',
+	image: null
 };
 
 const StaffForm: React.FC<StaffFormProps> = ({ onSubmit, defaultValues = emptyDefaults, mode, staff, isSuccess }) => {

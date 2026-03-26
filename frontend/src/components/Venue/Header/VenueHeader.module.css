@@ -6,6 +6,21 @@
 	align-self: center;
 	width: 100%;
 	gap: 1rem;
+	position: absolute;
+	z-index: 2;
+}
+
+.header {
+	background-size: cover;
+	background-position: center;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-self: start;
+	opacity: 0.5;
+	position: relative;
 }
 
 .name {
@@ -13,4 +28,5 @@
 	font-weight: bold;
 	color: white;
 	text-align: center;
+	text-shadow: 1px 1px 4px rgba(0, 0, 0, 1);
 }

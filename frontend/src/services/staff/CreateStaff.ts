@@ -1,8 +1,11 @@
 import { API_ROUTES } from '@/constants/Routes';
 import apiClient from '@/lib/ApiClient';
 import { StaffFormData } from '@/schemas/StaffSchema';
+import { uploadSingleImage } from '@/utils/UploadSingleImage';
 
 export const createStaff = async (data: StaffFormData) => {
+	const uploadedImageId = await uploadSingleImage(data.image);
+
 	const params = new URLSearchParams({
 		'filters[first_name][$eq]': data.first_name,
 		'filters[last_name][$eq]': data.last_name
@@ -17,7 +20,8 @@ export const createStaff = async (data: StaffFormData) => {
 		data: {
 			first_name: data.first_name,
 			last_name: data.last_name,
-			role: data.role
+			role: data.role,
+			image: uploadedImageId
 		}
 	});
 };
