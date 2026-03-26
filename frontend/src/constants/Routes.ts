@@ -89,7 +89,7 @@ export const API_ROUTES = {
 		coaches: (gameId: string, teamSlug: string) => `${root}/game/coaches/${gameId}/${teamSlug}`
 	},
 	coach: {
-		details: (id: string) => `${root}/coach/${id}`,
+		details: (id: string) => `${root}/coach/${id}?populate=*`,
 		seasons: (id: string) => `${root}/coach/seasons/${id}`,
 		competitions: (coachId: string, seasons: string) => `${root}/coach/competitions/${seasons}/${coachId}`,
 		gamelog: (id: string, db: PlayerDB) => `${root}/coach/gamelog/${id}/${db}`,
@@ -104,10 +104,10 @@ export const API_ROUTES = {
 	staff: {
 		details: (id: string) => `${root}/staffs/${id}?populate=*`,
 		gamelog: (id: string) => `${root}/staff/gamelog/${id}`,
-		list: (params?: string) => `${root}/staffs?${params}`
+		list: (params?: string) => `${root}/staffs?${params}&populate=*`
 	},
 	league: {
-		details: (slug: string) => `${root}/league/${slug}?populate=*`,
+		details: (slug: string) => `${root}/league/${slug}`,
 		gamelog: (slug: string, season: string) => `${root}/league/games/${slug}/${season}`,
 		seasons: (slug: string) => `${root}/league/seasons/${slug}`,
 		playerRankings: (slug: string, stat: string) => `${root}/league/player-rankings/${slug}/${stat}`,
