@@ -54,6 +54,7 @@ const EditPlayerStats = () => {
 			</FormWrapper>
 			{player && (
 				<PlayerStatsForm
+					key={playerStatsId}
 					onSubmit={handleSubmit}
 					mode="edit"
 					defaultValues={(() => {

@@ -33,6 +33,7 @@ export const updatePlayerStats = async ({ id, ...data }: { id: string } & Player
 			turnovers: data.turnovers ? +data.turnovers : undefined,
 			fouls: data.fouls ? +data.fouls : undefined,
 			foulsOn: data.foulsOn ? +data.foulsOn : undefined,
+			blocksReceived: data.blocksReceived ? +data.blocksReceived : undefined,
 			efficiency: data.efficiency ? +data.efficiency : undefined,
 			plusMinus: data.plusMinus ? +data.plusMinus : undefined
 		}
