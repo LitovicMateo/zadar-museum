@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import TableWrapper from '@/components/ui/TableWrapper';
-import { TableSkeleton } from '@/components/ui/skeletons';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
+import TableWrapper from '@/components/UI/TableWrapper';
+import { TableSkeleton } from '@/components/UI/skeletons';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
 import { usePlayerLeagueStatsTable } from '@/hooks/UsePlayerLeagueStatsTable';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useAllTimeLeagueStats } from '@/hooks/queries/player/UseAllTimeLeagueStats';

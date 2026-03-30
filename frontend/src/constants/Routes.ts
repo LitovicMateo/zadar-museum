@@ -1,4 +1,4 @@
-import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
+import { PlayerDB } from '@/components/Player/PlayerPage';
 
 const root = '/api';
 

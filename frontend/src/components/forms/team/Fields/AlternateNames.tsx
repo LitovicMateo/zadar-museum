@@ -1,10 +1,11 @@
 import React from 'react';
 import { FieldValues, useFieldArray, useFormContext } from 'react-hook-form';
 
-import Button from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
+import Button from '@/components/UI/Button';
+import { Input } from '@/components/UI/Input';
 import { TeamFormData } from '@/schemas/TeamSchema';
 import { Plus, X } from 'lucide-react';
+
 import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const AlternateNames: React.FC = () => {

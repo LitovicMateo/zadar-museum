@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 
+import TableWrapper from '@/components/UI/TableWrapper';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
 import { useVenueLeagueStatsTable } from '@/components/Venue/Content/VenueLeagueStats/UseVenueLeagueStatsTable';
-import TableWrapper from '@/components/ui/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import { useVenueLeagueStats } from '@/hooks/queries/venue/UseVenueLeagueStats';
 import { useVenueTeamRecord } from '@/hooks/queries/venue/UseVenueTeamRecord';
 import { VenueLeagueStats as VenueLeagueStatsType } from '@/types/api/Venue';

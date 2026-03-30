@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Select from 'react-select';
 
-import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
-import NoContent from '@/components/no-content/NoContent';
-import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
-import RecordsCard from '@/components/ui/RecordsList/RecordsCard';
-import RecordsList from '@/components/ui/RecordsList/RecordsList';
+import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
+import NoContent from '@/components/NoContent/NoContent';
+import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
+import RecordsCard from '@/components/UI/RecordsList/RecordsCard';
+import RecordsList from '@/components/UI/RecordsList/RecordsList';
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useVenuePlayerRecords } from '@/hooks/queries/venue/UseVenuePlayerRecords';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';

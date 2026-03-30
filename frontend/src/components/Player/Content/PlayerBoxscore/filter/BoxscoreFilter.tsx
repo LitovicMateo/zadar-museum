@@ -2,10 +2,10 @@
 import React from 'react';
 import Select from 'react-select';
 
-import { Skeleton } from '@/components/ui/Skeleton';
+import { Skeleton } from '@/components/UI/Skeleton';
 import { selectStyle } from '@/constants/ReactSelectStyle';
-import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useSeasonTransition } from '@/hooks/UseSeasonTransition';
+import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { usePlayerSeasons } from '@/hooks/queries/player/UsePlayerSeasons';
 
 import styles from './BoxscoreFilter.module.css';
@@ -15,10 +15,7 @@ const BoxscoreFilter: React.FC = () => {
 	const { data: seasons, isLoading } = usePlayerSeasons(playerId, selectedDatabase);
 	const { selectSeason, isPending } = useSeasonTransition(setSeason);
 
-	const seasonOptions = React.useMemo(
-		() => seasons?.map((s) => ({ value: s, label: s })) ?? [],
-		[seasons]
-	);
+	const seasonOptions = React.useMemo(() => seasons?.map((s) => ({ value: s, label: s })) ?? [], [seasons]);
 	const selectedSeason = seasonOptions.find((opt) => opt.value === season) ?? null;
 
 	if (isLoading) {

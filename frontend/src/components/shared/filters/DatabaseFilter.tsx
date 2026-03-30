@@ -1,10 +1,10 @@
 import React from 'react';
 import Select from 'react-select';
 
-import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
+import { PlayerDB } from '@/components/Player/PlayerPage';
+import Category from '@/components/Stats/Category';
+import Container from '@/components/Stats/Container';
 import { selectStyle } from '@/constants/ReactSelectStyle';
-import Category from '@/pages/Stats/Category';
-import Container from '@/pages/Stats/Container';
 
 type DatabaseFilterProps = {
 	database: PlayerDB;

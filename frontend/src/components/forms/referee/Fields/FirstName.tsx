@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/UI/Input';
 import { RefereeFormData } from '@/schemas/RefereeSchema';
+
 import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const FirstName: React.FC = () => {

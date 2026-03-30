@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/FormWrapper';
+import FormWrapper from '@/components/UI/FormWrapper';
 import { StaffFormData } from '@/schemas/StaffSchema';
 import { StaffDetailsResponse } from '@/types/api/Staff';
 

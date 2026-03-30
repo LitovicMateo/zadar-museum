@@ -1,9 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/Fieldset';
-import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
-import SubmitButton from '@/components/ui/SubmitButton';
+import Fieldset from '@/components/UI/Fieldset';
+import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import SubmitButton from '@/components/UI/SubmitButton';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
 
 import Captain from '../Fields/Captain';
@@ -22,6 +22,7 @@ import Seconds from '../Fields/Seconds';
 import Shooting from '../Fields/Shooting';
 import Status from '../Fields/Status';
 import Team from '../Fields/Team';
+
 import styles from '@/components/forms/shared/FormLabel.module.css';
 
 type PlayerStatsFormContentProps = {

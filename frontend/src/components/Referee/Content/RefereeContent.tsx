@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 
-import PageContentWrapper from '@/components/ui/PageContentWrapper';
-import { ActiveTab, ActiveTabLabel, Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import PageContentWrapper from '@/components/UI/PageContentWrapper';
+import { ActiveTab, ActiveTabLabel, Tabs, TabsList, TabsTrigger } from '@/components/UI/Tabs';
 import { TabsContent } from '@radix-ui/react-tabs';
 import { AnimatePresence } from 'framer-motion';
 

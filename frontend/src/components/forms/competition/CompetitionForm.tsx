@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/FormWrapper';
+import FormWrapper from '@/components/UI/FormWrapper';
 import { CompetitionFormData } from '@/schemas/CompetitionSchema';
 import { CompetitionDetailsResponse } from '@/types/api/Competition';
 

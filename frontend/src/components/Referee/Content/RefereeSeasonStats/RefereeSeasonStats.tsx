@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
-import TableWrapper from '@/components/ui/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
+import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
+import TableWrapper from '@/components/UI/TableWrapper';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
 import { useRefereeSeasonLeagueStats } from '@/hooks/queries/referee/UseRefereeSeasonLeagueStats';
 import { useRefereeSeasonStats } from '@/hooks/queries/referee/UseRefereeSeasonStats';
 import { useRefereeSeasons } from '@/hooks/queries/referee/UseRefereeSeasons';

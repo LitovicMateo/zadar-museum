@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
+import { PlayerDB } from '@/components/Player/PlayerPage';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import DatabaseFilter from './DatabaseFilter';

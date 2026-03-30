@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
+import { PlayerDB } from '@/components/Player/PlayerPage';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 
 import styles from './Menu.module.css';

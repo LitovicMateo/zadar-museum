@@ -1,12 +1,12 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import NoContent from '@/components/NoContent/NoContent';
 import CareerHigh from '@/components/Player/Content/PlayerCareerHigh/CareerHigh';
 import AllTimeStats from '@/components/Player/Content/PlayerCareerStats/AllTimeStats';
 import AllTimeLeagueStats from '@/components/Player/Content/PlayerLeagueStats/PlayerLeagueStats';
 import Menu from '@/components/Player/menu/Menu';
-import NoContent from '@/components/no-content/NoContent';
-import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/UI/Tabs';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
 import { usePlayerProfileDatabase } from '@/hooks/queries/player/UsePlayerProfileDatabase';

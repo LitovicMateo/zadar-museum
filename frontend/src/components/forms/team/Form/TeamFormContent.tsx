@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/Fieldset';
-import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
-import SubmitButton from '@/components/ui/SubmitButton';
+import Fieldset from '@/components/UI/Fieldset';
+import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import SubmitButton from '@/components/UI/SubmitButton';
 import { TeamFormData } from '@/schemas/TeamSchema';
 
 import AlternateNames from '../Fields/AlternateNames';

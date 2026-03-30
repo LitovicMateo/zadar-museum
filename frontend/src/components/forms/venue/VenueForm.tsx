@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/FormWrapper';
+import FormWrapper from '@/components/UI/FormWrapper';
 import { VenueDetailsResponse, VenueFormData } from '@/types/api/Venue';
 
 import VenueFormContent from './Form/VenueFormContent';

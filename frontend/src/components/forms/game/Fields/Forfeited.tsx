@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/UI/Input';
 import { GameFormData } from '@/schemas/GameSchema';
 
 const Forfeited: React.FC = () => {

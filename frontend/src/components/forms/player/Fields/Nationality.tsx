@@ -1,8 +1,9 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import CountrySelect from '@/components/country-select/CountrySelect';
+import CountrySelect from '@/components/CountrySelect/CountrySelect';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
+
 import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const Nationality = () => {
@@ -14,9 +15,7 @@ const Nationality = () => {
 	}, [setValue, register]);
 	return (
 		<label>
-			<span className={styles.label}>
-				Nationality:
-			</span>
+			<span className={styles.label}>Nationality:</span>
 			<Controller
 				control={control}
 				name="nationality"

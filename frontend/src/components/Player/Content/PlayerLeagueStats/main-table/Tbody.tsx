@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TableCell from '@/components/ui/TableCell';
+import TableCell from '@/components/UI/TableCell';
 import { PlayerAllTimeStats } from '@/types/api/Player';
 import { flexRender, Table } from '@tanstack/react-table';
 

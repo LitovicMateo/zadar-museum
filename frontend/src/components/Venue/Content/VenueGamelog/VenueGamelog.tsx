@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import CompetitionSelectItem from '@/components/Games/GamesFilter/CompetitionSelect';
+import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
+import NoContent from '@/components/NoContent/NoContent';
 import { ScheduleList } from '@/components/Schedule/ScheduleList';
-import CompetitionSelectItem from '@/components/games-page/games-filter/CompetitionSelect';
-import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
-import NoContent from '@/components/no-content/NoContent';
-import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
+import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import { useVenueGamelog } from '@/hooks/queries/venue/UseVenueGamelog';
 import { useVenueSeasonCompetitions } from '@/hooks/queries/venue/UseVenueSeasonCompetitions';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';

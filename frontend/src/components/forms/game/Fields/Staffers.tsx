@@ -2,8 +2,8 @@ import React from 'react';
 import { FieldValues, useFieldArray, useFormContext, Controller, useWatch } from 'react-hook-form';
 import Select from 'react-select';
 
-import NoContent from '@/components/no-content/NoContent';
-import Button from '@/components/ui/Button';
+import NoContent from '@/components/NoContent/NoContent';
+import Button from '@/components/UI/Button';
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useStaffs } from '@/hooks/queries/staff/UseStaffs';
 import { GameFormData } from '@/schemas/GameSchema';

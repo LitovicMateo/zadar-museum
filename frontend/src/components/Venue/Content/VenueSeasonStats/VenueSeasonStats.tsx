@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
+import TableWrapper from '@/components/UI/TableWrapper';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
 import { useVenueSeasonStatsTable } from '@/components/Venue/Content/VenueSeasonStats/UseVenueSeasonStatsTable';
-import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
-import TableWrapper from '@/components/ui/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import { useVenueSeasonLeagueStats } from '@/hooks/queries/venue/UseVenueSeasonLeagueStats';
 import { useVenueSeasonStats } from '@/hooks/queries/venue/UseVenueSeasonStats';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';

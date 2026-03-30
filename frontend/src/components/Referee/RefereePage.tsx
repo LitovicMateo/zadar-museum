@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { APP_ROUTES } from '@/constants/Routes';
 import { useRefereeDetails } from '@/hooks/queries/referee/UseRefereeDetails';
 
-import ProfilePageWrapper from '../ui/ProfilePageWrapper/ProfilePageWrapper';
+import ProfilePageWrapper from '../UI/ProfilePageWrapper/ProfilePageWrapper';
 import RefereeContent from './Content/RefereeContent';
 import RefereeHeader from './Header/RefereeHeader';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
-import { Skeleton } from '@/components/ui/Skeleton';
+import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
+import { Skeleton } from '@/components/UI/Skeleton';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { usePlayerCareerHigh } from '@/hooks/queries/player/UsePlayerCareerHigh';
 import { PlayerCareerHighResponse } from '@/types/api/Player';
