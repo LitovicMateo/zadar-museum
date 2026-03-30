@@ -3,6 +3,8 @@ name: Build and publish backend
 on:
   push:
     branches: [staging]
+    paths:
+      - 'backend/**'
 
 permissions:
   contents: read

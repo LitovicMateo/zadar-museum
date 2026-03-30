@@ -25,9 +25,11 @@ const GamesContent: React.FC = () => {
 			<div className={styles.page}>
 				<GamesFilter />
 				<DynamicContentWrapper>
-					{selectedCompetitions.map((slug) => (
-						<GamesList key={slug} competitionSlug={slug} />
-					))}
+					<div className={styles.container}>
+						{selectedCompetitions.map((slug) => (
+							<GamesList key={slug} competitionSlug={slug} />
+						))}
+					</div>
 				</DynamicContentWrapper>
 			</div>
 		</PageContentWrapper>
