@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import '@/components/UI/table/Types';
 import { CoachRecordRow } from '@/types/api/Coach';
 import { getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
-import { ro } from 'date-fns/locale';
 
 const renderCell = (value: unknown, decimals?: number) => {
 	const num = Number(value as any);

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
+import NoData from '@/components/UI/NoData/NoData';
 import { useCoachGamelog } from '@/hooks/queries/coach/UseCoachGamelog';
 import { useCoachSeasonCompetitions } from '@/hooks/queries/coach/UseCoachSeasonCompetitions';
 import { useCoachSeasons } from '@/hooks/queries/coach/UseCoachSeasons';
@@ -75,6 +76,7 @@ const CoachGamelog: React.FC = () => {
 
 			<div className={styles.gamelogCard}>
 				<DynamicContentWrapper>
+					{filteredGames.length === 0 && <NoData>No competitions selected</NoData>}
 					<ScheduleList schedule={filteredGames} />
 				</DynamicContentWrapper>
 			</div>
