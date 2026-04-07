@@ -8,8 +8,6 @@ import { useStaffDetails } from '@/hooks/queries/staff/UseStaffDetails';
 import StaffContent from './StaffContent/StaffContent';
 import StaffHeader from './StaffContent/StaffHeader/StaffHeader';
 
-import styles from './StaffPage.module.css';
-
 export type PlayerDB = 'zadar' | 'opponent';
 
 const StaffPage: React.FC = () => {
@@ -26,16 +24,7 @@ const StaffPage: React.FC = () => {
 
 	if (!staffDetails) return null;
 
-	return (
-		<ProfilePageWrapper
-			header={<StaffHeader />}
-			content={
-				<main id="staff-content" tabIndex={-1} className={styles.staffMain}>
-					<StaffContent />
-				</main>
-			}
-		/>
-	);
+	return <ProfilePageWrapper header={<StaffHeader />} content={<StaffContent />} />;
 };
 
 export default StaffPage;
