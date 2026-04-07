@@ -45,7 +45,9 @@ const VenueGamelog = () => {
 		setSelectedCompetitions((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
 	};
 
-	if (!selectedSeason || !competitions || !seasons) return null;
+	if (!selectedSeason || !competitions || !seasons) {
+		return <NoContent type="info" description="No games have been played at this venue." />;
+	}
 
 	if (games && games.length === 0 && selectedSeason) {
 		return <NoContent type="info" description="No games have been played at this venue in the selected season." />;
