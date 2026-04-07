@@ -111,6 +111,7 @@ export const API_ROUTES = {
 		gamelog: (slug: string, season: string) => `${root}/league/games/${slug}/${season}`,
 		seasons: (slug: string) => `${root}/league/seasons/${slug}`,
 		playerRankings: (slug: string, stat: string) => `${root}/league/player-rankings/${slug}/${stat}`,
+		coachRankings: (slug: string, stat: string) => `${root}/league/coach-rankings/${slug}/${stat}`,
 		teamRecord: (slug: string) => `${root}/league/team-record/${slug}`,
 		playerSeasonStats: (slug: string, season: string) => `${root}/league/player-stats/${slug}/${season}`,
 		teamSeasonStats: (slug: string, season: string) => `${root}/league/team-stats/${slug}/${season}`

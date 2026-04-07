@@ -8,6 +8,7 @@ import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } f
 import { useLeagueSeasons } from '@/hooks/queries/league/UseLeagueSeasons';
 import { AnimatePresence } from 'framer-motion';
 
+import LeagueCoachRankings from './LeagueCoachRankings/LeagueCoachRankings';
 import LeagueGamelog from './LeagueGamelog/LeagueGamelog';
 import LeaguePlayerRankings from './LeaguePlayerRankings/LeaguePlayerRankings';
 import LeaguePlayerStats from './LeaguePlayerStats/LeaguePlayerStats';
@@ -32,7 +33,7 @@ const TAB_PANELS: { value: TabValue; content: React.ReactNode }[] = [
 	{ value: 'playerStats', content: <LeaguePlayerStats /> },
 	{ value: 'gamelog', content: <LeagueGamelog /> },
 	{ value: 'playerRankings', content: <LeaguePlayerRankings /> },
-	{ value: 'coachRankings', content: <div>Coach Rankings coming soon!</div> }
+	{ value: 'coachRankings', content: <LeagueCoachRankings /> }
 ];
 
 const LeagueContent: React.FC = () => {
@@ -74,7 +75,7 @@ const LeagueContent: React.FC = () => {
 
 				{TAB_PANELS.map(({ value, content }) => (
 					<TabsContent key={value} value={value}>
-						<div className={styles.contentWrapper}>{content}</div>
+						{content}
 					</TabsContent>
 				))}
 			</Tabs>
