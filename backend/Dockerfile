@@ -1,13 +1,17 @@
 FROM node:20-alpine AS development
 
+USER root
 WORKDIR /app
 
 # Development image: install dependencies but skip build steps.
 # This target is used for local development and runs `npm run develop`.
 COPY package*.json ./
+COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN npm ci
 
 EXPOSE 1337
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["npm", "run", "develop"]
 
 

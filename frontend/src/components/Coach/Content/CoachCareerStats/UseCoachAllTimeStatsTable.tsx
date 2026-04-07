@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import '@/components/UI/table/Types';
 import { CoachRecordRow } from '@/types/api/Coach';
 import { getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import { ro } from 'date-fns/locale';
 
 const renderCell = (value: unknown, decimals?: number) => {
 	const num = Number(value as any);
@@ -21,6 +22,10 @@ const renderCell = (value: unknown, decimals?: number) => {
 };
 
 export const useCoachAllTimeStatsTable = (data: CoachRecordRow[], footerData: CoachRecordRow[]) => {
+	const filterData = useMemo(() => {
+		return data.filter((row) => row.games > 0);
+	}, [data]);
+
 	const columns = useMemo(
 		() => [
 			{
@@ -120,7 +125,7 @@ export const useCoachAllTimeStatsTable = (data: CoachRecordRow[], footerData: Co
 	);
 
 	const table = useReactTable<CoachRecordRow>({
-		data,
+		data: filterData,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel()

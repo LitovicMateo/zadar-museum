@@ -1,13 +1,15 @@
 # Development stage
 FROM node:20-alpine AS development
 
+USER root
 WORKDIR /app
 
 COPY package*.json ./
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN npm ci --no-audit --progress=false --unsafe-perm=true
+COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 5173
+
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["npm", "run", "dev"]

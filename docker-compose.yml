@@ -61,6 +61,7 @@ services:
     environment:
       - VITE_API_ROOT=${VITE_API_ROOT}
       - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=development
     container_name: react_dev
     volumes:
       - ./frontend:/app
