@@ -14,8 +14,6 @@ import LeaguePlayerRankings from './LeaguePlayerRankings/LeaguePlayerRankings';
 import LeaguePlayerStats from './LeaguePlayerStats/LeaguePlayerStats';
 import LeagueSeasonStats from './LeagueSeasonStats/LeagueSeasonStats';
 
-import styles from './LeagueContent.module.css';
-
 const TABS = [
 	{ value: 'alltime', label: 'All Time' },
 	{ value: 'season', label: 'Season Data' },
