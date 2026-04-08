@@ -46,16 +46,20 @@ const GamesList: React.FC<GamesListProps> = ({ competitionSlug }) => {
 	return (
 		<section className={styles.section}>
 			<Heading title={leagueName ?? ''} type="secondary" />
-			{groupedGames.map(([groupName, games]) => (
-				<div key={groupName || '__no_group__'} className={styles.group}>
-					{groupName && (
-						<p className={styles.groupLabel}>
-							{leagueName} &ndash; Group {groupName}
-						</p>
-					)}
-					<ScheduleList schedule={games} />
-				</div>
-			))}
+			{groupedGames.map(([groupName, games]) => {
+				const hideGroupPrefix = groupName.length > 1;
+				return (
+					<div key={groupName || '__no_group__'} className={styles.group}>
+						{groupName && (
+							<p className={styles.groupLabel}>
+								{leagueName} - {hideGroupPrefix ? '' : 'Group '}
+								{groupName}
+							</p>
+						)}
+						<ScheduleList schedule={games} />
+					</div>
+				);
+			})}
 		</section>
 	);
 };
