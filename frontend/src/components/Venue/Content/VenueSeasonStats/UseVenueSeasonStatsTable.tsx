@@ -43,12 +43,12 @@ export const useVenueSeasonStatsTable = (seasonStats: VenueSeasonStats[] | undef
 			{
 				header: 'Win %',
 				accessorKey: 'win_percentage',
-				cell: (info) => info.getValue().toFixed(1) || 0
+				cell: (info) => info.getValue()?.toFixed(1) || 0
 			},
 			{
 				header: 'ATT',
 				accessorKey: 'avg_attendance',
-				cell: (info) => info.getValue().toFixed(1) || 0
+				cell: (info) => info.getValue()?.toFixed(1) || 0
 			}
 		],
 		getCoreRowModel: getCoreRowModel()
