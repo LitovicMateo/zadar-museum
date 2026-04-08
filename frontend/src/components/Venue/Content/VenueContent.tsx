@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 
-import PageContentWrapper from '@/components/ui/PageContentWrapper';
-import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import PageContentWrapper from '@/components/UI/PageContentWrapper';
+import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/UI/Tabs';
 import { AnimatePresence } from 'framer-motion';
 
 import VenueAllTimeStats from './VenueAllTimeStats/VenueAllTimeStats';

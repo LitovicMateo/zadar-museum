@@ -1,0 +1,62 @@
+import React from 'react';
+import { Toaster } from 'react-hot-toast';
+import Select from 'react-select';
+
+import CompetitionForm from '@/components/forms/competition/CompetitionForm';
+import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
+import { useLeagueDetails } from '@/hooks/queries/league/UseLeagueDetails';
+import { CompetitionFormData } from '@/schemas/CompetitionSchema';
+import { updateCompetition } from '@/services/competitions/UpdateCompetition';
+import { useMutation } from '@tanstack/react-query';
+
+import styles from '@/components/Dashboard/shared/EditPage.module.css';
+
+const EditCompetition = () => {
+	const [competitionSlug, setCompetitionSlug] = React.useState('');
+
+	const { data: competitions } = useCompetitions('slug', 'asc');
+	const { data: competition } = useLeagueDetails(competitionSlug);
+
+	const mutation = useMutation({
+		mutationFn: updateCompetition,
+		onError(error) {
+			console.error('Error updating competition', error.message);
+		}
+	});
+
+	const handleSubmit = (data: CompetitionFormData) => {
+		mutation.mutate({ ...data, id: competition!.documentId });
+	};
+
+	return (
+		<div>
+			<div className={styles.selectWrap}>
+				<Select
+					options={competitions?.map((competition) => ({
+						label: competition.name,
+						value: competition.slug
+					}))}
+					onChange={(e) => setCompetitionSlug(e!.value.toString())}
+					isSearchable
+				/>
+			</div>
+			{competition && (
+				<CompetitionForm
+					competition={competition}
+					onSubmit={handleSubmit}
+					mode="edit"
+					defaultValues={{
+						name: competition.name,
+						short_name: competition.short_name,
+						alternate_names: competition.alternate_names,
+						trophies: competition.trophies,
+						image: competition.image || null
+					}}
+				/>
+			)}
+			<Toaster position="bottom-right" />
+		</div>
+	);
+};
+
+export default EditCompetition;

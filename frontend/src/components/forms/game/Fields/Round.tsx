@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/UI/Input';
 import { selectStyle, OptionType } from '@/constants/ReactSelectStyle';
 import { GameFormData } from '@/schemas/GameSchema';
 

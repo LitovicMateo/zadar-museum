@@ -1,0 +1,109 @@
+.list {
+	font-family: var(--font-sans);
+	font-size: 1rem;
+	min-height: 500px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.header {
+	display: grid;
+	grid-template-columns: 3rem 1fr auto;
+	align-items: center;
+	padding: 0.625rem 1rem;
+	font-weight: 700;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: #64748b;
+	border-bottom: 2px solid #e2e8f0;
+}
+
+.item {
+	border-radius: 0.5rem;
+	transition:
+		box-shadow 0.2s,
+		background 0.2s;
+}
+
+.item:nth-child(even) {
+	background: #f8fafc;
+}
+
+.item:hover {
+	background: #f1f5f9;
+	box-shadow: 0 1px 3px rgba(0 0 0 / 0.08);
+}
+
+.itemInner {
+	display: grid;
+	grid-template-columns: 3rem 1fr auto;
+	align-items: center;
+	padding: 0.625rem 1rem;
+}
+
+.rank {
+	font-weight: 700;
+	font-size: 0.875rem;
+	color: #94a3b8;
+	font-variant-numeric: tabular-nums;
+}
+
+.gold .rank {
+	color: #b45309;
+}
+
+.silver .rank {
+	color: #64748b;
+}
+
+.bronze .rank {
+	color: #92400e;
+}
+
+.gold {
+	background: linear-gradient(90deg, #fffbeb 0%, transparent 60%);
+	border-left: 3px solid #f59e0b;
+}
+
+.silver {
+	background: linear-gradient(90deg, #f8fafc 0%, transparent 60%);
+	border-left: 3px solid #94a3b8;
+}
+
+.bronze {
+	background: linear-gradient(90deg, #fffbeb 0%, transparent 60%);
+	border-left: 3px solid #d97706;
+}
+
+.name a {
+	color: #1e293b;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.15s;
+}
+
+.name a:hover {
+	color: #2563eb;
+	text-decoration: underline;
+}
+
+.statValue {
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	color: #334155;
+	font-size: 0.9375rem;
+}
+
+.empty {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 200px;
+	color: #94a3b8;
+	font-size: 0.9375rem;
+}

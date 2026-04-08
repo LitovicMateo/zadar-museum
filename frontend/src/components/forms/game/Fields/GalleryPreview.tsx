@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import ImagePreview from '@/components/image-preview/ImagePreview';
+import ImagePreview from '@/components/UI/ImagePreview/ImagePreview';
 import { GameFormData } from '@/schemas/GameSchema';
 
 type GalleryPreviewProps = {

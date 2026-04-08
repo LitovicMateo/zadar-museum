@@ -107,7 +107,7 @@ def update_imports_in_file(
     for old_stem, new_stem in renames.items():
         # Match imports/exports like:
         #   from './button'
-        #   from '@/components/ui/button'
+        #   from '@/components/UI/button'
         #   from '../coach-gamelog'
         #   import './types'   (bare side-effect imports)
         # The old stem may appear as the last path segment before a quote / extension.

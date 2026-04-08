@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import HeaderWrapper from '@/components/ui/HeaderWrapper/HeaderWrapper';
-import ProfileImage from '@/components/ui/ProfileImage/ProfileImage';
-import { HeaderSkeleton } from '@/components/ui/skeletons';
+import HeaderWrapper from '@/components/UI/HeaderWrapper/HeaderWrapper';
+import ProfileImage from '@/components/UI/ProfileImage/ProfileImage';
+import { HeaderSkeleton } from '@/components/UI/skeletons';
 import { usePlayerDetails } from '@/hooks/queries/player/UsePlayerDetails';
 import { getImageUrl } from '@/utils/GetImageUrl';
 

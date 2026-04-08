@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CompetitionSelectItem from '@/components/games-page/games-filter/CompetitionSelect';
-import Heading from '@/components/ui/Heading';
+import CompetitionSelectItem from '@/components/Games/GamesFilter/CompetitionSelect';
+import Heading from '@/components/UI/Heading';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 
 import Boxscore from './boxscore/Boxscore';

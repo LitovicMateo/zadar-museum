@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Pill from '@/components/ui/Pill/Pill';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
+import Pill from '@/components/UI/Pill/Pill';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/UI/Select';
 import { type PositionFilter, type StatusFilter } from '@/hooks/UsePlayersFilters';
 
 import styles from './PlayersFilterBar.module.css';

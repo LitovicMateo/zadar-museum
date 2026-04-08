@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, ChangeEvent, KeyboardEvent, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/UI/Input';
 
 interface UseSearchOptions {
 	placeholder?: string;

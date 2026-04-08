@@ -1,4 +1,4 @@
-import ProfilePageWrapper from '../ui/ProfilePageWrapper/ProfilePageWrapper';
+import ProfilePageWrapper from '../UI/ProfilePageWrapper/ProfilePageWrapper';
 import VenueContent from './Content/VenueContent';
 import VenueHeader from './Header/VenueHeader';
 

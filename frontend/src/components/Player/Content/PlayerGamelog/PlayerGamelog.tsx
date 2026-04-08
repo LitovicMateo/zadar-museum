@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 
+import CompetitionSelectItem from '@/components/Games/GamesFilter/CompetitionSelect';
 import Boxscore from '@/components/Player/Content/PlayerBoxscore/boxscore/Boxscore';
 import BoxscoreFilter from '@/components/Player/Content/PlayerBoxscore/filter/BoxscoreFilter';
-import CompetitionSelectItem from '@/components/games-page/games-filter/CompetitionSelect';
-import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
+import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 
 import styles from './PlayerGamelog.module.css';

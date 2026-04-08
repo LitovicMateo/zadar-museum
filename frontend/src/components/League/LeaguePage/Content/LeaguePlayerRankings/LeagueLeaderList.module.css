@@ -1,5 +1,0 @@
-.list { font-family: var(--font-sans); font-size: 1.25rem; min-height: 500px; list-style: none; margin: 0; padding: 0; }
-.header { display: flex; justify-content: space-between; border-bottom: 1px solid #6b7280; padding: 0.5rem; font-weight: 600; background: #f1f5f9; }
-.item { font-size: 1rem; }
-.itemInner { display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid #6b7280; transition: background 0.2s; }
-.itemInner:hover { background: #f9fafb; }

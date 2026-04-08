@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import HeaderWrapper from '@/components/ui/HeaderWrapper/HeaderWrapper';
+import HeaderWrapper from '@/components/UI/HeaderWrapper/HeaderWrapper';
 import { useRefereeDetails } from '@/hooks/queries/referee/UseRefereeDetails';
 
 import styles from './RefereeHeader.module.css';

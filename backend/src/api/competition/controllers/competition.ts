@@ -39,6 +39,13 @@ export default factories.createCoreController(
       ctx.body = data;
     },
 
+    async getCoachLeagueRankings(ctx) {
+      const { leagueSlug, stat } = ctx.params;
+      const service = strapi.service("api::competition.competition");
+      const data = await service.findCoachLeagueRankings(leagueSlug, stat);
+      ctx.body = data;
+    },
+
     async getLeagueTeamRecord(ctx) {
       const { leagueSlug } = ctx.params;
       const service = strapi.service("api::competition.competition");
@@ -59,9 +66,9 @@ export default factories.createCoreController(
       const service = strapi.service("api::competition.competition");
       const data = await service.findPlayerSeasonLeagueStats(
         leagueSlug,
-        season
+        season,
       );
       ctx.body = data;
     },
-  })
+  }),
 );

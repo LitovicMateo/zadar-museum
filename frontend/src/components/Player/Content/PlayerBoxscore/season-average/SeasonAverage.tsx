@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { InlineError } from '@/components/ui/inline-error/InlineError';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
-import TableWrapper from '@/components/ui/TableWrapper';
+import TableWrapper from '@/components/UI/TableWrapper';
+import { InlineError } from '@/components/UI/inline-error/InlineError';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
+import { usePlayerLeagueStatsTable } from '@/hooks/UsePlayerLeagueStatsTable';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { usePlayerSeasonAverage } from '@/hooks/queries/player/UsePlayerSeasonAverage';
 import { usePlayerSeasonLeagueAverage } from '@/hooks/queries/player/UsePlayerSeasonLeagueAverage';
-import { usePlayerLeagueStatsTable } from '@/hooks/UsePlayerLeagueStatsTable';
 import { usePlayerHasAppearances } from '@/utils/PlayerHasAppearances';
 
 const SeasonAverage: React.FC = () => {

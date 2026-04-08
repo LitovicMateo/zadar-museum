@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Pill from '@/components/ui/Pill/Pill';
+import Pill from '@/components/UI/Pill/Pill';
 import { RoleFilter } from '@/hooks/useCoachesFilters';
 
 import styles from './CoachesFilterBar.module.css';

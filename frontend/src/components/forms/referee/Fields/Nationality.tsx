@@ -1,8 +1,9 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import CountrySelect from '@/components/country-select/CountrySelect';
+import CountrySelect from '@/components/CountrySelect/CountrySelect';
 import { RefereeFormData } from '@/schemas/RefereeSchema';
+
 import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const Nationality: React.FC = () => {

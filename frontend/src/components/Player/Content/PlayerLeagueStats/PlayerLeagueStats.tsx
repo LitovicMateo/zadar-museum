@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import Radio from '@/components/ui/Radio/Radio';
-import RadioGroup from '@/components/ui/RadioGroup';
+import Radio from '@/components/UI/Radio/Radio';
+import RadioGroup from '@/components/UI/RadioGroup';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useAllTimeLeagueStats } from '@/hooks/queries/player/UseAllTimeLeagueStats';
 import { usePlayerHasAppearances } from '@/utils/PlayerHasAppearances';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '@/components/ui/table/Types';
+import '@/components/UI/table/Types';
 import { RefereeStats } from '@/types/api/Referee';
 import { CellContext, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 

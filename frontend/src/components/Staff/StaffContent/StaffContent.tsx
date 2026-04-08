@@ -1,11 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react';
 
-import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import PageContentWrapper from '@/components/UI/PageContentWrapper';
+import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/UI/Tabs';
 import { AnimatePresence } from 'framer-motion';
 
 import StaffGamelog from './StaffGamelog/StaffGamelog';
-
-import styles from './StaffContent.module.css';
 
 const TABS = [{ value: 'gamelog', label: 'Gamelog' }] as const;
 
@@ -26,7 +25,7 @@ const StaffContent: React.FC = React.memo(() => {
 	}, []);
 
 	return (
-		<div className={styles.wrapper}>
+		<PageContentWrapper>
 			<Tabs value={activeTab} onValueChange={handleTabChange}>
 				<TabsList aria-label="Staff statistics sections">
 					{TABS.map((tab) => (
@@ -45,11 +44,11 @@ const StaffContent: React.FC = React.memo(() => {
 
 				{TAB_PANELS.map(({ value, content }) => (
 					<TabsContent key={value} value={value}>
-						<div className={styles.contentWrapper}>{content}</div>
+						{content}
 					</TabsContent>
 				))}
 			</Tabs>
-		</div>
+		</PageContentWrapper>
 	);
 });
 

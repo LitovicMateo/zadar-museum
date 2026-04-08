@@ -1,10 +1,10 @@
 import React from 'react';
 import Select from 'react-select';
 
+import Category from '@/components/Stats/Category';
+import Container from '@/components/Stats/Container';
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { CompetitionDetailsResponse } from '@/types/api/Competition';
-import Category from '@/pages/Stats/Category';
-import Container from '@/pages/Stats/Container';
 
 type LeagueFilterProps = {
 	league: string | null;
