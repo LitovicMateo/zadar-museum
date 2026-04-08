@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/ui/Fieldset';
-import FormFieldsWrapper from '@/components/ui/FormFieldsWrapper';
-import SubmitButton from '@/components/ui/SubmitButton';
+import Fieldset from '@/components/UI/Fieldset';
+import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import SubmitButton from '@/components/UI/SubmitButton';
 import { CoachFormData } from '@/schemas/CoachSchema';
 
 import DateOfBirth from '../Fields/DateOfBirth';
@@ -13,6 +13,7 @@ import LastName from '../Fields/LastName';
 import Nationality from '../Fields/Nationality';
 import ProfileImage from '../Fields/ProfileImage';
 import ProfileImagePreview from '../Fields/ProfileImagePreview';
+
 import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const CoachFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {

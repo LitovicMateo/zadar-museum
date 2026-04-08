@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/UI/Input';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
+
 import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const DateOfBirth: React.FC = () => {

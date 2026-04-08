@@ -104,6 +104,8 @@ export interface PlayerAllTimeStats {
 
 	efficiency: number;
 	efficiency_rank: number;
+
+	is_active_player: boolean;
 }
 
 export interface PlayerBoxscoreResponse {

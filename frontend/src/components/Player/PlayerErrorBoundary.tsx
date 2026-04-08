@@ -1,32 +1,32 @@
 import React from 'react';
 
-import { InlineError } from '@/components/ui/inline-error/InlineError';
+import { InlineError } from '@/components/UI/inline-error/InlineError';
 
 interface ErrorBoundaryProps {
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
+	children: React.ReactNode;
+	fallback?: React.ReactNode;
 }
 
 interface ErrorBoundaryState {
-  hasError: boolean;
+	hasError: boolean;
 }
 
 export class PlayerErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false };
-  }
+	constructor(props: ErrorBoundaryProps) {
+		super(props);
+		this.state = { hasError: false };
+	}
 
-  static getDerivedStateFromError(): ErrorBoundaryState {
-    return { hasError: true };
-  }
+	static getDerivedStateFromError(): ErrorBoundaryState {
+		return { hasError: true };
+	}
 
-  render() {
-    if (this.state.hasError) {
-      return this.props.fallback ?? (
-        <InlineError message="This section failed to load. Please refresh the page." />
-      );
-    }
-    return this.props.children;
-  }
+	render() {
+		if (this.state.hasError) {
+			return (
+				this.props.fallback ?? <InlineError message="This section failed to load. Please refresh the page." />
+			);
+		}
+		return this.props.children;
+	}
 }

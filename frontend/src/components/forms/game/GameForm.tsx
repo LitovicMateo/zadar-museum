@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/FormWrapper';
+import FormWrapper from '@/components/UI/FormWrapper';
 import { GameFormData } from '@/schemas/GameSchema';
 import { GameDetailsResponse } from '@/types/api/Game';
 

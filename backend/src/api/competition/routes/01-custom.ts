@@ -34,6 +34,14 @@ export default {
     },
     {
       method: "GET",
+      path: "/league/coach-rankings/:leagueSlug/:stat",
+      handler: "competition.getCoachLeagueRankings",
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: "GET",
       path: "/league/team-record/:leagueSlug",
       handler: "competition.getLeagueTeamRecord",
       config: {

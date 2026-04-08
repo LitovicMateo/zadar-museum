@@ -77,6 +77,54 @@ export default factories.createCoreService(
       }
     },
 
+    async findCoachLeagueRankings(leagueSlug, stat) {
+      const knex = strapi.db.connection;
+      const allowedStats = [
+        "games",
+        "wins",
+        "losses",
+        "win_percentage",
+        "points_scored",
+        "points_received",
+        "points_difference",
+      ];
+      if (!allowedStats.includes(stat)) {
+        return [];
+      }
+      try {
+        const rows = await knex("zadar_coach_league_record_full")
+          .select("coach_id", "first_name", "last_name", "head_coach_record")
+          .where("league_slug", leagueSlug)
+          .whereRaw("(head_coach_record->'total'->>'games')::int > 0");
+
+        const result = rows
+          .map((row) => {
+            const record =
+              typeof row.head_coach_record === "string"
+                ? JSON.parse(row.head_coach_record)
+                : row.head_coach_record;
+            const total = record?.total ?? {};
+            return {
+              coach_id: row.coach_id,
+              first_name: row.first_name,
+              last_name: row.last_name,
+              games: total.games ?? 0,
+              wins: total.wins ?? 0,
+              losses: total.losses ?? 0,
+              win_percentage: total.win_percentage ?? 0,
+              points_scored: total.points_scored ?? 0,
+              points_received: total.points_received ?? 0,
+              points_difference: total.points_difference ?? 0,
+            };
+          })
+          .sort((a, b) => b[stat] - a[stat]);
+
+        return result;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     async findTeamSeasonLeagueStats(leagueSlug, season) {
       const knex = strapi.db.connection;
       try {

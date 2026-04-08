@@ -1,8 +1,9 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import CountrySelect from '@/components/country-select/CountrySelect';
+import CountrySelect from '@/components/CountrySelect/CountrySelect';
 import { TeamFormData } from '@/schemas/TeamSchema';
+
 import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const Country = () => {

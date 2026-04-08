@@ -1,4 +1,4 @@
-import { PlayerDB } from '@/components/Player/PlayerPage/PlayerPage';
+import { PlayerDB } from '@/components/Player/PlayerPage';
 import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
 
 export const usePlayerHasAppearances = (playerId: string, db: PlayerDB) => {

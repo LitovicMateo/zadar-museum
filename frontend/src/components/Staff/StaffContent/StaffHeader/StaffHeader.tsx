@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import HeaderWrapper from '@/components/ui/HeaderWrapper/HeaderWrapper';
-import ProfileImage from '@/components/ui/ProfileImage/ProfileImage';
+import HeaderWrapper from '@/components/UI/HeaderWrapper/HeaderWrapper';
+import ProfileImage from '@/components/UI/ProfileImage/ProfileImage';
 import { useStaffDetails } from '@/hooks/queries/staff/UseStaffDetails';
 import { getImageUrl } from '@/utils/GetImageUrl';
 

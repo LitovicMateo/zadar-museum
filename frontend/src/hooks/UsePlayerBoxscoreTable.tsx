@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import '@/components/ui/table/Types';
+import '@/components/UI/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
 import { PlayerBoxscoreResponse } from '@/types/api/Player';
 import { formatMakeAttempt, mmss, pct } from '@/utils/TableFormatters';
@@ -78,7 +78,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 
 					return <p>{mmss(info.row.original.minutes, info.row.original.seconds)}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'pts',
@@ -90,7 +90,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'fg',
@@ -110,7 +110,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						</p>
 					);
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'fg_per',
@@ -122,7 +122,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{pct(info.getValue<number | null>())}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'three_point',
@@ -141,7 +141,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						</p>
 					);
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'three_per',
@@ -153,7 +153,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{pct(info.getValue<number | null>())}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'free_throw',
@@ -172,7 +172,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 						</p>
 					);
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'free_throw_per',
@@ -184,7 +184,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{pct(info.getValue<number | null>())}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'off_rebounds',
@@ -196,7 +196,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'def_rebounds',
@@ -208,7 +208,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'rebounds',
@@ -220,7 +220,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'assists',
@@ -232,7 +232,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'turnovers',
@@ -244,7 +244,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'steals',
@@ -256,7 +256,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'blocks',
@@ -268,7 +268,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'FLS',
@@ -280,7 +280,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'FLS ON',
@@ -292,7 +292,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'plus_minus',
@@ -304,7 +304,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			},
 			{
 				id: 'efficiency',
@@ -316,7 +316,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					}
 					return <p>{info.getValue<number | null>()}</p>;
 				},
-				sortingFn: "alphanumeric"
+				sortingFn: 'alphanumeric'
 			}
 		],
 		data: data

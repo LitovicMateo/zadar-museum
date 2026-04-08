@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import HeaderWrapper from '@/components/ui/HeaderWrapper/HeaderWrapper';
+import HeaderWrapper from '@/components/UI/HeaderWrapper/HeaderWrapper';
 import { useVenueDetails } from '@/hooks/queries/venue/UseVenueDetails';
 import { getImageUrl } from '@/utils/GetImageUrl';
 

@@ -1,7 +1,7 @@
 import { Toaster } from 'react-hot-toast';
 
-import Header from './components/header/Header';
-import AppRoutes from './components/routes/AppRoutes';
+import Header from './components/Header/Header';
+import AppRoutes from './routes/AppRoutes';
 
 import './App.css';
 

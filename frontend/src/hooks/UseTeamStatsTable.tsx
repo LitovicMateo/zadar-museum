@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import '@/components/ui/table/Types';
+import '@/components/UI/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
 import { TeamBoxscoreResponse } from '@/types/api/Team';
 import { formatMakeAttempt, pct } from '@/utils/TableFormatters';

@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import CompetitionList from '@/components/Games/GamesFilter/CompetitionList';
+import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
 import { ScheduleList } from '@/components/Schedule/ScheduleList';
-import CompetitionList from '@/components/games-page/games-filter/CompetitionList';
-import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
-import DynamicContentWrapper from '@/components/ui/DynamicContentWrapper';
+import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import { useStaffGamelog } from '@/hooks/queries/staff/UseStaffGamelog';
 
 import { deriveCompetitions, deriveSeasons } from './StaffGamelog.utils';

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Pill from '@/components/ui/Pill';
-import { Skeleton } from '@/components/ui/Skeleton';
+import Pill from '@/components/UI/Pill';
+import { Skeleton } from '@/components/UI/Skeleton';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
 

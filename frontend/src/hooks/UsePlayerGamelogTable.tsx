@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import '@/components/ui/table/Types';
+import '@/components/UI/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
 import { PlayerBoxscoreResponse } from '@/types/api/Player';
 import { getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
@@ -26,10 +26,7 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 				cell: (info) => {
 					const isHome = info.row.original.is_home_team;
 					return (
-						<Link
-							to={APP_ROUTES.game(info.row.original.game_id)}
-							className="py-2 font-semibold"
-						>
+						<Link to={APP_ROUTES.game(info.row.original.game_id)} className="py-2 font-semibold">
 							{isHome ? '' : '@ '}
 							{info.getValue()}
 						</Link>

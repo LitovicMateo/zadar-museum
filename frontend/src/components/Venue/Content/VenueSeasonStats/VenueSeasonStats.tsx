@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
+import NoContent from '@/components/NoContent/NoContent';
+import TableWrapper from '@/components/UI/TableWrapper';
+import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
 import { useVenueSeasonStatsTable } from '@/components/Venue/Content/VenueSeasonStats/UseVenueSeasonStatsTable';
-import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
-import TableWrapper from '@/components/ui/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/ui/table';
 import { useVenueSeasonLeagueStats } from '@/hooks/queries/venue/UseVenueSeasonLeagueStats';
 import { useVenueSeasonStats } from '@/hooks/queries/venue/UseVenueSeasonStats';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
@@ -16,8 +17,11 @@ const VenueSeasonStats = () => {
 	const [selectedSeason, setSelectedSeason] = React.useState('');
 	const { data: seasons } = useVenueSeasons(venueSlug!);
 
-	const { data: seasonStats } = useVenueSeasonStats(venueSlug!, selectedSeason);
-	const { data: seasonLeagueStats } = useVenueSeasonLeagueStats(venueSlug!, selectedSeason);
+	const { data: seasonStats, isLoading: isLoadingSeasonStats } = useVenueSeasonStats(venueSlug!, selectedSeason);
+	const { data: seasonLeagueStats, isLoading: isLoadingSeasonLeagueStats } = useVenueSeasonLeagueStats(
+		venueSlug!,
+		selectedSeason
+	);
 
 	const { table } = useVenueSeasonStatsTable(seasonLeagueStats);
 	const { table: footTable } = useVenueSeasonStatsTable(seasonStats);
@@ -29,10 +33,13 @@ const VenueSeasonStats = () => {
 	}, [seasons, setSelectedSeason]);
 
 	if (!seasons || seasons.length === 0) {
-		return null;
+		return <NoContent type="info" description="No season stats available for this venue." />;
+	}
+	if (isLoadingSeasonStats || isLoadingSeasonLeagueStats) {
+		return <div className={styles.loading}>Loading...</div>;
 	}
 	if (!seasonStats || !seasonLeagueStats || seasonStats.length === 0) {
-		return null;
+		return <NoContent type="info" description="No season stats available for this venue." />;
 	}
 
 	return (

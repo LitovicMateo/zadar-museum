@@ -2,12 +2,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { UniversalTableBody, UniversalTableHead } from '@/components/ui/table';
-import TableWrapper from '@/components/ui/TableWrapper';
-import { TableSkeleton } from '@/components/ui/skeletons';
+import TableWrapper from '@/components/UI/TableWrapper';
+import { TableSkeleton } from '@/components/UI/skeletons';
+import { UniversalTableBody, UniversalTableHead } from '@/components/UI/table';
+import { usePlayerGamelogTable } from '@/hooks/UsePlayerGamelogTable';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { usePlayerBoxscore } from '@/hooks/queries/player/UsePlayerBoxscore';
-import { usePlayerGamelogTable } from '@/hooks/UsePlayerGamelogTable';
 
 import styles from './Boxscore.module.css';
 

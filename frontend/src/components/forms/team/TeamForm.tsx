@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/FormWrapper';
+import FormWrapper from '@/components/UI/FormWrapper';
 import { TeamFormData } from '@/schemas/TeamSchema';
 import { TeamDetailsResponse } from '@/types/api/Team';
 

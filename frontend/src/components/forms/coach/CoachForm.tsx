@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FormWrapper from '@/components/ui/FormWrapper';
+import FormWrapper from '@/components/UI/FormWrapper';
 import { CoachFormData } from '@/schemas/CoachSchema';
 import { CoachDetailsResponse } from '@/types/api/Coach';
 

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import CompetitionSelectItem from '@/components/games-page/games-filter/CompetitionSelect';
-import SeasonSelect from '@/components/games-page/games-filter/SeasonSelect';
+import CompetitionSelectItem from '@/components/Games/GamesFilter/CompetitionSelect';
+import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
 import { API_ROUTES } from '@/constants/Routes';
 import { useRefereeSeasons } from '@/hooks/queries/referee/UseRefereeSeasons';
 import { useQuery } from '@tanstack/react-query';
