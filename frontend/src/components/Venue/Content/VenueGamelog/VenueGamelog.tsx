@@ -41,9 +41,9 @@ const VenueGamelog = () => {
 		}
 	}, [competitions, selectedSeason, setSelectedCompetitions]);
 
-	const toggleCompetition = (slug: string) => {
+	const toggleCompetition = React.useCallback((slug: string) => {
 		setSelectedCompetitions((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
-	};
+	}, []);
 
 	if (!selectedSeason || !competitions || !seasons) {
 		return <NoContent type="info" description="No games have been played at this venue." />;

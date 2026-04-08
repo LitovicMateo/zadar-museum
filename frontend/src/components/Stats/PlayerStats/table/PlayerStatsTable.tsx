@@ -4,7 +4,7 @@ import NoContent from '@/components/NoContent/NoContent';
 import AnimatedTableWrapper from '@/components/UI/AnimatedTableWrapper';
 import { UniversalTableBody, UniversalTableHead } from '@/components/UI/table';
 import { PlayerAllTimeStats } from '@/types/api/Player';
-import { SortingState } from '@tanstack/react-table';
+import { Row, SortingState } from '@tanstack/react-table';
 
 import { usePlayerStatsTable } from './UsePlayerStatsTable';
 
@@ -22,10 +22,12 @@ const PlayerStatsTable: React.FC<PlayerStatsTableProps> = ({ stats, prev, sortin
 		return <NoContent type="info" description={<p>There are no player stats in the database.</p>} />;
 	}
 
+	const rowVariant = (row: Row<PlayerAllTimeStats>) => (row.original.is_active_player ? 'trActive' : undefined);
+
 	return (
 		<AnimatedTableWrapper>
 			<UniversalTableHead table={table} />
-			<UniversalTableBody table={table} />
+			<UniversalTableBody table={table} rowVariant={rowVariant} />
 		</AnimatedTableWrapper>
 	);
 };
