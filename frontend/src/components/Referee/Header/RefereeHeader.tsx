@@ -15,6 +15,10 @@ const RefereeHeader: React.FC = () => {
 	const imagePath = refereeDetails?.image?.url;
 	const imageUrl = getImageUrl(imagePath);
 
+	if (!refereeDetails) {
+		return null; // or a loading spinner
+	}
+
 	return (
 		<HeaderWrapper>
 			<ProfileImage
@@ -22,7 +26,7 @@ const RefereeHeader: React.FC = () => {
 				name={`${refereeDetails?.first_name} ${refereeDetails?.last_name}`}
 				nationality={refereeDetails?.nationality || ''}
 			/>
-			<RefereeBio referee={refereeDetails!} />
+			<RefereeBio referee={refereeDetails} />
 		</HeaderWrapper>
 	);
 };
