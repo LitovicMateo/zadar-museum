@@ -24,8 +24,6 @@ const StaffsPage: React.FC = () => {
 	const { data: staffs, isLoading } = useStaffs();
 	const { searchTerm, SearchInput } = useSearch();
 
-	console.log(staffs);
-
 	const filteredStaff = searchPlayers(staffs as never[], searchTerm) as unknown as StaffDetailsResponse[];
 	const { page, pageSize, paginated, setPage, setPageSize, total } = usePagedSortedList(filteredStaff, undefined, {
 		initialPageSize: PAGE_SIZE,

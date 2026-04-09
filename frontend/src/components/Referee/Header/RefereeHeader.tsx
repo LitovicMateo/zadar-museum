@@ -2,21 +2,27 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import HeaderWrapper from '@/components/UI/HeaderWrapper/HeaderWrapper';
+import ProfileImage from '@/components/UI/ProfileImage/ProfileImage';
 import { useRefereeDetails } from '@/hooks/queries/referee/UseRefereeDetails';
+import { getImageUrl } from '@/utils/GetImageUrl';
 
-import styles from './RefereeHeader.module.css';
+import RefereeBio from './RefereeBio/RefereeBio';
 
 const RefereeHeader: React.FC = () => {
 	const { refereeId } = useParams();
 	const { data: refereeDetails } = useRefereeDetails(refereeId!);
 
+	const imagePath = refereeDetails?.image?.url;
+	const imageUrl = getImageUrl(imagePath);
+
 	return (
 		<HeaderWrapper>
-			<div className={styles.nameWrapper}>
-				<h2 className={styles.name}>
-					{refereeDetails?.first_name} {refereeDetails?.last_name}
-				</h2>
-			</div>
+			<ProfileImage
+				imageUrl={imageUrl}
+				name={`${refereeDetails?.first_name} ${refereeDetails?.last_name}`}
+				nationality={refereeDetails?.nationality || ''}
+			/>
+			<RefereeBio referee={refereeDetails!} />
 		</HeaderWrapper>
 	);
 };

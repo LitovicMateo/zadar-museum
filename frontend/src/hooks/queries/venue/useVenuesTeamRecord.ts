@@ -15,8 +15,6 @@ export const useVenuesTeamRecord = () => {
 const getVenuesTeamRecord = async (): Promise<VenueTeamRecordResponse[]> => {
 	const res = await apiClient.get(API_ROUTES.venue.venueRecords());
 
-	console.log('RES', res);
-
 	const raw = res.data;
 	return raw;
 };
