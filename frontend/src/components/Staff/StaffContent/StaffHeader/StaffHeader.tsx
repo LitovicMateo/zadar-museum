@@ -13,10 +13,6 @@ const StaffHeader: React.FC = () => {
 
 	const { data: staffDetails } = useStaffDetails(staffId!);
 
-	console.log('STAFF HEADER', staffDetails);
-
-	// return <div>Hello</div>;
-
 	const imagePath = staffDetails?.image?.url;
 	const imageUrl = getImageUrl(imagePath);
 

@@ -9,19 +9,14 @@ export const useVenuesDirectory = () => {
 	const { data: venues, isLoading } = useVenues('name', 'asc');
 	const { data: venueStats, isLoading: isTeamRecordLoading } = useVenuesTeamRecord();
 
-	// console.log('VENUE STATS', venueStats);
-
 	const directory = useMemo<VenueDirectoryEntry[] | undefined>(() => {
 		if (!venues || isTeamRecordLoading) return undefined;
 
 		const statsMap = new Map(venueStats ? venueStats.map((s) => [String(s.venue_slug), s]) : []);
 
-		// console.log(statsMap);
-
 		return venues.map((venue) => {
 			const stats = statsMap.get(venue.slug);
 
-			console.log('Mapping venue', venue.slug, 'to stats', stats);
 			return {
 				id: venue.id,
 				name: venue.name,
