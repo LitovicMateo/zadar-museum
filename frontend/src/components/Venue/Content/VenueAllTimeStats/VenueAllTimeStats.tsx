@@ -13,8 +13,6 @@ const VenueAllTimeStats: React.FC = () => {
 
 	const { data: record, isLoading } = useVenueTeamRecord(venueSlug!);
 
-	console.log(record);
-
 	if (isLoading) {
 		return <div className={styles.loading}>Loading...</div>;
 	}

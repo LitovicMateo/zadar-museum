@@ -14,8 +14,6 @@ type ProfileImageProps = {
 };
 
 const ProfileImage: React.FC<ProfileImageProps> = ({ imageUrl, name, nationality, fallback, variant = 'profile' }) => {
-	console.log(imageUrl);
-
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.clipArea}>
