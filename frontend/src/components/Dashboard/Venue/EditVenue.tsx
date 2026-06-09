@@ -25,7 +25,8 @@ const EditVenue: React.FC = () => {
 	});
 
 	const handleSubmit = (data: VenueFormData) => {
-		mutation.mutate({ ...data, id: venue!.documentId });
+		if (!venue?.documentId) return;
+		mutation.mutate({ ...data, id: venue.documentId });
 	};
 
 	return (

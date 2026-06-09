@@ -4,13 +4,18 @@
  */
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
+let _onUnauthorized: (() => void) | null = null;
+export const setUnauthorizedCallback = (fn: () => void) => {
+	_onUnauthorized = fn;
+};
+
 // Create axios instance with base configuration
 const apiClient = axios.create({
 	baseURL: '',
 	headers: {
 		'Content-Type': 'application/json'
 	},
-	timeout: 30000 // 30 second timeout
+	timeout: 30000 // 30 second timeout,
 });
 
 /**
@@ -50,7 +55,8 @@ apiClient.interceptors.response.use(
 
 			switch (status) {
 				case 401:
-					// Unauthorized - clear auth and redirect to login
+					// Unauthorized - clear auth state and redirect to login
+					_onUnauthorized?.();
 					localStorage.removeItem('jwt');
 					localStorage.removeItem('user');
 					// Only redirect if not already on login page

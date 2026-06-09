@@ -10,6 +10,8 @@ import {
   ALLOWED_ENTITIES,
   ALLOWED_STATS,
   ALLOWED_LOCATIONS,
+  ALLOWED_PLAYER_RECORD_STATS,
+  ALLOWED_TEAM_RECORD_STATS,
 } from "../../../validation";
 
 export default factories.createCoreService("api::team.team", ({ strapi }) => ({
@@ -273,19 +275,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
     statKey: string,
     season?: string,
   ) {
-    const ALLOWED = [
-      "points",
-      "rebounds",
-      "assists",
-      "steals",
-      "blocks",
-      "three_pointers_made",
-      "free_throws_made",
-      "field_goals_made",
-      "plus_minus",
-      "efficiency",
-    ];
-    if (!ALLOWED.includes(statKey)) throw new Error("Invalid stat key");
+    validateWhitelist(statKey, ALLOWED_PLAYER_RECORD_STATS, "statKey");
 
     const knex = strapi.db.connection;
     return await knex("player_boxscore as pb")
@@ -312,17 +302,7 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
     statKey: string,
     season?: string,
   ) {
-    const ALLOWED = [
-      "score",
-      "field_goals_made",
-      "three_pointers_made",
-      "free_throws_made",
-      "rebounds",
-      "assists",
-      "steals",
-      "blocks",
-    ];
-    if (!ALLOWED.includes(statKey)) throw new Error("Invalid stat key");
+    validateWhitelist(statKey, ALLOWED_TEAM_RECORD_STATS, "statKey");
 
     const knex = strapi.db.connection;
     return await knex("team_boxscore as tb")

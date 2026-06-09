@@ -3,8 +3,9 @@ import toast from 'react-hot-toast';
 
 import { API_ROUTES } from '@/constants/Routes';
 import { useQueryClient } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 
+import apiClient from '@/lib/ApiClient';
 import Button from '../Button';
 
 import styles from '@/components/UI/RefreshMVButton/RefreshDataButton.module.css';
@@ -18,7 +19,7 @@ const RefreshDataButton: React.FC = () => {
 		const toastId = toast.loading('Refreshing materialized views…');
 
 		try {
-			const res = await axios.get(API_ROUTES.refresh.views);
+			const res = await apiClient.get(API_ROUTES.refresh.views);
 
 			if (!res.data.success) {
 				throw new Error(res.data?.message || 'Failed to refresh views');

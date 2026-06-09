@@ -13,5 +13,6 @@ export const refreshSchedule = async () => {
 		return data;
 	} catch (err) {
 		console.error(err);
+		return { success: false, message: err instanceof Error ? err.message : 'Unknown error' };
 	}
 };

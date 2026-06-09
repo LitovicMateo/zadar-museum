@@ -4,7 +4,7 @@ import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
 export const usePlayerHasAppearances = (playerId: string, db: PlayerDB) => {
 	const { data } = useAllTimeStats(playerId, db);
 
-	if (!data) return null;
+	if (!data || data.length === 0) return null;
 
 	const gamesPlayed = data[0].total.total.games;
 	return gamesPlayed !== 0;

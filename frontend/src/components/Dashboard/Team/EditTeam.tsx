@@ -28,7 +28,8 @@ const EditTeam: React.FC = () => {
 	});
 
 	const handleSubmit = (data: TeamFormData) => {
-		mutation.mutate({ ...data, id: team!.documentId });
+		if (!team?.documentId) return;
+		mutation.mutate({ ...data, id: team.documentId });
 	};
 
 	return (

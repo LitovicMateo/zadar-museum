@@ -25,7 +25,8 @@ const EditCompetition = () => {
 	});
 
 	const handleSubmit = (data: CompetitionFormData) => {
-		mutation.mutate({ ...data, id: competition!.documentId });
+		if (!competition?.documentId) return;
+		mutation.mutate({ ...data, id: competition.documentId });
 	};
 
 	return (
