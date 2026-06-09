@@ -7,6 +7,13 @@ import { useLeagueDetails } from '@/hooks/queries/league/UseLeagueDetails';
 import { RefereeStats } from '@/types/api/Referee';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
+const LeagueCell: React.FC<{ leagueSlug?: string }> = ({ leagueSlug }) => {
+	const { data: league } = useLeagueDetails(leagueSlug || '');
+	if (!leagueSlug) return <p>Total</p>;
+	const leagueName = league?.name || '';
+	return <Link to={APP_ROUTES.league(leagueSlug)}>{leagueName}</Link>;
+};
+
 export const useRefereeStatsTable = (data: RefereeStats[] | undefined) => {
 	const table = useReactTable<RefereeStats>({
 		data: data || [],
@@ -68,13 +75,6 @@ export const useRefereeStatsTable = (data: RefereeStats[] | undefined) => {
 		],
 		getCoreRowModel: getCoreRowModel()
 	});
-
-	const LeagueCell: React.FC<{ leagueSlug?: string }> = ({ leagueSlug }) => {
-		const { data: league } = useLeagueDetails(leagueSlug || '');
-		if (!leagueSlug) return <p>Total</p>;
-		const leagueName = league?.name || '';
-		return <Link to={APP_ROUTES.league(leagueSlug)}>{leagueName}</Link>;
-	};
 
 	return { table };
 };

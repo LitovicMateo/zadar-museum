@@ -4,10 +4,11 @@ import { useQuery } from '@/hooks/UseQueryWithToast';
 import apiClient from '@/lib/ApiClient';
 import { PlayerSeasonsResponse } from '@/types/api/Player';
 
-export const usePlayerSeasons = (playerId: string, db: PlayerDB) => {
+export const usePlayerSeasons = (playerId: string, db: PlayerDB, options?: { enabled?: boolean }) => {
 	return useQuery({
 		queryKey: ['seasons', playerId, db],
 		queryFn: getPlayerSeasons.bind(null, playerId, db),
+		enabled: options?.enabled ?? true,
 		errorMessage: 'Failed to load player seasons'
 	});
 };

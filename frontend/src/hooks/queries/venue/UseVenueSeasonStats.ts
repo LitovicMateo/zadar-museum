@@ -7,7 +7,7 @@ export const useVenueSeasonStats = (venueSlug: string, season: string) => {
 	return useQuery({
 		queryKey: ['venue', 'stats', venueSlug, season],
 		queryFn: getVenueSeasonStats.bind(null, venueSlug, season),
-		enabled: !!venueSlug,
+		enabled: !!venueSlug && !!season,
 		errorMessage: 'Failed to load venue season statistics'
 	});
 };

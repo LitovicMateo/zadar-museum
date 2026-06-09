@@ -2,7 +2,7 @@ import { useEffect, useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext, AuthContextType, StrapiAuthResponse, StrapiUser } from '@/context/AuthContext';
-import apiClient from '@/lib/ApiClient';
+import apiClient, { setUnauthorizedCallback } from '@/lib/ApiClient';
 import { API_ROUTES } from '@/constants/Routes';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -53,6 +53,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		localStorage.removeItem('jwt');
 		localStorage.removeItem('user');
 	};
+
+	useEffect(() => {
+		setUnauthorizedCallback(logout);
+	}, [logout]);
 
 	const value: AuthContextType = {
 		user,
