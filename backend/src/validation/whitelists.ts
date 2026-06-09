@@ -18,6 +18,33 @@ export type AllowedRole = (typeof ALLOWED_ROLES)[number];
 export const ALLOWED_ENTITIES = ["player", "coach", "team"] as const;
 export type AllowedEntity = (typeof ALLOWED_ENTITIES)[number];
 
+export const ALLOWED_PLAYER_RECORD_STATS = [
+  "points",
+  "rebounds",
+  "assists",
+  "steals",
+  "blocks",
+  "three_pointers_made",
+  "free_throws_made",
+  "field_goals_made",
+  "plus_minus",
+  "efficiency",
+] as const;
+export type AllowedPlayerRecordStat =
+  (typeof ALLOWED_PLAYER_RECORD_STATS)[number];
+
+export const ALLOWED_TEAM_RECORD_STATS = [
+  "score",
+  "field_goals_made",
+  "three_pointers_made",
+  "free_throws_made",
+  "rebounds",
+  "assists",
+  "steals",
+  "blocks",
+] as const;
+export type AllowedTeamRecordStat = (typeof ALLOWED_TEAM_RECORD_STATS)[number];
+
 /**
  * Validates if a value is in the allowed list
  */

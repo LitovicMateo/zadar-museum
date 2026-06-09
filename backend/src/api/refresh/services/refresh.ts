@@ -19,7 +19,6 @@ interface MatviewRow {
 interface RefreshResult {
   count: number;
   refreshedViews: string[];
-  failedViews: string[];
 }
 
 /**
@@ -102,7 +101,6 @@ const refreshService = {
     const ordered = await getOrderedMatviews(knex);
 
     const refreshedViews: string[] = [];
-    const failedViews: string[] = [];
 
     for (const [depth, views] of [...ordered.entries()].sort(([a], [b]) => a - b)) {
       for (const view of views) {
@@ -114,13 +112,12 @@ const refreshService = {
             `[refresh] Failed to refresh MV "${view}" at depth ${depth}:`,
             err
           );
-          failedViews.push(view);
           throw new Error(`Failed to refresh view "${view}": ${err.message}`);
         }
       }
     }
 
-    return { count: refreshedViews.length, refreshedViews, failedViews };
+    return { count: refreshedViews.length, refreshedViews };
   },
 
   /**

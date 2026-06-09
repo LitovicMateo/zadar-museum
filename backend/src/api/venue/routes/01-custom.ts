@@ -1,3 +1,10 @@
+import { validate } from "../../../middlewares/validation";
+import {
+  venueSlugParamsSchema,
+  venuePlayerRecordsQuerySchema,
+  venueTeamRecordsQuerySchema,
+} from "../../../validation/schemas/venue";
+
 export default {
   routes: [
     {
@@ -77,6 +84,12 @@ export default {
       handler: "venue.getVenuePlayerRecords",
       config: {
         auth: false,
+        middlewares: [
+          validate({
+            params: venueSlugParamsSchema,
+            query: venuePlayerRecordsQuerySchema,
+          }),
+        ],
       },
     },
 
@@ -86,6 +99,12 @@ export default {
       handler: "venue.getVenueTeamRecords",
       config: {
         auth: false,
+        middlewares: [
+          validate({
+            params: venueSlugParamsSchema,
+            query: venueTeamRecordsQuerySchema,
+          }),
+        ],
       },
     },
     {

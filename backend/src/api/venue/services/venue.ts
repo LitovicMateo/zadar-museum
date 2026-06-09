@@ -3,6 +3,13 @@
  */
 
 import { factories } from "@strapi/strapi";
+import {
+  ALLOWED_PLAYER_RECORD_STATS,
+  ALLOWED_TEAM_RECORD_STATS,
+  validateWhitelist,
+} from "../../../validation/whitelists";
+
+const KK_ZADAR_SLUG = "kk-zadar";
 
 export default factories.createCoreService(
   "api::venue.venue",
@@ -96,19 +103,7 @@ export default factories.createCoreService(
     },
 
     async findVenuePlayerRecords(venueSlug, statKey, season?: string) {
-      const ALLOWED = [
-        "points",
-        "rebounds",
-        "assists",
-        "steals",
-        "blocks",
-        "three_pointers_made",
-        "free_throws_made",
-        "field_goals_made",
-        "plus_minus",
-        "efficiency",
-      ];
-      if (!ALLOWED.includes(statKey)) throw new Error("Invalid stat key");
+      validateWhitelist(statKey, ALLOWED_PLAYER_RECORD_STATS, "statKey");
 
       const knex = strapi.db.connection;
       return await knex("player_boxscore as pb")
@@ -121,7 +116,7 @@ export default factories.createCoreService(
           knex.raw(`pb.?? as stat_value`, [statKey]),
         )
         .where("s.venue_slug", venueSlug)
-        .where("pb.team_slug", "kk-zadar")
+        .where("pb.team_slug", KK_ZADAR_SLUG)
         .whereNot("pb.is_nulled", true)
         .whereNotNull(`pb.${statKey}`)
         .modify((qb) => {
@@ -132,17 +127,7 @@ export default factories.createCoreService(
     },
 
     async findVenueTeamRecords(venueSlug, statKey, season?: string) {
-      const ALLOWED = [
-        "score",
-        "field_goals_made",
-        "three_pointers_made",
-        "free_throws_made",
-        "rebounds",
-        "assists",
-        "steals",
-        "blocks",
-      ];
-      if (!ALLOWED.includes(statKey)) throw new Error("Invalid stat key");
+      validateWhitelist(statKey, ALLOWED_TEAM_RECORD_STATS, "statKey");
 
       const knex = strapi.db.connection;
       return await knex("team_boxscore as tb")
@@ -151,15 +136,17 @@ export default factories.createCoreService(
           "tb.game_id",
           "tb.season",
           knex.raw(
-            `CASE WHEN s.home_team_slug = 'kk-zadar' THEN s.away_team_name ELSE s.home_team_name END AS opponent_name`,
+            `CASE WHEN s.home_team_slug = ? THEN s.away_team_name ELSE s.home_team_name END AS opponent_name`,
+            [KK_ZADAR_SLUG],
           ),
           knex.raw(
-            `CASE WHEN s.home_team_slug = 'kk-zadar' THEN s.away_team_slug ELSE s.home_team_slug END AS opponent_slug`,
+            `CASE WHEN s.home_team_slug = ? THEN s.away_team_slug ELSE s.home_team_slug END AS opponent_slug`,
+            [KK_ZADAR_SLUG],
           ),
           knex.raw(`tb.?? as stat_value`, [statKey]),
         )
         .where("s.venue_slug", venueSlug)
-        .where("tb.team_slug", "kk-zadar")
+        .where("tb.team_slug", KK_ZADAR_SLUG)
         .whereNot("tb.is_nulled", true)
         .whereNotNull(`tb.${statKey}`)
         .modify((qb) => {

@@ -37,8 +37,7 @@ export default ({ strapi }) => ({
       prevQuery.where("season", season);
     }
 
-    const data = await query;
-    const prevData = await prevQuery;
+    const [data, prevData] = await Promise.all([query, prevQuery]);
 
     return {
       current: data,
@@ -219,8 +218,7 @@ export default ({ strapi }) => ({
       prevQuery.where("season", season);
     }
 
-    const data = await query;
-    const prevData = await prevQuery;
+    const [data, prevData] = await Promise.all([query, prevQuery]);
 
     return {
       current: data,
