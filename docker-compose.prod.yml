@@ -13,6 +13,19 @@ services:
     networks:
       - app_network
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis_prod_local
+    command: redis-server --save "" --appendonly no
+    networks:
+      - app_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   backend:
     build:
       context: ./backend
@@ -29,11 +42,13 @@ services:
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
       JWT_SECRET: ${JWT_SECRET}
+      REDIS_URL: redis://redis:6379
       NODE_ENV: production
       PUBLIC_URL: http://localhost
     command: npm run start
     depends_on:
       - postgres
+      - redis
     networks:
       - app_network
 

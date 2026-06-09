@@ -1,6 +1,8 @@
 /**
  * Refresh service
  *
+ * After all MVs refresh successfully, Redis is flushed so the next requests
+ * rebuild the cache from fresh data. See src/utils/cache.ts.
  * Layer 1 MVs are pinned in LAYER_1_ORDER because their cross-dependencies
  * (e.g. `schedule` JOINs `team_boxscore`) are not recorded in pg_depend with
  * deptype 'n', so the recursive CTE cannot detect them. Without pinning,
@@ -10,6 +12,8 @@
  * Layer 2+ MVs are fully auto-discovered via pg_depend and require no
  * manual maintenance when new views are added.
  */
+
+import { flushCache } from '../../../utils/cache';
 
 interface MatviewRow {
   name: string;
@@ -117,6 +121,7 @@ const refreshService = {
       }
     }
 
+    await flushCache();
     return { count: refreshedViews.length, refreshedViews };
   },
 
