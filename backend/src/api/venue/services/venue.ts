@@ -9,8 +9,8 @@ import {
   validateWhitelist,
 } from "../../../validation/whitelists";
 import { getCached, TTL_24H, TTL_1H } from "../../../utils/cache";
-
-const KK_ZADAR_SLUG = "kk-zadar";
+import { aggregateVenueRecord, buildRecord } from "../../../lib/aggregation/queries";
+import { getMainTeamSlug } from "../../../lib/mainTeam";
 
 export default factories.createCoreService(
   "api::venue.venue",
@@ -41,16 +41,18 @@ export default factories.createCoreService(
     async findVenueTeamRecord(venueSlug) {
       return getCached(`zadar:venue:team-record:${venueSlug}`, TTL_24H, () => {
         const knex = strapi.db.connection;
-        return knex("zadar_venue_record")
-          .select("*")
-          .where("venue_slug", venueSlug);
+        return buildRecord((location) =>
+          aggregateVenueRecord(knex, { venueSlug, location }).then(
+            (rows) => rows[0] ?? null,
+          ),
+        );
       });
     },
 
     async findVenuesTeamRecord() {
       return getCached("zadar:venue:all-team-records", TTL_24H, () => {
         const knex = strapi.db.connection;
-        return knex("zadar_venue_record").select("*");
+        return aggregateVenueRecord(knex, { location: "all" });
       });
     },
 
@@ -90,10 +92,11 @@ export default factories.createCoreService(
         TTL_24H,
         () => {
           const knex = strapi.db.connection;
-          return knex("zadar_venue_season_record")
-            .select("*")
-            .where("venue_slug", venueSlug)
-            .andWhere("season", season);
+          return buildRecord((location) =>
+            aggregateVenueRecord(knex, { venueSlug, location, season }).then(
+              (rows) => rows[0] ?? null,
+            ),
+          );
         },
       );
     },
@@ -102,42 +105,103 @@ export default factories.createCoreService(
       return getCached(
         `zadar:venue:season-league-stats:${venueSlug}:${season}`,
         TTL_24H,
-        () => {
+        async () => {
           const knex = strapi.db.connection;
-          return knex("zadar_venue_league_season_record")
-            .select("*")
-            .where("venue_slug", venueSlug)
-            .andWhere("season", season);
+
+          // Get distinct leagues played at this venue in the given season
+          const leagues: { league_id: string; league_slug: string }[] =
+            await knex("schedule")
+              .select("league_id", "league_slug")
+              .distinct("league_id")
+              .where("venue_slug", venueSlug)
+              .andWhere("season", season)
+              .whereNotNull("league_id");
+
+          if (leagues.length === 0) return null;
+
+          const leagueResults = await Promise.all(
+            leagues.map(async ({ league_id, league_slug }) => {
+              const record = await buildRecord((location) =>
+                aggregateVenueRecord(knex, {
+                  venueSlug,
+                  location,
+                  season,
+                  league: league_slug,
+                }).then((rows) => rows[0] ?? null),
+              );
+
+              const anyRow =
+                record.total ?? record.home ?? record.away ?? record.neutral;
+
+              if (!anyRow) return null;
+
+              return {
+                venueSlug: anyRow.venue_slug,
+                venueName: anyRow.venue_name,
+                season,
+                leagueId: league_id,
+                leagueSlug: league_slug,
+                total: record.total,
+                home: record.home,
+                away: record.away,
+                neutral: record.neutral,
+              };
+            }),
+          );
+
+          return leagueResults.filter(Boolean);
         },
       );
     },
 
     async findVenueLeagueStats(venueSlug) {
-      return getCached(`zadar:venue:league-stats:${venueSlug}`, TTL_24H, () => {
-        const knex = strapi.db.connection;
-        return knex("zadar_venue_league_record as vlr")
-          .join(
-            knex("schedule")
-              .select("league_slug", "league_name")
-              .distinctOn("league_slug")
-              .as("l"),
-            "vlr.league_slug",
-            "l.league_slug",
-          )
-          .select(
-            "vlr.venue_slug",
-            "vlr.league_id",
-            "vlr.league_slug",
-            "l.league_name",
-            "vlr.games",
-            "vlr.wins",
-            "vlr.losses",
-            "vlr.win_percentage",
-            "vlr.avg_attendance",
-          )
-          .where("vlr.venue_slug", venueSlug)
-          .orderBy("vlr.games", "desc");
-      });
+      return getCached(
+        `zadar:venue:league-stats:${venueSlug}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
+
+          // Get distinct leagues played at this venue (all time)
+          const leagues: { league_id: string; league_slug: string }[] =
+            await knex("schedule")
+              .select("league_id", "league_slug")
+              .distinct("league_id")
+              .where("venue_slug", venueSlug)
+              .whereNotNull("league_id");
+
+          if (leagues.length === 0) return null;
+
+          const leagueResults = await Promise.all(
+            leagues.map(async ({ league_id, league_slug }) => {
+              const record = await buildRecord((location) =>
+                aggregateVenueRecord(knex, {
+                  venueSlug,
+                  location,
+                  league: league_slug,
+                }).then((rows) => rows[0] ?? null),
+              );
+
+              const anyRow =
+                record.total ?? record.home ?? record.away ?? record.neutral;
+
+              if (!anyRow) return null;
+
+              return {
+                venueSlug: anyRow.venue_slug,
+                venueName: anyRow.venue_name,
+                leagueId: league_id,
+                leagueSlug: league_slug,
+                total: record.total,
+                home: record.home,
+                away: record.away,
+                neutral: record.neutral,
+              };
+            }),
+          );
+
+          return leagueResults.filter(Boolean);
+        },
+      );
     },
 
     async findVenuePlayerRecords(venueSlug, statKey, season?: string) {
@@ -146,8 +210,9 @@ export default factories.createCoreService(
       return getCached(
         `zadar:venue:player-records:${venueSlug}:${statKey}:${season || "all"}`,
         TTL_24H,
-        () => {
+        async () => {
           const knex = strapi.db.connection;
+          const mainSlug = await getMainTeamSlug();
           return knex("player_boxscore as pb")
             .join("schedule as s", "pb.game_id", "s.game_document_id")
             .select(
@@ -158,7 +223,7 @@ export default factories.createCoreService(
               knex.raw(`pb.?? as stat_value`, [statKey]),
             )
             .where("s.venue_slug", venueSlug)
-            .where("pb.team_slug", KK_ZADAR_SLUG)
+            .where("pb.team_slug", mainSlug)
             .whereNot("pb.is_nulled", true)
             .whereNotNull(`pb.${statKey}`)
             .modify((qb) => {
@@ -176,8 +241,9 @@ export default factories.createCoreService(
       return getCached(
         `zadar:venue:team-records:${venueSlug}:${statKey}:${season || "all"}`,
         TTL_24H,
-        () => {
+        async () => {
           const knex = strapi.db.connection;
+          const mainSlug = await getMainTeamSlug();
           return knex("team_boxscore as tb")
             .join("schedule as s", "tb.game_id", "s.game_document_id")
             .select(
@@ -185,16 +251,16 @@ export default factories.createCoreService(
               "tb.season",
               knex.raw(
                 `CASE WHEN s.home_team_slug = ? THEN s.away_team_name ELSE s.home_team_name END AS opponent_name`,
-                [KK_ZADAR_SLUG],
+                [mainSlug],
               ),
               knex.raw(
                 `CASE WHEN s.home_team_slug = ? THEN s.away_team_slug ELSE s.home_team_slug END AS opponent_slug`,
-                [KK_ZADAR_SLUG],
+                [mainSlug],
               ),
               knex.raw(`tb.?? as stat_value`, [statKey]),
             )
             .where("s.venue_slug", venueSlug)
-            .where("tb.team_slug", KK_ZADAR_SLUG)
+            .where("tb.team_slug", mainSlug)
             .whereNot("tb.is_nulled", true)
             .whereNotNull(`tb.${statKey}`)
             .modify((qb) => {
