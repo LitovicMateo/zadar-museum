@@ -7,6 +7,7 @@ export const API_ROUTES = {
 	auth: {
 		login: `${root}/auth/local`
 	},
+	search: (q: string) => `${root}/search?q=${encodeURIComponent(q)}`,
 	refresh: {
 		views: `${root}/refresh/views`,
 		schedule: `${root}/refresh/schedule`

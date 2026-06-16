@@ -13,7 +13,7 @@ PROD_COMPOSE := docker-compose.prod.yml
 PROD_ENV := .env.prod
 
 
-.PHONY: dev dev-stop dev-mv staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod help
+.PHONY: dev dev-stop dev-mv dev-enable-unaccent staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod help
 
 help:
 	@echo "Usage: make <target>"	@echo "Note: several targets forward flags to underlying scripts (e.g. apply-mvs accepts --env-file)"
@@ -29,6 +29,10 @@ dev-logs-frontend:
 	docker-compose -f docker-compose.dev.yml logs --follow --tail=30 frontend
 dev-stop:
 	$(COMPOSE_CMD) -f $(DEV_COMPOSE) --env-file $(DEV_ENV) down
+dev-enable-unaccent:
+	@CONTAINER=$$($(COMPOSE_CMD) -f $(DEV_COMPOSE) ps -q postgres); \
+	if [ -z "$$CONTAINER" ]; then echo "No postgres container found (is the dev stack running?)"; exit 1; fi; \
+	docker exec -i "$$CONTAINER" psql -U strapi -d strapi -c "CREATE EXTENSION IF NOT EXISTS unaccent;"
 
 dev-mv:
 	@POSTGRES_CTR=$$($(COMPOSE_CMD) -f $(DEV_COMPOSE) ps -q postgres); \
