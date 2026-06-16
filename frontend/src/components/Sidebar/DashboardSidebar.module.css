@@ -29,13 +29,15 @@
 
 /* ── Single row ─────────────────────────────────────────── */
 .row {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	display: block;
 	padding: 0.35rem 0.5rem;
 	border-radius: 0.5rem;
 	border-bottom: 1px solid #f1f5f9;
 	transition: background-color 0.15s ease;
+	text-decoration: none;
+	color: #374151;
+	font-size: 0.8125rem;
+	font-weight: 500;
 }
 
 .row:last-child {
@@ -129,4 +131,12 @@
         top: 1rem;
         left: 100%;
         margin-left: 0.5rem;
+}
+
+/* ── Active nav row ─────────────────────────────────────── */
+.rowActive {
+	background-color: #1e3a5f;
+	color: #93c5fd;
+	border-left: 2px solid #3b82f6;
+	font-weight: 600;
 }
