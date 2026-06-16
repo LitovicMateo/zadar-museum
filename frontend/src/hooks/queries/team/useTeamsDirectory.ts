@@ -12,11 +12,11 @@ export const useTeamsDirectory = () => {
 	const directory = useMemo<TeamDirectoryEntry[] | undefined>(() => {
 		if (!teams || !statsData) return undefined;
 
-		const statsMap = new Map(statsData.map((s) => [String(s.team_id), s]));
+		const statsMap = new Map(statsData.map((s) => [s.team_slug, s]));
 
 		return teams
 			.map((team) => {
-				const stats = statsMap.get(String(team.id));
+				const stats = statsMap.get(team.slug);
 				if (!stats) return null;
 
 				// 1 decimal place for win percentage, and convert to loss percentage for display
