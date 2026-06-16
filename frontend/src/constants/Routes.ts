@@ -176,7 +176,31 @@ export const API_ROUTES = {
 		playerStats: (params: string) => `${root}/dashboard/player-stats?${params}`,
 		teamStats: (params: string) => `${root}/dashboard/team-stats?${params}`,
 		teamsWithStats: (gameId: string) => `${root}/game/team-stats/${gameId}`
-	}
+	},
+	adminList: {
+		players: (params: string) => `${root}/dashboard/admin/players?${params}`,
+		coaches: (params: string) => `${root}/dashboard/admin/coaches?${params}`,
+		referees: (params: string) => `${root}/dashboard/admin/referees?${params}`,
+		staff: (params: string) => `${root}/dashboard/admin/staff?${params}`,
+		teams: (params: string) => `${root}/dashboard/admin/teams?${params}`,
+		venues: (params: string) => `${root}/dashboard/admin/venues?${params}`,
+		competitions: (params: string) => `${root}/dashboard/admin/competitions?${params}`,
+		games: (params: string) => `${root}/dashboard/admin/games?${params}`,
+		playerStats: (params: string) => `${root}/dashboard/admin/player-stats?${params}`,
+		teamStats: (params: string) => `${root}/dashboard/admin/team-stats?${params}`,
+	},
+	delete: {
+		player: (id: string) => `${root}/players/${id}`,
+		referee: (id: string) => `${root}/referees/${id}`,
+		team: (id: string) => `${root}/teams/${id}`,
+		coach: (id: string) => `${root}/coaches/${id}`,
+		staff: (id: string) => `${root}/staffs/${id}`,
+		game: (id: string) => `${root}/games/${id}`,
+		venue: (id: string) => `${root}/venues/${id}`,
+		competition: (id: string) => `${root}/competitions/${id}`,
+		playerStats: (id: string) => `${root}/player-stats/${id}`,
+		teamStats: (id: string) => `${root}/team-stats/${id}`,
+	},
 };
 
 export const APP_ROUTES = {
@@ -189,44 +213,54 @@ export const APP_ROUTES = {
 	dashboard: {
 		default: '/dashboard',
 		player: {
+			list: '/dashboard/player/list',
 			create: '/dashboard/player/create',
-			edit: `/dashboard/player/edit/`
+			edit: '/dashboard/player/edit/'
 		},
 		staff: {
+			list: '/dashboard/staff/list',
 			create: '/dashboard/staff/create',
-			edit: `/dashboard/staff/edit/`
+			edit: '/dashboard/staff/edit/'
 		},
 		team: {
+			list: '/dashboard/team/list',
 			create: '/dashboard/team/create',
-			edit: `/dashboard/team/edit/`
+			edit: '/dashboard/team/edit/'
 		},
 		referee: {
+			list: '/dashboard/referee/list',
 			create: '/dashboard/referee/create',
-			edit: `/dashboard/referee/edit/`
+			edit: '/dashboard/referee/edit/'
 		},
 		coach: {
+			list: '/dashboard/coach/list',
 			create: '/dashboard/coach/create',
-			edit: `/dashboard/coach/edit/`
+			edit: '/dashboard/coach/edit/'
 		},
 		game: {
+			list: '/dashboard/game/list',
 			create: '/dashboard/game/create',
-			edit: `/dashboard/game/edit/`
+			edit: '/dashboard/game/edit/'
 		},
 		venue: {
+			list: '/dashboard/venue/list',
 			create: '/dashboard/venue/create',
-			edit: `/dashboard/venue/edit/`
+			edit: '/dashboard/venue/edit/'
 		},
 		competition: {
+			list: '/dashboard/competition/list',
 			create: '/dashboard/competition/create',
-			edit: `/dashboard/competition/edit/`
+			edit: '/dashboard/competition/edit/'
 		},
 		playerStats: {
+			list: '/dashboard/player-stats/list',
 			create: '/dashboard/player-stats/create',
-			edit: `/dashboard/player-stats/edit/`
+			edit: '/dashboard/player-stats/edit/'
 		},
 		teamStats: {
+			list: '/dashboard/team-stats/list',
 			create: '/dashboard/team-stats/create',
-			edit: `/dashboard/team-stats/edit/`
+			edit: '/dashboard/team-stats/edit/'
 		}
 	},
 
