@@ -3,6 +3,9 @@
  */
 
 import { factories } from "@strapi/strapi";
+import { validateSeason } from "../../../validation";
+import { getCached, TTL_24H } from "../../../utils/cache";
+import { aggregateRefereeStats, buildRecord } from "../../../lib/aggregation/queries";
 
 export default factories.createCoreService(
   "api::referee.referee",
@@ -32,30 +35,51 @@ export default factories.createCoreService(
     },
 
     async findRefereeTeamRecord(refereeId) {
-      const knex = await strapi.db.connection;
-      const data = await knex("referee_all_time_record")
-        .select("*")
-        .where("referee_id", refereeId);
+      return getCached(
+        `zadar:referee:team-record:${refereeId}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
 
-      const referee = data[0];
+          const record = await buildRecord((location) =>
+            aggregateRefereeStats(knex, {
+              refereeId,
+              location,
+            }).then((r) => r[0] ?? null),
+          );
 
-      if (!referee) {
-        return null;
-      }
+          const anyRow =
+            record.total ?? record.home ?? record.away ?? record.neutral;
 
-      const totalStats = JSON.parse(referee.total);
-      const homeStats = JSON.parse(referee.home);
-      const awayStats = JSON.parse(referee.away);
-      const neutralStats = referee.neutral ? JSON.parse(referee.neutral) : null;
+          if (!anyRow) return null;
 
-      const stats = {
-        refereeId: referee.referee_id,
-        firstName: referee.first_name,
-        lastName: referee.last_name,
-        stats: [homeStats, awayStats, neutralStats, totalStats].filter(Boolean),
-      };
+          const toStatsRow = (row: any, key: string) =>
+            row
+              ? {
+                  key,
+                  games: row.games,
+                  wins: row.wins,
+                  losses: row.losses,
+                  win_percentage: row.win_percentage,
+                  fouls_for: row.fouls_for,
+                  fouls_against: row.fouls_against,
+                  foul_difference: row.foul_difference,
+                }
+              : null;
 
-      return stats;
+          const homeStats = toStatsRow(record.home, "Home");
+          const awayStats = toStatsRow(record.away, "Away");
+          const neutralStats = toStatsRow(record.neutral, "Neutral");
+          const totalStats = toStatsRow(record.total, "Total");
+
+          return {
+            refereeId: anyRow.referee_id,
+            firstName: anyRow.first_name,
+            lastName: anyRow.last_name,
+            stats: [homeStats, awayStats, neutralStats, totalStats].filter(Boolean),
+          };
+        },
+      );
     },
 
     async findRefereeSeasons(refereeId) {
@@ -81,71 +105,140 @@ export default factories.createCoreService(
     },
 
     async findRefereeSeasonStats(refereeId, season) {
-      const knex = await strapi.db.connection;
-      return knex("referee_season_stats")
-        .select("*")
-        .where("referee_document_id", refereeId)
-        .andWhere("season", season);
+      const validatedSeason = validateSeason(season);
+
+      return getCached(
+        `zadar:referee:season-stats:${refereeId}:${validatedSeason}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
+
+          const rows = await aggregateRefereeStats(knex, {
+            refereeId,
+            location: "all",
+            season: validatedSeason ?? undefined,
+          });
+
+          return rows;
+        },
+      );
     },
 
     async findRefereeSeasonLeagueStats(refereeId, season) {
-      const knex = strapi.db.connection;
-      const data = await knex("referee_season_league_record_full")
-        .select("*")
-        .where("referee_id", refereeId)
-        .andWhere("season", season);
+      const validatedSeason = validateSeason(season);
 
-      if (!data.length) {
-        return null;
-      }
+      return getCached(
+        `zadar:referee:season-league-stats:${refereeId}:${validatedSeason}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
 
-      const referee = data.map((r) => {
-        const totalStats = JSON.parse(r.total);
-        const homeStats = JSON.parse(r.home);
-        const awayStats = JSON.parse(r.away);
+          // Get distinct leagues for this referee in this season
+          const leagues: { league_id: string; league_slug: string }[] =
+            await knex("schedule")
+              .select("league_id", "league_slug")
+              .distinct("league_id")
+              .where(function () {
+                this.where("main_referee_id", refereeId)
+                  .orWhere("second_referee_id", refereeId)
+                  .orWhere("third_referee_id", refereeId);
+              })
+              .andWhere("season", validatedSeason)
+              .whereNotNull("league_id");
 
-        const neutralStats = r.neutral ? JSON.parse(r.neutral) : null;
+          if (leagues.length === 0) return null;
 
-        return {
-          refereeId: r.referee_id,
-          firstName: r.first_name,
-          lastName: r.last_name,
-          season: r.season,
-          leagueId: r.league_id,
-          leagueSlug: r.league_slug,
-          stats: {
-            total: totalStats,
-            home: homeStats,
-            away: awayStats,
-            neutral: neutralStats,
-          },
-        };
-      });
+          const leagueResults = await Promise.all(
+            leagues.map(async ({ league_id, league_slug }) => {
+              const record = await buildRecord((location) =>
+                aggregateRefereeStats(knex, {
+                  refereeId,
+                  location,
+                  season: validatedSeason ?? undefined,
+                  league: league_slug,
+                }).then((r) => r[0] ?? null),
+              );
 
-      return referee;
+              const anyRow =
+                record.total ?? record.home ?? record.away ?? record.neutral;
+
+              if (!anyRow) return null;
+
+              return {
+                refereeId: anyRow.referee_id,
+                firstName: anyRow.first_name,
+                lastName: anyRow.last_name,
+                season: validatedSeason,
+                leagueId: league_id,
+                leagueSlug: league_slug,
+                stats: {
+                  total: record.total,
+                  home: record.home,
+                  away: record.away,
+                  neutral: record.neutral,
+                },
+              };
+            }),
+          );
+
+          return leagueResults.filter(Boolean);
+        },
+      );
     },
 
     async findRefereeLeagueStats(refereeId) {
-      const knex = strapi.db.connection;
-      const data = await knex("referee_league_record_full")
-        .select("*")
-        .where("referee_id", refereeId);
+      return getCached(
+        `zadar:referee:league-stats:${refereeId}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
 
-      if (!data.length) {
-        return null;
-      }
+          // Get distinct leagues for this referee (all time)
+          const leagues: { league_id: string; league_slug: string }[] =
+            await knex("schedule")
+              .select("league_id", "league_slug")
+              .distinct("league_id")
+              .where(function () {
+                this.where("main_referee_id", refereeId)
+                  .orWhere("second_referee_id", refereeId)
+                  .orWhere("third_referee_id", refereeId);
+              })
+              .whereNotNull("league_id");
 
-      return data.map((r) => ({
-        refereeId: r.referee_id,
-        firstName: r.first_name,
-        lastName: r.last_name,
-        leagueId: r.league_id,
-        leagueSlug: r.league_slug,
-        total: JSON.parse(r.total),
-        home: JSON.parse(r.home),
-        away: JSON.parse(r.away),
-        neutral: r.neutral ? JSON.parse(r.neutral) : null,
-      }));
+          if (leagues.length === 0) return null;
+
+          const leagueResults = await Promise.all(
+            leagues.map(async ({ league_id, league_slug }) => {
+              const record = await buildRecord((location) =>
+                aggregateRefereeStats(knex, {
+                  refereeId,
+                  location,
+                  league: league_slug,
+                }).then((r) => r[0] ?? null),
+              );
+
+              const anyRow =
+                record.total ?? record.home ?? record.away ?? record.neutral;
+
+              if (!anyRow) return null;
+
+              return {
+                refereeId: anyRow.referee_id,
+                firstName: anyRow.first_name,
+                lastName: anyRow.last_name,
+                leagueId: league_id,
+                leagueSlug: league_slug,
+                total: record.total,
+                home: record.home,
+                away: record.away,
+                neutral: record.neutral,
+              };
+            }),
+          );
+
+          return leagueResults.filter(Boolean);
+        },
+      );
     },
   }),
 );
