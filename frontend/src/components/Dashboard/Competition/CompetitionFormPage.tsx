@@ -8,7 +8,7 @@ import { useQuery } from '@/hooks/UseQueryWithToast';
 import FormPageLayout from '@/layouts/FormPageLayout';
 import apiClient from '@/lib/ApiClient';
 import { API_ROUTES } from '@/constants/Routes';
-import { createCompetition } from '@/services/competitions/CreateCompetition';
+import { createCompetiton as createCompetition } from '@/services/competitions/CreateCompetition';
 import { updateCompetition } from '@/services/competitions/UpdateCompetition';
 import { CompetitionDetailsResponse } from '@/types/api/Competition';
 

@@ -19,8 +19,12 @@ const GameFormPage: React.FC = () => {
 	const { data: game } = useGameDetails(documentId ?? '');
 
 	const mutation = useMutation({
-		mutationFn: (data: GameFormData) =>
-			documentId ? updateGame({ ...data, id: documentId }) : createGame(data),
+		mutationFn: async (data: GameFormData) => {
+			if (documentId) {
+				return updateGame({ ...data, id: documentId });
+			}
+			return createGame(data);
+		},
 		onSuccess: async () => {
 			await refreshSchedule();
 			queryClient.invalidateQueries({ queryKey: ['game', 'admin-list'] });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
@@ -6,8 +6,8 @@ import { Pencil, Trash2 } from 'lucide-react';
 
 import apiClient from '@/lib/ApiClient';
 import { useAdminList } from '@/hooks/queries/dashboard/UseAdminList';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import Button from '@/components/UI/Button';
+import { Input } from '@/components/UI/Input';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
