@@ -8,6 +8,7 @@ export const useGameScore = (gameId: string) => {
 		queryKey: ['score', gameId],
 		queryFn: getGameScore.bind(null, gameId),
 		enabled: !!gameId,
+		staleTime: Infinity,
 		errorMessage: 'Failed to load game score'
 	});
 };

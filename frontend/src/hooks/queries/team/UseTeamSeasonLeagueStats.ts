@@ -13,7 +13,7 @@ export const useTeamSeasonLeagueStats = (season: string, teamSlug: string) => {
 };
 
 const getTeamSeasonLeagueStats = async (season: string, teamSlug: string): Promise<TeamStatsResponse> => {
-	const res = await apiClient.get(API_ROUTES.team.stats.seasonTotalStats(teamSlug!, season!));
+	const res = await apiClient.get(API_ROUTES.team.stats.seasonLeagueStats(teamSlug!, season!));
 
 	return res.data;
 };

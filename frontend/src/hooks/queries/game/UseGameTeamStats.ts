@@ -8,6 +8,7 @@ export const useGameTeamStats = (gameId: string) =>
 		queryKey: ['team-stats', gameId],
 		queryFn: fetchSingleGameTeamBoxscore.bind(null, gameId!),
 		enabled: !!gameId,
+		staleTime: Infinity,
 		errorMessage: 'Failed to load team statistics'
 	});
 

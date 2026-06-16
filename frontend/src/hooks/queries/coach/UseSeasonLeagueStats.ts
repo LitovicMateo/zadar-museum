@@ -6,7 +6,7 @@ import { CoachStatsResponse } from '@/types/api/Coach';
 
 export const useSeasonLeagueStats = (coachId: string, season: string, db: PlayerDB) => {
 	return useQuery({
-		queryKey: ['season-league-stats', coachId, season, db],
+		queryKey: ['coach-season-league-stats', coachId, season, db],
 		queryFn: getSeasonLeagueStats.bind(null, coachId, season, db),
 		enabled: !!coachId && !!db,
 		errorMessage: 'Failed to load season league statistics'
