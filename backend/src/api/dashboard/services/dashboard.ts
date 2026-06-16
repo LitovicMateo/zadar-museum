@@ -188,4 +188,174 @@ export default ({ strapi }: FactoryArgs) => ({
 
     return staff;
   },
+
+  async findPlayersAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { last_name: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::player.player").findMany({
+        select: ["*"],
+        populate: ["image"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::player.player").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findCoachesAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { last_name: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::coach.coach").findMany({
+        select: ["*"],
+        populate: ["image"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::coach.coach").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findRefereesAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { last_name: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::referee.referee").findMany({
+        select: ["*"],
+        populate: ["image"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::referee.referee").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findStaffAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { last_name: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::staff.staff").findMany({
+        select: ["*"],
+        populate: ["image"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::staff.staff").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findTeamsAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { name: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::team.team").findMany({
+        select: ["*"],
+        populate: ["image"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::team.team").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findVenuesAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { name: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::venue.venue").findMany({
+        select: ["*"],
+        populate: ["image"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::venue.venue").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findCompetitionsAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { name: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::competition.competition").findMany({
+        select: ["*"],
+        populate: ["image"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::competition.competition").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findGamesAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { season: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::game.game").findMany({
+        select: ["*"],
+        populate: ["home_team", "away_team"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::game.game").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findPlayerStatsAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { season: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::player-stats.player-stat").findMany({
+        select: ["*"],
+        populate: ["player", "team", "game", "game.home_team", "game.away_team"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::player-stats.player-stat").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findTeamStatsAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { season: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::team-stats.team-stat").findMany({
+        select: ["*"],
+        populate: ["game", "game.home_team", "game.away_team", "coach", "team"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::team-stats.team-stat").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
 });
