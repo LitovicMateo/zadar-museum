@@ -120,6 +120,9 @@ export async function aggregatePlayerStats(
   const bindings: Record<string, any> = { mainSlug };
 
   // -- WHERE clauses built up as fragments
+  // Note: forfeited games are intentionally NOT filtered here, matching the
+  // Layer 2 zadar_player_total_all_time MV which also omits a forfeited filter.
+  // aggregatePlayerRecords filters forfeited = false because the record MVs do.
   const whereClauses: string[] = [
     `b.status::text <> 'dnp-cd'::text`,
     `b.is_nulled = false`,
@@ -210,7 +213,7 @@ export async function aggregatePlayerStats(
       b.player_id,
       b.first_name,
       b.last_name,
-      b.is_active_player,
+      BOOL_OR(b.is_active_player) AS is_active_player,
 
       COUNT(b.game_id) AS games,
       RANK() OVER (ORDER BY COUNT(b.game_id) DESC NULLS LAST) AS games_rank,
@@ -273,7 +276,7 @@ export async function aggregatePlayerStats(
 
     FROM player_boxscore b
     WHERE ${whereSQL}
-    GROUP BY b.player_id, b.first_name, b.last_name, b.is_active_player
+    GROUP BY b.player_id, b.first_name, b.last_name
   `;
 
   const result = await knex.raw(sql, bindings);
@@ -890,8 +893,11 @@ export async function aggregateRefereeStats(
     locationFilter = `AND s.is_neutral = true`;
   }
 
-  // Referee filter
-  const refereeFilter = params.refereeId ? `WHERE r.document_id = :refereeId` : '';
+  // Referee filter — applied inside ref_game_union so the WHERE sits correctly
+  // before the GROUP BY (never interpolated after a JOIN).
+  const refereeFilterSQL = params.refereeId
+    ? `AND ref_id = :refereeId`
+    : '';
   if (params.refereeId) {
     bindings.refereeId = params.refereeId;
   }
@@ -915,9 +921,9 @@ export async function aggregateRefereeStats(
         opp_tb.fouls AS opp_fouls
       FROM schedule s
       JOIN team_boxscore zadar_tb
-        ON zadar_tb.game_id = s.game_id AND zadar_tb.team_slug = :mainSlug
+        ON zadar_tb.game_id = s.game_document_id AND zadar_tb.team_slug = :mainSlug
       JOIN team_boxscore opp_tb
-        ON opp_tb.game_id = s.game_id AND opp_tb.team_slug != :mainSlug
+        ON opp_tb.game_id = s.game_document_id AND opp_tb.team_slug != :mainSlug
       WHERE
         (s.home_team_slug = :mainSlug OR s.away_team_slug = :mainSlug)
         AND s.is_nulled = false
@@ -932,7 +938,7 @@ export async function aggregateRefereeStats(
              home_team_slug, away_team_slug, home_score, away_score,
              zadar_fouls, opp_fouls,
              main_referee_id AS ref_id
-      FROM ref_games WHERE main_referee_id IS NOT NULL
+      FROM ref_games WHERE main_referee_id IS NOT NULL ${refereeFilterSQL}
 
       UNION ALL
 
@@ -940,7 +946,7 @@ export async function aggregateRefereeStats(
              home_team_slug, away_team_slug, home_score, away_score,
              zadar_fouls, opp_fouls,
              second_referee_id AS ref_id
-      FROM ref_games WHERE second_referee_id IS NOT NULL
+      FROM ref_games WHERE second_referee_id IS NOT NULL ${refereeFilterSQL}
 
       UNION ALL
 
@@ -948,7 +954,7 @@ export async function aggregateRefereeStats(
              home_team_slug, away_team_slug, home_score, away_score,
              zadar_fouls, opp_fouls,
              third_referee_id AS ref_id
-      FROM ref_games WHERE third_referee_id IS NOT NULL
+      FROM ref_games WHERE third_referee_id IS NOT NULL ${refereeFilterSQL}
     )
     SELECT
       r.document_id AS referee_id,
@@ -1010,7 +1016,6 @@ export async function aggregateRefereeStats(
 
     FROM ref_game_union u
     JOIN referees r ON r.document_id = u.ref_id
-    ${refereeFilter}
     GROUP BY r.document_id, r.first_name, r.last_name
     ORDER BY COUNT(DISTINCT u.game_id) DESC
   `;
@@ -1116,7 +1121,7 @@ export async function aggregateVenueRecord(
             ELSE 0
           END
         )::decimal / NULLIF(COUNT(*), 0) * 100,
-        2
+        1
       ) AS win_percentage,
 
       ROUND(AVG(NULLIF(s.attendance::text, '')::numeric), 0) AS avg_attendance,
