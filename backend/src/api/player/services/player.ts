@@ -9,7 +9,7 @@ import {
   ALLOWED_DATABASES,
 } from "../../../validation";
 import { getCached, TTL_24H, TTL_1H } from "../../../utils/cache";
-import { aggregatePlayerStats } from "../../../lib/aggregation/queries";
+import { aggregatePlayerStats, buildRecord } from "../../../lib/aggregation/queries";
 import { getMainTeamSlug } from "../../../lib/mainTeam";
 
 export default factories.createCoreService(
@@ -64,20 +64,196 @@ export default factories.createCoreService(
         `zadar:player:all-time-league:${playerId}:${validatedDb}`,
         TTL_24H,
         async () => {
-          const table = `${validatedDb}_player_league_record_full`;
+          const mainSlug = await getMainTeamSlug();
           const knex = strapi.db.connection;
-          const data = await knex(table)
-            .select("*")
-            .where("player_id", playerId);
 
-          if (data.length === 0) {
+          const teamClause =
+            validatedDb === "zadar"
+              ? `b.team_slug = :mainSlug`
+              : `b.team_slug != :mainSlug`;
+
+          // Build a SQL query aggregating player stats per league per location.
+          // Runs 8 times in parallel (4 locations × 2 modes).
+          function buildLeagueLocationSql(
+            mode: "total" | "average",
+            location: "all" | "home" | "away" | "neutral",
+          ): string {
+            const isAvg = mode === "average";
+
+            const minutesExpr = isAvg
+              ? `ROUND(AVG(b.minutes + (b.seconds / 60.0)), 1)`
+              : `SUM(b.minutes + (b.seconds / 60.0))`;
+
+            function statCol(col: string): string {
+              return isAvg ? `ROUND(AVG(b.${col}), 1)` : `SUM(b.${col})`;
+            }
+
+            function rankCol(col: string): string {
+              const aggFn = isAvg ? `AVG(b.${col})` : `SUM(b.${col})`;
+              return `RANK() OVER (PARTITION BY b.league_id ORDER BY ${aggFn} DESC NULLS LAST)`;
+            }
+
+            function pctCol(made: string, att: string): string {
+              if (isAvg) {
+                return `CASE WHEN AVG(b.${att}) = 0 THEN 0
+                  ELSE ROUND(AVG(b.${made}) / NULLIF(AVG(b.${att}), 0) * 100, 1)
+                END`;
+              }
+              return `CASE WHEN SUM(b.${att}) = 0 THEN 0
+                ELSE ROUND(SUM(b.${made})::numeric / NULLIF(SUM(b.${att}), 0) * 100, 1)
+              END`;
+            }
+
+            function pctRankCol(made: string, att: string): string {
+              const expr = isAvg
+                ? `CASE WHEN AVG(b.${att}) = 0 THEN 0 ELSE ROUND(AVG(b.${made}) / NULLIF(AVG(b.${att}), 0) * 100, 1) END`
+                : `CASE WHEN SUM(b.${att}) = 0 THEN 0 ELSE ROUND(SUM(b.${made})::numeric / NULLIF(SUM(b.${att}), 0) * 100, 1) END`;
+              return `RANK() OVER (PARTITION BY b.league_id ORDER BY ${expr} DESC NULLS LAST)`;
+            }
+
+            const locationClause =
+              location !== "all"
+                ? `AND b.is_home_team = '${location}'`
+                : "";
+
+            return `
+              SELECT
+                b.player_id,
+                b.league_id,
+                b.league_slug,
+                b.first_name,
+                b.last_name,
+                BOOL_OR(b.is_active_player) AS is_active_player,
+
+                COUNT(b.game_id) AS games,
+                RANK() OVER (PARTITION BY b.league_id ORDER BY COUNT(b.game_id) DESC NULLS LAST) AS games_rank,
+                SUM(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) AS games_started,
+                RANK() OVER (PARTITION BY b.league_id ORDER BY SUM(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) DESC NULLS LAST) AS games_started_rank,
+
+                ${minutesExpr} AS minutes,
+                RANK() OVER (PARTITION BY b.league_id ORDER BY ${minutesExpr} DESC NULLS LAST) AS minutes_rank,
+
+                ${statCol("points")} AS points,
+                ${rankCol("points")} AS points_rank,
+
+                ${statCol("assists")} AS assists,
+                ${rankCol("assists")} AS assists_rank,
+
+                ${statCol("offensive_rebounds")} AS off_rebounds,
+                ${rankCol("offensive_rebounds")} AS off_rebounds_rank,
+
+                ${statCol("defensive_rebounds")} AS def_rebounds,
+                ${rankCol("defensive_rebounds")} AS def_rebounds_rank,
+
+                ${statCol("rebounds")} AS rebounds,
+                ${rankCol("rebounds")} AS rebounds_rank,
+
+                ${statCol("steals")} AS steals,
+                ${rankCol("steals")} AS steals_rank,
+
+                ${statCol("blocks")} AS blocks,
+                ${rankCol("blocks")} AS blocks_rank,
+
+                ${statCol("field_goals_made")} AS field_goals_made,
+                ${rankCol("field_goals_made")} AS field_goals_made_rank,
+
+                ${statCol("field_goals_attempted")} AS field_goals_attempted,
+                ${rankCol("field_goals_attempted")} AS field_goals_attempted_rank,
+
+                ${pctCol("field_goals_made", "field_goals_attempted")} AS field_goal_percentage,
+                ${pctRankCol("field_goals_made", "field_goals_attempted")} AS field_goal_percentage_rank,
+
+                ${statCol("three_pointers_made")} AS three_pointers_made,
+                ${rankCol("three_pointers_made")} AS three_pointers_made_rank,
+
+                ${statCol("three_pointers_attempted")} AS three_pointers_attempted,
+                ${rankCol("three_pointers_attempted")} AS three_pointers_attempted_rank,
+
+                ${pctCol("three_pointers_made", "three_pointers_attempted")} AS three_point_percentage,
+                ${pctRankCol("three_pointers_made", "three_pointers_attempted")} AS three_point_percentage_rank,
+
+                ${statCol("free_throws_made")} AS free_throws_made,
+                ${rankCol("free_throws_made")} AS free_throws_made_rank,
+
+                ${statCol("free_throws_attempted")} AS free_throws_attempted,
+                ${rankCol("free_throws_attempted")} AS free_throws_attempted_rank,
+
+                ${pctCol("free_throws_made", "free_throws_attempted")} AS free_throw_percentage,
+                ${pctRankCol("free_throws_made", "free_throws_attempted")} AS free_throw_percentage_rank,
+
+                ${statCol("efficiency")} AS efficiency,
+                ${rankCol("efficiency")} AS efficiency_rank
+
+              FROM player_boxscore b
+              WHERE
+                b.player_id = :playerId
+                AND ${teamClause}
+                AND b.status::text <> 'dnp-cd'::text
+                AND b.is_nulled = false
+                ${locationClause}
+              GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.league_slug
+            `;
+          }
+
+          const bindings = { playerId, mainSlug };
+          const locations = ["all", "home", "away", "neutral"] as const;
+
+          const [totalResults, avgResults] = await Promise.all([
+            Promise.all(
+              locations.map((loc) =>
+                knex
+                  .raw(buildLeagueLocationSql("total", loc), bindings)
+                  .then((r) => r.rows as any[]),
+              ),
+            ),
+            Promise.all(
+              locations.map((loc) =>
+                knex
+                  .raw(buildLeagueLocationSql("average", loc), bindings)
+                  .then((r) => r.rows as any[]),
+              ),
+            ),
+          ]);
+
+          const [totalAll, totalHome, totalAway, totalNeutral] = totalResults;
+          const [avgAll, avgHome, avgAway, avgNeutral] = avgResults;
+
+          if (totalAll.length === 0) {
             return [];
           }
 
-          return data.map((league) => {
-            const total = JSON.parse(league.total);
-            const average = JSON.parse(league.average);
-            return { ...league, total, average };
+          // Build lookup maps keyed by league_id for each location/mode pair
+          function byLeague(rows: any[]): Map<string, any> {
+            return new Map(rows.map((r) => [r.league_id, r]));
+          }
+
+          const totalHomeMap = byLeague(totalHome);
+          const totalAwayMap = byLeague(totalAway);
+          const totalNeutralMap = byLeague(totalNeutral);
+          const avgAllMap = byLeague(avgAll);
+          const avgHomeMap = byLeague(avgHome);
+          const avgAwayMap = byLeague(avgAway);
+          const avgNeutralMap = byLeague(avgNeutral);
+
+          return totalAll.map((totalRow) => {
+            const leagueId = totalRow.league_id;
+            return {
+              player_id: totalRow.player_id,
+              first_name: totalRow.first_name,
+              last_name: totalRow.last_name,
+              total: {
+                total: totalRow,
+                home: totalHomeMap.get(leagueId) ?? null,
+                away: totalAwayMap.get(leagueId) ?? null,
+                neutral: totalNeutralMap.get(leagueId) ?? null,
+              },
+              average: {
+                total: avgAllMap.get(leagueId) ?? null,
+                home: avgHomeMap.get(leagueId) ?? null,
+                away: avgAwayMap.get(leagueId) ?? null,
+                neutral: avgNeutralMap.get(leagueId) ?? null,
+              },
+            };
           });
         },
       );
@@ -93,21 +269,47 @@ export default factories.createCoreService(
         `zadar:player:all-time:${playerId}:${validatedDb}`,
         TTL_24H,
         async () => {
-          const table = `${validatedDb}_player_record_full`;
           const knex = strapi.db.connection;
-          const data = await knex(table)
-            .select("*")
-            .where("player_id", playerId);
+          const baseParams = {
+            database: validatedDb as "zadar" | "opponent",
+            playerId,
+          };
 
-          if (data.length === 0) {
-            return [];
-          }
+          const [totalRecord, avgRecord] = await Promise.all([
+            buildRecord(async (location) => {
+              const rows = await aggregatePlayerStats(knex, {
+                ...baseParams,
+                stats: "total",
+                location,
+              });
+              return rows[0] ?? null;
+            }),
+            buildRecord(async (location) => {
+              const rows = await aggregatePlayerStats(knex, {
+                ...baseParams,
+                stats: "average",
+                location,
+              });
+              return rows[0] ?? null;
+            }),
+          ]);
 
-          const player = data[0];
-          const total = JSON.parse(player.total);
-          const average = JSON.parse(player.average);
+          const anyRow =
+            totalRecord.total ??
+            totalRecord.home ??
+            totalRecord.away ??
+            totalRecord.neutral;
+          if (!anyRow) return [];
 
-          return [{ ...player, total, average }];
+          return [
+            {
+              player_id: anyRow.player_id,
+              first_name: anyRow.first_name,
+              last_name: anyRow.last_name,
+              total: totalRecord,
+              average: avgRecord,
+            },
+          ];
         },
       );
     },
