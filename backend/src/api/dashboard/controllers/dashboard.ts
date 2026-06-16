@@ -105,4 +105,64 @@ export default ({ strapi }: FactoryArgs) => ({
     const data = await service.findStaff(sort, direction);
     ctx.body = data;
   },
+
+  async getPlayersAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findPlayersAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getCoachesAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findCoachesAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getRefereesAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findRefereesAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getStaffAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findStaffAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getTeamsAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findTeamsAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getVenuesAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findVenuesAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getCompetitionsAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findCompetitionsAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getGamesAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findGamesAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getPlayerStatsAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findPlayerStatsAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getTeamStatsAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findTeamStatsAdmin({ sort, direction, page, pageSize, search });
+  },
 });
