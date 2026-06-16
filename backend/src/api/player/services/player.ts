@@ -327,20 +327,21 @@ export default factories.createCoreService(
       return getCached(
         `zadar:player:seasons:${playerId}:${validatedDatabase}`,
         TTL_1H,
-        () => {
+        async () => {
           const knex = strapi.db.connection;
+          const mainTeamSlug = await getMainTeamSlug();
 
           if (validatedDatabase === "zadar") {
             return knex("player_boxscore")
               .distinct("season")
               .where("player_id", playerId)
-              .andWhere("team_slug", "kk-zadar");
+              .andWhere("team_slug", mainTeamSlug);
           }
 
           return knex("player_boxscore")
             .distinct("season")
             .where("player_id", playerId)
-            .andWhereNot("team_slug", "kk-zadar");
+            .andWhereNot("team_slug", mainTeamSlug);
         },
       );
     },
