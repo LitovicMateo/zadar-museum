@@ -3,50 +3,45 @@
  */
 
 import { getCached, TTL_24H } from '../../../utils/cache';
+import {
+  aggregatePlayerStats,
+  aggregatePlayerRecords,
+  aggregateTeamStats,
+  aggregateTeamRecords,
+  aggregateCoachRecord,
+  aggregateRefereeStats,
+} from '../../../lib/aggregation/queries';
+import { getMainTeamSlug } from '../../../lib/mainTeam';
+
+// Normalize optional filter params: null/undefined/"all" → 'all' for location,
+// null/undefined/"all" → undefined for league/season/role.
+function normalizeLocation(v: string | null | undefined): 'all' | 'home' | 'away' | 'neutral' {
+  if (!v || v.toLowerCase() === 'all') return 'all';
+  return v as 'home' | 'away' | 'neutral';
+}
+
+function normalizeOptional(v: string | null | undefined): string | undefined {
+  if (!v || v.toLowerCase() === 'all') return undefined;
+  return v;
+}
 
 export default ({ strapi }) => ({
   async findPlayersAllTimeStats(stats, location, league, season, database) {
     const cacheKey = `zadar:stats:players-all-time:${database}:${stats}:${location}:${league}:${season}`;
     return getCached(cacheKey, TTL_24H, async () => {
-      // Parameters already validated by middleware
-      const statsString = "_" + stats;
-      const includeLocation =
-        location && String(location).toLowerCase() !== "all";
-      const locationString = includeLocation ? "_" + location : "";
-      const includeLeague = league && String(league).toLowerCase() !== "all";
-      const leagueString = includeLeague ? "_league" : "";
-      const includeSeason = season && String(season).toLowerCase() !== "all";
-      const seasonString = includeSeason ? "_season" : "";
-
-      const table = `${database}_player${seasonString}${statsString}_all_time${leagueString}${locationString}`;
-
       const knex = strapi.db.connection;
-      const query = knex(table)
-        .select(`${table}.*`, "players.is_active_player")
-        .leftJoin("players", `${table}.player_id`, "players.document_id")
-        .orderBy("points", "desc");
-      const prevTable = `${table}_prev`;
-      const prevQuery = knex(prevTable)
-        .select(`${prevTable}.*`, "players.is_active_player")
-        .leftJoin("players", `${prevTable}.player_id`, "players.document_id")
-        .orderBy("points", "desc");
-
-      if (includeLeague) {
-        query.where("league_slug", league);
-        prevQuery.where("league_slug", league);
-      }
-
-      if (includeSeason) {
-        query.where("season", season);
-        prevQuery.where("season", season);
-      }
-
-      const [data, prevData] = await Promise.all([query, prevQuery]);
-
-      return {
-        current: data,
-        previous: prevData,
+      const params = {
+        database: database as 'zadar' | 'opponent',
+        stats: stats as 'average' | 'total',
+        location: normalizeLocation(location),
+        league: normalizeOptional(league),
+        season: normalizeOptional(season),
       };
+      const [data, prevData] = await Promise.all([
+        aggregatePlayerStats(knex, { ...params, prev: false }),
+        aggregatePlayerStats(knex, { ...params, prev: true }),
+      ]);
+      return { current: data, previous: prevData };
     });
   },
 
@@ -77,68 +72,30 @@ export default ({ strapi }) => ({
   async findPlayersRecords(database, location, league, season, sortKey) {
     const cacheKey = `zadar:stats:player-records:${database}:${location}:${league}:${season}:${sortKey || 'points'}`;
     return getCached(cacheKey, TTL_24H, async () => {
-      // Parameters already validated by middleware
-      const includeLocation =
-        location && String(location).toLowerCase() !== "all";
-      const locationString = includeLocation ? "_" + location : "";
-      const includeLeague = league && String(league).toLowerCase() !== "all";
-      const leagueString = includeLeague ? "_league" : "";
-      const includeSeason = season && String(season).toLowerCase() !== "all";
-      const seasonString = includeSeason ? "_season" : "";
-
-      const table = `${database}_player${seasonString}${leagueString}_record${locationString}`;
-
       const knex = strapi.db.connection;
-      const query = knex(table)
-        .select("*")
-        .orderBy(sortKey || "points", "desc");
-
-      if (includeLeague) {
-        query.where("league_slug", league);
-      }
-
-      if (includeSeason) {
-        query.where("season", season);
-      }
-
-      const data = await query;
-
-      if (!data) {
-        return [];
-      }
-
-      return data;
+      const data = await aggregatePlayerRecords(knex, {
+        database: database as 'zadar' | 'opponent',
+        location: normalizeLocation(location),
+        league: normalizeOptional(league),
+        season: normalizeOptional(season),
+      });
+      const key = sortKey || 'points';
+      return data.slice().sort((a, b) => (b[key] ?? 0) - (a[key] ?? 0));
     });
   },
 
   async findTeamsAllTimeStats(location, league, season) {
     const cacheKey = `zadar:stats:teams-all-time:${location}:${league}:${season}`;
     return getCached(cacheKey, TTL_24H, async () => {
-      // Parameters already validated by middleware
-      const includeLocation =
-        location && String(location).toLowerCase() !== "all";
-      const locationString = includeLocation ? "_" + location : "";
-      const includeLeague = league && String(league).toLowerCase() !== "all";
-      const leagueString = includeLeague ? "_league" : "";
-      const includeSeason = season && String(season).toLowerCase() !== "all";
-      const seasonString = includeSeason ? "_season" : "";
-
-      const table = `team${seasonString}${leagueString}_average_stats${locationString}`;
       const knex = strapi.db.connection;
-      const query = knex(table)
-        .select("*")
-        .where("team_slug", "!=", "kk-zadar")
-        .orderBy("games", "desc");
-
-      if (includeLeague) {
-        query.where("league_slug", league);
-      }
-
-      if (includeSeason) {
-        query.where("season", season);
-      }
-
-      return await query;
+      const results = await aggregateTeamStats(knex, {
+        location: normalizeLocation(location),
+        league: normalizeOptional(league),
+        season: normalizeOptional(season),
+        excludeMainTeam: true,
+      });
+      const mainTeamSlug = await getMainTeamSlug();
+      return results.filter((row) => row.team_slug !== mainTeamSlug);
     });
   },
 
@@ -170,100 +127,47 @@ export default ({ strapi }) => ({
   async findTeamRecords(database, season, league, location, sortKey) {
     const cacheKey = `zadar:stats:team-records:${database}:${season}:${league}:${location}:${sortKey || 'games'}`;
     return getCached(cacheKey, TTL_24H, async () => {
-      // Parameters already validated by middleware
-      const includeLocation =
-        location && String(location).toLowerCase() !== "all";
-      const locationString = includeLocation ? "_" + location : "";
-      const includeLeague = league && String(league).toLowerCase() !== "all";
-      const leagueString = includeLeague ? "_league" : "";
-      const includeSeason = season && String(season).toLowerCase() !== "all";
-      const seasonString = includeSeason ? "_season" : "";
-
-      const table = `${database}_team${seasonString}${leagueString}_record${locationString}`;
-
       const knex = strapi.db.connection;
-      const query = knex(table)
-        .select("*")
-        .orderBy(sortKey || "games", "desc");
-
-      if (includeLeague) {
-        query.where("league_slug", league);
-      }
-
-      if (includeSeason) {
-        query.where("season", season);
-      }
-
-      return await query;
+      const data = await aggregateTeamRecords(knex, {
+        database: database as 'zadar' | 'opponent',
+        location: normalizeLocation(location),
+        league: normalizeOptional(league),
+        season: normalizeOptional(season),
+      });
+      const key = sortKey || 'games';
+      return data.slice().sort((a, b) => (b[key] ?? 0) - (a[key] ?? 0));
     });
   },
 
   async findCoachesAllTimeStats(database, role, location, league, season) {
     const cacheKey = `zadar:stats:coaches-all-time:${database}:${role}:${location}:${league}:${season}`;
     return getCached(cacheKey, TTL_24H, async () => {
-      // Parameters already validated by middleware
-      const includeRole = role && String(role).toLowerCase() !== "all";
-      const roleString = includeRole ? "_" + role : "";
-      const includeLocation =
-        location && String(location).toLowerCase() !== "all";
-      const locationString = includeLocation ? "_" + location : "";
-      const includeLeague = league && String(league).toLowerCase() !== "all";
-      const leagueString = includeLeague ? "_league" : "";
-      const includeSeason = season && String(season).toLowerCase() !== "all";
-      const seasonString = includeSeason ? "_season" : "";
-
-      const table = `${database}${roleString}_coach${seasonString}${leagueString}_record${locationString}`;
-
       const knex = strapi.db.connection;
-      const query = knex(table).select("*").orderBy("games", "desc");
-      const prevQuery = knex(`${table}_prev`)
-        .select("*")
-        .orderBy("games", "desc");
-
-      if (includeLeague) {
-        query.where("league_slug", league);
-        prevQuery.where("league_slug", league);
-      }
-
-      if (includeSeason) {
-        query.where("season", season);
-        prevQuery.where("season", season);
-      }
-
-      const [data, prevData] = await Promise.all([query, prevQuery]);
-
-      return {
-        current: data,
-        previous: prevData,
+      const normalizedRole = normalizeOptional(role) as 'head' | 'assistant' | undefined;
+      const params = {
+        database: database as 'zadar' | 'opponent',
+        role: normalizedRole,
+        location: normalizeLocation(location),
+        league: normalizeOptional(league),
+        season: normalizeOptional(season),
       };
+      const [data, prevData] = await Promise.all([
+        aggregateCoachRecord(knex, { ...params, prev: false }),
+        aggregateCoachRecord(knex, { ...params, prev: true }),
+      ]);
+      return { current: data, previous: prevData };
     });
   },
 
   async findRefereesAllTimeStats(location, league, season) {
     const cacheKey = `zadar:stats:referees-all-time:${location}:${league}:${season}`;
     return getCached(cacheKey, TTL_24H, async () => {
-      // Parameters already validated by middleware
-      const includeLocation =
-        location && String(location).toLowerCase() !== "all";
-      const locationString = includeLocation ? "_" + location : "";
-      const includeLeague = league && String(league).toLowerCase() !== "all";
-      const leagueString = includeLeague ? "_league" : "";
-      const includeSeason = season && String(season).toLowerCase() !== "all";
-      const seasonString = includeSeason ? "_season" : "";
-
-      const table = `referee${seasonString}${leagueString}_stats${locationString}`;
       const knex = strapi.db.connection;
-      const query = knex(table).select("*").orderBy("games", "desc");
-
-      if (includeLeague) {
-        query.where("league_slug", league);
-      }
-
-      if (includeSeason) {
-        query.where("season", season);
-      }
-
-      return await query;
+      return aggregateRefereeStats(knex, {
+        location: normalizeLocation(location),
+        league: normalizeOptional(league),
+        season: normalizeOptional(season),
+      });
     });
   },
 });

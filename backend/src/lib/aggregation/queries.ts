@@ -50,6 +50,7 @@ export interface TeamStatsParams {
 }
 
 export interface TeamRecordsParams {
+  database?: 'zadar' | 'opponent';
   location: 'all' | 'home' | 'away' | 'neutral';
   league?: string;
   season?: string;
@@ -619,10 +620,11 @@ export async function aggregateTeamRecords(
   const mainSlug = await getMainTeamSlug();
   const bindings: Record<string, any> = { mainSlug };
 
+  const isOpponent = params.database === 'opponent';
   const whereClauses: string[] = [
     `tb.is_nulled = false`,
     `tb.forfeited = false`,
-    `tb.team_slug = :mainSlug`,
+    isOpponent ? `tb.team_slug != :mainSlug` : `tb.team_slug = :mainSlug`,
   ];
 
   if (params.location !== 'all') {
