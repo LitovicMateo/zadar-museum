@@ -1,111 +1,58 @@
-import { Link } from 'react-router-dom';
+import React from 'react';
 
-import { APP_ROUTES } from '@/constants/Routes';
+import { groupByCompetition } from '@/components/Games/GamesList/GamesList.util';
 import { useMainTeam } from '@/hooks/queries/team/UseMainTeam';
+import { useTeamLogos } from '@/hooks/queries/team/UseTeamLogos';
 import { TeamScheduleResponse } from '@/types/api/Team';
 
-import styles from './ScheduleList.module.css';
+import GameCard from './GameCard';
 
-// ── Sub-components ────────────────────────────────────────────
-
-const RoundCell: React.FC<{ round: TeamScheduleResponse['round'] }> = ({ round }) => (
-	<div className={styles.roundCell}>{round ?? '-'}</div>
-);
-
-const DateCell: React.FC<{ gameDate: TeamScheduleResponse['game_date'] }> = ({ gameDate }) => {
-	const formatted = gameDate
-		? new Date(gameDate).toLocaleDateString(undefined, { day: '2-digit', month: 'short' })
-		: '-';
-	return <div className={styles.dateCell}>{formatted}</div>;
+type ScheduleListProps = {
+	schedule?: TeamScheduleResponse[];
+	/** Team whose win/loss drives card colouring. Defaults to the main team (KK Zadar). */
+	perspectiveSlug?: string;
+	/** Render the competition name as a title above each competition's games. */
+	showCompetitionTitle?: boolean;
 };
 
-type TeamsCellProps = {
-	url: string;
-	homeTeamName?: string | null;
-	homeTeamShortName?: string | null;
-	awayTeamName?: string | null;
-	awayTeamShortName?: string | null;
-};
-
-const TeamsCell: React.FC<TeamsCellProps> = ({
-	url,
-	homeTeamName,
-	homeTeamShortName,
-	awayTeamName,
-	awayTeamShortName
-}) => (
-	<div className={styles.teamsCell}>
-		<Link to={url} className={styles.teamsLink}>
-			<span className={`${styles.teamName} ${styles.teamNameFull}`}>{homeTeamName}</span>
-			<span className={`${styles.teamName} ${styles.teamNameShort}`}>{homeTeamShortName ?? homeTeamName}</span>
-			<span className={styles.vs}>vs</span>
-			<span className={`${styles.teamName} ${styles.teamNameFull}`}>{awayTeamName}</span>
-			<span className={`${styles.teamName} ${styles.teamNameShort}`}>{awayTeamShortName ?? awayTeamName}</span>
-		</Link>
-	</div>
-);
-
-type ScoreCellProps = {
-	home?: number | null;
-	away?: number | null;
-	mainTeamIsHome: boolean;
-};
-
-const ScoreCell: React.FC<ScoreCellProps> = ({ home, away, mainTeamIsHome }) => {
-	let modifier = styles.neutral;
-
-	if (typeof home === 'number' && typeof away === 'number') {
-		if (home === away) {
-			modifier = styles.draw;
-		} else {
-			const homeWon = home > away;
-			const mainTeamWon = (homeWon && mainTeamIsHome) || (!homeWon && !mainTeamIsHome);
-			modifier = mainTeamWon ? styles.win : styles.loss;
-		}
-	}
-
-	const label = typeof home === 'number' || typeof away === 'number' ? `${home ?? '-'} - ${away ?? '-'}` : '-';
-
-	return (
-		<div className={styles.scoreCell}>
-			<div className={`${styles.scoreBadge} ${modifier}`}>{label}</div>
-		</div>
-	);
-};
-
-// ── ScheduleList ──────────────────────────────────────────────
-
-export const ScheduleList: React.FC<{ schedule?: TeamScheduleResponse[] }> = ({ schedule = [] }) => {
+export const ScheduleList: React.FC<ScheduleListProps> = ({
+	schedule = [],
+	perspectiveSlug,
+	showCompetitionTitle = true
+}) => {
 	const { data: mainTeam } = useMainTeam();
+	const logos = useTeamLogos();
+
+	const effectivePerspective = perspectiveSlug ?? mainTeam?.slug;
+	const competitions = groupByCompetition(schedule);
+
+	if (competitions.length === 0) return null;
 
 	return (
-	<div className={styles.wrapper}>
-		<div className={styles.list}>
-			{schedule.map((g) => {
-				const url = APP_ROUTES.game(g.game_document_id.toString());
-
-				const homeName = g.home_team_name ?? '';
-				const homeShort = g.home_team_short_name ?? '';
-				const mainTeamIsHome =
-					!!mainTeam &&
-					`${homeName} ${homeShort}`.toLowerCase().includes(mainTeam.name.toLowerCase());
-
-				return (
-					<div key={g.game_document_id} className={styles.row}>
-						<RoundCell round={g.round} />
-						<DateCell gameDate={g.game_date} />
-						<TeamsCell
-							url={url}
-							homeTeamName={g.home_team_name}
-							homeTeamShortName={g.home_team_short_name}
-							awayTeamName={g.away_team_name}
-							awayTeamShortName={g.away_team_short_name}
-						/>
-						<ScoreCell home={g.home_score} away={g.away_score} mainTeamIsHome={mainTeamIsHome} />
-					</div>
-				);
-			})}
+		<div className="flex flex-col gap-8">
+			{competitions.map((comp) => (
+				<section key={comp.leagueId} className="flex flex-col gap-3">
+					{showCompetitionTitle && (
+						<h2 className="text-lg font-semibold text-foreground">{comp.leagueName}</h2>
+					)}
+					{comp.sections.map((section) => (
+						<div key={section.key} className="flex flex-col gap-2">
+							{section.heading && (
+								<p className="text-sm font-medium text-muted-foreground">{section.heading}</p>
+							)}
+							{section.items.map(({ game, roundLabel }) => (
+								<GameCard
+									key={game.game_document_id}
+									game={game}
+									roundLabel={roundLabel}
+									perspectiveSlug={effectivePerspective}
+									logos={logos}
+								/>
+							))}
+						</div>
+					))}
+				</section>
+			))}
 		</div>
-	</div>
 	);
 };

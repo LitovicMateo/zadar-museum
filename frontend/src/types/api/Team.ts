@@ -67,11 +67,13 @@ export interface TeamScheduleResponse {
 	home_team_id: string;
 	home_team_name: string;
 	home_team_short_name: string;
+	home_team_slug: string;
 	home_score: number | null;
 
 	away_team_id: string;
 	away_team_name: string;
 	away_team_short_name: string;
+	away_team_slug: string;
 	away_score: number | null;
 }
 

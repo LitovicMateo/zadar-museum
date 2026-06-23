@@ -1,36 +1,36 @@
-import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
+import ScheduleControls from '@/components/Schedule/Controls/ScheduleControls';
 import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper/DynamicContentWrapper';
 import { useLeagueGames } from '@/hooks/queries/league/UseLeagueGames';
 import { useLeagueSeasons } from '@/hooks/queries/league/UseLeagueSeasons';
+import { useScheduleFilters, useSeasonState } from '@/hooks/UseScheduleFilters';
 
 import styles from './LeagueGamelog.module.css';
 
 const LeagueGamelog = () => {
 	const { leagueSlug } = useParams();
 
-	const [selectedSeason, setSelectedSeason] = React.useState<string>('');
-
 	const { data: seasons } = useLeagueSeasons(leagueSlug!);
-	const { data: leagueGamelog } = useLeagueGames(leagueSlug!, selectedSeason);
+	const [selectedSeason, setSelectedSeason] = useSeasonState(seasons);
 
-	useEffect(() => {
-		if (seasons) setSelectedSeason(seasons[0]);
-	}, [seasons, setSelectedSeason]);
+	const { data: leagueGamelog } = useLeagueGames(leagueSlug!, selectedSeason);
+	const filters = useScheduleFilters(leagueGamelog, selectedSeason);
+
+	if (!seasons) return null;
 
 	return (
 		<section className={styles.section}>
-			<SeasonSelect
-				compact
-				seasons={seasons!}
+			<ScheduleControls
+				seasons={seasons}
 				selectedSeason={selectedSeason}
-				onSeasonChange={setSelectedSeason}
+				setSelectedSeason={setSelectedSeason}
+				showCompetition={false}
+				{...filters}
 			/>
 			<DynamicContentWrapper>
-				<ScheduleList schedule={leagueGamelog} />
+				<ScheduleList schedule={filters.filteredGames} />
 			</DynamicContentWrapper>
 		</section>
 	);

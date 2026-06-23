@@ -85,11 +85,25 @@ export const searchLeagues = (leagues: CompetitionDetailsResponse[], term: strin
 	return filteredLeagues;
 };
 
-export const searchGames = (game: TeamScheduleResponse, term: string) => {
-	if (!term || !game) return game;
+/**
+ * Matches a game by OPPONENT name only. Opponent = the side whose slug differs from
+ * `perspectiveSlug` (the profile/main team). Every game is a KK Zadar game, so the
+ * opponent is always the non-Zadar side. Falls back to both team names when no
+ * perspective slug is provided.
+ */
+export const searchGames = (game: TeamScheduleResponse, term: string, perspectiveSlug?: string): boolean => {
+	if (!term?.trim() || !game) return true;
 
-	const item = slugify(`${game.home_team_name} vs ${game.away_team_name}`, { delimiter: ' ' });
-	return item.includes(term);
+	let opponentName: string;
+	if (perspectiveSlug && game.home_team_slug === perspectiveSlug) {
+		opponentName = game.away_team_name;
+	} else if (perspectiveSlug && game.away_team_slug === perspectiveSlug) {
+		opponentName = game.home_team_name;
+	} else {
+		opponentName = `${game.home_team_name} ${game.away_team_name}`;
+	}
+
+	return opponentName.toLowerCase().includes(term.trim().toLowerCase());
 };
 
 export const searchPlayerStats = (stats: PlayerAllTimeStats[] | undefined, term: string) => {
