@@ -19,17 +19,26 @@ const TeamLeagueStats: React.FC = () => {
 	const { data: leagueStats } = useTeamLeagueStats(teamSlug!);
 	const { data: totalStats } = useTeamTotalStats(teamSlug!);
 
+	const hasHome = !!leagueStats?.some((team) => (team.home?.games ?? 0) > 0);
+	const hasAway = !!leagueStats?.some((team) => (team.away?.games ?? 0) > 0);
+	const hasNeutral = !!leagueStats?.some((team) => (team.neutral?.games ?? 0) > 0);
+
+	// If the current selection becomes unavailable, fall back to 'total'.
+	const effectiveSelected: 'total' | 'home' | 'away' | 'neutral' =
+		(selected === 'home' && !hasHome) || (selected === 'away' && !hasAway) || (selected === 'neutral' && !hasNeutral)
+			? 'total'
+			: selected;
+
 	const leagueStatsRow: TeamStats[] = useMemo(() => {
 		if (!leagueStats?.length) return [];
-		return leagueStats.map((team) => {
-			return team[selected];
-		});
-	}, [leagueStats, selected]);
+		return leagueStats.map((team) => team[effectiveSelected]).filter((row): row is TeamStats => row != null);
+	}, [leagueStats, effectiveSelected]);
 
 	const selectTotalStats: TeamStats[] = useMemo(() => {
 		if (!totalStats) return [];
-		return [totalStats[selected]];
-	}, [totalStats, selected]);
+		const row = totalStats[effectiveSelected];
+		return row ? [row] : [];
+	}, [totalStats, effectiveSelected]);
 
 	const { table: mainTable } = useTeamLeagueStatsTable(leagueStatsRow);
 	const { table: footTable } = useTeamLeagueStatsTable(selectTotalStats);
@@ -38,7 +47,13 @@ const TeamLeagueStats: React.FC = () => {
 
 	return (
 		<section className={styles.section}>
-			<DatabaseSelect selected={selected} setSelected={setSelected} />
+			<DatabaseSelect
+				selected={effectiveSelected}
+				setSelected={setSelected}
+				homeDisabled={!hasHome}
+				awayDisabled={!hasAway}
+				neutralDisabled={!hasNeutral}
+			/>
 			<TableWrapper>
 				<UniversalTableHead table={mainTable} />
 				<UniversalTableBody table={mainTable} />

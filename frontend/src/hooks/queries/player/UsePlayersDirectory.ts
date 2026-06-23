@@ -6,9 +6,9 @@ import { PlayerDirectoryEntry } from '@/types/api/Player';
 
 export function usePlayersDirectory() {
 	const { data: players, isLoading: playersLoading } = usePlayers('last_name', 'asc');
-	const { data: statsData, isLoading: statsLoading } = usePlayerAllTimeStats('zadar', 'total', 'all', 'all', 'all');
+	const { data: statsData, isLoading: statsLoading } = usePlayerAllTimeStats('main', 'total', 'all', 'all', 'all');
 	const { data: averageStatsData, isLoading: averageStatsLoading } = usePlayerAllTimeStats(
-		'zadar',
+		'main',
 		'average',
 		'all',
 		'all',

@@ -1,12 +1,14 @@
+import { getMainTeamSlug } from "../../../../lib/mainTeam";
+
 export async function coachGamelogService(
   coachId: string,
-  database: "zadar" | "opponent"
+  database: "main" | "opponent"
 ) {
   const TABLE = "schedule";
 
   const knex = strapi.db.connection;
   const table = knex(TABLE);
-  const zadarSlug = "kk-zadar";
-  const isZadarDb = database === "zadar";    
-  
+  const mainSlug = await getMainTeamSlug();
+  const isMainDb = database === "main";
+
 }

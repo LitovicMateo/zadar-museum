@@ -1,0 +1,25 @@
+.row {
+	display: block;
+	padding: 0.35rem 0.5rem;
+	border-radius: 0.5rem;
+	border-bottom: 1px solid var(--sidebar-border);
+	transition: background-color 0.15s ease;
+	text-decoration: none;
+	color: var(--sidebar-foreground);
+	font-size: 0.8125rem;
+	font-weight: 500;
+}
+
+.row:last-child {
+	border-bottom: none;
+}
+
+.row:hover {
+	background-color: var(--muted);
+}
+
+.rowActive {
+	background-color: var(--sidebar-accent);
+	color: var(--sidebar-accent-foreground);
+	font-weight: 600;
+}

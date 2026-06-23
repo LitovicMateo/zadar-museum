@@ -6,7 +6,7 @@ export const coachListConfig: EntityListConfig<CoachDetailsResponse> = {
   title: 'Coaches',
   entityType: 'coach',
   apiRoute: API_ROUTES.adminList.coaches,
-  searchPlaceholder: 'Search by last name...',
+  searchPlaceholder: 'Search by name...',
   createPath: APP_ROUTES.dashboard.coach.create,
   editPath: (id) => `${APP_ROUTES.dashboard.coach.edit}${id}`,
   deleteApiRoute: API_ROUTES.delete.coach,

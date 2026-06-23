@@ -65,6 +65,7 @@ export const API_ROUTES = {
 	},
 	team: {
 		details: (slug: string) => `${root}/teams?filters[slug][$eq]=${slug}&populate=*`, //
+		mainTeam: () => `${root}/teams?filters[isMainTeam][$eq]=true&populate=*`,
 		stats: {
 			total: (slug: string) => `${root}/team/stats/total/${slug}`,
 			leagueStats: (teamId: string) => `${root}/team/stats/league/${teamId}`,
@@ -146,7 +147,9 @@ export const API_ROUTES = {
 		player: {
 			allTime: (params: string) => `${root}/stats/player/all-time?${params}`,
 			game: (params: string) => `${root}/stats/player/game?${params}`,
-			records: (params: string) => `${root}/stats/player/records?${params}`
+			records: (params: string) => `${root}/stats/player/records?${params}`,
+			compare: (params: string) => `${root}/stats/player/compare?${params}`,
+			roster: () => `${root}/stats/player/roster`
 		},
 		team: {
 			allTime: (params: string) => `${root}/stats/team/all-time?${params}`,
@@ -154,7 +157,9 @@ export const API_ROUTES = {
 			records: (params: string) => `${root}/stats/team/records?${params}`
 		},
 		coach: {
-			allTime: (params: string) => `${root}/stats/coach/all-time?${params}`
+			allTime: (params: string) => `${root}/stats/coach/all-time?${params}`,
+			compare: (params: string) => `${root}/stats/coach/compare?${params}`,
+			roster: () => `${root}/stats/coach/roster`
 		},
 		referee: {
 			allTime: (params: string) => `${root}/stats/referee/all-time?${params}`
@@ -270,7 +275,8 @@ export const APP_ROUTES = {
 		player: '/stats/player',
 		team: '/stats/team',
 		coach: '/stats/coach',
-		referee: '/stats/referee'
+		referee: '/stats/referee',
+		compare: '/stats/compare'
 	},
 
 	// players

@@ -2,6 +2,7 @@ import { Navigate, RouteObject } from 'react-router-dom';
 
 import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 import CoachStats from '@/components/Stats/CoachStats/CoachStats';
+import ComparePage from '@/components/Stats/Compare/ComparePage';
 import PlayerRecords from '@/components/Stats/PlayerRecords/PlayerRecords';
 import PlayerStats from '@/components/Stats/PlayerStats/PlayerStats';
 import RefereeStats from '@/components/Stats/RefereeStats/RefereeStats';
@@ -44,6 +45,10 @@ export const statsRoutes: RouteObject = {
 		{
 			path: 'referee',
 			element: <RefereeStats />
+		},
+		{
+			path: 'compare',
+			element: <ComparePage />
 		}
 	]
 };

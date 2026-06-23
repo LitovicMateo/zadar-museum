@@ -4,9 +4,9 @@
 	left: 0;
 	position: sticky;
 	transition: all 300ms;
-	background: linear-gradient(to bottom, #f8fafc, #fff);
+	background: var(--sidebar);
 	padding: 1.5rem 1rem;
-	border-right: 2px solid #e5e7eb;
+	border-right: 2px solid var(--sidebar-border);
 	display: none;
 	overflow-y: auto;
 	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);

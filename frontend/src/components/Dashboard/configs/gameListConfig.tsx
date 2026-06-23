@@ -6,7 +6,7 @@ export const gameListConfig: EntityListConfig<GameDetailsResponse> = {
   title: 'Games',
   entityType: 'game',
   apiRoute: API_ROUTES.adminList.games,
-  searchPlaceholder: 'Search by season...',
+  searchPlaceholder: 'Search by opponent...',
   createPath: APP_ROUTES.dashboard.game.create,
   editPath: (id) => `${APP_ROUTES.dashboard.game.edit}${id}`,
   deleteApiRoute: API_ROUTES.delete.game,

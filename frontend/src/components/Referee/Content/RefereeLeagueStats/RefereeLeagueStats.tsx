@@ -18,6 +18,14 @@ const RefereeLeagueStats: React.FC = () => {
 	const { data: leagueStats } = useRefereeLeagueStats(refereeId);
 	const { data: teamRecord } = useRefereeTeamRecord(refereeId!);
 
+	const hasHome = useMemo(
+		() => leagueStats?.some((row) => row.home !== null && (row.home?.games ?? 0) > 0) ?? false,
+		[leagueStats]
+	);
+	const hasAway = useMemo(
+		() => leagueStats?.some((row) => row.away !== null && (row.away?.games ?? 0) > 0) ?? false,
+		[leagueStats]
+	);
 	const hasNeutral = useMemo(
 		() => leagueStats?.some((row) => row.neutral !== null && (row.neutral?.games ?? 0) > 0) ?? false,
 		[leagueStats]
@@ -42,7 +50,13 @@ const RefereeLeagueStats: React.FC = () => {
 
 	return (
 		<section className={styles.section}>
-			<DatabaseSelect selected={selected} setSelected={setSelected} neutralDisabled={!hasNeutral} />
+			<DatabaseSelect
+				selected={selected}
+				setSelected={setSelected}
+				homeDisabled={!hasHome}
+				awayDisabled={!hasAway}
+				neutralDisabled={!hasNeutral}
+			/>
 			<TableWrapper>
 				<UniversalTableHead table={mainTable} />
 				<UniversalTableBody table={mainTable} />

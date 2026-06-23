@@ -13,6 +13,7 @@ export interface TeamDetailsResponse {
 	country: string;
 	image: StrapiImage;
 	alternate_names: AlternateName[];
+	isMainTeam: boolean;
 }
 
 type AlternateName = {
@@ -43,9 +44,9 @@ export interface TeamHeadToHeadResposne {
 	opponent_name: string;
 	opponent_slug: string;
 	games_played: number;
-	zadar_wins: number;
+	main_team_wins: number;
 	opponent_wins: number;
-	zadar_win_percentage: number;
+	main_team_win_percentage: number;
 	opponent_win_percentage: number;
 }
 
@@ -254,4 +255,5 @@ export interface TeamDirectoryEntry {
 	wins: string;
 	losses: string;
 	win_percentage: string;
+	isMainTeam: boolean;
 }

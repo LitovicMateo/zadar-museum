@@ -21,7 +21,8 @@ const emptyDefaults: TeamFormData = {
 	city: '',
 	image: null,
 	country: '',
-	alternate_names: []
+	alternate_names: [],
+	isMainTeam: false
 };
 
 const TeamForm: React.FC<TeamFormOptions> = ({ onSubmit, defaultValues = emptyDefaults, mode, team, isSuccess }) => {

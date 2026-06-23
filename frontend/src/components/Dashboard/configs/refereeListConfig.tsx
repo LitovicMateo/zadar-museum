@@ -6,7 +6,7 @@ export const refereeListConfig: EntityListConfig<RefereeDetailsResponse> = {
   title: 'Referees',
   entityType: 'referee',
   apiRoute: API_ROUTES.adminList.referees,
-  searchPlaceholder: 'Search by last name...',
+  searchPlaceholder: 'Search by name...',
   createPath: APP_ROUTES.dashboard.referee.create,
   editPath: (id) => `${APP_ROUTES.dashboard.referee.edit}${id}`,
   deleteApiRoute: API_ROUTES.delete.referee,

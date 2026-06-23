@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { APP_ROUTES } from '@/constants/Routes';
+import { useMainTeam } from '@/hooks/queries/team/UseMainTeam';
 import { TeamScheduleResponse } from '@/types/api/Team';
 
 import styles from './ScheduleList.module.css';
@@ -47,10 +48,10 @@ const TeamsCell: React.FC<TeamsCellProps> = ({
 type ScoreCellProps = {
 	home?: number | null;
 	away?: number | null;
-	zadarIsHome: boolean;
+	mainTeamIsHome: boolean;
 };
 
-const ScoreCell: React.FC<ScoreCellProps> = ({ home, away, zadarIsHome }) => {
+const ScoreCell: React.FC<ScoreCellProps> = ({ home, away, mainTeamIsHome }) => {
 	let modifier = styles.neutral;
 
 	if (typeof home === 'number' && typeof away === 'number') {
@@ -58,8 +59,8 @@ const ScoreCell: React.FC<ScoreCellProps> = ({ home, away, zadarIsHome }) => {
 			modifier = styles.draw;
 		} else {
 			const homeWon = home > away;
-			const zadarWon = (homeWon && zadarIsHome) || (!homeWon && !zadarIsHome);
-			modifier = zadarWon ? styles.win : styles.loss;
+			const mainTeamWon = (homeWon && mainTeamIsHome) || (!homeWon && !mainTeamIsHome);
+			modifier = mainTeamWon ? styles.win : styles.loss;
 		}
 	}
 
@@ -74,7 +75,10 @@ const ScoreCell: React.FC<ScoreCellProps> = ({ home, away, zadarIsHome }) => {
 
 // ── ScheduleList ──────────────────────────────────────────────
 
-export const ScheduleList: React.FC<{ schedule?: TeamScheduleResponse[] }> = ({ schedule = [] }) => (
+export const ScheduleList: React.FC<{ schedule?: TeamScheduleResponse[] }> = ({ schedule = [] }) => {
+	const { data: mainTeam } = useMainTeam();
+
+	return (
 	<div className={styles.wrapper}>
 		<div className={styles.list}>
 			{schedule.map((g) => {
@@ -82,7 +86,9 @@ export const ScheduleList: React.FC<{ schedule?: TeamScheduleResponse[] }> = ({ 
 
 				const homeName = g.home_team_name ?? '';
 				const homeShort = g.home_team_short_name ?? '';
-				const zadarIsHome = `${homeName} ${homeShort}`.toLowerCase().includes('zadar');
+				const mainTeamIsHome =
+					!!mainTeam &&
+					`${homeName} ${homeShort}`.toLowerCase().includes(mainTeam.name.toLowerCase());
 
 				return (
 					<div key={g.game_document_id} className={styles.row}>
@@ -95,10 +101,11 @@ export const ScheduleList: React.FC<{ schedule?: TeamScheduleResponse[] }> = ({ 
 							awayTeamName={g.away_team_name}
 							awayTeamShortName={g.away_team_short_name}
 						/>
-						<ScoreCell home={g.home_score} away={g.away_score} zadarIsHome={zadarIsHome} />
+						<ScoreCell home={g.home_score} away={g.away_score} mainTeamIsHome={mainTeamIsHome} />
 					</div>
 				);
 			})}
 		</div>
 	</div>
-);
+	);
+};

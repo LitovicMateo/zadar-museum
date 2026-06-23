@@ -12,7 +12,7 @@ import {
 } from "../whitelists";
 
 /**
- * Database parameter (zadar, opponent)
+ * Database parameter (main, opponent)
  */
 export const databaseSchema = z.enum(
   ALLOWED_DATABASES as unknown as [string, ...string[]],

@@ -3,14 +3,14 @@
  */
 
 import { factories } from "@strapi/strapi";
-import { getCached, TTL_24H, TTL_1H } from "../../../utils/cache";
+import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
 import { getMainTeamSlug } from "../../../lib/mainTeam";
 
 export default factories.createCoreService(
   "api::competition.competition",
   ({ strapi }) => ({
     async findLeagueDetails(leagueSlug) {
-      return getCached(`zadar:competition:details:${leagueSlug}`, TTL_1H, () =>
+      return getCached(`${CACHE_PREFIX}competition:details:${leagueSlug}`, TTL_1H, () =>
         strapi.db.query("api::competition.competition").findOne({
           where: { slug: leagueSlug },
           populate: ["image"],
@@ -20,7 +20,7 @@ export default factories.createCoreService(
 
     async findLeagueGames(leagueSlug, season) {
       return getCached(
-        `zadar:competition:games:${leagueSlug}:${season}`,
+        `${CACHE_PREFIX}competition:games:${leagueSlug}:${season}`,
         TTL_1H,
         () => {
           const knex = strapi.db.connection;
@@ -35,7 +35,7 @@ export default factories.createCoreService(
 
     async findLeagueTeamRecord(leagueSlug) {
       return getCached(
-        `zadar:competition:team-record:${leagueSlug}`,
+        `${CACHE_PREFIX}competition:team-record:${leagueSlug}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
@@ -185,7 +185,7 @@ export default factories.createCoreService(
 
     async findLeagueSeasons(leagueSlug) {
       return getCached(
-        `zadar:competition:seasons:${leagueSlug}`,
+        `${CACHE_PREFIX}competition:seasons:${leagueSlug}`,
         TTL_1H,
         () => {
           const knex = strapi.db.connection;
@@ -199,7 +199,7 @@ export default factories.createCoreService(
 
     async findPlayerLeagueRankings(leagueSlug, stat) {
       return getCached(
-        `zadar:competition:player-rankings:${leagueSlug}:${stat}`,
+        `${CACHE_PREFIX}competition:player-rankings:${leagueSlug}:${stat}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
@@ -285,7 +285,7 @@ export default factories.createCoreService(
 
     async findCoachLeagueRankings(leagueSlug, stat) {
       return getCached(
-        `zadar:competition:coach-rankings:${leagueSlug}:${stat}`,
+        `${CACHE_PREFIX}competition:coach-rankings:${leagueSlug}:${stat}`,
         TTL_24H,
         async () => {
           const allowedStats = [
@@ -338,7 +338,7 @@ export default factories.createCoreService(
 
     async findTeamSeasonLeagueStats(leagueSlug, season) {
       return getCached(
-        `zadar:competition:team-season-stats:${leagueSlug}:${season}`,
+        `${CACHE_PREFIX}competition:team-season-stats:${leagueSlug}:${season}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
@@ -467,7 +467,7 @@ export default factories.createCoreService(
 
     async findPlayerSeasonLeagueStats(leagueSlug, season) {
       return getCached(
-        `zadar:competition:player-season-stats:${leagueSlug}:${season}`,
+        `${CACHE_PREFIX}competition:player-season-stats:${leagueSlug}:${season}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;

@@ -21,7 +21,7 @@ export const filterSchedule = (
 schedule: TeamScheduleResponse[] | undefined,
 selectedCompetitions: string[] = [],
 searchTerm = '',
-isZadar = false
+isMainTeam = false
 ): TeamScheduleResponse[] => {
 if (!schedule || schedule.length === 0) return [];
 
@@ -34,7 +34,7 @@ const leagueId = String(game.league_id);
 const matchesCompetition = !hasCompetitionFilter || selectedSet.has(leagueId);
 if (!matchesCompetition) return false;
 
-if (isZadar && searchTerm && searchTerm.trim().length > 0) {
+if (isMainTeam && searchTerm && searchTerm.trim().length > 0) {
 return Boolean(searchGames(game, searchTerm));
 }
 

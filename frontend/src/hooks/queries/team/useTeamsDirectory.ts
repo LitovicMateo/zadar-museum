@@ -33,11 +33,15 @@ export const useTeamsDirectory = () => {
 					games: String(stats.games) ?? null,
 					wins: String(stats.losses) ?? null,
 					losses: String(stats.wins) ?? null,
-					win_percentage: String(winPct) ?? null
+					win_percentage: String(winPct) ?? null,
+					isMainTeam: team.isMainTeam
 				} as TeamDirectoryEntry;
 			})
 			.filter((entry): entry is TeamDirectoryEntry => entry !== null)
-			.sort((a, b) => a.short_name.localeCompare(b.short_name));
+			.sort((a, b) => {
+				if (a.isMainTeam !== b.isMainTeam) return a.isMainTeam ? -1 : 1;
+				return a.short_name.localeCompare(b.short_name);
+			});
 	}, [teams, statsData]);
 
 	return {

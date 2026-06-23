@@ -8,6 +8,8 @@ import {
   teamRecordsQuerySchema,
   coachesAllTimeStatsQuerySchema,
   refereesAllTimeStatsQuerySchema,
+  playersCompareQuerySchema,
+  coachesCompareQuerySchema,
 } from "../../../validation/schemas/stats";
 
 export default {
@@ -82,6 +84,40 @@ export default {
       config: {
         auth: false,
         middlewares: [validate({ query: refereesAllTimeStatsQuerySchema })],
+      },
+    },
+    {
+      method: "GET",
+      path: "/stats/player/compare",
+      handler: "stats.getPlayersCompareStats",
+      config: {
+        auth: false,
+        middlewares: [validate({ query: playersCompareQuerySchema })],
+      },
+    },
+    {
+      method: "GET",
+      path: "/stats/player/roster",
+      handler: "stats.getPlayersRoster",
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: "GET",
+      path: "/stats/coach/compare",
+      handler: "stats.getCoachesCompareStats",
+      config: {
+        auth: false,
+        middlewares: [validate({ query: coachesCompareQuerySchema })],
+      },
+    },
+    {
+      method: "GET",
+      path: "/stats/coach/roster",
+      handler: "stats.getCoachesRoster",
+      config: {
+        auth: false,
       },
     },
   ],

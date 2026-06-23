@@ -2,6 +2,7 @@ import { filterSchedule } from './GamesUtils';
 import React, { createContext, useState, useTransition, useCallback, useEffect, useMemo, JSX } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useMainTeam } from '@/hooks/queries/team/UseMainTeam';
 import { useTeamDetails } from '@/hooks/queries/team/UseTeamDetails';
 import { useTeamSeasonCompetitions } from '@/hooks/queries/team/UseTeamSeasonCompetitions';
 import { useTeamSeasons } from '@/hooks/queries/team/UseTeamSeasons';
@@ -23,7 +24,7 @@ type GamesContextType = {
 	scheduleLoading: boolean;
 	teamSlug: string;
 	teamName: string;
-	isZadar: boolean;
+	isMainTeam: boolean;
 	SearchInput: JSX.Element;
 };
 
@@ -39,10 +40,11 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	const { SearchInput, searchTerm } = useSearch();
 
 	// derive effective slug + name
-	const effectiveSlug = paramSlug || 'kk-zadar';
+	const { data: mainTeam } = useMainTeam();
+	const effectiveSlug = paramSlug || mainTeam?.slug || '';
 	const { data: team } = useTeamDetails(effectiveSlug);
-	const effectiveName = team?.name || 'KK Zadar';
-	const isZadar = effectiveName === 'KK Zadar';
+	const effectiveName = team?.name || mainTeam?.name || '';
+	const isMainTeam = team?.isMainTeam ?? false;
 
 	// state
 	const [selectedSeason, setSelectedSeasonRaw] = useState(initialSeason);
@@ -99,8 +101,8 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 	// derived schedule
 	const filteredSchedule = useMemo(
-		() => filterSchedule(schedule, selectedCompetitions, searchTerm, isZadar),
-		[schedule, selectedCompetitions, searchTerm, isZadar]
+		() => filterSchedule(schedule, selectedCompetitions, searchTerm, isMainTeam),
+		[schedule, selectedCompetitions, searchTerm, isMainTeam]
 	);
 
 	return (
@@ -119,7 +121,7 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 				scheduleLoading,
 				teamSlug: effectiveSlug,
 				teamName: effectiveName,
-				isZadar
+				isMainTeam
 			}}
 		>
 			{children}

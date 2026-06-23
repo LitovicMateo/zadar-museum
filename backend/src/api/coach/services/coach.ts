@@ -8,7 +8,7 @@ import {
   validateSeason,
   ALLOWED_DATABASES,
 } from "../../../validation";
-import { getCached, TTL_24H, TTL_1H } from "../../../utils/cache";
+import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
 import { aggregateCoachRecord, buildRecord } from "../../../lib/aggregation/queries";
 import { getMainTeamSlug } from "../../../lib/mainTeam";
 
@@ -28,10 +28,10 @@ export default factories.createCoreService(
       if (!coachId) {
         throw new Error("Coach ID is required");
       }
-      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "zadar" | "opponent";
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "main" | "opponent";
 
       return getCached(
-        `zadar:coach:team-record:${coachId}:${validatedDb}`,
+        `${CACHE_PREFIX}coach:team-record:${coachId}:${validatedDb}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
@@ -88,10 +88,10 @@ export default factories.createCoreService(
       const knex = strapi.db.connection;
       const mainSlug = await getMainTeamSlug();
 
-      if (validatedDb === "zadar") {
+      if (validatedDb === "main") {
         return await knex("schedule")
           .where(function () {
-            // Coach led Zadar at home
+            // Coach led the main team at home
             this.where("home_team_slug", mainSlug).andWhere(function () {
               this.where("home_head_coach_id", coachId).orWhere(
                 "home_assistant_coach_id",
@@ -100,7 +100,7 @@ export default factories.createCoreService(
             });
           })
           .orWhere(function () {
-            // Coach led Zadar away
+            // Coach led the main team away
             this.where("away_team_slug", mainSlug).andWhere(function () {
               this.where("away_head_coach_id", coachId).orWhere(
                 "away_assistant_coach_id",
@@ -191,10 +191,10 @@ export default factories.createCoreService(
       if (!coachId) {
         throw new Error("Coach ID is required");
       }
-      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "zadar" | "opponent";
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "main" | "opponent";
 
       return getCached(
-        `zadar:coach:league-record:${coachId}:${validatedDb}`,
+        `${CACHE_PREFIX}coach:league-record:${coachId}:${validatedDb}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
@@ -207,7 +207,7 @@ export default factories.createCoreService(
             .distinct("league_id")
             .where("coach_id", coachId);
 
-          if (validatedDb === "zadar") {
+          if (validatedDb === "main") {
             leagueQuery.where("team_slug", mainSlug);
           } else {
             leagueQuery.whereNot("team_slug", mainSlug);
@@ -276,10 +276,10 @@ export default factories.createCoreService(
         throw new Error("Coach ID is required");
       }
       const validatedSeason = validateSeason(season);
-      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "zadar" | "opponent";
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "main" | "opponent";
 
       return getCached(
-        `zadar:coach:league-season-stats:${coachId}:${validatedSeason}:${validatedDb}`,
+        `${CACHE_PREFIX}coach:league-season-stats:${coachId}:${validatedSeason}:${validatedDb}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
@@ -293,7 +293,7 @@ export default factories.createCoreService(
             .where("coach_id", coachId)
             .where("season", validatedSeason);
 
-          if (validatedDb === "zadar") {
+          if (validatedDb === "main") {
             leagueQuery.where("team_slug", mainSlug);
           } else {
             leagueQuery.whereNot("team_slug", mainSlug);
@@ -366,10 +366,10 @@ export default factories.createCoreService(
         throw new Error("Coach ID is required");
       }
       const validatedSeason = validateSeason(season);
-      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "zadar" | "opponent";
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "main" | "opponent";
 
       return getCached(
-        `zadar:coach:total-season-stats:${coachId}:${validatedSeason}:${validatedDb}`,
+        `${CACHE_PREFIX}coach:total-season-stats:${coachId}:${validatedSeason}:${validatedDb}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;

@@ -5,7 +5,7 @@ import CoachBio from '@/components/Coach/Header/Bio/CoachBio';
 import HeaderWrapper from '@/components/UI/HeaderWrapper/HeaderWrapper';
 import ProfileImage from '@/components/UI/ProfileImage/ProfileImage';
 import { Skeleton } from '@/components/UI/Skeleton';
-import { zadarBg } from '@/constants/PlayerBg';
+import { mainTeamBg } from '@/constants/PlayerBg';
 import { useCoachDetails } from '@/hooks/queries/coach/UseCoachDetails';
 import { getImageUrl } from '@/utils/GetImageUrl';
 
@@ -18,7 +18,7 @@ const CoachHeader: React.FC = () => {
 
 	if (!coach || isLoading) {
 		return (
-			<section className={`${styles.section} ${zadarBg}`} aria-busy="true" aria-label="Loading coach profile">
+			<section className={`${styles.section} ${mainTeamBg}`} aria-busy="true" aria-label="Loading coach profile">
 				<div className={styles.inner}>
 					{/* Image placeholder */}
 					<Skeleton className={styles.skeletonImage} />

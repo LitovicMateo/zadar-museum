@@ -9,6 +9,7 @@ import { TeamFormData } from '@/schemas/TeamSchema';
 import AlternateNames from '../Fields/AlternateNames';
 import City from '../Fields/City';
 import Country from '../Fields/Country';
+import IsMainTeam from '../Fields/IsMainTeam';
 import Logo from '../Fields/Logo';
 import LogoPreview from '../Fields/LogoPreview';
 import Name from '../Fields/Name';
@@ -48,6 +49,7 @@ const TeamFormContent: React.FC<TeamFormContentProps> = ({ mode }) => {
 				<ShortName />
 				<City />
 				<Country />
+				<IsMainTeam />
 			</Fieldset>
 			<Fieldset label="Team Logo">
 				<Logo fileInputRef={fileInputRef} handleImageChange={handleImageChange} />

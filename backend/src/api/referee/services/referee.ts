@@ -4,7 +4,7 @@
 
 import { factories } from "@strapi/strapi";
 import { validateSeason } from "../../../validation";
-import { getCached, TTL_24H } from "../../../utils/cache";
+import { getCached, TTL_24H, CACHE_PREFIX } from "../../../utils/cache";
 import { aggregateRefereeStats, buildRecord } from "../../../lib/aggregation/queries";
 
 export default factories.createCoreService(
@@ -36,7 +36,7 @@ export default factories.createCoreService(
 
     async findRefereeTeamRecord(refereeId) {
       return getCached(
-        `zadar:referee:team-record:${refereeId}`,
+        `${CACHE_PREFIX}referee:team-record:${refereeId}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
@@ -108,7 +108,7 @@ export default factories.createCoreService(
       const validatedSeason = validateSeason(season);
 
       return getCached(
-        `zadar:referee:season-stats:${refereeId}:${validatedSeason}`,
+        `${CACHE_PREFIX}referee:season-stats:${refereeId}:${validatedSeason}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
@@ -128,7 +128,7 @@ export default factories.createCoreService(
       const validatedSeason = validateSeason(season);
 
       return getCached(
-        `zadar:referee:season-league-stats:${refereeId}:${validatedSeason}`,
+        `${CACHE_PREFIX}referee:season-league-stats:${refereeId}:${validatedSeason}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
@@ -188,7 +188,7 @@ export default factories.createCoreService(
 
     async findRefereeLeagueStats(refereeId) {
       return getCached(
-        `zadar:referee:league-stats:${refereeId}`,
+        `${CACHE_PREFIX}referee:league-stats:${refereeId}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;

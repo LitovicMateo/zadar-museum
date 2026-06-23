@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
+import FloatingEditButton from '@/components/UI/FloatingEditButton/FloatingEditButton';
 import { APP_ROUTES } from '@/constants/Routes';
 import { useGameDetails } from '@/hooks/queries/game/UseGameDetails';
 
@@ -26,6 +27,7 @@ const Game = () => {
 				<GameHeader />
 				<GameContent />
 			</section>
+			<FloatingEditButton to={`${APP_ROUTES.dashboard.game.edit}${gameId}`} />
 		</DynamicContentWrapper>
 	);
 };

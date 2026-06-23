@@ -21,7 +21,7 @@ const GamesFilter: React.FC<Props> = ({ showCompetitions = true }) => {
 		SearchInput,
 		seasons,
 		scheduleLoading,
-		teamName
+		isMainTeam
 	} = useGamesContext();
 
 	if (seasons === undefined || competitions === undefined || scheduleLoading) {
@@ -30,7 +30,7 @@ const GamesFilter: React.FC<Props> = ({ showCompetitions = true }) => {
 
 	return (
 		<aside className={styles.aside}>
-			<MobileFilters SearchInput={teamName === 'KK Zadar' ? SearchInput : undefined} title="Filters">
+			<MobileFilters SearchInput={isMainTeam ? SearchInput : undefined} title="Filters">
 				<div className={styles.wrapper}>
 					{showCompetitions && (
 						<CompetitionList

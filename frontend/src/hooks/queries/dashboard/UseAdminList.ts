@@ -1,3 +1,4 @@
+import { keepPreviousData } from '@tanstack/react-query';
 import apiClient from '@/lib/ApiClient';
 import { useQuery } from '@/hooks/UseQueryWithToast';
 import { AdminListResponse } from '@/components/Dashboard/EntityListPage/types';
@@ -30,6 +31,7 @@ export function useAdminList<T>({
       const res = await apiClient.get(apiRoute(params.toString()));
       return res.data;
     },
+    placeholderData: keepPreviousData,
     errorMessage: `Failed to load ${entityType} list`,
   });
 }

@@ -42,7 +42,7 @@ export function EntityListPage<T extends { documentId: string }>({
     return () => clearTimeout(t);
   }, [search]);
 
-  const { data, isLoading } = useAdminList<T>({
+  const { data, isPending, isFetching } = useAdminList<T>({
     apiRoute: config.apiRoute,
     entityType: config.entityType,
     page,
@@ -90,17 +90,17 @@ export function EntityListPage<T extends { documentId: string }>({
         />
         <div className="flex items-center gap-2 text-sm text-slate-400 whitespace-nowrap">
           <span className="text-slate-500">Showing {from}–{to} of {total}</span>
-          <Button variant="outline" size="sm" onClick={() => setPage((p) => p - 1)} disabled={page <= 1}>
+          <Button variant="outline" size="sm" onClick={() => setPage((p) => p - 1)} disabled={page <= 1 || isFetching}>
             ← Prev
           </Button>
           <span className="font-semibold text-slate-200">{page} / {totalPages}</span>
-          <Button variant="outline" size="sm" onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages}>
+          <Button variant="outline" size="sm" onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages || isFetching}>
             Next →
           </Button>
         </div>
       </div>
 
-      <Table>
+      <Table className={isFetching ? 'opacity-60 transition-opacity' : ''}>
         <TableHeader>
           <TableRow>
             <TableHead className="w-10">#</TableHead>
@@ -113,14 +113,14 @@ export function EntityListPage<T extends { documentId: string }>({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && (
+          {isPending && (
             <TableRow>
               <TableCell colSpan={config.columns.length + 2} className="text-center text-slate-500 py-8">
                 Loading...
               </TableCell>
             </TableRow>
           )}
-          {!isLoading && items.length === 0 && (
+          {!isPending && items.length === 0 && (
             <TableRow>
               <TableCell colSpan={config.columns.length + 2} className="text-center text-slate-500 py-8">
                 No results

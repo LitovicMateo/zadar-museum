@@ -2,7 +2,7 @@
  * stats service
  */
 
-import { getCached, TTL_24H } from '../../../utils/cache';
+import { getCached, TTL_24H, CACHE_PREFIX } from '../../../utils/cache';
 import {
   aggregatePlayerStats,
   aggregatePlayerRecords,
@@ -10,6 +10,8 @@ import {
   aggregateTeamRecords,
   aggregateCoachRecord,
   aggregateRefereeStats,
+  listMainTeamPlayers,
+  listMainTeamCoaches,
 } from '../../../lib/aggregation/queries';
 import { getMainTeamSlug } from '../../../lib/mainTeam';
 
@@ -27,11 +29,11 @@ function normalizeOptional(v: string | null | undefined): string | undefined {
 
 export default ({ strapi }) => ({
   async findPlayersAllTimeStats(stats, location, league, season, database) {
-    const cacheKey = `zadar:stats:players-all-time:${database}:${stats}:${location}:${league}:${season}`;
+    const cacheKey = `${CACHE_PREFIX}stats:players-all-time:${database}:${stats}:${location}:${league}:${season}`;
     return getCached(cacheKey, TTL_24H, async () => {
       const knex = strapi.db.connection;
       const params = {
-        database: database as 'zadar' | 'opponent',
+        database: database as 'main' | 'opponent',
         stats: stats as 'average' | 'total',
         location: normalizeLocation(location),
         league: normalizeOptional(league),
@@ -70,11 +72,11 @@ export default ({ strapi }) => ({
   },
 
   async findPlayersRecords(database, location, league, season, sortKey) {
-    const cacheKey = `zadar:stats:player-records:${database}:${location}:${league}:${season}:${sortKey || 'points'}`;
+    const cacheKey = `${CACHE_PREFIX}stats:player-records:${database}:${location}:${league}:${season}:${sortKey || 'points'}`;
     return getCached(cacheKey, TTL_24H, async () => {
       const knex = strapi.db.connection;
       const data = await aggregatePlayerRecords(knex, {
-        database: database as 'zadar' | 'opponent',
+        database: database as 'main' | 'opponent',
         location: normalizeLocation(location),
         league: normalizeOptional(league),
         season: normalizeOptional(season),
@@ -85,7 +87,7 @@ export default ({ strapi }) => ({
   },
 
   async findTeamsAllTimeStats(location, league, season) {
-    const cacheKey = `zadar:stats:teams-all-time:${location}:${league}:${season}`;
+    const cacheKey = `${CACHE_PREFIX}stats:teams-all-time:${location}:${league}:${season}`;
     return getCached(cacheKey, TTL_24H, async () => {
       const knex = strapi.db.connection;
       const results = await aggregateTeamStats(knex, {
@@ -125,11 +127,11 @@ export default ({ strapi }) => ({
   },
 
   async findTeamRecords(database, season, league, location, sortKey) {
-    const cacheKey = `zadar:stats:team-records:${database}:${season}:${league}:${location}:${sortKey || 'games'}`;
+    const cacheKey = `${CACHE_PREFIX}stats:team-records:${database}:${season}:${league}:${location}:${sortKey || 'games'}`;
     return getCached(cacheKey, TTL_24H, async () => {
       const knex = strapi.db.connection;
       const data = await aggregateTeamRecords(knex, {
-        database: database as 'zadar' | 'opponent',
+        database: database as 'main' | 'opponent',
         location: normalizeLocation(location),
         league: normalizeOptional(league),
         season: normalizeOptional(season),
@@ -140,12 +142,12 @@ export default ({ strapi }) => ({
   },
 
   async findCoachesAllTimeStats(database, role, location, league, season) {
-    const cacheKey = `zadar:stats:coaches-all-time:${database}:${role}:${location}:${league}:${season}`;
+    const cacheKey = `${CACHE_PREFIX}stats:coaches-all-time:${database}:${role}:${location}:${league}:${season}`;
     return getCached(cacheKey, TTL_24H, async () => {
       const knex = strapi.db.connection;
       const normalizedRole = normalizeOptional(role) as 'head' | 'assistant' | undefined;
       const params = {
-        database: database as 'zadar' | 'opponent',
+        database: database as 'main' | 'opponent',
         role: normalizedRole,
         location: normalizeLocation(location),
         league: normalizeOptional(league),
@@ -160,7 +162,7 @@ export default ({ strapi }) => ({
   },
 
   async findRefereesAllTimeStats(location, league, season) {
-    const cacheKey = `zadar:stats:referees-all-time:${location}:${league}:${season}`;
+    const cacheKey = `${CACHE_PREFIX}stats:referees-all-time:${location}:${league}:${season}`;
     return getCached(cacheKey, TTL_24H, async () => {
       const knex = strapi.db.connection;
       return aggregateRefereeStats(knex, {
@@ -169,5 +171,54 @@ export default ({ strapi }) => ({
         season: normalizeOptional(season),
       });
     });
+  },
+
+  async findPlayersCompareStats(ids, stats, location, league, season) {
+    const [id1, id2] = String(ids).split(',').map((id) => id.trim());
+    const cacheKey = `${CACHE_PREFIX}stats:players-compare:${id1}:${id2}:${stats}:${location}:${league}:${season}`;
+    return getCached(cacheKey, TTL_24H, async () => {
+      const knex = strapi.db.connection;
+      const params = {
+        database: 'main' as const,
+        stats: stats as 'average' | 'total',
+        location: normalizeLocation(location),
+        league: normalizeOptional(league),
+        season: normalizeOptional(season),
+      };
+      const [rows1, rows2] = await Promise.all([
+        aggregatePlayerStats(knex, { ...params, playerId: id1 }),
+        aggregatePlayerStats(knex, { ...params, playerId: id2 }),
+      ]);
+      return { player1: rows1[0] ?? null, player2: rows2[0] ?? null };
+    });
+  },
+
+  async findPlayersRoster() {
+    const knex = strapi.db.connection;
+    return listMainTeamPlayers(knex);
+  },
+
+  async findCoachesCompareStats(ids, location, league, season) {
+    const [id1, id2] = String(ids).split(',').map((id) => id.trim());
+    const cacheKey = `${CACHE_PREFIX}stats:coaches-compare:${id1}:${id2}:${location}:${league}:${season}`;
+    return getCached(cacheKey, TTL_24H, async () => {
+      const knex = strapi.db.connection;
+      const params = {
+        database: 'main' as const,
+        location: normalizeLocation(location),
+        league: normalizeOptional(league),
+        season: normalizeOptional(season),
+      };
+      const [rows1, rows2] = await Promise.all([
+        aggregateCoachRecord(knex, { ...params, coachId: id1 }),
+        aggregateCoachRecord(knex, { ...params, coachId: id2 }),
+      ]);
+      return { coach1: rows1[0] ?? null, coach2: rows2[0] ?? null };
+    });
+  },
+
+  async findCoachesRoster() {
+    const knex = strapi.db.connection;
+    return listMainTeamCoaches(knex);
   },
 });

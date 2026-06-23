@@ -6,7 +6,7 @@ export const staffListConfig: EntityListConfig<StaffDetailsResponse> = {
   title: 'Staff',
   entityType: 'staff',
   apiRoute: API_ROUTES.adminList.staff,
-  searchPlaceholder: 'Search by last name...',
+  searchPlaceholder: 'Search by name...',
   createPath: APP_ROUTES.dashboard.staff.create,
   editPath: (id) => `${APP_ROUTES.dashboard.staff.edit}${id}`,
   deleteApiRoute: API_ROUTES.delete.staff,

@@ -291,6 +291,21 @@ export interface GameAverages {
 export type GameStats = GameAverages & GameRanks;
 
 /**
+ * Lightweight roster entry for the compare-page player picker.
+ */
+export interface PlayerRosterEntry {
+	player_id: string;
+	first_name: string;
+	last_name: string;
+	image_url: string | null;
+}
+
+export interface PlayerCompareResponse {
+	player1: GameStats | null;
+	player2: GameStats | null;
+}
+
+/**
  * Combined bio + career stats entry used on the Players directory page.
  */
 export interface PlayerDirectoryEntry {

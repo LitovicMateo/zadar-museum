@@ -34,13 +34,13 @@ export const useTeamRecordsTable = (
 				cell: (info) => <RankCell info={info} />
 			},
 			{
-				header: database === 'zadar' ? 'VS' : 'Team',
+				header: database === 'main' ? 'VS' : 'Team',
 				meta: { sticky: 'left', stickyOffset: '4ch' },
 				cell: (info) => {
 					let name;
 					let slug;
 
-					if (database === 'zadar') {
+					if (database === 'main') {
 						name = info.row.original.opponent_team_name;
 						slug = info.row.original.opponent_team_slug;
 					} else {

@@ -24,7 +24,7 @@ import { getMainTeamSlug } from '../mainTeam';
 // ---------------------------------------------------------------------------
 
 export interface PlayerStatsParams {
-  database: 'zadar' | 'opponent';
+  database: 'main' | 'opponent';
   stats: 'average' | 'total';
   location: 'all' | 'home' | 'away' | 'neutral';
   league?: string;
@@ -34,7 +34,7 @@ export interface PlayerStatsParams {
 }
 
 export interface PlayerRecordsParams {
-  database: 'zadar' | 'opponent';
+  database: 'main' | 'opponent';
   location: 'all' | 'home' | 'away' | 'neutral';
   league?: string;
   season?: string;
@@ -50,7 +50,7 @@ export interface TeamStatsParams {
 }
 
 export interface TeamRecordsParams {
-  database?: 'zadar' | 'opponent';
+  database?: 'main' | 'opponent';
   location: 'all' | 'home' | 'away' | 'neutral';
   league?: string;
   season?: string;
@@ -58,7 +58,7 @@ export interface TeamRecordsParams {
 
 export interface CoachRecordParams {
   coachId?: string;
-  database: 'zadar' | 'opponent';
+  database: 'main' | 'opponent';
   role?: 'head' | 'assistant';
   location: 'all' | 'home' | 'away' | 'neutral';
   league?: string;
@@ -122,7 +122,7 @@ export async function aggregatePlayerStats(
 
   // -- WHERE clauses built up as fragments
   // Note: forfeited games are intentionally NOT filtered here, matching the
-  // Layer 2 zadar_player_total_all_time MV which also omits a forfeited filter.
+  // Layer 2 main_player_total_all_time MV which also omits a forfeited filter.
   // aggregatePlayerRecords filters forfeited = false because the record MVs do.
   const whereClauses: string[] = [
     `b.status::text <> 'dnp-cd'::text`,
@@ -130,7 +130,7 @@ export async function aggregatePlayerStats(
   ];
 
   // database filter
-  if (params.database === 'zadar') {
+  if (params.database === 'main') {
     whereClauses.push(`b.team_slug = :mainSlug`);
   } else {
     whereClauses.push(`b.team_slug != :mainSlug`);
@@ -175,7 +175,7 @@ export async function aggregatePlayerStats(
 
   const minutesExpr = isAvg
     ? `ROUND(AVG(b.minutes + (b.seconds / 60.0)), 1)`
-    : `SUM(b.minutes + (b.seconds / 60.0))`;
+    : `ROUND(SUM(b.minutes + (b.seconds / 60.0)), 1)`;
 
   const minutesRankExpr = isAvg
     ? `RANK() OVER (ORDER BY AVG(b.minutes + (b.seconds / 60.0)) DESC NULLS LAST)`
@@ -286,12 +286,12 @@ export async function aggregatePlayerStats(
 
 // ---------------------------------------------------------------------------
 // 2. aggregatePlayerRecords
-//    Returns per-game record rows (mirrors zadar_player_record MV).
+//    Returns per-game record rows (mirrors main_player_record MV).
 // ---------------------------------------------------------------------------
 
 /**
  * Per-game record rows from player_boxscore, with RANK() OVER window functions
- * for each stat. Mirrors the zadar_player_record / opponent_player_record MVs.
+ * for each stat. Mirrors the main_player_record / opponent_player_record MVs.
  *
  * Note: player_boxscore.is_home_team is a string: 'home'|'away'|'neutral'.
  * The MV also includes is_active_player already.
@@ -309,7 +309,7 @@ export async function aggregatePlayerRecords(
     `b.forfeited = false`,
   ];
 
-  if (params.database === 'zadar') {
+  if (params.database === 'main') {
     whereClauses.push(`b.team_slug = :mainSlug`);
   } else {
     whereClauses.push(`b.team_slug != :mainSlug`);
@@ -604,7 +604,7 @@ export async function aggregateTeamStats(
 
 // ---------------------------------------------------------------------------
 // 4. aggregateTeamRecords
-//    Per-game records from team_boxscore (mirrors zadar_team_record MV).
+//    Per-game records from team_boxscore (mirrors main_team_record MV).
 // ---------------------------------------------------------------------------
 
 /**
@@ -737,7 +737,7 @@ export async function aggregateTeamRecords(
 
 /**
  * Aggregated coach win/loss record from coach_boxscore MV.
- * Mirrors the zadar_coach_record / opponent_coach_record family of MVs.
+ * Mirrors the main_coach_record / opponent_coach_record family of MVs.
  *
  * coach_boxscore.is_home_team is inherited from team_boxscore — a STRING:
  * 'home' | 'away' | 'neutral'
@@ -754,7 +754,7 @@ export async function aggregateCoachRecord(
   ];
 
   // database filter
-  if (params.database === 'zadar') {
+  if (params.database === 'main') {
     whereClauses.push(`cb.team_slug = :mainSlug`);
   } else {
     whereClauses.push(`cb.team_slug != :mainSlug`);
@@ -896,10 +896,12 @@ export async function aggregateRefereeStats(
   }
 
   // Referee filter — applied inside ref_game_union so the WHERE sits correctly
-  // before the GROUP BY (never interpolated after a JOIN).
-  const refereeFilterSQL = params.refereeId
-    ? `AND ref_id = :refereeId`
-    : '';
+  // before the GROUP BY (never interpolated after a JOIN). Each branch must
+  // filter on its own underlying column — "ref_id" is only an alias created
+  // by the SELECT, so it isn't visible yet in that branch's WHERE clause.
+  const mainRefFilterSQL = params.refereeId ? `AND main_referee_id = :refereeId` : '';
+  const secondRefFilterSQL = params.refereeId ? `AND second_referee_id = :refereeId` : '';
+  const thirdRefFilterSQL = params.refereeId ? `AND third_referee_id = :refereeId` : '';
   if (params.refereeId) {
     bindings.refereeId = params.refereeId;
   }
@@ -919,11 +921,11 @@ export async function aggregateRefereeStats(
         s.main_referee_id,
         s.second_referee_id,
         s.third_referee_id,
-        zadar_tb.fouls AS zadar_fouls,
+        main_tb.fouls AS main_fouls,
         opp_tb.fouls AS opp_fouls
       FROM schedule s
-      JOIN team_boxscore zadar_tb
-        ON zadar_tb.game_id = s.game_document_id AND zadar_tb.team_slug = :mainSlug
+      JOIN team_boxscore main_tb
+        ON main_tb.game_id = s.game_document_id AND main_tb.team_slug = :mainSlug
       JOIN team_boxscore opp_tb
         ON opp_tb.game_id = s.game_document_id AND opp_tb.team_slug != :mainSlug
       WHERE
@@ -938,25 +940,25 @@ export async function aggregateRefereeStats(
     ref_game_union AS (
       SELECT game_id, league_id, league_slug, season, is_neutral,
              home_team_slug, away_team_slug, home_score, away_score,
-             zadar_fouls, opp_fouls,
+             main_fouls, opp_fouls,
              main_referee_id AS ref_id
-      FROM ref_games WHERE main_referee_id IS NOT NULL ${refereeFilterSQL}
+      FROM ref_games WHERE main_referee_id IS NOT NULL ${mainRefFilterSQL}
 
       UNION ALL
 
       SELECT game_id, league_id, league_slug, season, is_neutral,
              home_team_slug, away_team_slug, home_score, away_score,
-             zadar_fouls, opp_fouls,
+             main_fouls, opp_fouls,
              second_referee_id AS ref_id
-      FROM ref_games WHERE second_referee_id IS NOT NULL ${refereeFilterSQL}
+      FROM ref_games WHERE second_referee_id IS NOT NULL ${secondRefFilterSQL}
 
       UNION ALL
 
       SELECT game_id, league_id, league_slug, season, is_neutral,
              home_team_slug, away_team_slug, home_score, away_score,
-             zadar_fouls, opp_fouls,
+             main_fouls, opp_fouls,
              third_referee_id AS ref_id
-      FROM ref_games WHERE third_referee_id IS NOT NULL ${refereeFilterSQL}
+      FROM ref_games WHERE third_referee_id IS NOT NULL ${thirdRefFilterSQL}
     )
     SELECT
       r.document_id AS referee_id,
@@ -1007,14 +1009,14 @@ export async function aggregateRefereeStats(
         1
       ) AS win_percentage,
 
-      ROUND(AVG(u.zadar_fouls), 1) AS fouls_for,
-      RANK() OVER (ORDER BY AVG(u.zadar_fouls) DESC NULLS LAST) AS fouls_for_rank,
+      ROUND(AVG(u.main_fouls), 1) AS fouls_for,
+      RANK() OVER (ORDER BY AVG(u.main_fouls) DESC NULLS LAST) AS fouls_for_rank,
 
       ROUND(AVG(u.opp_fouls), 1) AS fouls_against,
       RANK() OVER (ORDER BY AVG(u.opp_fouls) DESC NULLS LAST) AS fouls_against_rank,
 
-      ROUND(AVG(u.zadar_fouls - u.opp_fouls), 1) AS foul_difference,
-      RANK() OVER (ORDER BY AVG(u.zadar_fouls - u.opp_fouls) DESC NULLS LAST) AS foul_difference_rank
+      ROUND(AVG(u.main_fouls - u.opp_fouls), 1) AS foul_difference,
+      RANK() OVER (ORDER BY AVG(u.main_fouls - u.opp_fouls) DESC NULLS LAST) AS foul_difference_rank
 
     FROM ref_game_union u
     JOIN referees r ON r.document_id = u.ref_id
@@ -1027,12 +1029,61 @@ export async function aggregateRefereeStats(
 }
 
 // ---------------------------------------------------------------------------
+// 7a. listMainTeamPlayers / listMainTeamCoaches
+//     Lightweight roster lists for the player/coach comparison picker.
+// ---------------------------------------------------------------------------
+
+export async function listMainTeamPlayers(
+  knex: Knex,
+): Promise<{ player_id: string; first_name: string; last_name: string; image_url: string | null }[]> {
+  const mainSlug = await getMainTeamSlug();
+  const result = await knex.raw(
+    `
+    SELECT roster.player_id, roster.first_name, roster.last_name, f.url AS image_url
+    FROM (
+      SELECT DISTINCT player_id, first_name, last_name
+      FROM player_boxscore
+      WHERE team_slug = :mainSlug AND is_nulled = false
+    ) roster
+    LEFT JOIN players p ON p.document_id = roster.player_id
+    LEFT JOIN files_related_mph m ON m.related_id = p.id AND m.related_type = 'api::player.player' AND m.field = 'image'
+    LEFT JOIN files f ON f.id = m.file_id
+    ORDER BY roster.last_name, roster.first_name
+  `,
+    { mainSlug },
+  );
+  return result.rows;
+}
+
+export async function listMainTeamCoaches(
+  knex: Knex,
+): Promise<{ coach_id: string; first_name: string; last_name: string; image_url: string | null }[]> {
+  const mainSlug = await getMainTeamSlug();
+  const result = await knex.raw(
+    `
+    SELECT roster.coach_id, roster.first_name, roster.last_name, f.url AS image_url
+    FROM (
+      SELECT DISTINCT coach_id, first_name, last_name
+      FROM coach_boxscore
+      WHERE team_slug = :mainSlug AND is_nulled = false
+    ) roster
+    LEFT JOIN coaches c ON c.document_id = roster.coach_id
+    LEFT JOIN files_related_mph m ON m.related_id = c.id AND m.related_type = 'api::coach.coach' AND m.field = 'image'
+    LEFT JOIN files f ON f.id = m.file_id
+    ORDER BY roster.last_name, roster.first_name
+  `,
+    { mainSlug },
+  );
+  return result.rows;
+}
+
+// ---------------------------------------------------------------------------
 // 7. aggregateVenueRecord
 // ---------------------------------------------------------------------------
 
 /**
  * Venue win/loss record from the schedule MV.
- * Mirrors the zadar_venue_record / zadar_venue_season_record family.
+ * Mirrors the main_venue_record / main_venue_season_record family.
  *
  * Location filter uses is_neutral + home/away team slug comparisons.
  */

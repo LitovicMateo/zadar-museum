@@ -87,4 +87,41 @@ export default {
     );
     ctx.body = data;
   },
+
+  async getPlayersCompareStats(ctx) {
+    const { ids, stats, location, league, season } = ctx.query;
+    const service = strapi.service("api::stats.stats");
+    const data = await service.findPlayersCompareStats(
+      ids,
+      stats,
+      location,
+      league,
+      season
+    );
+    ctx.body = data;
+  },
+
+  async getPlayersRoster(ctx) {
+    const service = strapi.service("api::stats.stats");
+    const data = await service.findPlayersRoster();
+    ctx.body = data;
+  },
+
+  async getCoachesCompareStats(ctx) {
+    const { ids, location, league, season } = ctx.query;
+    const service = strapi.service("api::stats.stats");
+    const data = await service.findCoachesCompareStats(
+      ids,
+      location,
+      league,
+      season
+    );
+    ctx.body = data;
+  },
+
+  async getCoachesRoster(ctx) {
+    const service = strapi.service("api::stats.stats");
+    const data = await service.findCoachesRoster();
+    ctx.body = data;
+  },
 };

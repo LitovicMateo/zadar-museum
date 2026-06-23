@@ -23,10 +23,12 @@ const MainTable: React.FC<MainTableProps> = ({ view, location }) => {
 
 	const leagueStats = useMemo(() => {
 		if (!league) return [];
-		return league.map((league) => {
-			const group = view === 'average' ? league.average : league.total;
-			return group[location] ?? group.total;
-		});
+		return league
+			.map((league) => {
+				const group = view === 'average' ? league.average : league.total;
+				return group[location];
+			})
+			.filter((row): row is NonNullable<typeof row> => row != null);
 	}, [league, view, location]);
 
 	const careerStats = useMemo(() => {

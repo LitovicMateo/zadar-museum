@@ -127,6 +127,21 @@ export type CoachStatsRanking = {
 	points_difference_rank: number;
 };
 
+/**
+ * Lightweight roster entry for the compare-page coach picker.
+ */
+export interface CoachRosterEntry {
+	coach_id: string;
+	first_name: string;
+	last_name: string;
+	image_url: string | null;
+}
+
+export interface CoachCompareResponse {
+	coach1: CoachStatsRanking | null;
+	coach2: CoachStatsRanking | null;
+}
+
 export interface CoachDirectoryEntry {
 	id: number;
 	documentId: string;

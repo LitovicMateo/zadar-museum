@@ -25,6 +25,12 @@ export const teamListConfig: EntityListConfig<TeamDetailsResponse> = {
     },
     { header: 'Short', cell: (row) => row.short_name ?? '—', className: 'text-slate-400' },
     { header: 'City', cell: (row) => row.city ?? '—', className: 'text-slate-400' },
+    {
+      header: 'Main team',
+      cell: (row) => row.isMainTeam
+        ? <span className="text-xs font-medium px-2 py-0.5 rounded bg-blue-900/60 text-blue-200">Main</span>
+        : null,
+    },
     { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-slate-400 text-sm' },
   ],
 };

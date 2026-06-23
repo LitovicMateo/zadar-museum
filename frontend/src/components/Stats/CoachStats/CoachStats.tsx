@@ -15,7 +15,7 @@ import { SortingState } from '@tanstack/react-table';
 import PageWrapper from '../UI/PageWrapper';
 
 const CoachStats: React.FC = () => {
-	const [database, setDatabase] = React.useState<PlayerDB>('zadar');
+	const [database, setDatabase] = React.useState<PlayerDB>('main');
 	const [role, setRole] = React.useState<'all' | 'head' | 'assistant'>('all');
 	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');
 	const [league, setLeague] = React.useState<string>('all');

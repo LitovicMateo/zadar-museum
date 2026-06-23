@@ -14,7 +14,7 @@ import { useCoachProfileDatabase } from '@/hooks/queries/player/UseCoachProfileD
 import { CoachStats } from '@/types/api/Coach';
 
 import { useCoachSeasonStatsTable } from '../CoachSeasonStats/UseCoachSeasonStatsTable';
-import { computeHasNeutral, computeLeagueStats, computeTotalStats } from './CoachLeagueStats.utils';
+import { computeHasAway, computeHasHome, computeHasNeutral, computeLeagueStats, computeTotalStats } from './CoachLeagueStats.utils';
 
 import styles from './CoachLeagueStats.module.css';
 
@@ -30,11 +30,15 @@ const CoachLeagueStats: React.FC = () => {
 	const { data: coachLeagueStats } = useCoachLeagueStats(coachId!, db!);
 	const { data: coachRecord } = useCoachRecord(coachId!, db);
 
+	const hasHome = useMemo(() => computeHasHome(coachLeagueStats, coachRole), [coachLeagueStats, coachRole]);
+	const hasAway = useMemo(() => computeHasAway(coachLeagueStats, coachRole), [coachLeagueStats, coachRole]);
 	const hasNeutral = useMemo(() => computeHasNeutral(coachLeagueStats, coachRole), [coachLeagueStats, coachRole]);
 
 	useEffect(() => {
-		if (!hasNeutral && location === 'neutral') setLocation('total');
-	}, [hasNeutral, location]);
+		if (location === 'home' && !hasHome) setLocation('total');
+		else if (location === 'away' && !hasAway) setLocation('total');
+		else if (location === 'neutral' && !hasNeutral) setLocation('total');
+	}, [hasHome, hasAway, hasNeutral, location]);
 
 	const leagueStats: CoachStats[] = useMemo(
 		() => computeLeagueStats(coachLeagueStats, coachRole, location),
@@ -58,14 +62,12 @@ const CoachLeagueStats: React.FC = () => {
 	}, [coachRecord]);
 
 	const locationOptions = useMemo<OptionType[]>(() => {
-		const opts: OptionType[] = [
-			{ value: 'total', label: 'Total' },
-			{ value: 'home', label: 'Home' },
-			{ value: 'away', label: 'Away' }
-		];
+		const opts: OptionType[] = [{ value: 'total', label: 'Total' }];
+		if (hasHome) opts.push({ value: 'home', label: 'Home' });
+		if (hasAway) opts.push({ value: 'away', label: 'Away' });
 		if (hasNeutral) opts.push({ value: 'neutral', label: 'Neutral' });
 		return opts;
-	}, [hasNeutral]);
+	}, [hasHome, hasAway, hasNeutral]);
 
 	return (
 		<section className={styles.section}>
@@ -120,8 +122,18 @@ const CoachLeagueStats: React.FC = () => {
 								onChange={() => setLocation('total')}
 								isActive={location === 'total'}
 							/>
-							<Radio label="Home" onChange={() => setLocation('home')} isActive={location === 'home'} />
-							<Radio label="Away" onChange={() => setLocation('away')} isActive={location === 'away'} />
+							<Radio
+								label="Home"
+								onChange={() => setLocation('home')}
+								isActive={location === 'home'}
+								isDisabled={!hasHome}
+							/>
+							<Radio
+								label="Away"
+								onChange={() => setLocation('away')}
+								isActive={location === 'away'}
+								isDisabled={!hasAway}
+							/>
 							<Radio
 								label="Neutral"
 								onChange={() => setLocation('neutral')}

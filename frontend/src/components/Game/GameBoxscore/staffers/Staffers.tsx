@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { useGameDetails } from '@/hooks/queries/game/UseGameDetails';
+import { useMainTeam } from '@/hooks/queries/team/UseMainTeam';
 import { Users } from 'lucide-react';
 
 import styles from './Staffers.module.css';
@@ -21,12 +22,13 @@ type Staffer = {
 const Staffers: React.FC<StaffersProps> = ({ teamSlug }) => {
 	const { gameId } = useParams();
 	const { data: game } = useGameDetails(gameId!);
+	const { data: mainTeam } = useMainTeam();
 
 	if (!game || !game.staffers || game.staffers.length === 0) return null;
 
-	// Only show staffers for KK Zadar
-	const isZadar = teamSlug === 'kk-zadar';
-	if (!isZadar) return null;
+	// Only show staffers for the main team
+	const isMainTeam = teamSlug === mainTeam?.slug;
+	if (!isMainTeam) return null;
 
 	// Group staffers by role
 	const staffersByRole = game.staffers.reduce(

@@ -6,7 +6,7 @@ export const playerListConfig: EntityListConfig<PlayerResponse> = {
   title: 'Players',
   entityType: 'player',
   apiRoute: API_ROUTES.adminList.players,
-  searchPlaceholder: 'Search by last name...',
+  searchPlaceholder: 'Search by name...',
   createPath: APP_ROUTES.dashboard.player.create,
   editPath: (id) => `${APP_ROUTES.dashboard.player.edit}${id}`,
   deleteApiRoute: API_ROUTES.delete.player,

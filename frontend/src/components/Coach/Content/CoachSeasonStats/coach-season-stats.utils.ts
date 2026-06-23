@@ -3,6 +3,22 @@ import { CoachStatsResponse, CoachStats } from '@/types/api/Coach';
 export type CoachRole = 'total' | 'headCoach' | 'assistantCoach';
 export type MatchLocation = 'total' | 'home' | 'away' | 'neutral';
 
+export const computeHasHomeSeason = (
+  coachLeagueStats: CoachStatsResponse[] | undefined,
+  coachRole: CoachRole
+) => {
+  if (!coachLeagueStats) return false;
+  return coachLeagueStats.some((row: CoachStatsResponse) => (row[coachRole]?.home?.games ?? 0) > 0);
+};
+
+export const computeHasAwaySeason = (
+  coachLeagueStats: CoachStatsResponse[] | undefined,
+  coachRole: CoachRole
+) => {
+  if (!coachLeagueStats) return false;
+  return coachLeagueStats.some((row: CoachStatsResponse) => (row[coachRole]?.away?.games ?? 0) > 0);
+};
+
 export const computeHasNeutralSeason = (
   coachLeagueStats: CoachStatsResponse[] | undefined,
   coachRole: CoachRole
@@ -28,7 +44,8 @@ export const computeTotalStatsSeason = (
   location: MatchLocation
 ) => {
   if (!coachTotalStats) return [] as CoachStats[];
-  return [coachTotalStats[coachRole]?.[location]];
+  const v = coachTotalStats[coachRole]?.[location];
+  return v ? [v] : [];
 };
 
 export default {};

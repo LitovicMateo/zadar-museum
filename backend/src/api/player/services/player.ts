@@ -8,7 +8,7 @@ import {
   validateSeason,
   ALLOWED_DATABASES,
 } from "../../../validation";
-import { getCached, TTL_24H, TTL_1H } from "../../../utils/cache";
+import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
 import { aggregatePlayerStats, buildRecord } from "../../../lib/aggregation/queries";
 import { getMainTeamSlug } from "../../../lib/mainTeam";
 
@@ -22,7 +22,7 @@ export default factories.createCoreService(
       const validatedSeason = validateSeason(season);
 
       return getCached(
-        `zadar:player:boxscore:${playerId}:${validatedSeason}`,
+        `${CACHE_PREFIX}player:boxscore:${playerId}:${validatedSeason}`,
         TTL_1H,
         () => {
           const knex = strapi.db.connection;
@@ -37,7 +37,7 @@ export default factories.createCoreService(
 
     async findMostFrequentPlayerNumber(playerId: string | number) {
       return getCached(
-        `zadar:player:shirt-number:${playerId}`,
+        `${CACHE_PREFIX}player:shirt-number:${playerId}`,
         TTL_1H,
         async () => {
           const knex = strapi.db.connection;
@@ -61,14 +61,14 @@ export default factories.createCoreService(
       const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
 
       return getCached(
-        `zadar:player:all-time-league:${playerId}:${validatedDb}`,
+        `${CACHE_PREFIX}player:all-time-league:${playerId}:${validatedDb}`,
         TTL_24H,
         async () => {
           const mainSlug = await getMainTeamSlug();
           const knex = strapi.db.connection;
 
           const teamClause =
-            validatedDb === "zadar"
+            validatedDb === "main"
               ? `b.team_slug = :mainSlug`
               : `b.team_slug != :mainSlug`;
 
@@ -266,12 +266,12 @@ export default factories.createCoreService(
       const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
 
       return getCached(
-        `zadar:player:all-time:${playerId}:${validatedDb}`,
+        `${CACHE_PREFIX}player:all-time:${playerId}:${validatedDb}`,
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
           const baseParams = {
-            database: validatedDb as "zadar" | "opponent",
+            database: validatedDb as "main" | "opponent",
             playerId,
           };
 
@@ -325,13 +325,13 @@ export default factories.createCoreService(
       );
 
       return getCached(
-        `zadar:player:seasons:${playerId}:${validatedDatabase}`,
+        `${CACHE_PREFIX}player:seasons:${playerId}:${validatedDatabase}`,
         TTL_1H,
         async () => {
           const knex = strapi.db.connection;
           const mainTeamSlug = await getMainTeamSlug();
 
-          if (validatedDatabase === "zadar") {
+          if (validatedDatabase === "main") {
             return knex("player_boxscore")
               .distinct("season")
               .where("player_id", playerId)
@@ -353,7 +353,7 @@ export default factories.createCoreService(
       const validatedSeason = validateSeason(season);
 
       return getCached(
-        `zadar:player:season-competitions:${playerId}:${validatedSeason}`,
+        `${CACHE_PREFIX}player:season-competitions:${playerId}:${validatedSeason}`,
         TTL_1H,
         () => {
           const knex = strapi.db.connection;
@@ -372,7 +372,7 @@ export default factories.createCoreService(
     },
 
     async findPlayerTeams(playerId) {
-      return getCached(`zadar:player:teams:${playerId}`, TTL_1H, () => {
+      return getCached(`${CACHE_PREFIX}player:teams:${playerId}`, TTL_1H, () => {
         const knex = strapi.db.connection;
         return knex("player_boxscore")
           .select("team_name", "team_slug")
@@ -392,14 +392,14 @@ export default factories.createCoreService(
       );
 
       return getCached(
-        `zadar:player:career-high:${playerId}:${validatedDatabase}`,
+        `${CACHE_PREFIX}player:career-high:${playerId}:${validatedDatabase}`,
         TTL_24H,
         async () => {
           const mainSlug = await getMainTeamSlug();
           const knex = strapi.db.connection;
 
           const teamClause =
-            validatedDatabase === "zadar"
+            validatedDatabase === "main"
               ? `b.team_slug = :mainSlug`
               : `b.team_slug != :mainSlug`;
 
@@ -489,12 +489,12 @@ export default factories.createCoreService(
       );
 
       return getCached(
-        `zadar:player:season-avg:${playerId}:${validatedSeason}:${validatedDatabase}`,
+        `${CACHE_PREFIX}player:season-avg:${playerId}:${validatedSeason}:${validatedDatabase}`,
         TTL_24H,
         () => {
           const knex = strapi.db.connection;
           return aggregatePlayerStats(knex, {
-            database: validatedDatabase as "zadar" | "opponent",
+            database: validatedDatabase as "main" | "opponent",
             stats: "average",
             location: "all",
             season: validatedSeason,
@@ -516,19 +516,19 @@ export default factories.createCoreService(
       );
 
       return getCached(
-        `zadar:player:season-avg-league:${playerId}:${validatedSeason}:${validatedDatabase}`,
+        `${CACHE_PREFIX}player:season-avg-league:${playerId}:${validatedSeason}:${validatedDatabase}`,
         TTL_24H,
         async () => {
           const mainSlug = await getMainTeamSlug();
           const knex = strapi.db.connection;
 
           const teamClause =
-            validatedDatabase === "zadar"
+            validatedDatabase === "main"
               ? `b.team_slug = :mainSlug`
               : `b.team_slug != :mainSlug`;
 
           // Returns one row per league (same structure as the Layer 2 MV
-          // zadar_player_season_average_all_time_league, grouped by league_id).
+          // main_player_season_average_all_time_league, grouped by league_id).
           const sql = `
             SELECT
               b.player_id,

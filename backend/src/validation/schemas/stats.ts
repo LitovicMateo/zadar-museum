@@ -99,3 +99,33 @@ export const refereesAllTimeStatsQuerySchema = z.object({
   league: leagueSlugSchema,
   season: seasonSchema,
 });
+
+/**
+ * Two comma-separated entity IDs, e.g. "1,2"
+ */
+const compareIdsSchema = z
+  .string()
+  .regex(/^[^,]+,[^,]+$/, "ids must be exactly two comma-separated values");
+
+/**
+ * GET /api/stats/player/compare
+ * Query params: ids, stats, location?, league?, season?
+ */
+export const playersCompareQuerySchema = z.object({
+  ids: compareIdsSchema,
+  stats: statsSchema,
+  location: locationSchema,
+  league: leagueSlugSchema,
+  season: seasonSchema,
+});
+
+/**
+ * GET /api/stats/coach/compare
+ * Query params: ids, location?, league?, season?
+ */
+export const coachesCompareQuerySchema = z.object({
+  ids: compareIdsSchema,
+  location: locationSchema,
+  league: leagueSlugSchema,
+  season: seasonSchema,
+});
