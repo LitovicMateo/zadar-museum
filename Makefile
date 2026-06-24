@@ -13,7 +13,7 @@ PROD_COMPOSE := docker-compose.prod.yml
 PROD_ENV := .env.prod
 
 
-.PHONY: dev dev-stop dev-mv dev-enable-unaccent staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod backup-prod-full restore-prod help
+.PHONY: dev dev-stop dev-mv dev-enable-unaccent staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod backup-prod-full restore-prod install-backup-timer help
 
 help:
 	@echo "Usage: make <target>"	@echo "Note: several targets forward flags to underlying scripts (e.g. apply-mvs accepts --env-file)"
@@ -127,3 +127,10 @@ import-prod-backup:
 	@CONTAINER=$$($(COMPOSE_CMD) -f $(PROD_COMPOSE) ps -q postgres); \
 	if [ -z "$$CONTAINER" ]; then echo "No postgres container found (is the prod stack running?)"; exit 1; fi; \
 	docker exec -i "$$CONTAINER" sh -c "export PGCLIENTENCODING=UTF8; psql -U strapi -d strapi -f /tmp/zadar-backup.sql"
+# Install the systemd timer that runs backup.sh every 2 days (run on the VPS)
+install-backup-timer:
+	@sed 's|__PROJECT_ROOT__|$(PROJECT_ROOT)|g' scripts/backups/systemd/zadar-backup.service | sudo tee /etc/systemd/system/zadar-backup.service >/dev/null
+	@sudo cp scripts/backups/systemd/zadar-backup.timer /etc/systemd/system/zadar-backup.timer
+	@sudo systemctl daemon-reload
+	@sudo systemctl enable --now zadar-backup.timer
+	@echo "Installed. Verify with: systemctl list-timers zadar-backup.timer"
