@@ -149,6 +149,7 @@ Run `make help` for the full list. The main targets:
 |--------|--------|
 | `make dev-mv` | Refresh the Layer 1 views against the running dev DB |
 | `make apply-mvs` / `apply-mvs-staging` / `apply-mvs-prod` | Apply/refresh views for the given env |
+| `make list-mvs` / `list-mvs-prod` | List materialized views in the running dev/prod DB |
 
 **Backups & restore**
 | Target | Action |
@@ -280,15 +281,7 @@ docker exec postgres_dev psql -U strapi -d strapi -c "SHOW server_encoding; SHOW
 
 ## Manual VPS operations (no Make target)
 
-These are intentionally not wrapped (rare, or destructive). Substitute your `.env.prod` DB user/name where shown.
-
-**List materialized views:**
-
-```bash
-docker compose -f docker-compose.prod.yml exec -T postgres \
-  psql -U "$DB_USER" -d "$DB_NAME" -c \
-  "SELECT schemaname, matviewname FROM pg_matviews WHERE schemaname NOT IN ('pg_catalog','information_schema') ORDER BY 1,2;"
-```
+These are intentionally not wrapped (rare, or destructive). Substitute your `.env.prod` DB user/name where shown. (To list materialized views, use `make list-mvs` / `make list-mvs-prod`.)
 
 **Recreate a single service** (e.g. just the frontend) without touching the rest:
 

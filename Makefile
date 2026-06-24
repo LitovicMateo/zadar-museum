@@ -13,7 +13,7 @@ PROD_COMPOSE := docker-compose.prod.yml
 PROD_ENV := .env.prod
 
 
-.PHONY: dev dev-stop dev-mv dev-enable-unaccent staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod backup-prod-full restore-prod install-backup-timer help
+.PHONY: dev dev-stop dev-mv dev-enable-unaccent staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod list-mvs list-mvs-prod backup-dev backup-staging backup-prod backup-prod-full restore-prod install-backup-timer help
 
 help:
 	@echo "Usage: make <target>"	@echo "Note: several targets forward flags to underlying scripts (e.g. apply-mvs accepts --env-file)"
@@ -95,6 +95,23 @@ apply-mvs-staging:
 
 apply-mvs-prod:
 	bash scripts/apply-mvs.sh --compose-file $(PROD_COMPOSE) --env-file $(PROD_ENV)
+
+# List materialized views in the running dev/prod postgres (excludes system schemas)
+list-mvs:
+	@CONTAINER=$$($(COMPOSE_CMD) -f $(DEV_COMPOSE) ps -q postgres); \
+	if [ -z "$$CONTAINER" ]; then echo "No postgres container found (is the dev stack running?)"; exit 1; fi; \
+	DB_USER=$$(grep -E '^(POSTGRES_USER|DATABASE_USERNAME)=' $(DEV_ENV) 2>/dev/null | head -n1 | sed -E 's/^[^=]+=//'); \
+	DB_NAME=$$(grep -E '^(POSTGRES_DB|DATABASE_NAME)=' $(DEV_ENV) 2>/dev/null | head -n1 | sed -E 's/^[^=]+=//'); \
+	docker exec -i "$$CONTAINER" psql -U "$${DB_USER:-strapi}" -d "$${DB_NAME:-strapi}" -c \
+	  "SELECT schemaname, matviewname FROM pg_matviews WHERE schemaname NOT IN ('pg_catalog','information_schema') ORDER BY 1,2;"
+
+list-mvs-prod:
+	@CONTAINER=$$($(COMPOSE_CMD) -f $(PROD_COMPOSE) ps -q postgres); \
+	if [ -z "$$CONTAINER" ]; then echo "No postgres container found (is the prod stack running?)"; exit 1; fi; \
+	DB_USER=$$(grep -E '^(POSTGRES_USER|DATABASE_USERNAME)=' $(PROD_ENV) 2>/dev/null | head -n1 | sed -E 's/^[^=]+=//'); \
+	DB_NAME=$$(grep -E '^(POSTGRES_DB|DATABASE_NAME)=' $(PROD_ENV) 2>/dev/null | head -n1 | sed -E 's/^[^=]+=//'); \
+	docker exec -i "$$CONTAINER" psql -U "$${DB_USER:-strapi}" -d "$${DB_NAME:-strapi}" -c \
+	  "SELECT schemaname, matviewname FROM pg_matviews WHERE schemaname NOT IN ('pg_catalog','information_schema') ORDER BY 1,2;"
 
 # Backups: produce zadar-backup.sql (hyphen) to match existing load/import targets
 backup-dev:
