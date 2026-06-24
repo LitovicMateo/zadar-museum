@@ -13,7 +13,7 @@ PROD_COMPOSE := docker-compose.prod.yml
 PROD_ENV := .env.prod
 
 
-.PHONY: dev dev-stop dev-mv dev-enable-unaccent staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod help
+.PHONY: dev dev-stop dev-mv dev-enable-unaccent staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod backup-dev backup-staging backup-prod backup-prod-full restore-prod help
 
 help:
 	@echo "Usage: make <target>"	@echo "Note: several targets forward flags to underlying scripts (e.g. apply-mvs accepts --env-file)"
@@ -108,6 +108,14 @@ backup-staging:
 backup-prod:
 	@echo "Creating prod backup -> $(PROJECT_ROOT)/zadar-backup.sql"; \
 	./scripts/pg_backup.sh --compose-file $(PROD_COMPOSE) --env-file $(PROD_ENV) --output "$(PROJECT_ROOT)/zadar-backup.sql"
+
+# Full prod backup (timestamped DB + uploads with retention) -> backups/prod/
+backup-prod-full:
+	./scripts/backups/backup.sh --compose-file $(PROD_COMPOSE) --env-file $(PROD_ENV) --output-dir backups/prod
+
+# Restore latest backups/prod/ pair into the running prod stack
+restore-prod:
+	./scripts/backups/restore.sh --compose-file $(PROD_COMPOSE) --env-file $(PROD_ENV) --backup-dir backups/prod
 
 load-prod-backup:
 	@CONTAINER=$$($(COMPOSE_CMD) -f $(PROD_COMPOSE) ps -q postgres); \
