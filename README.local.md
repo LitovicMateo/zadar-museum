@@ -9,7 +9,7 @@
 - **Frontend:** `frontend/` — A Vite + React application (TypeScript). UI components, pages and assets are here.
 - **Database / SQL:** `sql/` and `backend/database/` — SQL layers and migrations; several materialized views and helper scripts. There is a full DB dump at `zadar_backup.sql`.
 - **Reverse proxy / TLS / Config:** `nginx/` — nginx config variants for local, prod and VPS deployments.
-- **Orchestration / Containers:** Root-level Docker Compose files (`docker-compose.yml`, `docker-compose.local.override.yml`, `docker-compose.prod.yml`, `docker-compose.prod.yml`) define the services for local and production deployments.
+- **Orchestration / Containers:** Root-level Docker Compose files (`docker-compose.yml`, `docker-compose.local.override.yml`, `docker-compose.dev.yml`, `docker-compose.staging.yml`, `docker-compose.prod.yml`) define the services for local, staging and production deployments.
 
 **Key Folders**
 
