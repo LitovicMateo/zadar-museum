@@ -2,6 +2,7 @@ import React from 'react';
 
 import { PlayerDB } from '@/components/Player/PlayerPage';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
+import { useMainTeam } from '@/hooks/queries/team/UseMainTeam';
 
 import styles from './Menu.module.css';
 
@@ -11,6 +12,7 @@ type MenuProps = {
 
 const Menu: React.FC<MenuProps> = ({ showMenu }) => {
 	const { toggleDatabase } = useBoxscore();
+	const { data: mainTeam } = useMainTeam();
 
 	const handleClick = (db: PlayerDB) => {
 		toggleDatabase(db);
@@ -25,10 +27,10 @@ const Menu: React.FC<MenuProps> = ({ showMenu }) => {
 			<div className={styles.inner}>
 				<button
 					type="button"
-					onClick={handleClick.bind(null, 'zadar')}
-					className={`${styles.btn} ${styles.btnZadar}`}
+					onClick={handleClick.bind(null, 'main')}
+					className={`${styles.btn} ${styles.btnMain}`}
 				>
-					Zadar
+					{mainTeam?.short_name ?? mainTeam?.name ?? 'Main'}
 				</button>
 				<button
 					type="button"

@@ -5,6 +5,7 @@ import Pill from '@/components/UI/Pill';
 import { Skeleton } from '@/components/UI/Skeleton';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
+import { usePlayerHasAppearances } from '@/utils/PlayerHasAppearances';
 
 import styles from './AllTimeStats.module.css';
 
@@ -22,13 +23,18 @@ const AllTimeStats: React.FC = React.memo(() => {
 	const { selectedDatabase } = useBoxscore();
 
 	const { data, isLoading } = useAllTimeStats(playerId!, selectedDatabase!);
+	const hasAppearances = usePlayerHasAppearances(playerId!, selectedDatabase!);
 
 	const [location, setLocation] = useState<'total' | 'home' | 'away' | 'neutral'>('total');
+	const hasHome = !!data?.[0]?.total?.home?.games;
+	const hasAway = !!data?.[0]?.total?.away?.games;
 	const hasNeutral = !!data?.[0]?.total?.neutral?.games;
 
 	useEffect(() => {
-		if (!hasNeutral && location === 'neutral') setLocation('total');
-	}, [hasNeutral, location]);
+		if (location === 'home' && !hasHome) setLocation('total');
+		else if (location === 'away' && !hasAway) setLocation('total');
+		else if (location === 'neutral' && !hasNeutral) setLocation('total');
+	}, [hasHome, hasAway, hasNeutral, location]);
 
 	if (isLoading || !data) {
 		return (
@@ -50,6 +56,8 @@ const AllTimeStats: React.FC = React.memo(() => {
 		);
 	}
 
+	if (!hasAppearances) return null;
+
 	const totalStats = data[0].total[location] ?? data[0].total.total;
 
 	return (
@@ -62,7 +70,9 @@ const AllTimeStats: React.FC = React.memo(() => {
 						type="button"
 						role="radio"
 						aria-checked={location === loc}
-						isDisabled={loc === 'neutral' && !hasNeutral}
+						isDisabled={
+							(loc === 'home' && !hasHome) || (loc === 'away' && !hasAway) || (loc === 'neutral' && !hasNeutral)
+						}
 						isActive={location === loc}
 						onClick={() => setLocation(loc)}
 					/>

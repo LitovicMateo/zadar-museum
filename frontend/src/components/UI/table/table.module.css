@@ -184,6 +184,50 @@
 	font-size: 0.625rem; /* 10px */
 }
 
+/* ── PHASE SPLIT (StatsTable sub-rows) ───────────────────────────────────────── */
+
+/* Full-width heading row introducing a competition (+season) group. */
+.groupHeading {
+	padding: 0.5rem 1rem;
+	text-align: left;
+	font-weight: 700;
+	font-size: var(--font-size-mobile);
+	color: #1f2937; /* gray-800 */
+	background-color: #eef2ff; /* indigo-50 */
+	border-top: 1px solid #e5e7eb; /* gray-200 */
+}
+
+/* Indented phase label inside the sticky first column (Regular Season / Playoff). */
+.phaseIndent {
+	display: inline-block;
+	padding-left: 1.25rem;
+	color: #475569; /* slate-600 */
+}
+
+/* The combined "Total" sub-row gets a subtle subtotal treatment. */
+.trPhaseTotal {
+	background-color: #f8fafc; /* slate-50 */
+}
+
+.trPhaseTotal .td {
+	border-top: 1px solid #94a3b8; /* slate-400 */
+	font-weight: 600;
+}
+
+.trPhaseTotal .tdSticky {
+	background-color: #f8fafc; /* slate-50 */
+}
+
+.trPhaseTotal:hover .tdSticky {
+	background-color: #eff6ff; /* blue-50 */
+}
+
+@media (min-width: 768px) {
+	.groupHeading {
+		font-size: var(--font-size-desktop);
+	}
+}
+
 @media (min-width: 768px) {
 	.th,
 	.td,

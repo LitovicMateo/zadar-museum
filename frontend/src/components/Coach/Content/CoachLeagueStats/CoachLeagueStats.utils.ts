@@ -1,5 +1,21 @@
 import { CoachStats } from '@/types/api/Coach';
 
+export const computeHasHome = (coachLeagueStats: unknown[] | undefined, coachRole: string) => {
+	if (!coachLeagueStats || coachLeagueStats.length === 0) return false;
+	return coachLeagueStats.some((row) => {
+		const r = row as unknown as Record<string, Record<string, CoachStats | undefined>>;
+		return (r[coachRole]?.home?.games ?? 0) > 0;
+	});
+};
+
+export const computeHasAway = (coachLeagueStats: unknown[] | undefined, coachRole: string) => {
+	if (!coachLeagueStats || coachLeagueStats.length === 0) return false;
+	return coachLeagueStats.some((row) => {
+		const r = row as unknown as Record<string, Record<string, CoachStats | undefined>>;
+		return (r[coachRole]?.away?.games ?? 0) > 0;
+	});
+};
+
 export const computeHasNeutral = (coachLeagueStats: unknown[] | undefined, coachRole: string) => {
 	if (!coachLeagueStats || coachLeagueStats.length === 0) return false;
 	return coachLeagueStats.some((row) => {

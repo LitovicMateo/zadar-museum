@@ -13,6 +13,7 @@ export interface TeamDetailsResponse {
 	country: string;
 	image: StrapiImage;
 	alternate_names: AlternateName[];
+	isMainTeam: boolean;
 }
 
 type AlternateName = {
@@ -43,9 +44,9 @@ export interface TeamHeadToHeadResposne {
 	opponent_name: string;
 	opponent_slug: string;
 	games_played: number;
-	zadar_wins: number;
+	main_team_wins: number;
 	opponent_wins: number;
-	zadar_win_percentage: number;
+	main_team_win_percentage: number;
 	opponent_win_percentage: number;
 }
 
@@ -66,11 +67,13 @@ export interface TeamScheduleResponse {
 	home_team_id: string;
 	home_team_name: string;
 	home_team_short_name: string;
+	home_team_slug: string;
 	home_score: number | null;
 
 	away_team_id: string;
 	away_team_name: string;
 	away_team_short_name: string;
+	away_team_slug: string;
 	away_score: number | null;
 }
 
@@ -180,6 +183,14 @@ export interface TeamStats {
 	win_percentage: number | null;
 }
 
+// A location-keyed team record for one phase.
+export interface TeamLocationRecord {
+	total: TeamStats | null;
+	home: TeamStats | null;
+	away: TeamStats | null;
+	neutral: TeamStats | null;
+}
+
 // Top-level API response
 export interface TeamStatsResponse {
 	teamId: number;
@@ -189,7 +200,13 @@ export interface TeamStatsResponse {
 	home: TeamStats;
 	away: TeamStats;
 	neutral: TeamStats;
-	stats: TeamStats[];
+	stats?: TeamStats[];
+	/** Regular-season-only split (stage IN league/group). */
+	regular?: TeamLocationRecord | null;
+	/** Playoff-only split (stage = playoff). */
+	playoff?: TeamLocationRecord | null;
+	/** True only when the team has games in both phases for this competition. */
+	hasPhaseSplit?: boolean;
 }
 
 export interface TeamSeasonStatsResponse {
@@ -254,4 +271,5 @@ export interface TeamDirectoryEntry {
 	wins: string;
 	losses: string;
 	win_percentage: string;
+	isMainTeam: boolean;
 }

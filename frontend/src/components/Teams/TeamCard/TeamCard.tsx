@@ -5,7 +5,7 @@ import Flag from 'react-world-flags';
 import { APP_ROUTES } from '@/constants/Routes';
 import { TeamDirectoryEntry } from '@/types/api/Team';
 import { getImageUrl } from '@/utils/GetImageUrl';
-import { Shield } from 'lucide-react';
+import { Shield, Star } from 'lucide-react';
 
 import styles from './TeamCard.module.css';
 
@@ -26,6 +26,11 @@ const TeamCard: React.FC<TeamCardProps> = ({ team }) => {
 					<Shield size={64} color="var(--muted-foreground)" strokeWidth={1} />
 				)}
 				{team.nation && <Flag className={styles.flagBadge} code={team.nation} aria-label={team.nation} />}
+				{team.isMainTeam && (
+					<div className={styles.mainTeamBadge} aria-label="Main team" title="Main team">
+						<Star size={14} fill="currentColor" />
+					</div>
+				)}
 			</div>
 
 			<div className={styles.body}>

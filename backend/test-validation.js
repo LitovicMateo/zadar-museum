@@ -78,17 +78,17 @@ async function runTests() {
     // Stats API - Valid requests
     {
       name: "Valid player all-time stats",
-      path: "/api/stats/player/all-time?database=zadar&stats=total",
+      path: "/api/stats/player/all-time?database=main&stats=total",
       expectedStatus: 200,
     },
     {
       name: "Valid player all-time stats (all seasons)",
-      path: "/api/stats/player/all-time?database=zadar&stats=total&season=all",
+      path: "/api/stats/player/all-time?database=main&stats=total&season=all",
       expectedStatus: 200,
     },
     {
       name: "Valid team game stats",
-      path: "/api/stats/team/game?database=zadar&season=2024",
+      path: "/api/stats/team/game?database=main&season=2024",
       expectedStatus: 200,
     },
 
@@ -100,17 +100,17 @@ async function runTests() {
     },
     {
       name: "Invalid stats parameter",
-      path: "/api/stats/player/all-time?database=zadar&stats=invalid",
+      path: "/api/stats/player/all-time?database=main&stats=invalid",
       expectedStatus: 400,
     },
     {
       name: "Invalid season format",
-      path: "/api/stats/player/all-time?database=zadar&stats=total&season=20244",
+      path: "/api/stats/player/all-time?database=main&stats=total&season=20244",
       expectedStatus: 400,
     },
     {
       name: "Season out of range",
-      path: "/api/stats/player/all-time?database=zadar&stats=total&season=1800",
+      path: "/api/stats/player/all-time?database=main&stats=total&season=1800",
       expectedStatus: 400,
     },
 

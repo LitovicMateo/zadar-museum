@@ -21,7 +21,7 @@ export default factories.createCoreService(
       const knex = strapi.db.connection;
       const query = knex(table).select("*").orderBy("points", "desc");
 
-      if (league) {
+      if (includeLeague) {
         query.where("league_slug", league);
       }
 

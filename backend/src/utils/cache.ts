@@ -3,6 +3,8 @@ import redis from '../lib/redis';
 export const TTL_24H = 24 * 60 * 60;
 export const TTL_1H = 60 * 60;
 
+export const CACHE_PREFIX = 'app:';
+
 export async function getCached<T>(key: string, ttl: number, fn: () => Promise<T>): Promise<T> {
   if (redis) {
     try {

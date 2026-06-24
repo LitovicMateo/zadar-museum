@@ -27,14 +27,21 @@ export interface VenueTeamRecordResponse {
 	avg_attendance: number;
 }
 
-export interface VenueSeasonStats extends VenueTeamRecordResponse {
+/** Flat regular/playoff split rows attached to venue league/season entries. */
+export interface VenuePhaseSplit {
+	regular?: VenueTeamRecordResponse | null;
+	playoff?: VenueTeamRecordResponse | null;
+	hasPhaseSplit?: boolean;
+}
+
+export interface VenueSeasonStats extends VenueTeamRecordResponse, VenuePhaseSplit {
 	season: string;
 	league_name: string;
 	league_id: string;
 	league_slug: string;
 }
 
-export interface VenueLeagueStats extends VenueTeamRecordResponse {
+export interface VenueLeagueStats extends VenueTeamRecordResponse, VenuePhaseSplit {
 	league_name: string;
 	league_id: string;
 	league_slug: string;

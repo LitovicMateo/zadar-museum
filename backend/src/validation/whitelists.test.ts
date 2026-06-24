@@ -13,14 +13,14 @@ import {
 
 describe("validateWhitelist", () => {
   it("should return value if it is in the whitelist", () => {
-    const result = validateWhitelist("zadar", ALLOWED_DATABASES, "database");
-    expect(result).toBe("zadar");
+    const result = validateWhitelist("main", ALLOWED_DATABASES, "database");
+    expect(result).toBe("main");
   });
 
   it("should throw error if value is not in whitelist", () => {
     expect(() => {
       validateWhitelist("invalid", ALLOWED_DATABASES, "database");
-    }).toThrow('Invalid database: "invalid". Allowed values: zadar, opponent');
+    }).toThrow('Invalid database: "invalid". Allowed values: main, opponent');
   });
 
   it("should throw error if value is null", () => {
@@ -46,11 +46,11 @@ describe("validateWhitelist", () => {
 describe("validateOptionalWhitelist", () => {
   it("should return value if it is in the whitelist", () => {
     const result = validateOptionalWhitelist(
-      "zadar",
+      "main",
       ALLOWED_DATABASES,
       "database",
     );
-    expect(result).toBe("zadar");
+    expect(result).toBe("main");
   });
 
   it("should return null if value is null or undefined", () => {
@@ -65,7 +65,7 @@ describe("validateOptionalWhitelist", () => {
   it("should throw error if value is not in whitelist", () => {
     expect(() => {
       validateOptionalWhitelist("invalid", ALLOWED_DATABASES, "database");
-    }).toThrow('Invalid database: "invalid". Allowed values: zadar, opponent');
+    }).toThrow('Invalid database: "invalid". Allowed values: main, opponent');
   });
 });
 

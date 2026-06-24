@@ -1,9 +1,9 @@
-version: "3.8"
+name: zadar-museum-prod
 
 services:
   postgres:
-    image: postgres:15-alpine
-    container_name: postgres_prod_local
+    image: postgres:15.4-alpine
+    container_name: postgres_prod
     volumes:
       - postgres_prod_data:/var/lib/postgresql/data
     environment:
@@ -12,10 +12,21 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     networks:
       - app_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
     image: redis:7-alpine
-    container_name: redis_prod_local
+    container_name: redis_prod
     command: redis-server --save "" --appendonly no
     networks:
       - app_network
@@ -25,12 +36,22 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: strapi_prod_local
+    image: ghcr.io/litovicmateo/zadar-museum-backend:latest
+    container_name: strapi_prod
+    volumes:
+      - strapi_uploads:/app/public/uploads
     environment:
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
@@ -43,43 +64,106 @@ services:
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
       JWT_SECRET: ${JWT_SECRET}
       REDIS_URL: redis://redis:6379
+      # Allow configuring CORS origins from the .env file on the host (comma-separated)
+      CORS_ORIGINS: ${CORS_ORIGINS}
       NODE_ENV: production
-      PUBLIC_URL: http://localhost
+      PUBLIC_URL: ${PUBLIC_URL}
+      PROXY: ${PROXY}
     command: npm run start
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - app_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:1337/admin || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      target: production
-      args:
-        VITE_API_ROOT: ${VITE_API_ROOT}
-    container_name: react_prod_local
+    image: ghcr.io/litovicmateo/zadar-museum-frontend:latest
+    container_name: react_prod
     depends_on:
       - backend
     networks:
       - app_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /usr/share/nginx/html/index.html ] || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   nginx:
     image: nginx:alpine
-    container_name: nginx_prod_local
+    container_name: nginx_prod
+    command: ["/bin/sh", "-c", "while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g 'daemon off;'"]
     volumes:
       - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - frontend
       - backend
     networks:
       - app_network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   postgres_prod_data:
+  strapi_uploads:
 
 networks:
   app_network:

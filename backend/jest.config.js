@@ -21,6 +21,7 @@ module.exports = {
           // Use less strict config for tests
           esModuleInterop: true,
           allowSyntheticDefaultImports: true,
+          types: ["node", "jest"],
         },
       },
     ],

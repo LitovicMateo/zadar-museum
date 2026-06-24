@@ -18,6 +18,9 @@ make dev-mv           # apply/refresh materialized views against running dev DB
 make backup-dev       # dump dev DB to zadar-backup.sql
 make load-dev-backup  # copy zadar-backup.sql into the postgres container
 make import-dev-backup # import the copied dump
+make backup-prod-full   # timestamped prod DB + uploads backup (-> backups/prod/, keeps last 15)
+make restore-prod       # restore latest backups/prod/ pair into running prod stack
+make install-backup-timer # install systemd timer for backups every 2 days (run on VPS)
 ```
 
 Dev services: frontend → http://localhost:5173, backend/Strapi → http://localhost:1337, pgAdmin → http://localhost:5051
@@ -90,13 +93,17 @@ Located in `frontend/`. Entry point: `src/main.tsx` → `src/App.tsx` → route 
 
 ### Database — PostgreSQL + Materialized Views
 
-Strapi manages its own tables. On top of those, a separate layer of PostgreSQL materialized views aggregates stats. The SQL source lives in `sql/` in three ordered layers:
+Strapi manages its own tables. On top of those, a set of PostgreSQL materialized views provides base boxscore data. The SQL source lives in `sql/Layer 1/` and contains four views:
 
-- **Layer 1** — base boxscore views (player_boxscore, team_boxscore, coach_boxscore, schedule)
-- **Layer 2** — per-entity aggregated records (coach, player, referee, team subdirs)
-- **Layer 3** — league-level and cross-season records (coach, league, player, referee, team subdirs)
+- `player_boxscore` — one row per player per game with all stat columns
+- `team_boxscore` — one row per team per game with team stat columns
+- `coach_boxscore` — one row per coach per game with win/loss columns
+- `schedule` — one row per game with venue, score, and referee columns
+- `zz_layer1_indexes.sql` — indexes over the above views (runs unconditionally)
 
-`backend/scripts/apply-mvs.js` walks the `sql/` directory in alphabetical/numeric order and creates or refreshes each view. This script is run via `make dev-mv` locally or `make apply-mvs-staging` / `make apply-mvs-prod` for other environments.
+All aggregated stats (player totals/averages, team records, coach records, referee stats, venue records, competition/league rankings) are now computed at query time in `backend/src/lib/aggregation/queries.ts` rather than stored in pre-built materialized views. The previous Layer 2 and Layer 3 MV trees have been removed.
+
+`backend/scripts/apply-mvs.js` walks `sql/Layer 1/` and creates or refreshes each view. This script is run via `make dev-mv` locally or `make apply-mvs-staging` / `make apply-mvs-prod` for other environments.
 
 ### Docker Compose Environments
 
@@ -104,8 +111,7 @@ Strapi manages its own tables. On top of those, a separate layer of PostgreSQL m
 |------|----------|---------|
 | `docker-compose.dev.yml` | `.env.dev` | Local development |
 | `docker-compose.staging.yml` | `.env.staging` | Staging |
-| `docker-compose.prod.yml` | `.env.prod` | Production |
-| `docker-compose.vps.yml` | — | Direct VPS deployment |
+| `docker-compose.prod.yml` | `.env.prod` | Production (VPS) — GHCR images, nginx + certbot SSL, Redis |
 
 All `make` targets wrap the correct compose file + env file pair. Use `make help` for a full target list.
 

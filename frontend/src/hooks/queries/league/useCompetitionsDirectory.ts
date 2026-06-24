@@ -3,11 +3,13 @@ import { useMemo } from 'react';
 import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
 import { CompetitionDirectoryEntry } from '@/types/api/Competition';
 
+import { useMainTeam } from '../team/UseMainTeam';
 import { useTeamLeagueStats } from '../team/UseTeamLeagueStats';
 
 export const useCompetitionsDirectory = () => {
 	const { data: competitions, isLoading: isLoadingCompetitions } = useCompetitions('slug', 'asc');
-	const { data: teamStats, isLoading: isLoadingTeamStats } = useTeamLeagueStats('kk-zadar');
+	const { data: mainTeam } = useMainTeam();
+	const { data: teamStats, isLoading: isLoadingTeamStats } = useTeamLeagueStats(mainTeam?.slug ?? '');
 
 	const stats = useMemo(() => {
 		if (!teamStats) return undefined;

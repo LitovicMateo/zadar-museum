@@ -60,10 +60,10 @@ describe('filterSchedule', () => {
     expect(out).toHaveLength(2);
   });
 
-  it('applies searchTerm only when isZadar is true', () => {
-    // searching for 'zadar' should only match first game when isZadar === true
+  it('applies searchTerm only when isMainTeam is true', () => {
+    // searching for 'zadar' should only match first game when isMainTeam === true
     expect(filterSchedule(sampleSchedule, [], 'zadar', true)).toHaveLength(1);
-    // when not isZadar, searchTerm is ignored
+    // when not isMainTeam, searchTerm is ignored
     expect(filterSchedule(sampleSchedule, [], 'zadar', false)).toHaveLength(2);
   });
 });

@@ -10,31 +10,19 @@ import { APP_ROUTES } from '@/constants/Routes';
 import styles from './Dashboard.module.css';
 
 const navItems: DashboardNavItem[] = [
-	{ label: 'Player', createPath: APP_ROUTES.dashboard.player.create, editPath: APP_ROUTES.dashboard.player.edit },
-	{ label: 'Staff', createPath: APP_ROUTES.dashboard.staff.create, editPath: APP_ROUTES.dashboard.staff.edit },
-	{ label: 'Referee', createPath: APP_ROUTES.dashboard.referee.create, editPath: APP_ROUTES.dashboard.referee.edit },
-	{ label: 'Team', createPath: APP_ROUTES.dashboard.team.create, editPath: APP_ROUTES.dashboard.team.edit },
-	{ label: 'Coach', createPath: APP_ROUTES.dashboard.coach.create, editPath: APP_ROUTES.dashboard.coach.edit },
-	{ label: 'Game', createPath: APP_ROUTES.dashboard.game.create, editPath: APP_ROUTES.dashboard.game.edit },
-	{ label: 'Venue', createPath: APP_ROUTES.dashboard.venue.create, editPath: APP_ROUTES.dashboard.venue.edit },
-	{
-		label: 'Competition',
-		createPath: APP_ROUTES.dashboard.competition.create,
-		editPath: APP_ROUTES.dashboard.competition.edit
-	}
+	{ label: 'Player', listPath: APP_ROUTES.dashboard.player.list },
+	{ label: 'Staff', listPath: APP_ROUTES.dashboard.staff.list },
+	{ label: 'Referee', listPath: APP_ROUTES.dashboard.referee.list },
+	{ label: 'Team', listPath: APP_ROUTES.dashboard.team.list },
+	{ label: 'Coach', listPath: APP_ROUTES.dashboard.coach.list },
+	{ label: 'Game', listPath: APP_ROUTES.dashboard.game.list },
+	{ label: 'Venue', listPath: APP_ROUTES.dashboard.venue.list },
+	{ label: 'Competition', listPath: APP_ROUTES.dashboard.competition.list },
 ];
 
 const statsItems: DashboardNavItem[] = [
-	{
-		label: 'Player Stats',
-		createPath: APP_ROUTES.dashboard.playerStats.create,
-		editPath: APP_ROUTES.dashboard.playerStats.edit
-	},
-	{
-		label: 'Team Stats',
-		createPath: APP_ROUTES.dashboard.teamStats.create,
-		editPath: APP_ROUTES.dashboard.teamStats.edit
-	}
+	{ label: 'Player Stats', listPath: APP_ROUTES.dashboard.playerStats.list },
+	{ label: 'Team Stats', listPath: APP_ROUTES.dashboard.teamStats.list },
 ];
 
 const Dashboard: React.FC = () => {
@@ -52,13 +40,14 @@ const Dashboard: React.FC = () => {
 	type Option = { value: string; label: string };
 
 	const options: Option[] = useMemo(() => {
-		return [...navItems, ...statsItems].flatMap((item) => [
-			{ value: item.createPath, label: `Create ${item.label}` },
-			{ value: item.editPath, label: `Edit ${item.label}` }
-		]);
+		return [...navItems, ...statsItems].map((item) => ({
+			value: item.listPath,
+			label: item.label,
+		}));
 	}, []);
 
-	const currentOption: Option | null = options.find((o) => location.pathname.startsWith(o.value)) || null;
+	const currentOption: Option | null =
+		options.find((o) => location.pathname.startsWith(o.value.replace('/list', ''))) || null;
 
 	const handleChange = (selected: Option | null) => {
 		if (selected?.value) navigate(selected.value);

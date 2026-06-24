@@ -12,11 +12,11 @@ export const useTeamsDirectory = () => {
 	const directory = useMemo<TeamDirectoryEntry[] | undefined>(() => {
 		if (!teams || !statsData) return undefined;
 
-		const statsMap = new Map(statsData.map((s) => [String(s.team_id), s]));
+		const statsMap = new Map(statsData.map((s) => [s.team_slug, s]));
 
 		return teams
 			.map((team) => {
-				const stats = statsMap.get(String(team.id));
+				const stats = statsMap.get(team.slug);
 				if (!stats) return null;
 
 				// 1 decimal place for win percentage, and convert to loss percentage for display
@@ -33,11 +33,15 @@ export const useTeamsDirectory = () => {
 					games: String(stats.games) ?? null,
 					wins: String(stats.losses) ?? null,
 					losses: String(stats.wins) ?? null,
-					win_percentage: String(winPct) ?? null
+					win_percentage: String(winPct) ?? null,
+					isMainTeam: team.isMainTeam
 				} as TeamDirectoryEntry;
 			})
 			.filter((entry): entry is TeamDirectoryEntry => entry !== null)
-			.sort((a, b) => a.short_name.localeCompare(b.short_name));
+			.sort((a, b) => {
+				if (a.isMainTeam !== b.isMainTeam) return a.isMainTeam ? -1 : 1;
+				return a.short_name.localeCompare(b.short_name);
+			});
 	}, [teams, statsData]);
 
 	return {
