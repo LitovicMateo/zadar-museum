@@ -38,9 +38,6 @@ Thumbs.db
 *.swp
 *.swo
 
-# Docker
-.dockerignore
-
 # Strapi
 .cache/
 .tmp/
@@ -55,7 +52,8 @@ backend/public/uploads/*
 *.sqlite
 postgres_data/
 postgres_prod_data/
-backups
+# Only ignore the runtime backup output dir at the repo root, not scripts/backups/
+/backups/
 
 # SSL
 certbot/nginx/nginx.ssl-init.conf
