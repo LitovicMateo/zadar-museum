@@ -52,8 +52,8 @@ docker image prune -a -f
 Pull fresh images from the registry and recreate the stack on the VPS:
 
 ```bash
-docker-compose -f docker-compose.vps.yml pull
-docker-compose -f docker-compose.vps.yml up -d --force-recreate
+docker-compose -f docker-compose.prod.yml pull
+docker-compose -f docker-compose.prod.yml up -d --force-recreate
 ```
 
 ## Read materialized views (Postgres)
@@ -61,7 +61,7 @@ docker-compose -f docker-compose.vps.yml up -d --force-recreate
 List all materialized views in Postgres (excludes system schemas):
 
 ```bash
-docker-compose -f docker-compose.vps.yml exec -T postgres \
+docker-compose -f docker-compose.prod.yml exec -T postgres \
   psql -U "strapi_prod" -d "strapi_prod" -c \
   "SELECT schemaname, matviewname FROM pg_matviews WHERE schemaname NOT IN ('pg_catalog','information_schema') ORDER BY schemaname, matviewname;"
 ```
@@ -72,10 +72,10 @@ When you need to pull and recreate only specific services (frontend/backend) wit
 
 ```bash
 # Pull images
-docker-compose -f docker-compose.vps.yml pull frontend backend
+docker-compose -f docker-compose.prod.yml pull frontend backend
 
 # Recreate containers (no dependencies)
-docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate frontend backend
+docker-compose -f docker-compose.prod.yml up -d --no-deps --force-recreate frontend backend
 ```
 
 ## Execute materialized views script (inside a node container)
@@ -83,7 +83,7 @@ docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate fronte
 Use this helper to run Node scripts that need network access to the Postgres container on the compose network.
 
 ```bash
-POSTGRES_CTR=$(docker-compose -f docker-compose.vps.yml ps -q postgres)
+POSTGRES_CTR=$(docker-compose -f docker-compose.prod.yml ps -q postgres)
 NET=$(docker inspect -f '{{range $k,$v := .NetworkSettings.Networks}}{{$k}}{{end}}' "$POSTGRES_CTR" | awk '{print $1}')
 echo "postgres container: $POSTGRES_CTR"
 echo "compose network: $NET"
@@ -141,7 +141,7 @@ Create a dump on the VPS and copy it to your workstation. This is the simplest a
 On the VPS:
 
 ```bash
-docker-compose -f docker-compose.vps.yml exec -T postgres \
+docker-compose -f docker-compose.prod.yml exec -T postgres \
   pg_dump -U strapi_prod -d strapi_prod --clean --if-exists > zadar_backup.sql
 ```
 
@@ -179,7 +179,7 @@ Get-Content .\zadar_backup.sql -Encoding Byte -ReadCount 0 | docker exec -i -e P
 3. If you must re-dump on the VPS, ensure explicit UTF-8 encoding
 
 ```bash
-docker-compose -f docker-compose.vps.yml exec -T postgres \
+docker-compose -f docker-compose.prod.yml exec -T postgres \
   pg_dump -U strapi_prod -d strapi_prod --encoding=UTF8 --clean --if-exists > zadar_backup.sql
 ```
 
@@ -219,13 +219,13 @@ docker image prune -a -f
 
 # recreate services (pull first if you want freshest images)
 
-docker-compose -f docker-compose.vps.yml pull
-docker-compose -f docker-compose.vps.yml up -d --force-recreate
+docker-compose -f docker-compose.prod.yml pull
+docker-compose -f docker-compose.prod.yml up -d --force-recreate
 
 ## Read all Materialized Views in Postgres VSP
 
 ```
-docker-compose -f docker-compose.vps.yml exec -T postgres \
+docker-compose -f docker-compose.prod.yml exec -T postgres \
   psql -U "strapi_prod" -d "strapi_prod" -c \
   "SELECT schemaname, matviewname FROM pg_matviews WHERE schemaname NOT IN ('pg_catalog','information_schema') ORDER BY schemaname, matviewname;"
 
@@ -241,14 +241,14 @@ docker ps -a
 docker rm -f <container_id>
 
 # pull new images
-docker-compose -f docker-compose.vps.yml pull frontend
-docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate frontend
+docker-compose -f docker-compose.prod.yml pull frontend
+docker-compose -f docker-compose.prod.yml up -d --no-deps --force-recreate frontend
 
-docker-compose -f docker-compose.vps.yml pull backend
-docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate backend
+docker-compose -f docker-compose.prod.yml pull backend
+docker-compose -f docker-compose.prod.yml up -d --no-deps --force-recreate backend
 
-docker-compose -f docker-compose.vps.yml pull frontend backend
-docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate frontend backend
+docker-compose -f docker-compose.prod.yml pull frontend backend
+docker-compose -f docker-compose.prod.yml up -d --no-deps --force-recreate frontend backend
 
 
 # recreate images
@@ -260,7 +260,7 @@ docker-compose -f docker-compose.vps.yml up -d --no-deps --force-recreate fronte
 ## Execute MVs
 
 ```
-POSTGRES_CTR=$(docker-compose -f docker-compose.vps.yml ps -q postgres)
+POSTGRES_CTR=$(docker-compose -f docker-compose.prod.yml ps -q postgres)
 NET=$(docker inspect -f '{{range $k,$v := .NetworkSettings.Networks}}{{$k}}{{end}}' "$POSTGRES_CTR" | awk '{print $1}')
 echo "postgres container: $POSTGRES_CTR"
 echo "compose network: $NET"
@@ -312,7 +312,7 @@ END $$;
 ```
 # on VPS
 
-docker-compose -f docker-compose.vps.yml exec -T postgres \
+docker-compose -f docker-compose.prod.yml exec -T postgres \
   pg_dump -U strapi_prod -d strapi_prod --clean --if-exists > zadar_backup.sql
 ```
 
@@ -331,7 +331,7 @@ If you want a local copy of the production database for testing, follow these st
 
 ```bash
 cd /root/zadar-museum
-docker-compose -f docker-compose.vps.yml exec -T postgres \
+docker-compose -f docker-compose.prod.yml exec -T postgres \
   pg_dump -U strapi_prod -d strapi_prod --encoding=UTF8 --clean --if-exists > zadar_backup.sql
 ```
 
