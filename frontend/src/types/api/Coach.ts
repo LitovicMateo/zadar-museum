@@ -97,6 +97,13 @@ export interface CoachStatsGroup {
 	neutral?: CoachStats;
 }
 
+// The three role-keyed groups for one phase.
+export interface CoachPhaseGroups {
+	total: CoachStatsGroup;
+	headCoach: CoachStatsGroup;
+	assistantCoach: CoachStatsGroup;
+}
+
 // Top-level API response
 export interface CoachStatsResponse {
 	coachId: string;
@@ -106,6 +113,12 @@ export interface CoachStatsResponse {
 	total: CoachStatsGroup;
 	headCoach: CoachStatsGroup;
 	assistantCoach: CoachStatsGroup;
+	/** Regular-season-only split (stage IN league/group). */
+	regular?: CoachPhaseGroups | null;
+	/** Playoff-only split (stage = playoff). */
+	playoff?: CoachPhaseGroups | null;
+	/** True only when the coach has games in both phases for this competition. */
+	hasPhaseSplit?: boolean;
 }
 
 export type CoachStatsRanking = {

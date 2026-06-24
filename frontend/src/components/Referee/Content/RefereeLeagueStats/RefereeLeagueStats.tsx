@@ -2,14 +2,16 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import DatabaseSelect from '@/components/Team/Content/TeamLeagueStats/DatabaseSelect';
-import TableWrapper from '@/components/UI/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
-import { useRefereeLeagueStatsTable } from '@/hooks/UseRefereeLeagueStatsTable';
+import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { useRefereeLeagueStats } from '@/hooks/queries/referee/UseRefereeLeagueStats';
 import { useRefereeTeamRecord } from '@/hooks/queries/referee/UseRefereeTeamRecord';
-import { RefereeStats } from '@/types/api/Referee';
+import { RefereeLeagueStatsResponse, RefereeStats } from '@/types/api/Referee';
+
+import { RefereeLeagueCell, refereeStatsColumns } from '../refereeColumns';
 
 import styles from './RefereeLeagueStats.module.css';
+
+type Loc = 'total' | 'home' | 'away' | 'neutral';
 
 const RefereeLeagueStats: React.FC = () => {
 	const { refereeId } = useParams();
@@ -31,20 +33,25 @@ const RefereeLeagueStats: React.FC = () => {
 		[leagueStats]
 	);
 
-	const leagueStatsRows: RefereeStats[] = useMemo(() => {
-		if (!leagueStats?.length) return [];
-		return leagueStats.map((row) => row[selected]).filter(Boolean) as RefereeStats[];
-	}, [leagueStats, selected]);
+	const groups = useMemo(
+		() =>
+			buildPhaseGroups<RefereeLeagueStatsResponse, RefereeStats>(leagueStats, {
+				combined: (e) => e[selected as Loc],
+				regular: (e) => e.regular?.[selected as Loc] ?? null,
+				playoff: (e) => e.playoff?.[selected as Loc] ?? null,
+				split: (e) => !!e.hasPhaseSplit,
+				keyOf: (r) => r.league_slug ?? 'total',
+				heading: (r) => <RefereeLeagueCell leagueSlug={r.league_slug} />,
+			}),
+		[leagueStats, selected]
+	);
 
-	const footStats: RefereeStats[] = useMemo(() => {
+	const footerRows = useMemo<StatsDataRow<RefereeStats>[]>(() => {
 		if (!teamRecord?.stats) return [];
 		const selectedKey = selected.charAt(0).toUpperCase() + selected.slice(1);
 		const match = teamRecord.stats.find((s) => s.key === selectedKey);
-		return match ? [match] : [];
+		return match ? [{ key: 'total', data: match }] : [];
 	}, [teamRecord, selected]);
-
-	const { table: mainTable } = useRefereeLeagueStatsTable(leagueStatsRows);
-	const { table: footTable } = useRefereeLeagueStatsTable(footStats);
 
 	if (!leagueStats || !teamRecord) return null;
 
@@ -57,11 +64,12 @@ const RefereeLeagueStats: React.FC = () => {
 				awayDisabled={!hasAway}
 				neutralDisabled={!hasNeutral}
 			/>
-			<TableWrapper>
-				<UniversalTableHead table={mainTable} />
-				<UniversalTableBody table={mainTable} />
-				<UniversalTableFooter table={footTable} variant="default" />
-			</TableWrapper>
+			<StatsTable
+				columns={refereeStatsColumns}
+				groups={groups}
+				footer={{ rows: footerRows, variant: 'default' }}
+				initialSort={{ columnId: 'games', dir: 'desc' }}
+			/>
 		</section>
 	);
 };

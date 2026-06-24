@@ -9,7 +9,12 @@ import {
   ALLOWED_DATABASES,
 } from "../../../validation";
 import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
-import { aggregatePlayerStats, buildRecord } from "../../../lib/aggregation/queries";
+import {
+  aggregatePlayerStats,
+  buildRecord,
+  phaseClause,
+  type Phase,
+} from "../../../lib/aggregation/queries";
 import { getMainTeamSlug } from "../../../lib/mainTeam";
 
 export default factories.createCoreService(
@@ -73,10 +78,11 @@ export default factories.createCoreService(
               : `b.team_slug != :mainSlug`;
 
           // Build a SQL query aggregating player stats per league per location.
-          // Runs 8 times in parallel (4 locations × 2 modes).
+          // Runs 8 times per phase in parallel (4 locations × 2 modes).
           function buildLeagueLocationSql(
             mode: "total" | "average",
             location: "all" | "home" | "away" | "neutral",
+            phaseSql: string | null,
           ): string {
             const isAvg = mode === "average";
 
@@ -191,6 +197,7 @@ export default factories.createCoreService(
                 AND b.status::text <> 'dnp-cd'::text
                 AND b.is_nulled = false
                 ${locationClause}
+                ${phaseSql ? `AND ${phaseSql}` : ""}
               GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.league_slug
             `;
           }
@@ -198,51 +205,48 @@ export default factories.createCoreService(
           const bindings = { playerId, mainSlug };
           const locations = ["all", "home", "away", "neutral"] as const;
 
-          const [totalResults, avgResults] = await Promise.all([
-            Promise.all(
-              locations.map((loc) =>
-                knex
-                  .raw(buildLeagueLocationSql("total", loc), bindings)
-                  .then((r) => r.rows as any[]),
-              ),
-            ),
-            Promise.all(
-              locations.map((loc) =>
-                knex
-                  .raw(buildLeagueLocationSql("average", loc), bindings)
-                  .then((r) => r.rows as any[]),
-              ),
-            ),
-          ]);
-
-          const [totalAll, totalHome, totalAway, totalNeutral] = totalResults;
-          const [avgAll, avgHome, avgAway, avgNeutral] = avgResults;
-
-          if (totalAll.length === 0) {
-            return [];
-          }
-
-          // Build lookup maps keyed by league_id for each location/mode pair
           function byLeague(rows: any[]): Map<string, any> {
             return new Map(rows.map((r) => [r.league_id, r]));
           }
 
-          const totalHomeMap = byLeague(totalHome);
-          const totalAwayMap = byLeague(totalAway);
-          const totalNeutralMap = byLeague(totalNeutral);
-          const avgAllMap = byLeague(avgAll);
-          const avgHomeMap = byLeague(avgHome);
-          const avgAwayMap = byLeague(avgAway);
-          const avgNeutralMap = byLeague(avgNeutral);
+          // Computes the per-league { total, average } × location record for a
+          // single phase ('all' | 'regular' | 'playoff'). Returns the ordered
+          // 'all'-location total rows (for league ordering/identity) plus the
+          // nested record keyed by league_id.
+          async function computePhase(phase: Phase) {
+            const phaseSql = phaseClause("b.game_stage", phase);
+            const [totalResults, avgResults] = await Promise.all([
+              Promise.all(
+                locations.map((loc) =>
+                  knex
+                    .raw(buildLeagueLocationSql("total", loc, phaseSql), bindings)
+                    .then((r) => r.rows as any[]),
+                ),
+              ),
+              Promise.all(
+                locations.map((loc) =>
+                  knex
+                    .raw(buildLeagueLocationSql("average", loc, phaseSql), bindings)
+                    .then((r) => r.rows as any[]),
+                ),
+              ),
+            ]);
 
-          return totalAll.map((totalRow) => {
-            const leagueId = totalRow.league_id;
-            return {
-              player_id: totalRow.player_id,
-              first_name: totalRow.first_name,
-              last_name: totalRow.last_name,
+            const [totalAll, totalHome, totalAway, totalNeutral] = totalResults;
+            const [avgAll, avgHome, avgAway, avgNeutral] = avgResults;
+
+            const totalAllMap = byLeague(totalAll);
+            const totalHomeMap = byLeague(totalHome);
+            const totalAwayMap = byLeague(totalAway);
+            const totalNeutralMap = byLeague(totalNeutral);
+            const avgAllMap = byLeague(avgAll);
+            const avgHomeMap = byLeague(avgHome);
+            const avgAwayMap = byLeague(avgAway);
+            const avgNeutralMap = byLeague(avgNeutral);
+
+            const recordFor = (leagueId: string) => ({
               total: {
-                total: totalRow,
+                total: totalAllMap.get(leagueId) ?? null,
                 home: totalHomeMap.get(leagueId) ?? null,
                 away: totalAwayMap.get(leagueId) ?? null,
                 neutral: totalNeutralMap.get(leagueId) ?? null,
@@ -253,6 +257,37 @@ export default factories.createCoreService(
                 away: avgAwayMap.get(leagueId) ?? null,
                 neutral: avgNeutralMap.get(leagueId) ?? null,
               },
+            });
+
+            return { totalAll, recordFor };
+          }
+
+          const [allPhase, regularPhase, playoffPhase] = await Promise.all([
+            computePhase("all"),
+            computePhase("regular"),
+            computePhase("playoff"),
+          ]);
+
+          if (allPhase.totalAll.length === 0) {
+            return [];
+          }
+
+          return allPhase.totalAll.map((totalRow) => {
+            const leagueId = totalRow.league_id;
+            const combined = allPhase.recordFor(leagueId);
+            const regular = regularPhase.recordFor(leagueId);
+            const playoff = playoffPhase.recordFor(leagueId);
+            const regularGames = regular.total.total?.games ?? 0;
+            const playoffGames = playoff.total.total?.games ?? 0;
+            return {
+              player_id: totalRow.player_id,
+              first_name: totalRow.first_name,
+              last_name: totalRow.last_name,
+              total: combined.total,
+              average: combined.average,
+              regular,
+              playoff,
+              hasPhaseSplit: Number(regularGames) > 0 && Number(playoffGames) > 0,
             };
           });
         },
@@ -529,7 +564,7 @@ export default factories.createCoreService(
 
           // Returns one row per league (same structure as the Layer 2 MV
           // main_player_season_average_all_time_league, grouped by league_id).
-          const sql = `
+          const buildSeasonLeagueSql = (phaseSql: string | null) => `
             SELECT
               b.player_id,
               b.league_id,
@@ -608,15 +643,48 @@ export default factories.createCoreService(
               AND b.season = :season
               AND b.status::text <> 'dnp-cd'::text
               AND b.is_nulled = false
+              ${phaseSql ? `AND ${phaseSql}` : ""}
             GROUP BY b.player_id, b.first_name, b.last_name, b.league_id, b.league_slug, b.season
           `;
 
-          const result = await knex.raw(sql, {
+          const sqlBindings = {
             playerId,
             mainSlug,
             season: validatedSeason,
+          };
+
+          const runPhase = async (phase: Phase) => {
+            const phaseSql = phaseClause("b.game_stage", phase);
+            const r = await knex.raw(buildSeasonLeagueSql(phaseSql), sqlBindings);
+            return r.rows as any[];
+          };
+
+          const [allRows, regularRows, playoffRows] = await Promise.all([
+            runPhase("all"),
+            runPhase("regular"),
+            runPhase("playoff"),
+          ]);
+
+          const byLeagueId = (rows: any[]) =>
+            new Map(rows.map((r) => [r.league_id, r]));
+          const regularMap = byLeagueId(regularRows);
+          const playoffMap = byLeagueId(playoffRows);
+
+          // Each league row carries its regular/playoff sibling rows and a
+          // hasPhaseSplit flag (true only when the player has games in both
+          // phases for that league this season).
+          return allRows.map((row) => {
+            const regular = regularMap.get(row.league_id) ?? null;
+            const playoff = playoffMap.get(row.league_id) ?? null;
+            const regularGames = Number(regular?.games ?? 0);
+            const playoffGames = Number(playoff?.games ?? 0);
+            return {
+              ...row,
+              regular,
+              playoff,
+              hasPhaseSplit: regularGames > 0 && playoffGames > 0,
+            };
           });
-          return result.rows;
         },
       );
     },

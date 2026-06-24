@@ -5,6 +5,7 @@ import Pill from '@/components/UI/Pill';
 import { Skeleton } from '@/components/UI/Skeleton';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
+import { usePlayerHasAppearances } from '@/utils/PlayerHasAppearances';
 
 import styles from './AllTimeStats.module.css';
 
@@ -22,6 +23,7 @@ const AllTimeStats: React.FC = React.memo(() => {
 	const { selectedDatabase } = useBoxscore();
 
 	const { data, isLoading } = useAllTimeStats(playerId!, selectedDatabase!);
+	const hasAppearances = usePlayerHasAppearances(playerId!, selectedDatabase!);
 
 	const [location, setLocation] = useState<'total' | 'home' | 'away' | 'neutral'>('total');
 	const hasHome = !!data?.[0]?.total?.home?.games;
@@ -53,6 +55,8 @@ const AllTimeStats: React.FC = React.memo(() => {
 			</section>
 		);
 	}
+
+	if (!hasAppearances) return null;
 
 	const totalStats = data[0].total[location] ?? data[0].total.total;
 

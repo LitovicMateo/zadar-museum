@@ -9,8 +9,83 @@ import {
   ALLOWED_DATABASES,
 } from "../../../validation";
 import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
-import { aggregateCoachRecord, buildRecord } from "../../../lib/aggregation/queries";
+import {
+  aggregateCoachRecord,
+  buildRecord,
+  type Phase,
+} from "../../../lib/aggregation/queries";
 import { getMainTeamSlug } from "../../../lib/mainTeam";
+import type { Knex } from "knex";
+
+// Computes a coach's { total, headCoach, assistantCoach } location records for
+// one league + phase, or null when the coach has no games in that scope.
+async function coachLeaguePhase(
+  knex: Knex,
+  args: {
+    coachId: string;
+    database: "main" | "opponent";
+    league_slug: string;
+    season?: string;
+    phase: Phase;
+  },
+) {
+  const { coachId, database, league_slug, season, phase } = args;
+  const base = { coachId, database, league: league_slug, season, phase };
+  const [total, headCoach, assistantCoach] = await Promise.all([
+    buildRecord((location) =>
+      aggregateCoachRecord(knex, { ...base, location }).then((r) => r[0] ?? null),
+    ),
+    buildRecord((location) =>
+      aggregateCoachRecord(knex, { ...base, role: "head", location }).then((r) => r[0] ?? null),
+    ),
+    buildRecord((location) =>
+      aggregateCoachRecord(knex, { ...base, role: "assistant", location }).then((r) => r[0] ?? null),
+    ),
+  ]);
+  const anyRow = total.total ?? total.home ?? total.away ?? total.neutral;
+  if (!anyRow) return null;
+  return { total, headCoach, assistantCoach, anyRow };
+}
+
+// Assembles one per-league coach result with regular/playoff split.
+async function coachLeagueResultWithSplit(
+  knex: Knex,
+  args: {
+    coachId: string;
+    database: "main" | "opponent";
+    league_id: any;
+    league_slug: string;
+    season?: string;
+  },
+): Promise<Record<string, any> | null> {
+  const { league_id, league_slug, season } = args;
+  const [all, regular, playoff] = await Promise.all([
+    coachLeaguePhase(knex, { ...args, phase: "all" }),
+    coachLeaguePhase(knex, { ...args, phase: "regular" }),
+    coachLeaguePhase(knex, { ...args, phase: "playoff" }),
+  ]);
+  if (!all) return null;
+  const regularGames = Number(regular?.total.total?.games ?? 0);
+  const playoffGames = Number(playoff?.total.total?.games ?? 0);
+  return {
+    coachId: all.anyRow.coach_id,
+    firstName: all.anyRow.first_name,
+    lastName: all.anyRow.last_name,
+    ...(season ? { season } : {}),
+    leagueId: league_id,
+    leagueSlug: league_slug,
+    total: all.total,
+    headCoach: all.headCoach,
+    assistantCoach: all.assistantCoach,
+    regular: regular
+      ? { total: regular.total, headCoach: regular.headCoach, assistantCoach: regular.assistantCoach }
+      : null,
+    playoff: playoff
+      ? { total: playoff.total, headCoach: playoff.headCoach, assistantCoach: playoff.assistantCoach }
+      : null,
+    hasPhaseSplit: regularGames > 0 && playoffGames > 0,
+  };
+}
 
 export default factories.createCoreService(
   "api::coach.coach",
@@ -218,52 +293,14 @@ export default factories.createCoreService(
           if (leagues.length === 0) return null;
 
           const leagueResults = await Promise.all(
-            leagues.map(async ({ league_id, league_slug }) => {
-              const [totalRecord, headRecord, assistantRecord] = await Promise.all([
-                buildRecord((location) =>
-                  aggregateCoachRecord(knex, {
-                    coachId,
-                    database: validatedDb,
-                    location,
-                    league: league_slug,
-                  }).then((r) => r[0] ?? null),
-                ),
-                buildRecord((location) =>
-                  aggregateCoachRecord(knex, {
-                    coachId,
-                    database: validatedDb,
-                    role: "head",
-                    location,
-                    league: league_slug,
-                  }).then((r) => r[0] ?? null),
-                ),
-                buildRecord((location) =>
-                  aggregateCoachRecord(knex, {
-                    coachId,
-                    database: validatedDb,
-                    role: "assistant",
-                    location,
-                    league: league_slug,
-                  }).then((r) => r[0] ?? null),
-                ),
-              ]);
-
-              const anyRow =
-                totalRecord.total ?? totalRecord.home ?? totalRecord.away ?? totalRecord.neutral;
-
-              if (!anyRow) return null;
-
-              return {
-                coachId: anyRow.coach_id,
-                firstName: anyRow.first_name,
-                lastName: anyRow.last_name,
-                leagueId: league_id,
-                leagueSlug: league_slug,
-                total: totalRecord,
-                headCoach: headRecord,
-                assistantCoach: assistantRecord,
-              };
-            }),
+            leagues.map(({ league_id, league_slug }) =>
+              coachLeagueResultWithSplit(knex, {
+                coachId,
+                database: validatedDb,
+                league_id,
+                league_slug,
+              }),
+            ),
           );
 
           return leagueResults.filter(Boolean);
@@ -304,56 +341,15 @@ export default factories.createCoreService(
           if (leagues.length === 0) return null;
 
           const leagueResults = await Promise.all(
-            leagues.map(async ({ league_id, league_slug }) => {
-              const [totalRecord, headRecord, assistantRecord] = await Promise.all([
-                buildRecord((location) =>
-                  aggregateCoachRecord(knex, {
-                    coachId,
-                    database: validatedDb,
-                    location,
-                    league: league_slug,
-                    season: validatedSeason,
-                  }).then((r) => r[0] ?? null),
-                ),
-                buildRecord((location) =>
-                  aggregateCoachRecord(knex, {
-                    coachId,
-                    database: validatedDb,
-                    role: "head",
-                    location,
-                    league: league_slug,
-                    season: validatedSeason,
-                  }).then((r) => r[0] ?? null),
-                ),
-                buildRecord((location) =>
-                  aggregateCoachRecord(knex, {
-                    coachId,
-                    database: validatedDb,
-                    role: "assistant",
-                    location,
-                    league: league_slug,
-                    season: validatedSeason,
-                  }).then((r) => r[0] ?? null),
-                ),
-              ]);
-
-              const anyRow =
-                totalRecord.total ?? totalRecord.home ?? totalRecord.away ?? totalRecord.neutral;
-
-              if (!anyRow) return null;
-
-              return {
-                coachId: anyRow.coach_id,
-                firstName: anyRow.first_name,
-                lastName: anyRow.last_name,
+            leagues.map(({ league_id, league_slug }) =>
+              coachLeagueResultWithSplit(knex, {
+                coachId,
+                database: validatedDb,
+                league_id,
+                league_slug,
                 season: validatedSeason,
-                leagueId: league_id,
-                leagueSlug: league_slug,
-                total: totalRecord,
-                headCoach: headRecord,
-                assistantCoach: assistantRecord,
-              };
-            }),
+              }),
+            ),
           );
 
           return leagueResults.filter(Boolean);

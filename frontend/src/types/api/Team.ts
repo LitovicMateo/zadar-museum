@@ -183,6 +183,14 @@ export interface TeamStats {
 	win_percentage: number | null;
 }
 
+// A location-keyed team record for one phase.
+export interface TeamLocationRecord {
+	total: TeamStats | null;
+	home: TeamStats | null;
+	away: TeamStats | null;
+	neutral: TeamStats | null;
+}
+
 // Top-level API response
 export interface TeamStatsResponse {
 	teamId: number;
@@ -192,7 +200,13 @@ export interface TeamStatsResponse {
 	home: TeamStats;
 	away: TeamStats;
 	neutral: TeamStats;
-	stats: TeamStats[];
+	stats?: TeamStats[];
+	/** Regular-season-only split (stage IN league/group). */
+	regular?: TeamLocationRecord | null;
+	/** Playoff-only split (stage = playoff). */
+	playoff?: TeamLocationRecord | null;
+	/** True only when the team has games in both phases for this competition. */
+	hasPhaseSplit?: boolean;
 }
 
 export interface TeamSeasonStatsResponse {

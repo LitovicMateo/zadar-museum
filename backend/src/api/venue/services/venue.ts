@@ -9,8 +9,48 @@ import {
   validateWhitelist,
 } from "../../../validation/whitelists";
 import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
-import { aggregateVenueRecord } from "../../../lib/aggregation/queries";
+import { aggregateVenueRecord, type Phase } from "../../../lib/aggregation/queries";
 import { getMainTeamSlug } from "../../../lib/mainTeam";
+import type { Knex } from "knex";
+
+// Flatten an aggregateVenueRecord row into the venue league-stats shape.
+function flatVenue(row: any | null) {
+  if (!row) return null;
+  return {
+    games: row.games,
+    wins: row.wins,
+    losses: row.losses,
+    win_percentage: row.win_percentage,
+    avg_attendance: row.avg_attendance,
+  };
+}
+
+// Runs the three phases for one venue + league and returns the combined row plus
+// the regular/playoff split rows and the hasPhaseSplit flag.
+async function venueLeaguePhaseSet(
+  knex: Knex,
+  args: { venueSlug: string; league_slug: string; season?: string },
+) {
+  const run = (phase: Phase) =>
+    aggregateVenueRecord(knex, {
+      venueSlug: args.venueSlug,
+      location: "all",
+      league: args.league_slug,
+      season: args.season,
+      phase,
+    }).then((r) => r[0] ?? null);
+
+  const [all, regular, playoff] = await Promise.all([run("all"), run("regular"), run("playoff")]);
+  if (!all) return null;
+  const regularGames = Number(regular?.games ?? 0);
+  const playoffGames = Number(playoff?.games ?? 0);
+  return {
+    all,
+    regular: flatVenue(regular),
+    playoff: flatVenue(playoff),
+    hasPhaseSplit: regularGames > 0 && playoffGames > 0,
+  };
+}
 
 export default factories.createCoreService(
   "api::venue.venue",
@@ -119,15 +159,9 @@ export default factories.createCoreService(
 
           const leagueResults = await Promise.all(
             uniqueLeagues.map(async ({ league_id, league_slug, league_name }) => {
-              const rows = await aggregateVenueRecord(knex, {
-                venueSlug,
-                location: "all",
-                season,
-                league: league_slug,
-              });
-
-              const row = rows[0];
-              if (!row) return null;
+              const set = await venueLeaguePhaseSet(knex, { venueSlug, league_slug, season });
+              if (!set) return null;
+              const row = set.all;
 
               return {
                 venue_slug: row.venue_slug,
@@ -141,6 +175,9 @@ export default factories.createCoreService(
                 losses: row.losses,
                 win_percentage: row.win_percentage,
                 avg_attendance: row.avg_attendance,
+                regular: set.regular,
+                playoff: set.playoff,
+                hasPhaseSplit: set.hasPhaseSplit,
               };
             }),
           );
@@ -175,14 +212,9 @@ export default factories.createCoreService(
 
           const leagueResults = await Promise.all(
             uniqueLeagues.map(async ({ league_id, league_slug, league_name }) => {
-              const rows = await aggregateVenueRecord(knex, {
-                venueSlug,
-                location: "all",
-                league: league_slug,
-              });
-
-              const row = rows[0];
-              if (!row) return null;
+              const set = await venueLeaguePhaseSet(knex, { venueSlug, league_slug });
+              if (!set) return null;
+              const row = set.all;
 
               return {
                 venue_slug: row.venue_slug,
@@ -195,6 +227,9 @@ export default factories.createCoreService(
                 losses: row.losses,
                 win_percentage: row.win_percentage,
                 avg_attendance: row.avg_attendance,
+                regular: set.regular,
+                playoff: set.playoff,
+                hasPhaseSplit: set.hasPhaseSplit,
               };
             }),
           );

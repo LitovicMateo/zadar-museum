@@ -5,26 +5,26 @@ import Select from 'react-select';
 import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
 import Radio from '@/components/UI/Radio';
 import RadioGroup from '@/components/UI/RadioGroup';
-import TableWrapper from '@/components/UI/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
+import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { selectStyle, OptionType } from '@/constants/ReactSelectStyle';
 import { useIsMobile } from '@/hooks/UseMobile';
 import { useCoachSeasons } from '@/hooks/queries/coach/UseCoachSeasons';
 import { useSeasonLeagueStats } from '@/hooks/queries/coach/UseSeasonLeagueStats';
 import { useSeasonTotalStats } from '@/hooks/queries/coach/UseSeasonTotalStats';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/UseCoachProfileDatabase';
-import { CoachStats } from '@/types/api/Coach';
+import { CoachStats, CoachStatsResponse } from '@/types/api/Coach';
 
-import { useCoachSeasonStatsTable } from './UseCoachSeasonStatsTable';
 import {
 	computeHasAwaySeason,
 	computeHasHomeSeason,
-	computeHasNeutralSeason,
-	computeLeagueStatsSeason,
-	computeTotalStatsSeason
+	computeHasNeutralSeason
 } from './coach-season-stats.utils';
+import { CoachLeagueCell, coachStatsColumns } from '../coachColumns';
 
 import styles from './CoachSeasonStats.module.css';
+
+type Role = 'total' | 'headCoach' | 'assistantCoach';
+type Loc = 'total' | 'home' | 'away' | 'neutral';
 
 const CoachSeasonStats: React.FC = () => {
 	const { coachId } = useParams();
@@ -61,19 +61,23 @@ const CoachSeasonStats: React.FC = () => {
 		else if (location === 'neutral' && !hasNeutral) setLocation('total');
 	}, [hasHome, hasAway, hasNeutral, location]);
 
-	const leagueStats: CoachStats[] = useMemo(
-		() => computeLeagueStatsSeason(coachLeagueStats, coachRole, location),
+	const groups = useMemo(
+		() =>
+			buildPhaseGroups<CoachStatsResponse, CoachStats>(coachLeagueStats, {
+				combined: (e) => e[coachRole as Role][location as Loc],
+				regular: (e) => e.regular?.[coachRole as Role]?.[location as Loc] ?? null,
+				playoff: (e) => e.playoff?.[coachRole as Role]?.[location as Loc] ?? null,
+				split: (e) => !!e.hasPhaseSplit,
+				keyOf: (r) => r.league_slug ?? 'total',
+				heading: (r) => <CoachLeagueCell leagueSlug={r.league_slug} />,
+			}),
 		[coachLeagueStats, coachRole, location]
 	);
 
-	const totalStats: CoachStats[] = useMemo(
-		() => computeTotalStatsSeason(coachTotalStats, coachRole, location),
-		[coachTotalStats, coachRole, location]
-	);
-
-	// create table
-	const { table } = useCoachSeasonStatsTable(leagueStats, 'league');
-	const { table: footTable } = useCoachSeasonStatsTable(totalStats, 'total');
+	const footerRows = useMemo<StatsDataRow<CoachStats>[]>(() => {
+		const row = coachTotalStats?.[coachRole as Role]?.[location as Loc];
+		return row && row.games ? [{ key: 'total', data: row }] : [];
+	}, [coachTotalStats, coachRole, location]);
 
 	const coachRoleOptions = useMemo<OptionType[]>(() => {
 		const opts: OptionType[] = [{ value: 'total', label: 'Total' }];
@@ -175,11 +179,12 @@ const CoachSeasonStats: React.FC = () => {
 				)}
 			</div>
 			<div className={styles.content}>
-				<TableWrapper>
-					<UniversalTableHead table={table} />
-					<UniversalTableBody table={table} />
-					<UniversalTableFooter table={footTable} variant="light" />
-				</TableWrapper>
+				<StatsTable
+					columns={coachStatsColumns}
+					groups={groups}
+					footer={{ rows: footerRows, variant: 'light' }}
+					initialSort={{ columnId: 'games', dir: 'desc' }}
+				/>
 			</div>
 		</div>
 	);

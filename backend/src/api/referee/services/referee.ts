@@ -5,7 +5,55 @@
 import { factories } from "@strapi/strapi";
 import { validateSeason } from "../../../validation";
 import { getCached, TTL_24H, CACHE_PREFIX } from "../../../utils/cache";
-import { aggregateRefereeStats, buildRecord } from "../../../lib/aggregation/queries";
+import {
+  aggregateRefereeStats,
+  buildRecord,
+  type Phase,
+} from "../../../lib/aggregation/queries";
+import type { Knex } from "knex";
+
+// Computes a referee's { total, home, away, neutral } record for one league +
+// phase, or null when the referee officiated no games in that scope.
+async function refereeLeaguePhase(
+  knex: Knex,
+  args: { refereeId: string; league_slug: string; season?: string; phase: Phase },
+) {
+  const { refereeId, league_slug, season, phase } = args;
+  const record = await buildRecord((location) =>
+    aggregateRefereeStats(knex, {
+      refereeId,
+      location,
+      league: league_slug,
+      season,
+      phase,
+    }).then((r) => r[0] ?? null),
+  );
+  const anyRow = record.total ?? record.home ?? record.away ?? record.neutral;
+  if (!anyRow) return null;
+  return { record, anyRow };
+}
+
+// Runs the three phases for one referee league and returns the combined record,
+// the regular/playoff split records, and the hasPhaseSplit flag.
+async function refereeLeaguePhaseSet(
+  knex: Knex,
+  args: { refereeId: string; league_slug: string; season?: string },
+) {
+  const [all, regular, playoff] = await Promise.all([
+    refereeLeaguePhase(knex, { ...args, phase: "all" }),
+    refereeLeaguePhase(knex, { ...args, phase: "regular" }),
+    refereeLeaguePhase(knex, { ...args, phase: "playoff" }),
+  ]);
+  if (!all) return null;
+  const regularGames = Number(regular?.record.total?.games ?? 0);
+  const playoffGames = Number(playoff?.record.total?.games ?? 0);
+  return {
+    all,
+    regular: regular?.record ?? null,
+    playoff: playoff?.record ?? null,
+    hasPhaseSplit: regularGames > 0 && playoffGames > 0,
+  };
+}
 
 export default factories.createCoreService(
   "api::referee.referee",
@@ -150,19 +198,13 @@ export default factories.createCoreService(
 
           const leagueResults = await Promise.all(
             leagues.map(async ({ league_id, league_slug }) => {
-              const record = await buildRecord((location) =>
-                aggregateRefereeStats(knex, {
-                  refereeId,
-                  location,
-                  season: validatedSeason ?? undefined,
-                  league: league_slug,
-                }).then((r) => r[0] ?? null),
-              );
-
-              const anyRow =
-                record.total ?? record.home ?? record.away ?? record.neutral;
-
-              if (!anyRow) return null;
+              const set = await refereeLeaguePhaseSet(knex, {
+                refereeId,
+                league_slug,
+                season: validatedSeason ?? undefined,
+              });
+              if (!set) return null;
+              const anyRow = set.all.anyRow;
 
               return {
                 refereeId: anyRow.referee_id,
@@ -171,12 +213,10 @@ export default factories.createCoreService(
                 season: validatedSeason,
                 leagueId: league_id,
                 leagueSlug: league_slug,
-                stats: {
-                  total: record.total,
-                  home: record.home,
-                  away: record.away,
-                  neutral: record.neutral,
-                },
+                stats: set.all.record,
+                regular: set.regular,
+                playoff: set.playoff,
+                hasPhaseSplit: set.hasPhaseSplit,
               };
             }),
           );
@@ -209,18 +249,9 @@ export default factories.createCoreService(
 
           const leagueResults = await Promise.all(
             leagues.map(async ({ league_id, league_slug }) => {
-              const record = await buildRecord((location) =>
-                aggregateRefereeStats(knex, {
-                  refereeId,
-                  location,
-                  league: league_slug,
-                }).then((r) => r[0] ?? null),
-              );
-
-              const anyRow =
-                record.total ?? record.home ?? record.away ?? record.neutral;
-
-              if (!anyRow) return null;
+              const set = await refereeLeaguePhaseSet(knex, { refereeId, league_slug });
+              if (!set) return null;
+              const anyRow = set.all.anyRow;
 
               return {
                 refereeId: anyRow.referee_id,
@@ -228,10 +259,13 @@ export default factories.createCoreService(
                 lastName: anyRow.last_name,
                 leagueId: league_id,
                 leagueSlug: league_slug,
-                total: record.total,
-                home: record.home,
-                away: record.away,
-                neutral: record.neutral,
+                total: set.all.record.total,
+                home: set.all.record.home,
+                away: set.all.record.away,
+                neutral: set.all.record.neutral,
+                regular: set.regular,
+                playoff: set.playoff,
+                hasPhaseSplit: set.hasPhaseSplit,
               };
             }),
           );

@@ -34,6 +34,14 @@ export const locationSchema = z
   .nullable();
 
 /**
+ * Game phase for the regular-season / playoff split (all, regular, playoff) - optional
+ */
+export const phaseSchema = z
+  .enum(["all", "regular", "playoff"])
+  .optional()
+  .nullable();
+
+/**
  * Role (head, assistant, all) - optional
  */
 export const roleSchema = z

@@ -1,14 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import TableWrapper from '@/components/UI/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
-import { useTeamLeagueStatsTable } from '@/hooks/UseTeamLeagueStats';
+import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { useTeamLeagueStats } from '@/hooks/queries/team/UseTeamLeagueStats';
 import { useTeamTotalStats } from '@/hooks/queries/team/UseTeamTotalStats';
-import { TeamStats } from '@/types/api/Team';
+import { TeamStats, TeamStatsResponse } from '@/types/api/Team';
 
 import DatabaseSelect from './DatabaseSelect';
+import { TeamLeagueCell, teamStatsColumns } from '../teamColumns';
 
 import styles from './TeamLeagueStats.module.css';
 
@@ -29,19 +28,23 @@ const TeamLeagueStats: React.FC = () => {
 			? 'total'
 			: selected;
 
-	const leagueStatsRow: TeamStats[] = useMemo(() => {
-		if (!leagueStats?.length) return [];
-		return leagueStats.map((team) => team[effectiveSelected]).filter((row): row is TeamStats => row != null);
-	}, [leagueStats, effectiveSelected]);
+	const groups = useMemo(
+		() =>
+			buildPhaseGroups<TeamStatsResponse, TeamStats>(leagueStats, {
+				combined: (e) => e[effectiveSelected],
+				regular: (e) => e.regular?.[effectiveSelected] ?? null,
+				playoff: (e) => e.playoff?.[effectiveSelected] ?? null,
+				split: (e) => !!e.hasPhaseSplit,
+				keyOf: (r) => r.league_slug ?? 'total',
+				heading: (r) => <TeamLeagueCell leagueSlug={r.league_slug} />,
+			}),
+		[leagueStats, effectiveSelected],
+	);
 
-	const selectTotalStats: TeamStats[] = useMemo(() => {
-		if (!totalStats) return [];
-		const row = totalStats[effectiveSelected];
-		return row ? [row] : [];
+	const footerRows = useMemo<StatsDataRow<TeamStats>[]>(() => {
+		const row = totalStats?.[effectiveSelected];
+		return row ? [{ key: 'total', data: row }] : [];
 	}, [totalStats, effectiveSelected]);
-
-	const { table: mainTable } = useTeamLeagueStatsTable(leagueStatsRow);
-	const { table: footTable } = useTeamLeagueStatsTable(selectTotalStats);
 
 	if (!leagueStats || !totalStats) return null;
 
@@ -54,11 +57,12 @@ const TeamLeagueStats: React.FC = () => {
 				awayDisabled={!hasAway}
 				neutralDisabled={!hasNeutral}
 			/>
-			<TableWrapper>
-				<UniversalTableHead table={mainTable} />
-				<UniversalTableBody table={mainTable} />
-				<UniversalTableFooter table={footTable} variant="default" />
-			</TableWrapper>
+			<StatsTable
+				columns={teamStatsColumns}
+				groups={groups}
+				footer={{ rows: footerRows, variant: 'default' }}
+				initialSort={{ columnId: 'games', dir: 'desc' }}
+			/>
 		</section>
 	);
 };

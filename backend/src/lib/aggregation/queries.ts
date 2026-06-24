@@ -20,6 +20,33 @@ import type { Knex } from 'knex';
 import { getMainTeamSlug } from '../mainTeam';
 
 // ---------------------------------------------------------------------------
+// Phase split
+// ---------------------------------------------------------------------------
+
+/**
+ * Game phase discriminator for the regular-season / playoff split.
+ *  - 'all'      → no filter (competition as a whole; default, backward compatible)
+ *  - 'regular'  → game.stage IN ('league', 'group')
+ *  - 'playoff'  → game.stage = 'playoff'
+ *
+ * The underlying stage column name differs per MV: player_boxscore exposes it
+ * as `game_stage`, while team_boxscore / coach_boxscore / schedule use `stage`.
+ * Callers pass the correct qualified column name.
+ */
+export type Phase = 'all' | 'regular' | 'playoff';
+
+/**
+ * Returns a SQL WHERE fragment for the given phase, or null when no filter is
+ * needed ('all'/undefined). `col` is the fully-qualified stage column, e.g.
+ * 'b.game_stage' or 'tb.stage'.
+ */
+export function phaseClause(col: string, phase?: Phase): string | null {
+  if (phase === 'regular') return `${col} IN ('league', 'group')`;
+  if (phase === 'playoff') return `${col} = 'playoff'`;
+  return null;
+}
+
+// ---------------------------------------------------------------------------
 // Parameter interfaces
 // ---------------------------------------------------------------------------
 
@@ -31,6 +58,7 @@ export interface PlayerStatsParams {
   season?: string;
   playerId?: string;
   prev?: boolean;
+  phase?: Phase;
 }
 
 export interface PlayerRecordsParams {
@@ -39,6 +67,7 @@ export interface PlayerRecordsParams {
   league?: string;
   season?: string;
   playerId?: string;
+  phase?: Phase;
 }
 
 export interface TeamStatsParams {
@@ -47,6 +76,7 @@ export interface TeamStatsParams {
   season?: string;
   teamSlug?: string;
   excludeMainTeam?: boolean;
+  phase?: Phase;
 }
 
 export interface TeamRecordsParams {
@@ -54,6 +84,7 @@ export interface TeamRecordsParams {
   location: 'all' | 'home' | 'away' | 'neutral';
   league?: string;
   season?: string;
+  phase?: Phase;
 }
 
 export interface CoachRecordParams {
@@ -64,6 +95,7 @@ export interface CoachRecordParams {
   league?: string;
   season?: string;
   prev?: boolean;
+  phase?: Phase;
 }
 
 export interface RefereeStatsParams {
@@ -71,6 +103,7 @@ export interface RefereeStatsParams {
   location: 'all' | 'home' | 'away' | 'neutral';
   league?: string;
   season?: string;
+  phase?: Phase;
 }
 
 export interface VenueRecordParams {
@@ -78,6 +111,7 @@ export interface VenueRecordParams {
   location: 'all' | 'home' | 'away' | 'neutral';
   season?: string;
   league?: string;
+  phase?: Phase;
 }
 
 // ---------------------------------------------------------------------------
@@ -98,6 +132,22 @@ export async function buildRecord<T>(
     queryFn('neutral'),
   ]);
   return { total, home, away, neutral };
+}
+
+/**
+ * Runs a record builder once per phase ('all' | 'regular' | 'playoff') and
+ * returns the three variants. Used by the per-entity profile services to
+ * produce the regular-season / playoff split alongside the combined total.
+ */
+export async function buildPhaseRecords<T>(
+  recordFn: (phase: Phase) => Promise<T>,
+): Promise<{ all: T; regular: T; playoff: T }> {
+  const [all, regular, playoff] = await Promise.all([
+    recordFn('all'),
+    recordFn('regular'),
+    recordFn('playoff'),
+  ]);
+  return { all, regular, playoff };
 }
 
 // ---------------------------------------------------------------------------
@@ -159,6 +209,10 @@ export async function aggregatePlayerStats(
     whereClauses.push(`b.player_id = :playerId`);
     bindings.playerId = params.playerId;
   }
+
+  // optional phase filter (regular season / playoff split)
+  const playerStatsPhase = phaseClause('b.game_stage', params.phase);
+  if (playerStatsPhase) whereClauses.push(playerStatsPhase);
 
   // prev filter: games before the most recent game date for the main team
   if (params.prev) {
@@ -335,6 +389,9 @@ export async function aggregatePlayerRecords(
     bindings.playerId = params.playerId;
   }
 
+  const playerRecordsPhase = phaseClause('b.game_stage', params.phase);
+  if (playerRecordsPhase) whereClauses.push(playerRecordsPhase);
+
   const whereSQL = whereClauses.join(' AND ');
 
   const sql = `
@@ -457,6 +514,9 @@ export async function aggregateTeamStats(
     bindings.season = params.season;
   }
 
+  const teamStatsPhase = phaseClause('s.stage', params.phase);
+  if (teamStatsPhase) allGamesWhere.push(teamStatsPhase);
+
   const allGamesWhereSQL = allGamesWhere.length
     ? `AND ${allGamesWhere.join(' AND ')}`
     : '';
@@ -488,6 +548,7 @@ export async function aggregateTeamStats(
         s.is_nulled,
         s.attendance,
         CASE WHEN s.is_neutral THEN 'neutral' ELSE 'home' END AS venue,
+        'home' AS side,
         s.home_score AS points_scored,
         s.away_score AS points_allowed,
         s.home_score - s.away_score AS points_diff
@@ -509,6 +570,7 @@ export async function aggregateTeamStats(
         s.is_nulled,
         s.attendance,
         CASE WHEN s.is_neutral THEN 'neutral' ELSE 'away' END AS venue,
+        'away' AS side,
         s.away_score AS points_scored,
         s.home_score AS points_allowed,
         s.away_score - s.home_score AS points_diff
@@ -526,16 +588,14 @@ export async function aggregateTeamStats(
         COUNT(*) AS games,
         SUM(
           CASE
-            WHEN forfeited AND forfeited_by = 'home' AND venue = 'away' THEN 1
-            WHEN forfeited AND forfeited_by = 'away' AND venue = 'home' THEN 1
+            WHEN forfeited AND forfeited_by <> 'none' AND forfeited_by <> side THEN 1
             WHEN NOT forfeited AND points_scored > points_allowed THEN 1
             ELSE 0
           END
         ) AS wins,
         SUM(
           CASE
-            WHEN forfeited AND forfeited_by = 'home' AND venue = 'home' THEN 1
-            WHEN forfeited AND forfeited_by = 'away' AND venue = 'away' THEN 1
+            WHEN forfeited AND forfeited_by = side THEN 1
             WHEN NOT forfeited AND points_scored < points_allowed THEN 1
             ELSE 0
           END
@@ -543,8 +603,7 @@ export async function aggregateTeamStats(
         ROUND(
           100.0 * SUM(
             CASE
-              WHEN forfeited AND forfeited_by = 'home' AND venue = 'away' THEN 1
-              WHEN forfeited AND forfeited_by = 'away' AND venue = 'home' THEN 1
+              WHEN forfeited AND forfeited_by <> 'none' AND forfeited_by <> side THEN 1
               WHEN NOT forfeited AND points_scored > points_allowed THEN 1
               ELSE 0
             END
@@ -641,6 +700,9 @@ export async function aggregateTeamRecords(
     whereClauses.push(`tb.season = :season`);
     bindings.season = params.season;
   }
+
+  const teamRecordsPhase = phaseClause('tb.stage', params.phase);
+  if (teamRecordsPhase) whereClauses.push(teamRecordsPhase);
 
   const whereSQL = whereClauses.join(' AND ');
 
@@ -790,6 +852,10 @@ export async function aggregateCoachRecord(
     bindings.coachId = params.coachId;
   }
 
+  // phase filter (regular season / playoff split)
+  const coachPhase = phaseClause('cb.stage', params.phase);
+  if (coachPhase) whereClauses.push(coachPhase);
+
   // prev filter: games before the most recent game for the main team
   if (params.prev) {
     whereClauses.push(`cb.game_date < (
@@ -874,6 +940,9 @@ export async function aggregateRefereeStats(
     refGamesWhere.push(`s.season = :season`);
     bindings.season = params.season;
   }
+
+  const refPhase = phaseClause('s.stage', params.phase);
+  if (refPhase) refGamesWhere.push(refPhase);
 
   const refGamesWhereSQL = refGamesWhere.length
     ? `AND ${refGamesWhere.join(' AND ')}`
@@ -1124,6 +1193,9 @@ export async function aggregateVenueRecord(
     whereClauses.push(`s.league_slug = :league`);
     bindings.league = params.league;
   }
+
+  const venuePhase = phaseClause('s.stage', params.phase);
+  if (venuePhase) whereClauses.push(venuePhase);
 
   const whereSQL = whereClauses.join(' AND ');
 

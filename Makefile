@@ -3,7 +3,7 @@ SHELL := /bin/bash
 
 # Project root and compose detection
 PROJECT_ROOT := $(CURDIR)
-COMPOSE_CMD := docker-compose
+COMPOSE_CMD := $(shell command -v docker-compose >/dev/null 2>&1 && echo docker-compose || echo docker compose)
 
 DEV_COMPOSE := docker-compose.dev.yml
 DEV_ENV := .env.dev
@@ -20,13 +20,13 @@ help:
 	@echo "Script flags (when applicable): --compose-file FILE | --env-file FILE | --dry-run | --force | --backup"	@echo "Targets: dev dev-stop dev-mv staging staging-stop prod prod-stop backup-dev backup-staging backup-prod load-*-backup import-*-backup apply-mvs apply-mvs-staging apply-mvs-prod"
 
 dev:
-	docker-compose -f docker-compose.dev.yml --env-file .env.dev up --build -d --no-deps --force-recreate
+	$(COMPOSE_CMD) -f docker-compose.dev.yml --env-file .env.dev up --build -d --no-deps --force-recreate
 dev-logs-backend:
-	docker-compose -f docker-compose.dev.yml logs --follow --tail=30 backend
+	$(COMPOSE_CMD) -f docker-compose.dev.yml logs --follow --tail=30 backend
 dev-logs-postgres:
-	docker-compose -f docker-compose.dev.yml logs --follow --tail=30 postgres
+	$(COMPOSE_CMD) -f docker-compose.dev.yml logs --follow --tail=30 postgres
 dev-logs-frontend:
-	docker-compose -f docker-compose.dev.yml logs --follow --tail=30 frontend
+	$(COMPOSE_CMD) -f docker-compose.dev.yml logs --follow --tail=30 frontend
 dev-stop:
 	$(COMPOSE_CMD) -f $(DEV_COMPOSE) --env-file $(DEV_ENV) down
 dev-enable-unaccent:

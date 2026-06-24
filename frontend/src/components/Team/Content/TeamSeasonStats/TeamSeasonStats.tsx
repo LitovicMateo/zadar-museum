@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom';
 
 import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
 import Pill from '@/components/UI/Pill';
-import TableWrapper from '@/components/UI/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
-import { useTeamLeagueStatsTable } from '@/hooks/UseTeamLeagueStats';
+import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { useGamesContext } from '@/hooks/context/UseGamesContext';
 import { useTeamSeasonLeagueStats } from '@/hooks/queries/team/UseTeamSeasonLeagueStats';
 import { useTeamSeasonStats } from '@/hooks/queries/team/UseTeamSeasonStats';
-import { TeamStats } from '@/types/api/Team';
+import { TeamStats, TeamStatsResponse } from '@/types/api/Team';
+
+import { TeamLeagueCell, teamStatsColumns } from '../teamColumns';
 
 import styles from './TeamSeasonStats.module.css';
 
@@ -35,19 +35,23 @@ const TeamSeasonStats: React.FC = () => {
 			? 'total'
 			: selected;
 
-	const leagueStatsRow: TeamStats[] = useMemo(() => {
-		if (!seasonLeagueStats?.length) return [];
-		return seasonLeagueStats.map((team) => team[effectiveSelected]).filter(Boolean) as TeamStats[];
-	}, [seasonLeagueStats, effectiveSelected]);
+	const groups = useMemo(
+		() =>
+			buildPhaseGroups<TeamStatsResponse, TeamStats>(seasonLeagueStats, {
+				combined: (e) => e[effectiveSelected],
+				regular: (e) => e.regular?.[effectiveSelected] ?? null,
+				playoff: (e) => e.playoff?.[effectiveSelected] ?? null,
+				split: (e) => !!e.hasPhaseSplit,
+				keyOf: (r) => r.league_slug ?? 'total',
+				heading: (r) => <TeamLeagueCell leagueSlug={r.league_slug} />,
+			}),
+		[seasonLeagueStats, effectiveSelected],
+	);
 
-	const selectTotalStats: TeamStats[] = useMemo(() => {
-		if (!seasonStats) return [];
-		const row = seasonStats[effectiveSelected];
-		return row ? [row] : [];
+	const footerRows = useMemo<StatsDataRow<TeamStats>[]>(() => {
+		const row = seasonStats?.[effectiveSelected];
+		return row ? [{ key: 'total', data: row }] : [];
 	}, [seasonStats, effectiveSelected]);
-
-	const { table: mainTable } = useTeamLeagueStatsTable(leagueStatsRow);
-	const { table: footTable } = useTeamLeagueStatsTable(selectTotalStats);
 
 	if (!seasonStats || !seasonLeagueStats || !seasons) return null;
 
@@ -93,11 +97,12 @@ const TeamSeasonStats: React.FC = () => {
 				</fieldset>
 			</div>
 
-			<TableWrapper>
-				<UniversalTableHead table={mainTable} />
-				<UniversalTableBody table={mainTable} />
-				<UniversalTableFooter table={footTable} variant="light" />
-			</TableWrapper>
+			<StatsTable
+				columns={teamStatsColumns}
+				groups={groups}
+				footer={{ rows: footerRows, variant: 'light' }}
+				initialSort={{ columnId: 'games', dir: 'desc' }}
+			/>
 		</section>
 	);
 };

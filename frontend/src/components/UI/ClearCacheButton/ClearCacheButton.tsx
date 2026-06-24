@@ -8,30 +8,30 @@ import { AxiosError } from 'axios';
 import apiClient from '@/lib/ApiClient';
 import Button from '../Button';
 
-import styles from '@/components/UI/RefreshMVButton/RefreshDataButton.module.css';
+import styles from '@/components/UI/ClearCacheButton/ClearCacheButton.module.css';
 
-const RefreshDataButton: React.FC = () => {
+const ClearCacheButton: React.FC = () => {
 	const [loading, setLoading] = useState(false);
 	const queryClient = useQueryClient();
 
-	const handleRefresh = async () => {
+	const handleClearCache = async () => {
 		setLoading(true);
-		const toastId = toast.loading('Refreshing materialized views…');
+		const toastId = toast.loading('Clearing cache…');
 
 		try {
 			const res = await apiClient.get(API_ROUTES.refresh.views);
 
 			if (!res.data.success) {
-				throw new Error(res.data?.message || 'Failed to refresh views');
+				throw new Error(res.data?.message || 'Failed to clear cache');
 			}
 
 			const { count } = res.data as { count: number };
 
 			// Invalidate all React Query caches so the UI reflects the freshly
-			// refreshed materialized views without requiring a second refresh.
+			// refreshed materialized views without requiring a second action.
 			await queryClient.invalidateQueries();
 
-			toast.success(`Refreshed ${count} materialized view(s) successfully.`, {
+			toast.success(`Cache cleared and refreshed ${count} view(s).`, {
 				id: toastId,
 				duration: 5000
 			});
@@ -41,7 +41,7 @@ const RefreshDataButton: React.FC = () => {
 			const axiosErr = err as AxiosError<{ error?: { message?: string } }>;
 			const message =
 				axiosErr.response?.data?.error?.message ??
-				(err instanceof Error ? err.message : 'Failed to refresh views');
+				(err instanceof Error ? err.message : 'Failed to clear cache');
 
 			toast.error(message, { id: toastId, duration: 6000 });
 		} finally {
@@ -51,11 +51,11 @@ const RefreshDataButton: React.FC = () => {
 
 	return (
 		<div>
-			<Button onClick={handleRefresh} disabled={loading} className={styles.btn}>
-				{loading ? 'Refreshing…' : 'Refresh Materialized Views'}
+			<Button onClick={handleClearCache} disabled={loading} className={styles.btn}>
+				{loading ? 'Clearing cache…' : 'Clear cache'}
 			</Button>
 		</div>
 	);
 };
 
-export default RefreshDataButton;
+export default ClearCacheButton;

@@ -11,7 +11,12 @@ import {
   ALLOWED_TEAM_RECORD_STATS,
 } from "../../../validation";
 import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
-import { aggregateTeamStats, buildRecord } from "../../../lib/aggregation/queries";
+import {
+  aggregateTeamStats,
+  buildRecord,
+  type Phase,
+} from "../../../lib/aggregation/queries";
+import type { Knex } from "knex";
 
 // Shape a raw aggregateTeamStats row into the TeamStats JSONB-equivalent object
 function toTeamStats(
@@ -32,6 +37,65 @@ function toTeamStats(
     points_diff: row.points_diff,
     attendance: row.attendance,
     ...(leagueId !== undefined ? { league_id: leagueId, league_slug: leagueSlug } : {}),
+  };
+}
+
+// Computes the four location variants for one league + phase. Returns the
+// nested { total, home, away, neutral } record plus the raw total row (for
+// team identity and game-count thresholds), or null when the team has no games.
+async function teamLeaguePhase(
+  knex: Knex,
+  args: {
+    teamSlug: string;
+    league_id: any;
+    league_slug: string;
+    season?: string;
+    phase: Phase;
+  },
+): Promise<{ record: Record<string, any>; totalRow: any } | null> {
+  const { teamSlug, league_id, league_slug, season, phase } = args;
+  const base = { teamSlug, league: league_slug, season, phase };
+  const [totalRow, homeRow, awayRow, neutralRow] = await Promise.all([
+    aggregateTeamStats(knex, { ...base, location: "all" }).then((r) => r[0] ?? null),
+    aggregateTeamStats(knex, { ...base, location: "home" }).then((r) => r[0] ?? null),
+    aggregateTeamStats(knex, { ...base, location: "away" }).then((r) => r[0] ?? null),
+    aggregateTeamStats(knex, { ...base, location: "neutral" }).then((r) => r[0] ?? null),
+  ]);
+  if (!totalRow) return null;
+  return {
+    totalRow,
+    record: {
+      total: toTeamStats(totalRow, "Total", league_id, league_slug),
+      home: toTeamStats(homeRow, "Home", league_id, league_slug),
+      away: toTeamStats(awayRow, "Away", league_id, league_slug),
+      neutral: toTeamStats(neutralRow, "Neutral", league_id, league_slug),
+    },
+  };
+}
+
+// Assembles one per-league result with regular/playoff split + hasPhaseSplit.
+async function teamLeagueResultWithSplit(
+  knex: Knex,
+  args: { teamSlug: string; league_id: any; league_slug: string; season?: string },
+): Promise<Record<string, any> | null> {
+  const [all, regular, playoff] = await Promise.all([
+    teamLeaguePhase(knex, { ...args, phase: "all" }),
+    teamLeaguePhase(knex, { ...args, phase: "regular" }),
+    teamLeaguePhase(knex, { ...args, phase: "playoff" }),
+  ]);
+  if (!all) return null;
+  const regularGames = Number(regular?.record.total?.games ?? 0);
+  const playoffGames = Number(playoff?.record.total?.games ?? 0);
+  return {
+    teamId: all.totalRow.team_id,
+    teamSlug: all.totalRow.team_slug,
+    teamName: all.totalRow.team_name,
+    leagueId: args.league_id,
+    leagueSlug: args.league_slug,
+    ...all.record,
+    regular: regular?.record ?? null,
+    playoff: playoff?.record ?? null,
+    hasPhaseSplit: regularGames > 0 && playoffGames > 0,
   };
 }
 
@@ -98,35 +162,11 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
 
       if (leagues.length === 0) return null;
 
-      // For each league, fetch all four location variants in parallel
+      // For each league, fetch all location variants per phase in parallel.
       const leagueResults = await Promise.all(
-        leagues.map(async ({ league_id, league_slug }) => {
-          const [totalRow, homeRow, awayRow, neutralRow] = await Promise.all([
-            aggregateTeamStats(knex, { location: "all",     teamSlug, league: league_slug }).then((r) => r[0] ?? null),
-            aggregateTeamStats(knex, { location: "home",    teamSlug, league: league_slug }).then((r) => r[0] ?? null),
-            aggregateTeamStats(knex, { location: "away",    teamSlug, league: league_slug }).then((r) => r[0] ?? null),
-            aggregateTeamStats(knex, { location: "neutral", teamSlug, league: league_slug }).then((r) => r[0] ?? null),
-          ]);
-
-          if (!totalRow) return null;
-
-          const total   = toTeamStats(totalRow,   "Total",   league_id, league_slug);
-          const home    = toTeamStats(homeRow,    "Home",    league_id, league_slug);
-          const away    = toTeamStats(awayRow,    "Away",    league_id, league_slug);
-          const neutral = toTeamStats(neutralRow, "Neutral", league_id, league_slug);
-
-          return {
-            teamId:    totalRow.team_id,
-            teamSlug:  totalRow.team_slug,
-            teamName:  totalRow.team_name,
-            leagueId:  league_id,
-            leagueSlug: league_slug,
-            total,
-            home,
-            away,
-            neutral,
-          };
-        }),
+        leagues.map(({ league_id, league_slug }) =>
+          teamLeagueResultWithSplit(knex, { teamSlug, league_id, league_slug }),
+        ),
       );
 
       return leagueResults.filter(Boolean);
@@ -349,33 +389,9 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
         if (leagues.length === 0) return null;
 
         const leagueResults = await Promise.all(
-          leagues.map(async ({ league_id, league_slug }) => {
-            const [totalRow, homeRow, awayRow, neutralRow] = await Promise.all([
-              aggregateTeamStats(knex, { location: "all",     teamSlug, season, league: league_slug }).then((r) => r[0] ?? null),
-              aggregateTeamStats(knex, { location: "home",    teamSlug, season, league: league_slug }).then((r) => r[0] ?? null),
-              aggregateTeamStats(knex, { location: "away",    teamSlug, season, league: league_slug }).then((r) => r[0] ?? null),
-              aggregateTeamStats(knex, { location: "neutral", teamSlug, season, league: league_slug }).then((r) => r[0] ?? null),
-            ]);
-
-            if (!totalRow) return null;
-
-            const total   = toTeamStats(totalRow,   "Total",   league_id, league_slug);
-            const home    = toTeamStats(homeRow,    "Home",    league_id, league_slug);
-            const away    = toTeamStats(awayRow,    "Away",    league_id, league_slug);
-            const neutral = toTeamStats(neutralRow, "Neutral", league_id, league_slug);
-
-            return {
-              teamId:    totalRow.team_id,
-              teamSlug:  totalRow.team_slug,
-              teamName:  totalRow.team_name,
-              leagueId:  league_id,
-              leagueSlug: league_slug,
-              total,
-              home,
-              away,
-              neutral,
-            };
-          }),
+          leagues.map(({ league_id, league_slug }) =>
+            teamLeagueResultWithSplit(knex, { teamSlug, league_id, league_slug, season }),
+          ),
         );
 
         return leagueResults.filter(Boolean);

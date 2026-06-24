@@ -12,6 +12,7 @@ import {
   teamIdSchema,
   sortKeySchema,
   roleSchema,
+  phaseSchema,
 } from "./common";
 
 /**
@@ -24,6 +25,7 @@ export const playersAllTimeStatsQuerySchema = z.object({
   league: leagueSlugSchema,
   season: seasonSchema,
   database: databaseSchema,
+  phase: phaseSchema,
 });
 
 /**
@@ -45,6 +47,7 @@ export const playersRecordsQuerySchema = z.object({
   league: leagueSlugSchema,
   season: seasonSchema,
   sortKey: sortKeySchema,
+  phase: phaseSchema,
 });
 
 /**
@@ -55,6 +58,7 @@ export const teamsAllTimeStatsQuerySchema = z.object({
   location: locationSchema,
   league: leagueSlugSchema,
   season: seasonSchema,
+  phase: phaseSchema,
 });
 
 /**
@@ -76,6 +80,7 @@ export const teamRecordsQuerySchema = z.object({
   league: leagueSlugSchema,
   location: locationSchema,
   sortKey: sortKeySchema,
+  phase: phaseSchema,
 });
 
 /**
@@ -88,6 +93,7 @@ export const coachesAllTimeStatsQuerySchema = z.object({
   location: locationSchema,
   league: leagueSlugSchema,
   season: seasonSchema,
+  phase: phaseSchema,
 });
 
 /**
@@ -98,6 +104,7 @@ export const refereesAllTimeStatsQuerySchema = z.object({
   location: locationSchema,
   league: leagueSlugSchema,
   season: seasonSchema,
+  phase: phaseSchema,
 });
 
 /**

@@ -5,6 +5,7 @@
 import { factories } from "@strapi/strapi";
 import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
 import { getMainTeamSlug } from "../../../lib/mainTeam";
+import { phaseClause, type Phase } from "../../../lib/aggregation/queries";
 
 export default factories.createCoreService(
   "api::competition.competition",
@@ -344,7 +345,7 @@ export default factories.createCoreService(
           const knex = strapi.db.connection;
           const mainSlug = await getMainTeamSlug();
 
-          const sql = `
+          const buildSql = (phaseSql: string | null) => `
             WITH all_games AS (
               SELECT
                 s.home_team_document_id AS team_id,
@@ -353,6 +354,7 @@ export default factories.createCoreService(
                 s.league_slug,
                 s.season,
                 CASE WHEN s.is_neutral THEN 'neutral' ELSE 'home' END AS venue,
+                'home' AS side,
                 s.home_score AS points_scored,
                 s.away_score AS points_allowed,
                 s.attendance,
@@ -362,6 +364,7 @@ export default factories.createCoreService(
               WHERE s.home_score IS NOT NULL AND s.away_score IS NOT NULL
                 AND s.is_nulled IS NOT TRUE AND s.league_slug = :league
                 AND s.season = :season AND s.home_team_slug = :teamSlug
+                ${phaseSql ? `AND ${phaseSql}` : ""}
 
               UNION ALL
 
@@ -372,6 +375,7 @@ export default factories.createCoreService(
                 s.league_slug,
                 s.season,
                 CASE WHEN s.is_neutral THEN 'neutral' ELSE 'away' END AS venue,
+                'away' AS side,
                 s.away_score AS points_scored,
                 s.home_score AS points_allowed,
                 s.attendance,
@@ -381,6 +385,7 @@ export default factories.createCoreService(
               WHERE s.home_score IS NOT NULL AND s.away_score IS NOT NULL
                 AND s.is_nulled IS NOT TRUE AND s.league_slug = :league
                 AND s.season = :season AND s.away_team_slug = :teamSlug
+                ${phaseSql ? `AND ${phaseSql}` : ""}
             )
             SELECT
               team_id,
@@ -391,14 +396,12 @@ export default factories.createCoreService(
               venue,
               COUNT(*) AS games,
               SUM(CASE
-                WHEN forfeited AND forfeited_by = 'home' AND venue = 'away' THEN 1
-                WHEN forfeited AND forfeited_by = 'away' AND venue = 'home' THEN 1
+                WHEN forfeited AND forfeited_by <> 'none' AND forfeited_by <> side THEN 1
                 WHEN NOT forfeited AND points_scored > points_allowed THEN 1
                 ELSE 0
               END) AS wins,
               SUM(CASE
-                WHEN forfeited AND forfeited_by = 'home' AND venue = 'home' THEN 1
-                WHEN forfeited AND forfeited_by = 'away' AND venue = 'away' THEN 1
+                WHEN forfeited AND forfeited_by = side THEN 1
                 WHEN NOT forfeited AND points_scored < points_allowed THEN 1
                 ELSE 0
               END) AS losses,
@@ -410,55 +413,73 @@ export default factories.createCoreService(
             GROUP BY team_id, team_slug, league_id, league_slug, season, venue
           `;
 
-          const result = await knex.raw(sql, {
-            league: leagueSlug,
-            season,
-            teamSlug: mainSlug,
-          });
-          const rows: any[] = result.rows;
-          if (!rows.length) return [];
+          const sqlBindings = { league: leagueSlug, season, teamSlug: mainSlug };
 
-          const firstRow = rows[0];
-          const byVenue: Record<string, any> = {};
-          for (const r of rows) {
-            byVenue[r.venue] = r;
-          }
+          // Builds the { total, home, away } stats record for one phase, or null
+          // when the main team has no games in that phase for the season.
+          const computePhase = async (phase: Phase) => {
+            const phaseSql = phaseClause("s.stage", phase);
+            const result = await knex.raw(buildSql(phaseSql), sqlBindings);
+            const rows: any[] = result.rows;
+            if (!rows.length) return null;
 
-          const makeEntry = (key: string, r: any) => ({
-            key,
-            league_id: firstRow.league_id,
-            league_slug: firstRow.league_slug,
-            games: r?.games ?? 0,
-            wins: r?.wins ?? 0,
-            losses: r?.losses ?? 0,
-            win_percentage:
-              r && Number(r.games) > 0
-                ? Math.round((Number(r.wins) / Number(r.games)) * 1000) / 10
-                : 0,
-            points_scored: r?.points_scored ?? 0,
-            points_received: r?.points_received ?? 0,
-            points_diff: r?.points_diff ?? 0,
-            attendance: r?.attendance ?? 0,
-          });
+            const firstRow = rows[0];
+            const byVenue: Record<string, any> = {};
+            for (const r of rows) byVenue[r.venue] = r;
 
-          return [
-            {
-              teamId: firstRow.team_id,
-              teamSlug: firstRow.team_slug,
-              leagueId: firstRow.league_id,
-              leagueSlug: firstRow.league_slug,
-              season: firstRow.season,
+            const makeEntry = (key: string, r: any) => ({
+              key,
+              league_id: firstRow.league_id,
+              league_slug: firstRow.league_slug,
+              games: r?.games ?? 0,
+              wins: r?.wins ?? 0,
+              losses: r?.losses ?? 0,
+              win_percentage:
+                r && Number(r.games) > 0
+                  ? Math.round((Number(r.wins) / Number(r.games)) * 1000) / 10
+                  : 0,
+              points_scored: r?.points_scored ?? 0,
+              points_received: r?.points_received ?? 0,
+              points_diff: r?.points_diff ?? 0,
+              attendance: r?.attendance ?? 0,
+            });
+
+            const totalGames = rows.reduce((s, r) => s + Number(r.games), 0);
+            return {
+              firstRow,
+              totalGames,
               stats: {
                 total: makeEntry("Total", {
                   league_id: firstRow.league_id,
                   league_slug: firstRow.league_slug,
-                  games: rows.reduce((s, r) => s + Number(r.games), 0),
+                  games: totalGames,
                   wins: rows.reduce((s, r) => s + Number(r.wins), 0),
                   losses: rows.reduce((s, r) => s + Number(r.losses), 0),
                 }),
                 home: makeEntry("Home", byVenue["home"]),
                 away: makeEntry("Away", byVenue["away"]),
               },
+            };
+          };
+
+          const [all, regular, playoff] = await Promise.all([
+            computePhase("all"),
+            computePhase("regular"),
+            computePhase("playoff"),
+          ]);
+          if (!all) return [];
+
+          return [
+            {
+              teamId: all.firstRow.team_id,
+              teamSlug: all.firstRow.team_slug,
+              leagueId: all.firstRow.league_id,
+              leagueSlug: all.firstRow.league_slug,
+              season: all.firstRow.season,
+              stats: all.stats,
+              regular: regular?.stats ?? null,
+              playoff: playoff?.stats ?? null,
+              hasPhaseSplit: (regular?.totalGames ?? 0) > 0 && (playoff?.totalGames ?? 0) > 0,
             },
           ];
         },
