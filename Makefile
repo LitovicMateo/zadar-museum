@@ -13,7 +13,7 @@ PROD_COMPOSE := docker-compose.prod.yml
 PROD_ENV := .env.prod
 
 
-.PHONY: dev dev-stop dev-mv dev-enable-unaccent staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod list-mvs list-mvs-prod backup-dev backup-staging backup-prod backup-prod-full restore-prod install-backup-timer help
+.PHONY: dev dev-stop dev-mv dev-enable-unaccent staging staging-stop prod prod-stop load-dev-backup import-dev-backup restore-dev-from-vps load-staging-backup import-staging-backup restore-staging load-prod-backup import-prod-backup apply-mvs apply-mvs-staging apply-mvs-prod list-mvs list-mvs-prod backup-dev backup-staging backup-prod backup-prod-full restore-prod install-backup-timer help
 
 help:
 	@echo "Usage: make <target>"	@echo "Note: several targets forward flags to underlying scripts (e.g. apply-mvs accepts --env-file)"
@@ -86,6 +86,27 @@ import-staging-backup:
 	@CONTAINER=$$($(COMPOSE_CMD) -f $(STAGING_COMPOSE) ps -q postgres); \
 	if [ -z "$$CONTAINER" ]; then echo "No postgres container found (is the staging stack running?)"; exit 1; fi; \
 	docker exec -i "$$CONTAINER" sh -c "export PGCLIENTENCODING=UTF8; psql -U strapi -d strapi -f /tmp/zadar-backup.sql"
+
+## Full staging restore from zadar-backup.sql:
+##   stops backend → drops+recreates DB → imports backup → applies MVs → starts backend
+restore-staging:
+	@CONTAINER=$$($(COMPOSE_CMD) -f $(STAGING_COMPOSE) ps -q postgres); \
+	if [ -z "$$CONTAINER" ]; then echo "No postgres container found (is the staging stack running?)"; exit 1; fi; \
+	echo "Stopping backend..."; \
+	$(COMPOSE_CMD) -f $(STAGING_COMPOSE) stop backend; \
+	echo "Dropping and recreating database..."; \
+	docker exec -i "$$CONTAINER" psql -U strapi -d postgres \
+	  -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='strapi' AND pid != pg_backend_pid();" \
+	  -c "DROP DATABASE IF EXISTS strapi;" \
+	  -c "CREATE DATABASE strapi OWNER strapi;"; \
+	echo "Importing backup..."; \
+	docker cp "$(PROJECT_ROOT)/zadar-backup.sql" "$$CONTAINER":/tmp/zadar-backup.sql; \
+	docker exec -i "$$CONTAINER" sh -c "export PGCLIENTENCODING=UTF8; psql -U strapi -d strapi -f /tmp/zadar-backup.sql"; \
+	echo "Applying materialized views..."; \
+	bash scripts/apply-mvs.sh --compose-file $(STAGING_COMPOSE) --env-file $(STAGING_ENV) --force; \
+	echo "Starting backend..."; \
+	$(COMPOSE_CMD) -f $(STAGING_COMPOSE) start backend; \
+	echo "Done. Staging restore complete."
 
 apply-mvs:
 	bash scripts/apply-mvs.sh --compose-file $(DEV_COMPOSE) --env-file $(DEV_ENV)
