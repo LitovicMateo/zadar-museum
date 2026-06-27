@@ -32,6 +32,10 @@ const sidebarGroups: SidebarGroup[] = [
 			{
 				path: 'referee',
 				label: 'Referee stats'
+			},
+			{
+				path: 'compare',
+				label: 'Compare'
 			}
 		]
 	}

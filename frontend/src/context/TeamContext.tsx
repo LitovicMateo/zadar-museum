@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useTeamSeasonCompetitions } from '@/hooks/queries/team/UseTeamSeasonCompetitions';
 import Cookies from 'js-cookie';
@@ -20,6 +21,7 @@ type ProviderProps = {
 };
 
 export const TeamGamesProvider: React.FC<ProviderProps> = ({ children, defaultSearchTerm = '' }) => {
+	const { teamSlug } = useParams<{ teamSlug: string }>();
 	const initialSeason = Cookies.get('season') || '';
 	const initialCompetitions = Cookies.get('competitions') ? JSON.parse(Cookies.get('competitions')!) : [];
 
@@ -27,7 +29,7 @@ export const TeamGamesProvider: React.FC<ProviderProps> = ({ children, defaultSe
 	const [selectedCompetitions, setSelectedCompetitions] = useState<string[]>(initialCompetitions);
 	const [searchTerm, setSearchTerm] = useState(defaultSearchTerm);
 
-	const { data: competitions } = useTeamSeasonCompetitions('KK Zadar', season);
+	const { data: competitions } = useTeamSeasonCompetitions(teamSlug ?? '', season);
 
 	// on season change refresh selected competitions
 	useEffect(() => {

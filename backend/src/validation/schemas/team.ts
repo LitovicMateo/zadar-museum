@@ -11,6 +11,10 @@ import {
   teamIdSchema,
   entitySchema,
 } from "./common";
+import {
+  ALLOWED_PLAYER_RECORD_STATS,
+  ALLOWED_TEAM_RECORD_STATS,
+} from "../whitelists";
 
 /**
  * GET /api/team/:teamSlug
@@ -104,10 +108,22 @@ export const teamRecordParamsSchema = z.object({
 
 /**
  * GET /team/records/players/:teamSlug
- * GET /team/records/teams/:teamSlug
- * Query params: statKey (required), season (optional)
+ * Query params: statKey (player stat, required), season (optional)
  */
-export const teamRecordsQuerySchema = z.object({
-  statKey: statKeySchema,
+export const teamPlayerRecordsQuerySchema = z.object({
+  statKey: z.enum(
+    ALLOWED_PLAYER_RECORD_STATS as unknown as [string, ...string[]],
+  ),
+  season: seasonSchema,
+});
+
+/**
+ * GET /team/records/teams/:teamSlug
+ * Query params: statKey (team stat, required), season (optional)
+ */
+export const teamTeamRecordsQuerySchema = z.object({
+  statKey: z.enum(
+    ALLOWED_TEAM_RECORD_STATS as unknown as [string, ...string[]],
+  ),
   season: seasonSchema,
 });

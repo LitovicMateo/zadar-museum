@@ -1,0 +1,7 @@
+.floatingEditButton {
+	position: fixed;
+	bottom: 1.5rem;
+	right: 1.5rem;
+	z-index: 40;
+	box-shadow: 0 4px 12px rgb(0 0 0 / 0.25);
+}

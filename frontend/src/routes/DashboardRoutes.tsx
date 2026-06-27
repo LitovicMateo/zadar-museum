@@ -1,150 +1,149 @@
+import { lazy } from 'react';
 import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 
-import CreateCoach from '@/components/Dashboard/Coach/CreateCoach';
-import EditCoach from '@/components/Dashboard/Coach/EditCoach';
-import CreateCompetition from '@/components/Dashboard/Competition/CreateCompetition';
-import EditCompetition from '@/components/Dashboard/Competition/EditCompetition';
-import Dashboard from '@/components/Dashboard/Dashboard';
-import CreateGame from '@/components/Dashboard/Game/CreateGame';
-import EditGame from '@/components/Dashboard/Game/EditGame';
-import CreatePlayer from '@/components/Dashboard/Player/CreatePlayer';
-import EditPlayer from '@/components/Dashboard/Player/EditPlayer';
-import CreatePlayerStats from '@/components/Dashboard/PlayerStats/CreatePlayerStats';
-import EditPlayerStats from '@/components/Dashboard/PlayerStats/EditPlayerStats';
-import CreateReferee from '@/components/Dashboard/Referee/CreateReferee';
-import EditReferee from '@/components/Dashboard/Referee/EditReferee';
-import CreateStaff from '@/components/Dashboard/Staff/CreateStaff';
-import EditStaff from '@/components/Dashboard/Staff/EditStaff';
-import CreateTeam from '@/components/Dashboard/Team/CreateTeam';
-import EditTeam from '@/components/Dashboard/Team/EditTeam';
-import CreateTeamStats from '@/components/Dashboard/TeamStats/CreateTeamStats';
-import EditTeamStats from '@/components/Dashboard/TeamStats/EditTeamStats';
-import CreateVenue from '@/components/Dashboard/Venue/CreateVenue';
-import EditVenue from '@/components/Dashboard/Venue/EditVenue';
+import { playerListConfig } from '@/components/Dashboard/configs/playerListConfig';
+import { teamListConfig } from '@/components/Dashboard/configs/teamListConfig';
+import { coachListConfig } from '@/components/Dashboard/configs/coachListConfig';
+import { refereeListConfig } from '@/components/Dashboard/configs/refereeListConfig';
+import { staffListConfig } from '@/components/Dashboard/configs/staffListConfig';
+import { gameListConfig } from '@/components/Dashboard/configs/gameListConfig';
+import { venueListConfig } from '@/components/Dashboard/configs/venueListConfig';
+import { competitionListConfig } from '@/components/Dashboard/configs/competitionListConfig';
+import { playerStatsListConfig } from '@/components/Dashboard/configs/playerStatsListConfig';
+import { teamStatsListConfig } from '@/components/Dashboard/configs/teamStatsListConfig';
+import { EntityListPage } from '@/components/Dashboard/EntityListPage/EntityListPage';
 import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 
+const Dashboard = lazy(() => import('@/components/Dashboard/Dashboard'));
+const CoachFormPage = lazy(() => import('@/components/Dashboard/Coach/CoachFormPage'));
+const CompetitionFormPage = lazy(() => import('@/components/Dashboard/Competition/CompetitionFormPage'));
+const GameFormPage = lazy(() => import('@/components/Dashboard/Game/GameFormPage'));
+const PlayerFormPage = lazy(() => import('@/components/Dashboard/Player/PlayerFormPage'));
+const PlayerStatsFormPage = lazy(() => import('@/components/Dashboard/PlayerStats/PlayerStatsFormPage'));
+const RefereeFormPage = lazy(() => import('@/components/Dashboard/Referee/RefereeFormPage'));
+const StaffFormPage = lazy(() => import('@/components/Dashboard/Staff/StaffFormPage'));
+const TeamFormPage = lazy(() => import('@/components/Dashboard/Team/TeamFormPage'));
+const TeamStatsFormPage = lazy(() => import('@/components/Dashboard/TeamStats/TeamStatsFormPage'));
+const VenueFormPage = lazy(() => import('@/components/Dashboard/Venue/VenueFormPage'));
+
 export const dashboardRoutes: RouteObject = {
-	path: '/dashboard',
-	// ✅ Protect entire dashboard tree
-	element: (
-		<ProtectedRoute>
-			<Dashboard />
-		</ProtectedRoute>
-	),
-	children: [
-		{
-			index: true,
-			element: <Navigate to="player" replace />
-		},
+  path: '/dashboard',
+  element: (
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  ),
+  children: [
+    { index: true, element: <Navigate to="player" replace /> },
 
-		// ✅ Player
-		{
-			path: 'player',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreatePlayer /> },
-				{ path: 'edit', element: <EditPlayer /> }
-			]
-		},
+    {
+      path: 'player',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={playerListConfig} /> },
+        { path: 'create', element: <PlayerFormPage /> },
+        { path: 'edit/:id', element: <PlayerFormPage /> },
+      ],
+    },
 
-		// ✅ Coach
-		{
-			path: 'coach',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreateCoach /> },
-				{ path: 'edit', element: <EditCoach /> }
-			]
-		},
+    {
+      path: 'coach',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={coachListConfig} /> },
+        { path: 'create', element: <CoachFormPage /> },
+        { path: 'edit/:id', element: <CoachFormPage /> },
+      ],
+    },
 
-		// ✅ Team
-		{
-			path: 'team',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreateTeam /> },
-				{ path: 'edit', element: <EditTeam /> }
-			]
-		},
+    {
+      path: 'team',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={teamListConfig} /> },
+        { path: 'create', element: <TeamFormPage /> },
+        { path: 'edit/:id', element: <TeamFormPage /> },
+      ],
+    },
 
-		// ✅ Referee
-		{
-			path: 'referee',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreateReferee /> },
-				{ path: 'edit', element: <EditReferee /> }
-			]
-		},
+    {
+      path: 'referee',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={refereeListConfig} /> },
+        { path: 'create', element: <RefereeFormPage /> },
+        { path: 'edit/:id', element: <RefereeFormPage /> },
+      ],
+    },
 
-		// ✅ Game
-		{
-			path: 'game',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreateGame /> },
-				{ path: 'edit', element: <EditGame /> }
-			]
-		},
+    {
+      path: 'game',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={gameListConfig} /> },
+        { path: 'create', element: <GameFormPage /> },
+        { path: 'edit/:id', element: <GameFormPage /> },
+      ],
+    },
 
-		// ✅ Venue
-		{
-			path: 'venue',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreateVenue /> },
-				{ path: 'edit', element: <EditVenue /> }
-			]
-		},
+    {
+      path: 'venue',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={venueListConfig} /> },
+        { path: 'create', element: <VenueFormPage /> },
+        { path: 'edit/:id', element: <VenueFormPage /> },
+      ],
+    },
 
-		// ✅ Competition
-		{
-			path: 'competition',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreateCompetition /> },
-				{ path: 'edit', element: <EditCompetition /> }
-			]
-		},
+    {
+      path: 'competition',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={competitionListConfig} /> },
+        { path: 'create', element: <CompetitionFormPage /> },
+        { path: 'edit/:id', element: <CompetitionFormPage /> },
+      ],
+    },
 
-		// ✅ Player Stats
-		{
-			path: 'player-stats',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreatePlayerStats /> },
-				{ path: 'edit', element: <EditPlayerStats /> }
-			]
-		},
+    {
+      path: 'player-stats',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={playerStatsListConfig} /> },
+        { path: 'create', element: <PlayerStatsFormPage /> },
+        { path: 'edit/:id', element: <PlayerStatsFormPage /> },
+      ],
+    },
 
-		// ✅ Staff
-		{
-			path: 'staff',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreateStaff /> },
-				{ path: 'edit', element: <EditStaff /> }
-			]
-		},
+    {
+      path: 'staff',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={staffListConfig} /> },
+        { path: 'create', element: <StaffFormPage /> },
+        { path: 'edit/:id', element: <StaffFormPage /> },
+      ],
+    },
 
-		// ✅ Team Stats
-		{
-			path: 'team-stats',
-			element: <Outlet />,
-			children: [
-				{ index: true, element: <Navigate to="create" replace /> },
-				{ path: 'create', element: <CreateTeamStats /> },
-				{ path: 'edit', element: <EditTeamStats /> }
-			]
-		}
-	]
+    {
+      path: 'team-stats',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={teamStatsListConfig} /> },
+        { path: 'create', element: <TeamStatsFormPage /> },
+        { path: 'edit/:id', element: <TeamStatsFormPage /> },
+      ],
+    },
+  ],
 };

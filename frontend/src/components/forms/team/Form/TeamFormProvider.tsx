@@ -36,7 +36,8 @@ const TeamFormProvider: React.FC<TeamFormProviderProps> = ({ children, onSubmit,
 				short_name: team.short_name,
 				city: team.city,
 				country: team.country,
-				image: team.image
+				image: team.image,
+				isMainTeam: team.isMainTeam
 			});
 		}
 	}, [team, methods]);

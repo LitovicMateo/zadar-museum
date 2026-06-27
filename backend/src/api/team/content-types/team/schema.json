@@ -39,6 +39,10 @@
     },
     "country": {
       "type": "string"
+    },
+    "isMainTeam": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

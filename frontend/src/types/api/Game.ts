@@ -4,6 +4,14 @@ import { StaffDetailsResponse } from './Staff';
 import { TeamDetailsResponse } from './Team';
 import { VenueDetailsResponse } from './Venue';
 
+export type GalleryMedia = {
+	url: string;
+	width: number;
+	height: number;
+	alt: string;
+	mime?: string; // e.g. "image/jpeg", "video/mp4"
+};
+
 export type GameDetailsResponse = {
 	documentId: string;
 	id: number;
@@ -28,12 +36,7 @@ export type GameDetailsResponse = {
 	league_short_name: string;
 	createdAt: Date;
 	attendance: string;
-	gallery?: {
-		url: string;
-		width: number;
-		height: number;
-		alt: string;
-	}[];
+	gallery?: GalleryMedia[];
 	mainReferee: RefereeDetailsResponse;
 	secondReferee: RefereeDetailsResponse;
 	thirdReferee: RefereeDetailsResponse;

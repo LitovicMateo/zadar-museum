@@ -7,12 +7,14 @@ import styles from './MobileControls.module.css';
 interface MobileControlsProps {
 	view: 'total' | 'average';
 	location: 'total' | 'home' | 'away' | 'neutral';
+	hasHome: boolean;
+	hasAway: boolean;
 	hasNeutral: boolean;
 	setView: (view: 'total' | 'average') => void;
 	setLocation: (location: 'total' | 'home' | 'away' | 'neutral') => void;
 }
 
-function MobileControls({ view, location, hasNeutral, setView, setLocation }: MobileControlsProps) {
+function MobileControls({ view, location, hasHome, hasAway, hasNeutral, setView, setLocation }: MobileControlsProps) {
 	const viewOptions = [
 		{ value: 'total', label: 'Total' },
 		{ value: 'average', label: 'Average' }
@@ -36,7 +38,12 @@ function MobileControls({ view, location, hasNeutral, setView, setLocation }: Mo
 			/>
 			<Select
 				value={locationOptions.find((o) => o.value === location)}
-				options={locationOptions.filter((o) => o.value !== 'neutral' || hasNeutral)}
+				options={locationOptions.filter(
+					(o) =>
+						(o.value !== 'home' || hasHome) &&
+						(o.value !== 'away' || hasAway) &&
+						(o.value !== 'neutral' || hasNeutral)
+				)}
 				onChange={(opt) => opt && setLocation(opt.value as 'total' | 'home' | 'away' | 'neutral')}
 				styles={selectStyle()}
 				isSearchable={false}

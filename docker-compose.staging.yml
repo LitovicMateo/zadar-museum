@@ -21,6 +21,24 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis_staging
+    command: redis-server --save "" --appendonly no
+    networks:
+      - app_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
   backend:
     image: ghcr.io/litovicmateo/zadar-museum-backend:latest
     container_name: strapi_staging
@@ -37,6 +55,7 @@ services:
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
       JWT_SECRET: ${JWT_SECRET}
+      REDIS_URL: redis://redis:6379
       # Allow configuring CORS origins from the .env file on the host (comma-separated)
       # Allow browser requests from staging host root
       CORS_ORIGINS: "http://localhost"
@@ -46,6 +65,7 @@ services:
     command: npm run start
     depends_on:
       - postgres
+      - redis
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://127.0.0.1:1337/admin || exit 1"]
       interval: 30s
@@ -63,12 +83,6 @@ services:
 
   frontend:
     image: ghcr.io/litovicmateo/zadar-museum-frontend:latest
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      target: production
-      args:
-        VITE_API_ROOT: ${VITE_API_ROOT:-}
     container_name: react_staging
     depends_on:
       - backend

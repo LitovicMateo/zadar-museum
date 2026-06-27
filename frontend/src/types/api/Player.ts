@@ -208,22 +208,32 @@ export interface PlayerCareerHighResponse {
 	efficiency: Stat;
 }
 
+/** A location-keyed record of stat entries for one view (total or average). */
+export interface LocationRecord {
+	total: GameStatsEntry | null;
+	home: GameStatsEntry | null;
+	away: GameStatsEntry | null;
+	neutral?: GameStatsEntry | null;
+}
+
+/** A view-keyed (total/average) phase record. */
+export interface PhaseRecord {
+	total: LocationRecord;
+	average: LocationRecord;
+}
+
 export interface PlayerCareerStats {
 	player_id: string;
 	first_name: string;
 	last_name: string;
-	total: {
-		total: GameStatsEntry;
-		home: GameStatsEntry;
-		away: GameStatsEntry;
-		neutral?: GameStatsEntry;
-	};
-	average: {
-		total: GameStatsEntry;
-		home: GameStatsEntry;
-		away: GameStatsEntry;
-		neutral?: GameStatsEntry;
-	};
+	total: LocationRecord;
+	average: LocationRecord;
+	/** Regular-season-only split (game.stage IN league/group). */
+	regular?: PhaseRecord;
+	/** Playoff-only split (game.stage = playoff). */
+	playoff?: PhaseRecord;
+	/** True only when the player has games in both phases for this competition. */
+	hasPhaseSplit?: boolean;
 }
 
 /**
@@ -231,6 +241,15 @@ export interface PlayerCareerStats {
  */
 export interface GameStatsEntry extends GameStats {
 	key: 'home' | 'away' | 'total' | 'neutral';
+}
+
+/**
+ * A per-league season-average row carrying its regular/playoff split siblings.
+ */
+export interface SeasonLeagueEntry extends GameStatsEntry {
+	regular: GameStatsEntry | null;
+	playoff: GameStatsEntry | null;
+	hasPhaseSplit: boolean;
 }
 
 /**
@@ -289,6 +308,21 @@ export interface GameAverages {
  * GameStats = GameAverages + GameRanks
  */
 export type GameStats = GameAverages & GameRanks;
+
+/**
+ * Lightweight roster entry for the compare-page player picker.
+ */
+export interface PlayerRosterEntry {
+	player_id: string;
+	first_name: string;
+	last_name: string;
+	image_url: string | null;
+}
+
+export interface PlayerCompareResponse {
+	player1: GameStats | null;
+	player2: GameStats | null;
+}
 
 /**
  * Combined bio + career stats entry used on the Players directory page.

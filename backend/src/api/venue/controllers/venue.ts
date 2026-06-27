@@ -35,10 +35,6 @@ export default factories.createCoreController(
     async getVenuesTeamRecord(ctx) {
       const service = strapi.service("api::venue.venue");
       const data = await service.findVenuesTeamRecord();
-
-      // log the data to verify its structure
-      console.log("Venues Team Record Data:", data);
-
       ctx.body = data;
     },
 
@@ -87,13 +83,17 @@ export default factories.createCoreController(
         statKey: string;
         season?: string;
       };
-      const service = strapi.service("api::venue.venue");
-      const data = await service.findVenuePlayerRecords(
-        venueSlug,
-        statKey,
-        season,
-      );
-      ctx.body = data;
+      try {
+        const service = strapi.service("api::venue.venue");
+        const data = await service.findVenuePlayerRecords(
+          venueSlug,
+          statKey,
+          season,
+        );
+        ctx.body = data;
+      } catch (err) {
+        ctx.throw(500, err);
+      }
     },
 
     async getVenueTeamRecords(ctx) {
@@ -102,13 +102,17 @@ export default factories.createCoreController(
         statKey: string;
         season?: string;
       };
-      const service = strapi.service("api::venue.venue");
-      const data = await service.findVenueTeamRecords(
-        venueSlug,
-        statKey,
-        season,
-      );
-      ctx.body = data;
+      try {
+        const service = strapi.service("api::venue.venue");
+        const data = await service.findVenueTeamRecords(
+          venueSlug,
+          statKey,
+          season,
+        );
+        ctx.body = data;
+      } catch (err) {
+        ctx.throw(500, err);
+      }
     },
   }),
 );

@@ -2,10 +2,10 @@ import { PlayerDB } from '@/components/Player/PlayerPage';
 import { API_ROUTES } from '@/constants/Routes';
 import { useQuery } from '@/hooks/UseQueryWithToast';
 import apiClient from '@/lib/ApiClient';
-import { GameStatsEntry } from '@/types/api/Player';
+import { SeasonLeagueEntry } from '@/types/api/Player';
 
 export const usePlayerSeasonLeagueAverage = (playerId: string, season: string, database: PlayerDB) => {
-	return useQuery<GameStatsEntry[]>({
+	return useQuery<SeasonLeagueEntry[]>({
 		queryKey: ['seasonLeagueAverage', playerId, season, database],
 		queryFn: getPlayerSeasonLeagueAverage.bind(null, playerId!, season, database),
 		enabled: !!playerId,

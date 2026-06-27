@@ -25,11 +25,11 @@ export const BoxscoreProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 	const { playerId } = useParams();
 	const [season, setSeason] = useState('');
 	const [selectedCompetitions, setSelectedCompetitions] = useState<string[]>([]);
-	const [selectedDatabase, setSelectedDatabase] = useState<PlayerDB>('zadar');
+	const [selectedDatabase, setSelectedDatabase] = useState<PlayerDB>('main');
 
 	const { db } = usePlayerProfileDatabase(playerId!);
 	const { data: competitions = [] } = usePlayerCompetitions(playerId!, season);
-	const { data: seasons } = usePlayerSeasons(playerId!, selectedDatabase!);
+	const { data: seasons } = usePlayerSeasons(playerId!, db ?? 'main', { enabled: !!db });
 
 	useEffect(() => {
 		if (db) {

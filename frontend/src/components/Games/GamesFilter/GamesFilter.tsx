@@ -1,55 +1,44 @@
 import React from 'react';
 
-import CompetitionList from '@/components/Games/GamesFilter/CompetitionList';
-import RightControls from '@/components/Games/GamesFilter/RightControls';
-import MobileFilters from '@/components/MobileFilters/MobileFilters';
+import CompetitionDropdown from '@/components/Schedule/Controls/CompetitionDropdown';
+import OpponentSearch from '@/components/Schedule/Controls/OpponentSearch';
+import SeasonPager from '@/components/Schedule/Controls/SeasonPager';
 import { useGamesContext } from '@/hooks/context/UseGamesContext';
 
-import styles from './GamesFilter.module.css';
-
-interface Props {
-	showCompetitions?: boolean;
-}
-
-const GamesFilter: React.FC<Props> = ({ showCompetitions = true }) => {
+const GamesFilter: React.FC = () => {
 	const {
+		seasons,
 		selectedSeason,
 		setSelectedSeason,
+		isPending,
 		competitions,
-		selectedCompetitions,
-		toggleCompetition,
-		SearchInput,
-		seasons,
-		scheduleLoading,
-		teamName
+		selectedCompetition,
+		setSelectedCompetition,
+		searchTerm,
+		setSearchTerm
 	} = useGamesContext();
 
-	if (seasons === undefined || competitions === undefined || scheduleLoading) {
+	if (seasons === undefined) {
 		return <div>Loading...</div>;
 	}
 
 	return (
-		<aside className={styles.aside}>
-			<MobileFilters SearchInput={teamName === 'KK Zadar' ? SearchInput : undefined} title="Filters">
-				<div className={styles.wrapper}>
-					{showCompetitions && (
-						<CompetitionList
-							competitions={competitions}
-							selectedCompetitions={selectedCompetitions}
-							toggleCompetition={toggleCompetition}
-						/>
-					)}
-
-					{/* Right controls: season select (search is passed to MobileFilters) */}
-					<RightControls
-						seasons={seasons}
-						selectedSeason={selectedSeason}
-						onSeasonChange={setSelectedSeason}
-						compact
-					/>
-				</div>
-			</MobileFilters>
-		</aside>
+		<div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 bg-background py-2">
+			<SeasonPager
+				seasons={seasons}
+				selectedSeason={selectedSeason}
+				onSeasonChange={setSelectedSeason}
+				isPending={isPending}
+			/>
+			<CompetitionDropdown
+				competitions={competitions}
+				selected={selectedCompetition}
+				onChange={setSelectedCompetition}
+			/>
+			<div className="min-w-[200px] flex-1">
+				<OpponentSearch value={searchTerm} onChange={setSearchTerm} />
+			</div>
+		</div>
 	);
 };
 

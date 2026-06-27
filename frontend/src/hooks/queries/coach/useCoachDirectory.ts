@@ -7,7 +7,7 @@ import { CoachDirectoryEntry } from '@/types/api/Coach';
 
 export const useCoachesDirectory = (role: RoleFilter = 'all') => {
 	const { data: coaches, isLoading: coachesLoading } = useCoaches('last_name', 'asc');
-	const { data: statsData, isLoading: statsLoading } = useCoachAllTimeStats('zadar', role, 'all', 'all', 'all');
+	const { data: statsData, isLoading: statsLoading } = useCoachAllTimeStats('main', role, 'all', 'all', 'all');
 
 	const allTimeStats = statsData?.current;
 

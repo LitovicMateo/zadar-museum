@@ -4,19 +4,21 @@ import Select from 'react-select';
 
 import Radio from '@/components/UI/Radio/Radio';
 import RadioGroup from '@/components/UI/RadioGroup/RadioGroup';
-import TableWrapper from '@/components/UI/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
+import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { selectStyle, OptionType } from '@/constants/ReactSelectStyle';
 import { useIsMobile } from '@/hooks/UseMobile';
 import { useCoachLeagueStats } from '@/hooks/queries/coach/UseCoachLeagueStats';
 import { useCoachRecord } from '@/hooks/queries/coach/UseCoachRecord';
 import { useCoachProfileDatabase } from '@/hooks/queries/player/UseCoachProfileDatabase';
-import { CoachStats } from '@/types/api/Coach';
+import { CoachStats, CoachStatsResponse } from '@/types/api/Coach';
 
-import { useCoachSeasonStatsTable } from '../CoachSeasonStats/UseCoachSeasonStatsTable';
-import { computeHasNeutral, computeLeagueStats, computeTotalStats } from './CoachLeagueStats.utils';
+import { computeHasAway, computeHasHome, computeHasNeutral } from './CoachLeagueStats.utils';
+import { CoachLeagueCell, coachStatsColumns } from '../coachColumns';
 
 import styles from './CoachLeagueStats.module.css';
+
+type Role = 'total' | 'headCoach' | 'assistantCoach';
+type Loc = 'total' | 'home' | 'away' | 'neutral';
 
 const CoachLeagueStats: React.FC = () => {
 	const { coachId } = useParams();
@@ -30,24 +32,33 @@ const CoachLeagueStats: React.FC = () => {
 	const { data: coachLeagueStats } = useCoachLeagueStats(coachId!, db!);
 	const { data: coachRecord } = useCoachRecord(coachId!, db);
 
+	const hasHome = useMemo(() => computeHasHome(coachLeagueStats, coachRole), [coachLeagueStats, coachRole]);
+	const hasAway = useMemo(() => computeHasAway(coachLeagueStats, coachRole), [coachLeagueStats, coachRole]);
 	const hasNeutral = useMemo(() => computeHasNeutral(coachLeagueStats, coachRole), [coachLeagueStats, coachRole]);
 
 	useEffect(() => {
-		if (!hasNeutral && location === 'neutral') setLocation('total');
-	}, [hasNeutral, location]);
+		if (location === 'home' && !hasHome) setLocation('total');
+		else if (location === 'away' && !hasAway) setLocation('total');
+		else if (location === 'neutral' && !hasNeutral) setLocation('total');
+	}, [hasHome, hasAway, hasNeutral, location]);
 
-	const leagueStats: CoachStats[] = useMemo(
-		() => computeLeagueStats(coachLeagueStats, coachRole, location),
+	const groups = useMemo(
+		() =>
+			buildPhaseGroups<CoachStatsResponse, CoachStats>(coachLeagueStats, {
+				combined: (e) => e[coachRole as Role][location as Loc],
+				regular: (e) => e.regular?.[coachRole as Role]?.[location as Loc] ?? null,
+				playoff: (e) => e.playoff?.[coachRole as Role]?.[location as Loc] ?? null,
+				split: (e) => !!e.hasPhaseSplit,
+				keyOf: (r) => r.league_slug ?? 'total',
+				heading: (r) => <CoachLeagueCell leagueSlug={r.league_slug} />,
+			}),
 		[coachLeagueStats, coachRole, location]
 	);
 
-	const totalStats: CoachStats[] = useMemo(
-		() => computeTotalStats(coachRecord, coachRole, location),
-		[coachRecord, coachRole, location]
-	);
-
-	const { table } = useCoachSeasonStatsTable(leagueStats, 'league');
-	const { table: footTable } = useCoachSeasonStatsTable(totalStats, 'total');
+	const footerRows = useMemo<StatsDataRow<CoachStats>[]>(() => {
+		const row = coachRecord?.[coachRole as Role]?.[location as Loc];
+		return row && row.games ? [{ key: 'total', data: { ...row, league_id: null, league_slug: null } }] : [];
+	}, [coachRecord, coachRole, location]);
 
 	const coachRoleOptions = useMemo<OptionType[]>(() => {
 		const opts: OptionType[] = [{ value: 'total', label: 'Total' }];
@@ -58,14 +69,12 @@ const CoachLeagueStats: React.FC = () => {
 	}, [coachRecord]);
 
 	const locationOptions = useMemo<OptionType[]>(() => {
-		const opts: OptionType[] = [
-			{ value: 'total', label: 'Total' },
-			{ value: 'home', label: 'Home' },
-			{ value: 'away', label: 'Away' }
-		];
+		const opts: OptionType[] = [{ value: 'total', label: 'Total' }];
+		if (hasHome) opts.push({ value: 'home', label: 'Home' });
+		if (hasAway) opts.push({ value: 'away', label: 'Away' });
 		if (hasNeutral) opts.push({ value: 'neutral', label: 'Neutral' });
 		return opts;
-	}, [hasNeutral]);
+	}, [hasHome, hasAway, hasNeutral]);
 
 	return (
 		<section className={styles.section}>
@@ -120,8 +129,18 @@ const CoachLeagueStats: React.FC = () => {
 								onChange={() => setLocation('total')}
 								isActive={location === 'total'}
 							/>
-							<Radio label="Home" onChange={() => setLocation('home')} isActive={location === 'home'} />
-							<Radio label="Away" onChange={() => setLocation('away')} isActive={location === 'away'} />
+							<Radio
+								label="Home"
+								onChange={() => setLocation('home')}
+								isActive={location === 'home'}
+								isDisabled={!hasHome}
+							/>
+							<Radio
+								label="Away"
+								onChange={() => setLocation('away')}
+								isActive={location === 'away'}
+								isDisabled={!hasAway}
+							/>
 							<Radio
 								label="Neutral"
 								onChange={() => setLocation('neutral')}
@@ -133,11 +152,12 @@ const CoachLeagueStats: React.FC = () => {
 				)}
 			</div>
 			<section className={styles.content}>
-				<TableWrapper>
-					<UniversalTableHead table={table} />
-					<UniversalTableBody table={table} />
-					<UniversalTableFooter table={footTable} variant="default" />
-				</TableWrapper>
+				<StatsTable
+					columns={coachStatsColumns}
+					groups={groups}
+					footer={{ rows: footerRows, variant: 'default' }}
+					initialSort={{ columnId: 'games', dir: 'desc' }}
+				/>
 			</section>
 		</section>
 	);

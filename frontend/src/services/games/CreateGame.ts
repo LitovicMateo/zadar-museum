@@ -7,7 +7,7 @@ export const createGame = async (data: GameFormData) => {
 	if (data.stage === 'league' && data.competition) {
 		const { season, competition, round, home_team, away_team } = data;
 
-		// Query Strapi for any game in this season+competition+round with either team
+		// Query Strapi for the exact matchup in this season+competition+round
 		const res = await apiClient.get(API_ROUTES.create.game(), {
 			params: {
 				filters: {
@@ -15,10 +15,8 @@ export const createGame = async (data: GameFormData) => {
 					competition: { $eq: competition },
 					round: { $eq: round },
 					$or: [
-						{ home_team: { $eq: home_team } },
-						{ away_team: { $eq: home_team } },
-						{ home_team: { $eq: away_team } },
-						{ away_team: { $eq: away_team } }
+						{ $and: [{ home_team: { $eq: home_team } }, { away_team: { $eq: away_team } }] },
+						{ $and: [{ home_team: { $eq: away_team } }, { away_team: { $eq: home_team } }] }
 					]
 				}
 			}

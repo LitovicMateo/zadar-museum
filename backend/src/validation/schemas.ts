@@ -25,7 +25,7 @@ export const StatsQuerySchema = z.object({
     .string()
     .regex(/^\d{4}$/)
     .optional(),
-  database: z.enum(["zadar", "opponent"]),
+  database: z.enum(["main", "opponent"]),
 });
 
 export const TeamStatsQuerySchema = z.object({
@@ -40,7 +40,7 @@ export const TeamStatsQuerySchema = z.object({
     .string()
     .regex(/^\d{4}$/)
     .optional(),
-  database: z.enum(["zadar", "opponent"]),
+  database: z.enum(["main", "opponent"]),
 });
 
 export const CoachStatsQuerySchema = z.object({
@@ -55,7 +55,7 @@ export const CoachStatsQuerySchema = z.object({
     .string()
     .regex(/^\d{4}$/)
     .optional(),
-  database: z.enum(["zadar", "opponent"]),
+  database: z.enum(["main", "opponent"]),
   role: z.enum(["head", "assistant", "all"]).optional(),
 });
 

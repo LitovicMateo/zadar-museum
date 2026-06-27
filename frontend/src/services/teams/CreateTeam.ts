@@ -23,7 +23,8 @@ export const createTeam = async (data: TeamFormData) => {
 			city: data.city,
 			image: uploadedImageId,
 			country: data.country,
-			alternate_names: alternate_names
+			alternate_names: alternate_names,
+			isMainTeam: data.isMainTeam
 		}
 	});
 };

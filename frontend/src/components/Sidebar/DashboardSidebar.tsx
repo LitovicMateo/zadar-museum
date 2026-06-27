@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import RefreshDataButton from '../UI/RefreshMVButton/RefreshDataButton';
+import ClearCacheButton from '../UI/ClearCacheButton/ClearCacheButton';
 import DashboardSidebarRow, { type DashboardNavItem } from './DashboardSidebarRow';
 import SidebarContent from './SidebarContent';
 import SidebarTitle from './SidebarTitle';
@@ -58,7 +58,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ navItems, statsItem
 								</ul>
 							</div>
 
-							<RefreshDataButton />
+							<ClearCacheButton />
 						</SidebarContent>
 					</div>
 				)}

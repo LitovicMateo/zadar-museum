@@ -16,7 +16,7 @@ const path = require("path");
 const { Client } = require("pg");
 
 const defaultSqlDir =
-  process.env.SQL_DIR || path.resolve(__dirname, "../../sql");
+  process.env.SQL_DIR || path.resolve(__dirname, "../../sql/Layer 1");
 
 // Simple CLI flags:
 //   node apply-mvs.js [path/to/sql/dir] [--refresh] [--force] [--concurrent]
@@ -70,25 +70,8 @@ async function main() {
   }
 
   console.log("Collecting .sql files from", sqlDir);
-  const files = collectSqlFiles(sqlDir);
-
-  // Prefer applying Layer 1 -> Layer 2 -> Layer 3 files first to reduce
-  // dependency deferrals between layers that reference each other.
-  const layer1 = [];
-  const layer2 = [];
-  const layer3 = [];
-  const others = [];
-  for (const f of files) {
-    const p = f.replace(/\\\\/g, "/").toLowerCase();
-    if (p.includes("/layer 1/")) layer1.push(f);
-    else if (p.includes("/layer 2/")) layer2.push(f);
-    else if (p.includes("/layer 3/")) layer3.push(f);
-    else others.push(f);
-  }
-  const orderedFiles = [].concat(layer1, layer2, layer3, others);
-  console.log(
-    `Found ${files.length} .sql files (ordered ${orderedFiles.length})`
-  );
+  const orderedFiles = collectSqlFiles(sqlDir);
+  console.log(`Found ${orderedFiles.length} .sql files`);
 
   const connectionString =
     process.env.DATABASE_URL ||

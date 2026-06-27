@@ -7,7 +7,8 @@ import {
   teamLeadersQuerySchema,
   teamAverageParamsSchema,
   teamRecordParamsSchema,
-  teamRecordsQuerySchema,
+  teamPlayerRecordsQuerySchema,
+  teamTeamRecordsQuerySchema,
 } from "../../../validation/schemas/team";
 
 export default {
@@ -115,7 +116,7 @@ export default {
         middlewares: [
           validate({
             params: teamSlugParamsSchema,
-            query: teamRecordsQuerySchema,
+            query: teamPlayerRecordsQuerySchema,
           }),
         ],
       },
@@ -130,7 +131,7 @@ export default {
         middlewares: [
           validate({
             params: teamSlugParamsSchema,
-            query: teamRecordsQuerySchema,
+            query: teamTeamRecordsQuerySchema,
           }),
         ],
       },

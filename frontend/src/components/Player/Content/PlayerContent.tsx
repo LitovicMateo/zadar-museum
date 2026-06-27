@@ -7,9 +7,8 @@ import AllTimeStats from '@/components/Player/Content/PlayerCareerStats/AllTimeS
 import AllTimeLeagueStats from '@/components/Player/Content/PlayerLeagueStats/PlayerLeagueStats';
 import Menu from '@/components/Player/menu/Menu';
 import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/UI/Tabs';
-import { useBoxscore } from '@/hooks/context/UseBoxscore';
-import { useAllTimeStats } from '@/hooks/queries/player/UseAllTimeStats';
 import { usePlayerProfileDatabase } from '@/hooks/queries/player/UsePlayerProfileDatabase';
+import { usePlayerTeams } from '@/hooks/queries/player/UsePlayerTeams';
 import { AnimatePresence } from 'framer-motion';
 
 import GamelogTab from './PlayerGamelog';
@@ -37,7 +36,6 @@ const TAB_PANELS: { value: TabValue; content: React.ReactNode }[] = [
 
 const PlayerContent: React.FC = React.memo(() => {
 	const { playerId } = useParams();
-	const { selectedDatabase } = useBoxscore();
 
 	const [activeTab, setActiveTab] = useState<string>('career');
 	const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -51,9 +49,9 @@ const PlayerContent: React.FC = React.memo(() => {
 	}, []);
 
 	const data = usePlayerProfileDatabase(playerId!);
-	const { data: stats } = useAllTimeStats(playerId!, selectedDatabase!);
+	const { data: teams } = usePlayerTeams(playerId!);
 
-	if (stats?.length === 0) {
+	if (teams?.length === 0) {
 		return <NoContent type="info" description={<p>This player did not participate in any games.</p>} />;
 	}
 

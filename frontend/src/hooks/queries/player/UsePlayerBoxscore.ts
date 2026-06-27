@@ -5,9 +5,10 @@ import { PlayerBoxscoreResponse } from '@/types/api/Player';
 
 export const usePlayerBoxscore = (playerId: string, season: string) => {
 	return useQuery({
-		queryKey: ['boxscore', playerId, season], // stable key
+		queryKey: ['player-boxscore', playerId, season],
 		queryFn: getPlayerBoxscore.bind(null, playerId!, season),
 		enabled: !!playerId,
+		staleTime: Infinity,
 		errorMessage: 'Failed to load player boxscore'
 	});
 };

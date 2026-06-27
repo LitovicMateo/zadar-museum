@@ -8,6 +8,84 @@ import {
   validateSeason,
   ALLOWED_DATABASES,
 } from "../../../validation";
+import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
+import {
+  aggregateCoachRecord,
+  buildRecord,
+  type Phase,
+} from "../../../lib/aggregation/queries";
+import { getMainTeamSlug } from "../../../lib/mainTeam";
+import type { Knex } from "knex";
+
+// Computes a coach's { total, headCoach, assistantCoach } location records for
+// one league + phase, or null when the coach has no games in that scope.
+async function coachLeaguePhase(
+  knex: Knex,
+  args: {
+    coachId: string;
+    database: "main" | "opponent";
+    league_slug: string;
+    season?: string;
+    phase: Phase;
+  },
+) {
+  const { coachId, database, league_slug, season, phase } = args;
+  const base = { coachId, database, league: league_slug, season, phase };
+  const [total, headCoach, assistantCoach] = await Promise.all([
+    buildRecord((location) =>
+      aggregateCoachRecord(knex, { ...base, location }).then((r) => r[0] ?? null),
+    ),
+    buildRecord((location) =>
+      aggregateCoachRecord(knex, { ...base, role: "head", location }).then((r) => r[0] ?? null),
+    ),
+    buildRecord((location) =>
+      aggregateCoachRecord(knex, { ...base, role: "assistant", location }).then((r) => r[0] ?? null),
+    ),
+  ]);
+  const anyRow = total.total ?? total.home ?? total.away ?? total.neutral;
+  if (!anyRow) return null;
+  return { total, headCoach, assistantCoach, anyRow };
+}
+
+// Assembles one per-league coach result with regular/playoff split.
+async function coachLeagueResultWithSplit(
+  knex: Knex,
+  args: {
+    coachId: string;
+    database: "main" | "opponent";
+    league_id: any;
+    league_slug: string;
+    season?: string;
+  },
+): Promise<Record<string, any> | null> {
+  const { league_id, league_slug, season } = args;
+  const [all, regular, playoff] = await Promise.all([
+    coachLeaguePhase(knex, { ...args, phase: "all" }),
+    coachLeaguePhase(knex, { ...args, phase: "regular" }),
+    coachLeaguePhase(knex, { ...args, phase: "playoff" }),
+  ]);
+  if (!all) return null;
+  const regularGames = Number(regular?.total.total?.games ?? 0);
+  const playoffGames = Number(playoff?.total.total?.games ?? 0);
+  return {
+    coachId: all.anyRow.coach_id,
+    firstName: all.anyRow.first_name,
+    lastName: all.anyRow.last_name,
+    ...(season ? { season } : {}),
+    leagueId: league_id,
+    leagueSlug: league_slug,
+    total: all.total,
+    headCoach: all.headCoach,
+    assistantCoach: all.assistantCoach,
+    regular: regular
+      ? { total: regular.total, headCoach: regular.headCoach, assistantCoach: regular.assistantCoach }
+      : null,
+    playoff: playoff
+      ? { total: playoff.total, headCoach: playoff.headCoach, assistantCoach: playoff.assistantCoach }
+      : null,
+    hasPhaseSplit: regularGames > 0 && playoffGames > 0,
+  };
+}
 
 export default factories.createCoreService(
   "api::coach.coach",
@@ -22,46 +100,74 @@ export default factories.createCoreService(
     },
 
     async findCoachTeamRecord(coachId, db) {
-      // Validate inputs
       if (!coachId) {
         throw new Error("Coach ID is required");
       }
-      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "main" | "opponent";
 
-      const table = `${validatedDb}_coach_record_full`;
-      const knex = strapi.db.connection;
-      const data = await knex(table).select("*").where("coach_id", coachId);
+      return getCached(
+        `${CACHE_PREFIX}coach:team-record:${coachId}:${validatedDb}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
 
-      if (data.length === 0) {
-        return null;
-      }
+          const [totalRecord, headRecord, assistantRecord] = await Promise.all([
+            buildRecord((location) =>
+              aggregateCoachRecord(knex, {
+                coachId,
+                database: validatedDb,
+                location,
+              }).then((r) => r[0] ?? null),
+            ),
+            buildRecord((location) =>
+              aggregateCoachRecord(knex, {
+                coachId,
+                database: validatedDb,
+                role: "head",
+                location,
+              }).then((r) => r[0] ?? null),
+            ),
+            buildRecord((location) =>
+              aggregateCoachRecord(knex, {
+                coachId,
+                database: validatedDb,
+                role: "assistant",
+                location,
+              }).then((r) => r[0] ?? null),
+            ),
+          ]);
 
-      const coach = data[0];
+          const anyRow =
+            totalRecord.total ?? totalRecord.home ?? totalRecord.away ?? totalRecord.neutral;
 
-      return {
-        coachId: coach.coach_id,
-        firstName: coach.first_name,
-        lastName: coach.last_name,
-        total: JSON.parse(coach.total_record),
-        headCoach: JSON.parse(coach.head_coach_record),
-        assistantCoach: JSON.parse(coach.assistant_coach_record),
-      };
+          if (!anyRow) return null;
+
+          return {
+            coachId: anyRow.coach_id,
+            firstName: anyRow.first_name,
+            lastName: anyRow.last_name,
+            total: totalRecord,
+            headCoach: headRecord,
+            assistantCoach: assistantRecord,
+          };
+        },
+      );
     },
 
     async findCoachGamelog(coachId: string, db: string) {
-      // Validate inputs
       if (!coachId) {
         throw new Error("Coach ID is required");
       }
       const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
 
       const knex = strapi.db.connection;
+      const mainSlug = await getMainTeamSlug();
 
-      if (validatedDb === "zadar") {
+      if (validatedDb === "main") {
         return await knex("schedule")
           .where(function () {
-            // Coach led Zadar at home
-            this.where("home_team_slug", "kk-zadar").andWhere(function () {
+            // Coach led the main team at home
+            this.where("home_team_slug", mainSlug).andWhere(function () {
               this.where("home_head_coach_id", coachId).orWhere(
                 "home_assistant_coach_id",
                 coachId,
@@ -69,8 +175,8 @@ export default factories.createCoreService(
             });
           })
           .orWhere(function () {
-            // Coach led Zadar away
-            this.where("away_team_slug", "kk-zadar").andWhere(function () {
+            // Coach led the main team away
+            this.where("away_team_slug", mainSlug).andWhere(function () {
               this.where("away_head_coach_id", coachId).orWhere(
                 "away_assistant_coach_id",
                 coachId,
@@ -81,8 +187,8 @@ export default factories.createCoreService(
       } else {
         return await knex("schedule")
           .where(function () {
-            // Coach led opponent at home (any team except KK Zadar)
-            this.whereNot("home_team_slug", "kk-zadar").andWhere(function () {
+            // Coach led opponent at home (any team except main team)
+            this.whereNot("home_team_slug", mainSlug).andWhere(function () {
               this.where("home_head_coach_id", coachId).orWhere(
                 "home_assistant_coach_id",
                 coachId,
@@ -90,8 +196,8 @@ export default factories.createCoreService(
             });
           })
           .orWhere(function () {
-            // Coach led opponent away (any team except KK Zadar)
-            this.whereNot("away_team_slug", "kk-zadar").andWhere(function () {
+            // Coach led opponent away (any team except main team)
+            this.whereNot("away_team_slug", mainSlug).andWhere(function () {
               this.where("away_head_coach_id", coachId).orWhere(
                 "away_assistant_coach_id",
                 coachId,
@@ -123,7 +229,6 @@ export default factories.createCoreService(
     },
 
     async findCoachSeasonCompetitions(coachId, season) {
-      // Validate inputs
       if (!coachId) {
         throw new Error("Coach ID is required");
       }
@@ -158,101 +263,157 @@ export default factories.createCoreService(
     },
 
     async findCoachLeagueRecord(coachId, db) {
-      // Validate inputs
       if (!coachId) {
         throw new Error("Coach ID is required");
       }
-      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "main" | "opponent";
 
-      const knex = strapi.db.connection;
-      const data = await knex(`${validatedDb}_coach_league_record_full`)
-        .select("*")
-        .where("coach_id", coachId);
+      return getCached(
+        `${CACHE_PREFIX}coach:league-record:${coachId}:${validatedDb}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
 
-      if (data.length === 0) {
-        return null;
-      }
+          // Get distinct leagues this coach appeared in (via coach_boxscore)
+          const mainSlug = await getMainTeamSlug();
 
-      const coach = data.map((coach) => {
-        return {
-          coachId: coach.coach_id,
-          firstName: coach.first_name,
-          lastName: coach.last_name,
-          total: JSON.parse(coach.total_record),
-          headCoach: JSON.parse(coach.head_coach_record),
-          assistantCoach: JSON.parse(coach.assistant_coach_record),
-        };
-      });
+          const leagueQuery = knex("coach_boxscore")
+            .select("league_id", "league_slug")
+            .distinct("league_id")
+            .where("coach_id", coachId);
 
-      return coach;
+          if (validatedDb === "main") {
+            leagueQuery.where("team_slug", mainSlug);
+          } else {
+            leagueQuery.whereNot("team_slug", mainSlug);
+          }
+
+          const leagues: { league_id: string; league_slug: string }[] = await leagueQuery;
+
+          if (leagues.length === 0) return null;
+
+          const leagueResults = await Promise.all(
+            leagues.map(({ league_id, league_slug }) =>
+              coachLeagueResultWithSplit(knex, {
+                coachId,
+                database: validatedDb,
+                league_id,
+                league_slug,
+              }),
+            ),
+          );
+
+          return leagueResults.filter(Boolean);
+        },
+      );
     },
 
     async findCoachLeagueSeasonStats(coachId, season, db) {
-      // Validate inputs
       if (!coachId) {
         throw new Error("Coach ID is required");
       }
       const validatedSeason = validateSeason(season);
-      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "main" | "opponent";
 
-      const knex = strapi.db.connection;
-      const data = await knex(`${validatedDb}_coach_season_league_record_full`)
-        .select("*")
-        .where("coach_id", coachId)
-        .andWhere("season", validatedSeason);
+      return getCached(
+        `${CACHE_PREFIX}coach:league-season-stats:${coachId}:${validatedSeason}:${validatedDb}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
 
-      if (data.length === 0) {
-        return null;
-      }
+          // Get distinct leagues this coach appeared in during the given season
+          const mainSlug = await getMainTeamSlug();
 
-      const coach = data.map((coach) => {
-        return {
-          coachId: coach.coach_id,
-          firstName: coach.first_name,
-          lastName: coach.last_name,
-          season: coach.season,
-          total: JSON.parse(coach.total_record),
-          headCoach: JSON.parse(coach.head_coach_record),
-          assistantCoach: JSON.parse(coach.assistant_coach_record),
-        };
-      });
+          const leagueQuery = knex("coach_boxscore")
+            .select("league_id", "league_slug")
+            .distinct("league_id")
+            .where("coach_id", coachId)
+            .where("season", validatedSeason);
 
-      return coach;
+          if (validatedDb === "main") {
+            leagueQuery.where("team_slug", mainSlug);
+          } else {
+            leagueQuery.whereNot("team_slug", mainSlug);
+          }
+
+          const leagues: { league_id: string; league_slug: string }[] = await leagueQuery;
+
+          if (leagues.length === 0) return null;
+
+          const leagueResults = await Promise.all(
+            leagues.map(({ league_id, league_slug }) =>
+              coachLeagueResultWithSplit(knex, {
+                coachId,
+                database: validatedDb,
+                league_id,
+                league_slug,
+                season: validatedSeason,
+              }),
+            ),
+          );
+
+          return leagueResults.filter(Boolean);
+        },
+      );
     },
 
     async findCoachTotalSeasonStats(coachId, season, db) {
-      // Validate inputs
       if (!coachId) {
         throw new Error("Coach ID is required");
       }
       const validatedSeason = validateSeason(season);
-      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database");
+      const validatedDb = validateWhitelist(db, ALLOWED_DATABASES, "database") as "main" | "opponent";
 
-      const knex = strapi.db.connection;
+      return getCached(
+        `${CACHE_PREFIX}coach:total-season-stats:${coachId}:${validatedSeason}:${validatedDb}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
 
-      try {
-        const data = await knex(`${validatedDb}_coach_season_record_full`)
-          .select("*")
-          .where("coach_id", coachId)
-          .andWhere("season", validatedSeason);
+          const [totalRecord, headRecord, assistantRecord] = await Promise.all([
+            buildRecord((location) =>
+              aggregateCoachRecord(knex, {
+                coachId,
+                database: validatedDb,
+                location,
+                season: validatedSeason,
+              }).then((r) => r[0] ?? null),
+            ),
+            buildRecord((location) =>
+              aggregateCoachRecord(knex, {
+                coachId,
+                database: validatedDb,
+                role: "head",
+                location,
+                season: validatedSeason,
+              }).then((r) => r[0] ?? null),
+            ),
+            buildRecord((location) =>
+              aggregateCoachRecord(knex, {
+                coachId,
+                database: validatedDb,
+                role: "assistant",
+                location,
+                season: validatedSeason,
+              }).then((r) => r[0] ?? null),
+            ),
+          ]);
 
-        if (data.length === 0) {
-          return null;
-        }
+          const anyRow =
+            totalRecord.total ?? totalRecord.home ?? totalRecord.away ?? totalRecord.neutral;
 
-        const coach = data[0];
+          if (!anyRow) return null;
 
-        return {
-          coachId: coach.coach_id,
-          firstName: coach.first_name,
-          lastName: coach.last_name,
-          total: JSON.parse(coach.total_record),
-          headCoach: JSON.parse(coach.head_coach_record),
-          assistantCoach: JSON.parse(coach.assistant_coach_record),
-        };
-      } catch (err) {
-        throw new Error(`Failed to fetch coach season stats: ${err.message}`);
-      }
+          return {
+            coachId: anyRow.coach_id,
+            firstName: anyRow.first_name,
+            lastName: anyRow.last_name,
+            total: totalRecord,
+            headCoach: headRecord,
+            assistantCoach: assistantRecord,
+          };
+        },
+      );
     },
   }),
 );

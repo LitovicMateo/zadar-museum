@@ -6,141 +6,233 @@ import { factories } from "@strapi/strapi";
 import {
   validateWhitelist,
   validateSeason,
-  ALLOWED_DATABASES,
   ALLOWED_ENTITIES,
-  ALLOWED_STATS,
-  ALLOWED_LOCATIONS,
+  ALLOWED_PLAYER_RECORD_STATS,
+  ALLOWED_TEAM_RECORD_STATS,
 } from "../../../validation";
+import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
+import {
+  aggregateTeamStats,
+  buildRecord,
+  type Phase,
+} from "../../../lib/aggregation/queries";
+import type { Knex } from "knex";
+
+// Shape a raw aggregateTeamStats row into the TeamStats JSONB-equivalent object
+function toTeamStats(
+  row: any | null,
+  key: "Total" | "Home" | "Away" | "Neutral",
+  leagueId?: any,
+  leagueSlug?: any,
+): Record<string, any> | null {
+  if (!row) return null;
+  return {
+    key,
+    games: row.games,
+    wins: row.wins,
+    losses: row.losses,
+    win_percentage: row.win_pct,
+    points_scored: row.points_scored,
+    points_received: row.points_received,
+    points_diff: row.points_diff,
+    attendance: row.attendance,
+    ...(leagueId !== undefined ? { league_id: leagueId, league_slug: leagueSlug } : {}),
+  };
+}
+
+// Computes the four location variants for one league + phase. Returns the
+// nested { total, home, away, neutral } record plus the raw total row (for
+// team identity and game-count thresholds), or null when the team has no games.
+async function teamLeaguePhase(
+  knex: Knex,
+  args: {
+    teamSlug: string;
+    league_id: any;
+    league_slug: string;
+    season?: string;
+    phase: Phase;
+  },
+): Promise<{ record: Record<string, any>; totalRow: any } | null> {
+  const { teamSlug, league_id, league_slug, season, phase } = args;
+  const base = { teamSlug, league: league_slug, season, phase };
+  const [totalRow, homeRow, awayRow, neutralRow] = await Promise.all([
+    aggregateTeamStats(knex, { ...base, location: "all" }).then((r) => r[0] ?? null),
+    aggregateTeamStats(knex, { ...base, location: "home" }).then((r) => r[0] ?? null),
+    aggregateTeamStats(knex, { ...base, location: "away" }).then((r) => r[0] ?? null),
+    aggregateTeamStats(knex, { ...base, location: "neutral" }).then((r) => r[0] ?? null),
+  ]);
+  if (!totalRow) return null;
+  return {
+    totalRow,
+    record: {
+      total: toTeamStats(totalRow, "Total", league_id, league_slug),
+      home: toTeamStats(homeRow, "Home", league_id, league_slug),
+      away: toTeamStats(awayRow, "Away", league_id, league_slug),
+      neutral: toTeamStats(neutralRow, "Neutral", league_id, league_slug),
+    },
+  };
+}
+
+// Assembles one per-league result with regular/playoff split + hasPhaseSplit.
+async function teamLeagueResultWithSplit(
+  knex: Knex,
+  args: { teamSlug: string; league_id: any; league_slug: string; season?: string },
+): Promise<Record<string, any> | null> {
+  const [all, regular, playoff] = await Promise.all([
+    teamLeaguePhase(knex, { ...args, phase: "all" }),
+    teamLeaguePhase(knex, { ...args, phase: "regular" }),
+    teamLeaguePhase(knex, { ...args, phase: "playoff" }),
+  ]);
+  if (!all) return null;
+  const regularGames = Number(regular?.record.total?.games ?? 0);
+  const playoffGames = Number(playoff?.record.total?.games ?? 0);
+  return {
+    teamId: all.totalRow.team_id,
+    teamSlug: all.totalRow.team_slug,
+    teamName: all.totalRow.team_name,
+    leagueId: args.league_id,
+    leagueSlug: args.league_slug,
+    ...all.record,
+    regular: regular?.record ?? null,
+    playoff: playoff?.record ?? null,
+    hasPhaseSplit: regularGames > 0 && playoffGames > 0,
+  };
+}
 
 export default factories.createCoreService("api::team.team", ({ strapi }) => ({
   async getTeamSeasons(teamSlug) {
-    const knex = strapi.db.connection;
-    return knex("schedule")
-      .select("season")
-      .distinct("season")
-      .where("home_team_slug", teamSlug)
-      .orWhere("away_team_slug", teamSlug);
+    return getCached(`${CACHE_PREFIX}team:seasons:${teamSlug}`, TTL_1H, () => {
+      const knex = strapi.db.connection;
+      return knex("schedule")
+        .select("season")
+        .distinct("season")
+        .where("home_team_slug", teamSlug)
+        .orWhere("away_team_slug", teamSlug);
+    });
   },
 
   async findTeamCompetitions(teamSlug) {
-    const knex = strapi.db.connection;
-    return knex("schedule")
-      .select("league_id", "league_name", "league_slug", "league_short_name")
-      .distinct("league_id")
-      .where(function () {
-        this.where("home_team_slug", teamSlug).orWhere(
-          "away_team_slug",
-          teamSlug,
-        );
-      });
+    return getCached(`${CACHE_PREFIX}team:competitions:${teamSlug}`, TTL_1H, () => {
+      const knex = strapi.db.connection;
+      return knex("schedule")
+        .select("league_id", "league_name", "league_slug", "league_short_name")
+        .distinct("league_id")
+        .where(function () {
+          this.where("home_team_slug", teamSlug).orWhere(
+            "away_team_slug",
+            teamSlug,
+          );
+        });
+    });
   },
 
   async findTeamSeasonCompetitions(teamName, season) {
-    // Validate season
     const validatedSeason = validateSeason(season);
 
-    const knex = strapi.db.connection;
-
-    // find unique competitions team played in during the season
-    const data = await knex("schedule")
-      .select("league_id", "league_name", "league_slug", "league_short_name")
-      .distinct("league_id")
-      .where("season", validatedSeason)
-      .andWhere(function () {
-        this.where("home_team_slug", teamName).orWhere(
-          "away_team_slug",
-          teamName,
-        );
-      });
-
-    return data;
+    return getCached(
+      `${CACHE_PREFIX}team:season-competitions:${teamName}:${validatedSeason}`,
+      TTL_1H,
+      () => {
+        const knex = strapi.db.connection;
+        return knex("schedule")
+          .select("league_id", "league_name", "league_slug", "league_short_name")
+          .distinct("league_id")
+          .where("season", validatedSeason)
+          .andWhere(function () {
+            this.where("home_team_slug", teamName).orWhere(
+              "away_team_slug",
+              teamName,
+            );
+          });
+      },
+    );
   },
 
   async getTeamLeagueStats(teamSlug) {
-    const knex = strapi.db.connection;
+    return getCached(`${CACHE_PREFIX}team:league-stats:${teamSlug}`, TTL_24H, async () => {
+      const knex = strapi.db.connection;
 
-    const data = await knex("team_league_average_stats_full")
-      .select("*")
-      .where("team_slug", teamSlug);
+      // Get all leagues this team played in
+      const leagues: { league_id: string; league_slug: string }[] = await knex("schedule")
+        .select("league_id", "league_slug")
+        .distinct("league_id")
+        .where(function () {
+          this.where("home_team_slug", teamSlug).orWhere("away_team_slug", teamSlug);
+        });
 
-    if (data.length === 0) {
-      return null;
-    }
+      if (leagues.length === 0) return null;
 
-    const team = data.map((team) => {
-      const total = JSON.parse(team.total);
-      const home = JSON.parse(team.home);
-      const away = JSON.parse(team.away);
-      const neutral = team.neutral ? JSON.parse(team.neutral) : null;
+      // For each league, fetch all location variants per phase in parallel.
+      const leagueResults = await Promise.all(
+        leagues.map(({ league_id, league_slug }) =>
+          teamLeagueResultWithSplit(knex, { teamSlug, league_id, league_slug }),
+        ),
+      );
+
+      return leagueResults.filter(Boolean);
+    });
+  },
+
+  async findTeamDetails(teamSlug) {
+    return getCached(`${CACHE_PREFIX}team:details:${teamSlug}`, TTL_1H, () => {
+      const knex = strapi.db.connection;
+      return knex("teams").select("*").where("slug", teamSlug);
+    });
+  },
+
+  async findTeamAllTimeStats(teamSlug) {
+    return getCached(`${CACHE_PREFIX}team:all-time-stats:${teamSlug}`, TTL_24H, async () => {
+      const knex = strapi.db.connection;
+
+      const record = await buildRecord(async (location) => {
+        const rows = await aggregateTeamStats(knex, { location, teamSlug });
+        return rows[0] ?? null;
+      });
+
+      const anyRow = record.total ?? record.home ?? record.away ?? record.neutral;
+      if (!anyRow) return null;
+
+      const total   = toTeamStats(record.total,   "Total");
+      const home    = toTeamStats(record.home,    "Home");
+      const away    = toTeamStats(record.away,    "Away");
+      const neutral = toTeamStats(record.neutral, "Neutral");
+
+      const stats = [home, away];
+      if (neutral) stats.push(neutral);
+      stats.push(total);
+
       return {
-        teamId: team.team_id,
-        teamSlug: team.team_slug,
-        teamName: team.team_name,
-        leagueId: team.league_id,
-        leagueSlug: team.league_slug,
+        teamId:   anyRow.team_id,
+        teamSlug: anyRow.team_slug,
+        teamName: anyRow.team_name,
         total,
         home,
         away,
         neutral,
+        stats,
       };
     });
-
-    return team;
-  },
-
-  async findTeamDetails(teamSlug) {
-    const knex = strapi.db.connection;
-    const data = await knex("teams").select("*").where("slug", teamSlug);
-    return data;
-  },
-
-  async findTeamAllTimeStats(teamSlug) {
-    const knex = strapi.db.connection;
-    const data = await knex("team_average_stats_full")
-      .select("*")
-      .where("team_slug", teamSlug);
-
-    if (data.length === 0) {
-      return null;
-    }
-
-    const team = data[0];
-
-    const total = JSON.parse(team.total);
-    const home = JSON.parse(team.home);
-    const away = JSON.parse(team.away);
-    const neutral = team.neutral ? JSON.parse(team.neutral) : null;
-
-    const stats = [home, away];
-    if (neutral) stats.push(neutral);
-    stats.push(total);
-
-    return {
-      teamId: team.team_id,
-      teamSlug: team.team_slug,
-      teamName: team.team_name,
-      total,
-      home,
-      away,
-      neutral,
-      stats,
-    };
   },
 
   async findTeamSchedule(teamSlug, season) {
-    // Validate season
     const validatedSeason = validateSeason(season);
 
-    const knex = strapi.db.connection;
-    return knex("schedule")
-      .select("*")
-      .where(function () {
-        this.where("home_team_slug", teamSlug).orWhere(
-          "away_team_slug",
-          teamSlug,
-        );
-      })
-      .andWhere("season", validatedSeason);
+    return getCached(
+      `${CACHE_PREFIX}team:schedule:${teamSlug}:${validatedSeason}`,
+      TTL_1H,
+      () => {
+        const knex = strapi.db.connection;
+        return knex("schedule")
+          .select("*")
+          .where(function () {
+            this.where("home_team_slug", teamSlug).orWhere(
+              "away_team_slug",
+              teamSlug,
+            );
+          })
+          .andWhere("season", validatedSeason);
+      },
+    );
   },
 
   async findTeamLeaders(
@@ -149,12 +241,9 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
     statKey: string,
     competitionSlug?: string,
   ) {
-    // Validate db parameter
     const validatedDb = validateWhitelist(db, ALLOWED_ENTITIES, "entity");
 
-    // Validate statKey to prevent SQL injection
     const allowedStatKeys = [
-      // Player stats
       "points",
       "assists",
       "rebounds",
@@ -163,7 +252,6 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       "three_pointers_made",
       "free_throws_made",
       "minutes",
-      // Coach stats
       "games",
       "wins",
       "losses",
@@ -176,96 +264,139 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       throw new Error(`Invalid statKey: "${statKey}"`);
     }
 
-    const knex = strapi.db.connection;
-    let tableName: string;
+    return getCached(
+      `${CACHE_PREFIX}team:leaders:${teamSlug}:${validatedDb}:${statKey}:${competitionSlug || "all"}`,
+      TTL_24H,
+      () => {
+        const knex = strapi.db.connection;
 
-    const table = competitionSlug
-      ? `${validatedDb}_total_all_time_per_team_per_league`
-      : `${validatedDb}_total_all_time_per_team`;
+        if (validatedDb === "player") {
+          // Aggregate from player_boxscore directly, grouped by player + team
+          return knex("player_boxscore as b")
+            .select(
+              knex.raw(`b.player_id as id`),
+              "b.first_name",
+              "b.last_name",
+              knex.raw(`SUM(b.??) as ??`, [statKey, statKey]),
+            )
+            .where("b.team_slug", teamSlug)
+            .where("b.is_nulled", false)
+            .whereRaw(`b.status::text <> 'dnp-cd'::text`)
+            .modify((qb) => {
+              if (competitionSlug) {
+                qb.where("b.league_slug", competitionSlug);
+              }
+            })
+            .groupBy("b.player_id", "b.first_name", "b.last_name")
+            .havingRaw(`SUM(b.??) IS NOT NULL`, [statKey])
+            .orderByRaw(`SUM(b.??) DESC NULLS LAST`, [statKey])
+            .limit(5);
+        } else {
+          // coach — aggregate from coach_boxscore
+          const coachStatMap: Record<string, string> = {
+            games: "COUNT(*)",
+            wins: "SUM(CASE WHEN cb.team_score > cb.opponent_score THEN 1 ELSE 0 END)",
+            losses: "SUM(CASE WHEN cb.team_score < cb.opponent_score THEN 1 ELSE 0 END)",
+            win_percentage: `ROUND(SUM(CASE WHEN cb.team_score > cb.opponent_score THEN 1 ELSE 0 END)::numeric / NULLIF(COUNT(*), 0) * 100, 1)`,
+            points_scored: "ROUND(AVG(cb.team_score) FILTER (WHERE cb.forfeited IS NOT TRUE), 1)",
+            points_received: "ROUND(AVG(cb.opponent_score) FILTER (WHERE cb.forfeited IS NOT TRUE), 1)",
+            points_difference: "ROUND(AVG(cb.team_score - cb.opponent_score) FILTER (WHERE cb.forfeited IS NOT TRUE), 1)",
+          };
 
-    const id = `${validatedDb}_id`;
-
-    try {
-      return knex(table)
-        .select(`${id} as id`, "first_name", "last_name", statKey)
-        .where("team_slug", teamSlug)
-        .whereNotNull(statKey)
-        .modify((qb) => {
-          if (competitionSlug) {
-            qb.where("league_slug", competitionSlug);
+          const statExpr = coachStatMap[statKey];
+          if (!statExpr) {
+            throw new Error(`Invalid statKey for coach: "${statKey}"`);
           }
-        })
-        .orderByRaw("?? desc nulls last", [statKey])
-        .limit(5);
-    } catch (err) {
-      throw new Error(`Failed to fetch team leaders: ${err.message}`);
-    }
+
+          return knex
+            .raw(
+              `SELECT
+                cb.coach_id as id,
+                cb.first_name,
+                cb.last_name,
+                ${statExpr} AS ??
+              FROM coach_boxscore cb
+              WHERE cb.team_slug = ?
+                AND cb.is_nulled = false
+                AND cb.coach_role = 'head'
+                ${competitionSlug ? "AND cb.league_slug = ?" : ""}
+              GROUP BY cb.coach_id, cb.first_name, cb.last_name
+              HAVING (${statExpr}) IS NOT NULL
+              ORDER BY (${statExpr}) DESC NULLS LAST
+              LIMIT 5`,
+              [statKey, teamSlug, ...(competitionSlug ? [competitionSlug] : [])],
+            )
+            .then((r) => r.rows);
+        }
+      },
+    );
   },
 
   async findTeamSeasonStats(teamSlug, season) {
-    const knex = strapi.db.connection;
-    const data = await knex("team_season_average_stats_full")
-      .select("*")
-      .where("team_slug", teamSlug)
-      .andWhere("season", season);
+    return getCached(
+      `${CACHE_PREFIX}team:season-stats:${teamSlug}:${season}`,
+      TTL_24H,
+      async () => {
+        const knex = strapi.db.connection;
 
-    if (data.length === 0) {
-      return null;
-    }
+        const record = await buildRecord(async (location) => {
+          const rows = await aggregateTeamStats(knex, { location, teamSlug, season });
+          return rows[0] ?? null;
+        });
 
-    const team = data[0];
+        const anyRow = record.total ?? record.home ?? record.away ?? record.neutral;
+        if (!anyRow) return null;
 
-    const total = JSON.parse(team.total);
-    const home = JSON.parse(team.home);
-    const away = JSON.parse(team.away);
-    const neutral = team.neutral ? JSON.parse(team.neutral) : null;
+        const total   = toTeamStats(record.total,   "Total");
+        const home    = toTeamStats(record.home,    "Home");
+        const away    = toTeamStats(record.away,    "Away");
+        const neutral = toTeamStats(record.neutral, "Neutral");
 
-    const stats = [home, away];
-    if (neutral) stats.push(neutral);
-    stats.push(total);
+        const stats = [home, away];
+        if (neutral) stats.push(neutral);
+        stats.push(total);
 
-    return {
-      teamId: team.team_id,
-      teamSlug: team.team_slug,
-      teamName: team.team_name,
-      total,
-      home,
-      away,
-      neutral,
-      stats,
-    };
+        return {
+          teamId:   anyRow.team_id,
+          teamSlug: anyRow.team_slug,
+          teamName: anyRow.team_name,
+          total,
+          home,
+          away,
+          neutral,
+          stats,
+        };
+      },
+    );
   },
 
   async findTeamSeasonLeagueStats(teamSlug, season) {
-    const knex = strapi.db.connection;
-    const data = await knex("team_season_league_average_stats_full")
-      .select("*")
-      .where("team_slug", teamSlug)
-      .andWhere("season", season);
+    return getCached(
+      `${CACHE_PREFIX}team:season-league-stats:${teamSlug}:${season}`,
+      TTL_24H,
+      async () => {
+        const knex = strapi.db.connection;
 
-    if (data.length === 0) {
-      return null;
-    }
+        // Get leagues this team played in during this season
+        const leagues: { league_id: string; league_slug: string }[] = await knex("schedule")
+          .select("league_id", "league_slug")
+          .distinct("league_id")
+          .where("season", season)
+          .where(function () {
+            this.where("home_team_slug", teamSlug).orWhere("away_team_slug", teamSlug);
+          });
 
-    const team = data.map((team) => {
-      const total = JSON.parse(team.total);
-      const home = JSON.parse(team.home);
-      const away = JSON.parse(team.away);
-      const neutral = team.neutral ? JSON.parse(team.neutral) : null;
-      return {
-        teamId: team.team_id,
-        teamSlug: team.team_slug,
-        teamName: team.team_name,
-        leagueId: team.league_id,
-        leagueSlug: team.league_slug,
-        total,
-        home,
-        away,
-        neutral,
-      };
-    });
+        if (leagues.length === 0) return null;
 
-    return team;
+        const leagueResults = await Promise.all(
+          leagues.map(({ league_id, league_slug }) =>
+            teamLeagueResultWithSplit(knex, { teamSlug, league_id, league_slug, season }),
+          ),
+        );
+
+        return leagueResults.filter(Boolean);
+      },
+    );
   },
 
   async findTeamPlayerRecords(
@@ -273,38 +404,32 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
     statKey: string,
     season?: string,
   ) {
-    const ALLOWED = [
-      "points",
-      "rebounds",
-      "assists",
-      "steals",
-      "blocks",
-      "three_pointers_made",
-      "free_throws_made",
-      "field_goals_made",
-      "plus_minus",
-      "efficiency",
-    ];
-    if (!ALLOWED.includes(statKey)) throw new Error("Invalid stat key");
+    validateWhitelist(statKey, ALLOWED_PLAYER_RECORD_STATS, "statKey");
 
-    const knex = strapi.db.connection;
-    return await knex("player_boxscore as pb")
-      .join("schedule as s", "pb.game_id", "s.game_document_id")
-      .select(
-        "pb.game_id",
-        "pb.first_name",
-        "pb.last_name",
-        "pb.season",
-        knex.raw(`pb.?? as stat_value`, [statKey]),
-      )
-      .where("pb.team_slug", teamSlug)
-      .whereNot("pb.is_nulled", true)
-      .whereNotNull(`pb.${statKey}`)
-      .modify((qb) => {
-        if (season) qb.where("pb.season", season);
-      })
-      .orderByRaw(`pb.?? desc`, [statKey])
-      .limit(20);
+    return getCached(
+      `${CACHE_PREFIX}team:player-records:${teamSlug}:${statKey}:${season || "all"}`,
+      TTL_24H,
+      () => {
+        const knex = strapi.db.connection;
+        return knex("player_boxscore as pb")
+          .join("schedule as s", "pb.game_id", "s.game_document_id")
+          .select(
+            "pb.game_id",
+            "pb.first_name",
+            "pb.last_name",
+            "pb.season",
+            knex.raw(`pb.?? as stat_value`, [statKey]),
+          )
+          .where("pb.team_slug", teamSlug)
+          .whereNot("pb.is_nulled", true)
+          .whereNotNull(`pb.${statKey}`)
+          .modify((qb) => {
+            if (season) qb.where("pb.season", season);
+          })
+          .orderByRaw(`pb.?? desc`, [statKey])
+          .limit(20);
+      },
+    );
   },
 
   async findTeamTeamRecords(
@@ -312,41 +437,37 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
     statKey: string,
     season?: string,
   ) {
-    const ALLOWED = [
-      "score",
-      "field_goals_made",
-      "three_pointers_made",
-      "free_throws_made",
-      "rebounds",
-      "assists",
-      "steals",
-      "blocks",
-    ];
-    if (!ALLOWED.includes(statKey)) throw new Error("Invalid stat key");
+    validateWhitelist(statKey, ALLOWED_TEAM_RECORD_STATS, "statKey");
 
-    const knex = strapi.db.connection;
-    return await knex("team_boxscore as tb")
-      .join("schedule as s", "tb.game_id", "s.game_document_id")
-      .select(
-        "tb.game_id",
-        "tb.season",
-        knex.raw(
-          `CASE WHEN s.home_team_slug = ? THEN s.away_team_name ELSE s.home_team_name END AS opponent_name`,
-          [teamSlug],
-        ),
-        knex.raw(
-          `CASE WHEN s.home_team_slug = ? THEN s.away_team_slug ELSE s.home_team_slug END AS opponent_slug`,
-          [teamSlug],
-        ),
-        knex.raw(`tb.?? as stat_value`, [statKey]),
-      )
-      .where("tb.team_slug", teamSlug)
-      .whereNot("tb.is_nulled", true)
-      .whereNotNull(`tb.${statKey}`)
-      .modify((qb) => {
-        if (season) qb.where("tb.season", season);
-      })
-      .orderByRaw(`tb.?? desc`, [statKey])
-      .limit(20);
+    return getCached(
+      `${CACHE_PREFIX}team:team-records:${teamSlug}:${statKey}:${season || "all"}`,
+      TTL_24H,
+      () => {
+        const knex = strapi.db.connection;
+        return knex("team_boxscore as tb")
+          .join("schedule as s", "tb.game_id", "s.game_document_id")
+          .select(
+            "tb.game_id",
+            "tb.season",
+            knex.raw(
+              `CASE WHEN s.home_team_slug = ? THEN s.away_team_name ELSE s.home_team_name END AS opponent_name`,
+              [teamSlug],
+            ),
+            knex.raw(
+              `CASE WHEN s.home_team_slug = ? THEN s.away_team_slug ELSE s.home_team_slug END AS opponent_slug`,
+              [teamSlug],
+            ),
+            knex.raw(`tb.?? as stat_value`, [statKey]),
+          )
+          .where("tb.team_slug", teamSlug)
+          .whereNot("tb.is_nulled", true)
+          .whereNotNull(`tb.${statKey}`)
+          .modify((qb) => {
+            if (season) qb.where("tb.season", season);
+          })
+          .orderByRaw(`tb.?? desc`, [statKey])
+          .limit(20);
+      },
+    );
   },
 }));

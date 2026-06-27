@@ -20,6 +20,16 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    command: redis-server --save "" --appendonly no
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   backend:
     build:
       context: ./backend
@@ -36,6 +46,7 @@ services:
       DATABASE_NAME: ${DATABASE_NAME:-${POSTGRES_DB}}
       DATABASE_USERNAME: ${DATABASE_USERNAME:-${POSTGRES_USER}}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-${POSTGRES_PASSWORD}}
+      REDIS_URL: redis://redis:6379
       # Strapi secrets (supply via .env.dev passed with --env-file)
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       API_TOKEN_SALT: ${API_TOKEN_SALT}
@@ -52,6 +63,8 @@ services:
       - "1337:1337"
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   frontend:

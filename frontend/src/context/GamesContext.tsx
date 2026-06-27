@@ -1,12 +1,12 @@
-import { filterSchedule } from './GamesUtils';
-import React, { createContext, useState, useTransition, useCallback, useEffect, useMemo, JSX } from 'react';
+import { ALL_COMPETITIONS, filterSchedule } from './GamesUtils';
+import React, { createContext, useState, useTransition, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useMainTeam } from '@/hooks/queries/team/UseMainTeam';
 import { useTeamDetails } from '@/hooks/queries/team/UseTeamDetails';
 import { useTeamSeasonCompetitions } from '@/hooks/queries/team/UseTeamSeasonCompetitions';
 import { useTeamSeasons } from '@/hooks/queries/team/UseTeamSeasons';
 import { useSeasonSchedule } from '@/hooks/queries/UseSeasonSchedule';
-import { useSearch } from '@/hooks/UseSearch';
 import { TeamCompetitionsResponse, TeamScheduleResponse } from '@/types/api/Team';
 import Cookies from 'js-cookie';
 
@@ -14,17 +14,18 @@ type GamesContextType = {
 	seasons: string[] | undefined;
 	selectedSeason: string;
 	setSelectedSeason: (s: string) => void;
+	isPending: boolean;
 	competitions: TeamCompetitionsResponse[] | undefined;
-	selectedCompetitions: string[];
-	toggleCompetition: (slug: string) => void;
+	selectedCompetition: string;
+	setSelectedCompetition: (v: string) => void;
 	searchTerm: string;
+	setSearchTerm: (v: string) => void;
 	schedule: TeamScheduleResponse[] | undefined;
 	filteredSchedule: TeamScheduleResponse[] | undefined;
 	scheduleLoading: boolean;
 	teamSlug: string;
 	teamName: string;
-	isZadar: boolean;
-	SearchInput: JSX.Element;
+	isMainTeam: boolean;
 };
 
 const GamesContext = createContext<GamesContextType | undefined>(undefined);
@@ -32,27 +33,24 @@ const GamesContext = createContext<GamesContextType | undefined>(undefined);
 export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	// cookies
 	const initialSeason = Cookies.get('season') || '';
-	const initialCompetitions = Cookies.get('competitions') ? JSON.parse(Cookies.get('competitions')!) : [];
 
 	// params
 	const { teamSlug: paramSlug } = useParams();
-	const { SearchInput, searchTerm } = useSearch();
 
 	// derive effective slug + name
-	const effectiveSlug = paramSlug || 'kk-zadar';
+	const { data: mainTeam } = useMainTeam();
+	const effectiveSlug = paramSlug || mainTeam?.slug || '';
 	const { data: team } = useTeamDetails(effectiveSlug);
-	const effectiveName = team?.name || 'KK Zadar';
-	const isZadar = effectiveName === 'KK Zadar';
+	const effectiveName = team?.name || mainTeam?.name || '';
+	const isMainTeam = team?.isMainTeam ?? false;
 
 	// state
 	const [selectedSeason, setSelectedSeasonRaw] = useState(initialSeason);
-	const [selectedCompetitions, setSelectedCompetitions] = useState<string[]>(initialCompetitions);
-	const [, startTransition] = useTransition();
+	const [selectedCompetition, setSelectedCompetition] = useState<string>(ALL_COMPETITIONS);
+	const [searchTerm, setSearchTerm] = useState('');
+	const [isPending, startTransition] = useTransition();
 
-	const setSelectedSeason = useCallback(
-		(s: string) => startTransition(() => setSelectedSeasonRaw(s)),
-		[] // eslint-disable-line react-hooks/exhaustive-deps
-	);
+	const setSelectedSeason = useCallback((s: string) => startTransition(() => setSelectedSeasonRaw(s)), []);
 
 	// queries
 	const { data: seasons } = useTeamSeasons(effectiveSlug);
@@ -71,36 +69,25 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 		});
 	}, [rawCompetitions]);
 
+	// default to the most recent season
 	useEffect(() => {
-		if (seasons) setSelectedSeason(seasons[0]);
+		if (seasons && seasons.length > 0) setSelectedSeason(seasons[0]);
 	}, [seasons, setSelectedSeason]);
 
-	// persist cookies
+	// persist season cookie — skip if no valid season to avoid storing "undefined"
 	useEffect(() => {
-		Cookies.set('season', selectedSeason, { expires: 30 });
+		if (selectedSeason) Cookies.set('season', selectedSeason, { expires: 30 });
 	}, [selectedSeason]);
 
+	// reset competition filter to "all" whenever the season changes
 	useEffect(() => {
-		Cookies.set('competitions', JSON.stringify(selectedCompetitions), { expires: 30 });
-	}, [selectedCompetitions]);
-
-	// when season changes -> reset competitions
-	useEffect(() => {
-		if (competitions && competitions.length > 0) {
-			const uniqueLeagueIds = Array.from(new Set(competitions.map((c) => c.league_id)));
-			setSelectedCompetitions(uniqueLeagueIds);
-		}
-	}, [competitions]);
-
-	// handlers
-	const toggleCompetition = (slug: string) => {
-		setSelectedCompetitions((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
-	};
+		setSelectedCompetition(ALL_COMPETITIONS);
+	}, [selectedSeason]);
 
 	// derived schedule
 	const filteredSchedule = useMemo(
-		() => filterSchedule(schedule, selectedCompetitions, searchTerm, isZadar),
-		[schedule, selectedCompetitions, searchTerm, isZadar]
+		() => filterSchedule(schedule, selectedCompetition, searchTerm, effectiveSlug),
+		[schedule, selectedCompetition, searchTerm, effectiveSlug]
 	);
 
 	return (
@@ -109,17 +96,18 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 				seasons,
 				selectedSeason,
 				setSelectedSeason,
+				isPending,
 				competitions,
-				selectedCompetitions,
-				toggleCompetition,
+				selectedCompetition,
+				setSelectedCompetition,
 				searchTerm,
-				SearchInput,
+				setSearchTerm,
 				schedule,
 				filteredSchedule,
 				scheduleLoading,
 				teamSlug: effectiveSlug,
 				teamName: effectiveName,
-				isZadar
+				isMainTeam
 			}}
 		>
 			{children}

@@ -1,12 +1,12 @@
 .group { /* container */ }
 .label {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  color: #6b7280;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--muted-foreground);
   padding: 0 0.5rem;
-  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
 }
 .items {
   display: flex;

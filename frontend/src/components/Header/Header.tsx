@@ -212,7 +212,7 @@ const Header: React.FC = () => {
 					</button>
 				</div>
 
-				<h1 className={styles.title}>Muzej Zadarske Košarke</h1>
+				<h1 className={styles.title}>{import.meta.env.VITE_APP_NAME ?? 'Muzej Zadarske Košarke'}</h1>
 
 				<div className={styles.desktopNav}>
 					<div className={styles.searchWrapper}>

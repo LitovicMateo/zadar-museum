@@ -12,7 +12,7 @@ import {
 } from "../whitelists";
 
 /**
- * Database parameter (zadar, opponent)
+ * Database parameter (main, opponent)
  */
 export const databaseSchema = z.enum(
   ALLOWED_DATABASES as unknown as [string, ...string[]],
@@ -30,6 +30,14 @@ export const statsSchema = z.enum(
  */
 export const locationSchema = z
   .enum(ALLOWED_LOCATIONS as unknown as [string, ...string[]])
+  .optional()
+  .nullable();
+
+/**
+ * Game phase for the regular-season / playoff split (all, regular, playoff) - optional
+ */
+export const phaseSchema = z
+  .enum(["all", "regular", "playoff"])
   .optional()
   .nullable();
 

@@ -1,7 +1,7 @@
 import { Context } from "koa";
 
 type RefreshService = {
-  refreshAllViews: () => Promise<{ count: number; refreshedViews: string[]; failedViews: string[] }>;
+  refreshAllViews: () => Promise<{ count: number; refreshedViews: string[] }>;
   refreshSingleView: (name: string) => Promise<void>;
 };
 
