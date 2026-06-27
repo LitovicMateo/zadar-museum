@@ -24,6 +24,24 @@ const LAYER_1_VIEWS: readonly string[] = [
   'schedule',
 ];
 
+// Try CONCURRENT first; fall back to non-concurrent if the unique index check fails
+// (can happen when duplicate source rows exist in the underlying data).
+async function refreshView(knex: any, view: string): Promise<void> {
+  try {
+    await knex.raw(`REFRESH MATERIALIZED VIEW CONCURRENTLY ${view}`);
+  } catch (err: any) {
+    if (err?.message?.includes('unique') || err?.message?.includes('duplicate')) {
+      strapi.log.warn(
+        `[refresh] CONCURRENT refresh failed for "${view}" (duplicate key); falling back to non-concurrent.`
+      );
+      await knex.raw(`REFRESH MATERIALIZED VIEW ${view}`);
+    } else {
+      strapi.log.error(`[refresh] Failed to refresh MV "${view}":`, err);
+      throw err;
+    }
+  }
+}
+
 const refreshService = {
   /**
    * Refreshes all 4 Layer 1 materialized views concurrently in parallel,
@@ -33,9 +51,7 @@ const refreshService = {
     const knex = strapi.db.connection;
 
     await Promise.all(
-      LAYER_1_VIEWS.map((view) =>
-        knex.raw(`REFRESH MATERIALIZED VIEW CONCURRENTLY ${view}`)
-      )
+      LAYER_1_VIEWS.map((view) => refreshView(knex, view))
     );
 
     await flushCache();
@@ -47,12 +63,7 @@ const refreshService = {
    */
   async refreshSingleView(name: string): Promise<void> {
     const knex = strapi.db.connection;
-    try {
-      await knex.raw(`REFRESH MATERIALIZED VIEW CONCURRENTLY ${name}`);
-    } catch (err: any) {
-      strapi.log.error(`[refresh] Failed to refresh MV "${name}":`, err);
-      throw err;
-    }
+    await refreshView(knex, name);
   },
 };
 
