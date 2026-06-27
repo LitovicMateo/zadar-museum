@@ -18,8 +18,8 @@ CMD ["npm", "run", "dev"]
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-# Install build deps as root to avoid permission issues during install
-RUN npm ci --no-audit --progress=false --unsafe-perm=true
+# NODE_ENV=development ensures devDependencies (tsc, vite) are installed
+RUN NODE_ENV=development npm ci --no-audit --progress=false --unsafe-perm=true
 COPY . .
 ARG VITE_API_ROOT
 ENV VITE_API_ROOT=$VITE_API_ROOT
