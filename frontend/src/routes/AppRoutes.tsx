@@ -1,27 +1,28 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 
-import Coach from '@/components/Coach/CoachPage';
-import CoachesPage from '@/components/Coaches/CoachesPage';
-import Game from '@/components/Game/Game';
-import Games from '@/components/Games/Games';
-import Home from '@/components/Home/Home';
-import League from '@/components/League/LeaguePage';
-import LeaguesPage from '@/components/Leagues/LeaguesPage';
-import Login from '@/components/Login/Login';
-import Player from '@/components/Player';
-import PlayersPage from '@/components/Players/PlayersPage';
 import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
-import Referee from '@/components/Referee/RefereePage';
-import RefereesPage from '@/components/Referees/RefereesPage';
-import StaffPage from '@/components/Staff/StaffPage';
-import StaffsPage from '@/components/Staffs/StaffsPage';
-import TeamPage from '@/components/Team/';
-import TeamsPage from '@/components/Teams/TeamsPage';
-import Venue from '@/components/Venue//VenuePage';
-import VenuesPage from '@/components/Venues/VenuesPage';
 import { GamesProvider } from '@/context/GamesContext';
 import { TeamGamesProvider } from '@/context/TeamContext';
+
+const Coach = lazy(() => import('@/components/Coach/CoachPage'));
+const CoachesPage = lazy(() => import('@/components/Coaches/CoachesPage'));
+const Game = lazy(() => import('@/components/Game/Game'));
+const Games = lazy(() => import('@/components/Games/Games'));
+const Home = lazy(() => import('@/components/Home/Home'));
+const League = lazy(() => import('@/components/League/LeaguePage'));
+const LeaguesPage = lazy(() => import('@/components/Leagues/LeaguesPage'));
+const Login = lazy(() => import('@/components/Login/Login'));
+const Player = lazy(() => import('@/components/Player'));
+const PlayersPage = lazy(() => import('@/components/Players/PlayersPage'));
+const Referee = lazy(() => import('@/components/Referee/RefereePage'));
+const RefereesPage = lazy(() => import('@/components/Referees/RefereesPage'));
+const StaffPage = lazy(() => import('@/components/Staff/StaffPage'));
+const StaffsPage = lazy(() => import('@/components/Staffs/StaffsPage'));
+const TeamPage = lazy(() => import('@/components/Team/'));
+const TeamsPage = lazy(() => import('@/components/Teams/TeamsPage'));
+const Venue = lazy(() => import('@/components/Venue//VenuePage'));
+const VenuesPage = lazy(() => import('@/components/Venues/VenuesPage'));
 
 import { dashboardRoutes } from './DashboardRoutes';
 import { statsRoutes } from './StatsRoutes';
@@ -145,7 +146,8 @@ const AppRoutes: React.FC = () => {
 		}
 	];
 
-	return useRoutes(routes);
+	const element = useRoutes(routes);
+	return <Suspense fallback={null}>{element}</Suspense>;
 };
 
 export default AppRoutes;

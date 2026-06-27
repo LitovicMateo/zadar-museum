@@ -1,17 +1,6 @@
+import { lazy } from 'react';
 import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 
-import Dashboard from '@/components/Dashboard/Dashboard';
-import CoachFormPage from '@/components/Dashboard/Coach/CoachFormPage';
-import CompetitionFormPage from '@/components/Dashboard/Competition/CompetitionFormPage';
-import GameFormPage from '@/components/Dashboard/Game/GameFormPage';
-import PlayerFormPage from '@/components/Dashboard/Player/PlayerFormPage';
-import PlayerStatsFormPage from '@/components/Dashboard/PlayerStats/PlayerStatsFormPage';
-import RefereeFormPage from '@/components/Dashboard/Referee/RefereeFormPage';
-import StaffFormPage from '@/components/Dashboard/Staff/StaffFormPage';
-import TeamFormPage from '@/components/Dashboard/Team/TeamFormPage';
-import TeamStatsFormPage from '@/components/Dashboard/TeamStats/TeamStatsFormPage';
-import VenueFormPage from '@/components/Dashboard/Venue/VenueFormPage';
-import { EntityListPage } from '@/components/Dashboard/EntityListPage/EntityListPage';
 import { playerListConfig } from '@/components/Dashboard/configs/playerListConfig';
 import { teamListConfig } from '@/components/Dashboard/configs/teamListConfig';
 import { coachListConfig } from '@/components/Dashboard/configs/coachListConfig';
@@ -22,7 +11,20 @@ import { venueListConfig } from '@/components/Dashboard/configs/venueListConfig'
 import { competitionListConfig } from '@/components/Dashboard/configs/competitionListConfig';
 import { playerStatsListConfig } from '@/components/Dashboard/configs/playerStatsListConfig';
 import { teamStatsListConfig } from '@/components/Dashboard/configs/teamStatsListConfig';
+import { EntityListPage } from '@/components/Dashboard/EntityListPage/EntityListPage';
 import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
+
+const Dashboard = lazy(() => import('@/components/Dashboard/Dashboard'));
+const CoachFormPage = lazy(() => import('@/components/Dashboard/Coach/CoachFormPage'));
+const CompetitionFormPage = lazy(() => import('@/components/Dashboard/Competition/CompetitionFormPage'));
+const GameFormPage = lazy(() => import('@/components/Dashboard/Game/GameFormPage'));
+const PlayerFormPage = lazy(() => import('@/components/Dashboard/Player/PlayerFormPage'));
+const PlayerStatsFormPage = lazy(() => import('@/components/Dashboard/PlayerStats/PlayerStatsFormPage'));
+const RefereeFormPage = lazy(() => import('@/components/Dashboard/Referee/RefereeFormPage'));
+const StaffFormPage = lazy(() => import('@/components/Dashboard/Staff/StaffFormPage'));
+const TeamFormPage = lazy(() => import('@/components/Dashboard/Team/TeamFormPage'));
+const TeamStatsFormPage = lazy(() => import('@/components/Dashboard/TeamStats/TeamStatsFormPage'));
+const VenueFormPage = lazy(() => import('@/components/Dashboard/Venue/VenueFormPage'));
 
 export const dashboardRoutes: RouteObject = {
   path: '/dashboard',

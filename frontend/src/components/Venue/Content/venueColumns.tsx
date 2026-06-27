@@ -15,7 +15,7 @@ export const venueLeagueHeading = (row: VenueLeagueStats) => {
 };
 
 const fixed = (v: unknown) => (v === null || v === undefined ? '0.0' : Number(v).toFixed(1));
-const intVal = (v: unknown) => v || 0;
+const intVal = (v: unknown): number => Number(v) || 0;
 
 const numSort = (row: VenueLeagueStats, key: keyof VenueLeagueStats) => {
 	const v = row[key];
