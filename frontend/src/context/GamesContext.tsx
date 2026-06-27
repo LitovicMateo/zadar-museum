@@ -71,12 +71,12 @@ export const GamesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 	// default to the most recent season
 	useEffect(() => {
-		if (seasons) setSelectedSeason(seasons[0]);
+		if (seasons && seasons.length > 0) setSelectedSeason(seasons[0]);
 	}, [seasons, setSelectedSeason]);
 
-	// persist season cookie
+	// persist season cookie — skip if no valid season to avoid storing "undefined"
 	useEffect(() => {
-		Cookies.set('season', selectedSeason, { expires: 30 });
+		if (selectedSeason) Cookies.set('season', selectedSeason, { expires: 30 });
 	}, [selectedSeason]);
 
 	// reset competition filter to "all" whenever the season changes
