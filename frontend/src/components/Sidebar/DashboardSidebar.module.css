@@ -12,7 +12,7 @@
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
-	color: #6b7280;
+	color: var(--muted-foreground);
 	padding: 0 0.5rem;
 	margin-bottom: 0.5rem;
 }
@@ -29,13 +29,15 @@
 
 /* ── Single row ─────────────────────────────────────────── */
 .row {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	display: block;
 	padding: 0.35rem 0.5rem;
 	border-radius: 0.5rem;
-	border-bottom: 1px solid #f1f5f9;
+	border-bottom: 1px solid var(--sidebar-border);
 	transition: background-color 0.15s ease;
+	text-decoration: none;
+	color: var(--sidebar-foreground);
+	font-size: 0.8125rem;
+	font-weight: 500;
 }
 
 .row:last-child {
@@ -43,14 +45,14 @@
 }
 
 .row:hover {
-	background-color: #f1f5f9;
+	background-color: var(--muted);
 }
 
 /* ── Label ──────────────────────────────────────────────── */
 .rowLabel {
 	font-size: 0.8125rem;
 	font-weight: 500;
-	color: #374151;
+	color: var(--sidebar-foreground);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -115,7 +117,7 @@
 /* ── Section divider ────────────────────────────────────── */
 .divider {
 	height: 1px;
-	background-color: #e5e7eb;
+	background-color: var(--sidebar-border);
 }
 /* ── Outer container ────────────────────────────────────── */
 .container {
@@ -129,4 +131,11 @@
         top: 1rem;
         left: 100%;
         margin-left: 0.5rem;
+}
+
+/* ── Active nav row ─────────────────────────────────────── */
+.rowActive {
+	background-color: var(--sidebar-accent);
+	color: var(--sidebar-accent-foreground);
+	font-weight: 600;
 }

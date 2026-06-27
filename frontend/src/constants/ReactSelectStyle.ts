@@ -12,16 +12,19 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 	control: (provided, state) => ({
 		...provided,
 		maxHeight: '40px',
-		borderRadius: '8px',
-		border: state.isFocused ? '2px solid #3b82f6' : '1px solid #d1d5db',
+		borderRadius: 'var(--radius)',
+		border: state.isFocused ? '2px solid var(--ring)' : '1px solid var(--border)',
 		fontSize: '14px',
 		minHeight: '40px',
 		height: '40px',
 		padding: '0 4px',
-		boxShadow: state.isFocused ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-		transition: 'all 0.2s ease',
+		background: 'var(--background)',
+		boxShadow: state.isFocused
+			? '0 0 0 3px color-mix(in oklch, var(--ring) 50%, transparent)'
+			: 'none',
+		transition: 'color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease',
 		'&:hover': {
-			borderColor: '#9ca3af'
+			borderColor: 'var(--muted-foreground)'
 		}
 	}),
 	valueContainer: (provided) => ({
@@ -32,20 +35,43 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 	input: (provided) => ({
 		...provided,
 		margin: '0',
-		padding: '0'
+		padding: '0',
+		color: 'var(--foreground)'
 	}),
 	indicatorsContainer: (provided) => ({
 		...provided,
 		height: '40px'
 	}),
+	indicatorSeparator: (provided) => ({
+		...provided,
+		backgroundColor: 'var(--border)'
+	}),
+	dropdownIndicator: (provided) => ({
+		...provided,
+		color: 'var(--muted-foreground)',
+		'&:hover': {
+			color: 'var(--foreground)'
+		}
+	}),
+	clearIndicator: (provided) => ({
+		...provided,
+		color: 'var(--muted-foreground)',
+		'&:hover': {
+			color: 'var(--foreground)'
+		}
+	}),
 	placeholder: (provided) => ({
 		...provided,
 		fontSize: '14px',
-		color: '#9ca3af'
+		color: 'var(--muted-foreground)'
+	}),
+	singleValue: (provided) => ({
+		...provided,
+		color: 'var(--foreground)'
 	}),
 	container: (provided) => ({
 		...provided,
-		borderRadius: '8px',
+		borderRadius: 'var(--radius)',
 		border: 'none',
 		background: 'transparent',
 		boxShadow: 'none',
@@ -54,20 +80,22 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 	}),
 	option: (provided, state) => ({
 		...provided,
-		backgroundColor: state.isSelected ? '#3b82f6' : state.isFocused ? '#eff6ff' : 'white',
-		color: state.isSelected ? 'white' : '#1f2937',
+		backgroundColor: state.isSelected ? 'var(--primary)' : state.isFocused ? 'var(--accent)' : 'transparent',
+		color: state.isSelected ? 'var(--primary-foreground)' : 'var(--foreground)',
 		padding: '10px 12px',
 		cursor: 'pointer',
-		transition: 'all 0.15s ease',
+		transition: 'background-color 0.1s ease',
 		'&:active': {
-			backgroundColor: '#3b82f6'
+			backgroundColor: 'var(--primary)',
+			color: 'var(--primary-foreground)'
 		}
 	}),
 	menu: (provided) => ({
 		...provided,
-		borderRadius: '8px',
+		borderRadius: 'var(--radius)',
 		boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-		border: '1px solid #e5e7eb',
+		border: '1px solid var(--border)',
+		background: 'var(--popover)',
 		overflow: 'hidden',
 		zIndex: 2147483647
 	}),

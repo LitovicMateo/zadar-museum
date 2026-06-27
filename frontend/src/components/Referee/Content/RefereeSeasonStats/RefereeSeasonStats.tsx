@@ -2,13 +2,13 @@ import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
-import TableWrapper from '@/components/UI/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
+import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { useRefereeSeasonLeagueStats } from '@/hooks/queries/referee/UseRefereeSeasonLeagueStats';
 import { useRefereeSeasonStats } from '@/hooks/queries/referee/UseRefereeSeasonStats';
 import { useRefereeSeasons } from '@/hooks/queries/referee/UseRefereeSeasons';
+import { RefereSeasonStatsResponse, RefereeStats } from '@/types/api/Referee';
 
-import { useRefereeStatsTable } from '../RefereeGamelog/UseRefereeStatsTable';
+import { RefereeLeagueCell, refereeStatsColumns } from '../refereeColumns';
 
 import styles from './RefereeSeasonStats.module.css';
 
@@ -20,13 +20,23 @@ const RefereeSeasonStats: React.FC = () => {
 	const { data: seasonStats } = useRefereeSeasonStats(refereeId, selectedSeason);
 	const { data: seasonLeagueStats } = useRefereeSeasonLeagueStats(refereeId, selectedSeason);
 
-	const leagueStats = useMemo(() => {
-		if (!seasonLeagueStats) return [];
-		return seasonLeagueStats.map((league) => league.stats.total);
-	}, [seasonLeagueStats]);
+	const groups = useMemo(
+		() =>
+			buildPhaseGroups<RefereSeasonStatsResponse, RefereeStats>(seasonLeagueStats, {
+				combined: (e) => e.stats.total,
+				regular: (e) => e.regular?.total ?? null,
+				playoff: (e) => e.playoff?.total ?? null,
+				split: (e) => !!e.hasPhaseSplit,
+				keyOf: (r) => r.league_slug ?? 'total',
+				heading: (r) => <RefereeLeagueCell leagueSlug={r.league_slug} />,
+			}),
+		[seasonLeagueStats]
+	);
 
-	const { table } = useRefereeStatsTable(leagueStats);
-	const { table: footTable } = useRefereeStatsTable(seasonStats);
+	const footerRows = useMemo<StatsDataRow<RefereeStats>[]>(
+		() => (seasonStats ?? []).map((data, i) => ({ key: `season-${i}`, data })),
+		[seasonStats]
+	);
 
 	useEffect(() => {
 		if (seasons && seasons.length > 0) {
@@ -45,11 +55,12 @@ const RefereeSeasonStats: React.FC = () => {
 				onSeasonChange={setSelectedSeason}
 			/>
 
-			<TableWrapper>
-				<UniversalTableHead table={table} />
-				<UniversalTableBody table={table} />
-				<UniversalTableFooter table={footTable} variant="light" />
-			</TableWrapper>
+			<StatsTable
+				columns={refereeStatsColumns}
+				groups={groups}
+				footer={{ rows: footerRows, variant: 'light' }}
+				initialSort={{ columnId: 'games', dir: 'desc' }}
+			/>
 		</div>
 	);
 };

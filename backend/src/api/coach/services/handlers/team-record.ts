@@ -18,8 +18,8 @@ export async function findTeamRecord(data: Data) {
     coachId: coach.coach_id,
     firstName: coach.first_name,
     lastName: coach.last_name,
-    total: JSON.parse(coach.total_record),
-    headCoach: JSON.parse(coach.head_coach_record),
-    assistantCoach: JSON.parse(coach.assistant_coach_record),
+    total: coach.total_record,
+    headCoach: coach.head_coach_record,
+    assistantCoach: coach.assistant_coach_record,
   };
 }

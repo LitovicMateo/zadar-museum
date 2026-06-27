@@ -13,7 +13,7 @@ import PlayerStatsFilter from '../PlayerStats/filter/PlayerStatsFilter';
 import PageWrapper from '../UI/PageWrapper';
 
 const PlayerRecords = () => {
-	const [database, setDatabase] = React.useState<PlayerDB>('zadar');
+	const [database, setDatabase] = React.useState<PlayerDB>('main');
 	const [season, setSeason] = React.useState<string>('all');
 	const [league, setLeague] = React.useState<string>('all');
 	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');

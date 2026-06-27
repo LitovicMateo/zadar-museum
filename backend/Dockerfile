@@ -37,18 +37,21 @@ FROM node:20-alpine AS runtime
 
 WORKDIR /app
 
-# Install only production dependencies in the final image
-COPY package*.json ./
-RUN npm ci --only=production
 RUN apk add --no-cache curl
 
-# Copy compiled output and app files from the builder stage
+# Copy the built app (including node_modules) from the builder stage
 COPY --from=builder /app .
+
+# Strip dev dependencies from the runtime image
+RUN npm prune --omit=dev
 
 # Ensure the admin client build is available where the Strapi server expects it
 RUN mkdir -p /app/node_modules/@strapi/admin/dist/server/server/build \
  && cp -r ./dist/build/* /app/node_modules/@strapi/admin/dist/server/server/build/ || true
 
 EXPOSE 1337
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=5 \
+  CMD curl -f http://127.0.0.1:1337/admin || exit 1
 
 CMD ["npm", "run", "start"]

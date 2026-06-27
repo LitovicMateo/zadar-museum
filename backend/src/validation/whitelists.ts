@@ -3,7 +3,7 @@
  * These values are safe to use in dynamic table name building
  */
 
-export const ALLOWED_DATABASES = ["zadar", "opponent"] as const;
+export const ALLOWED_DATABASES = ["main", "opponent"] as const;
 export type AllowedDatabase = (typeof ALLOWED_DATABASES)[number];
 
 export const ALLOWED_STATS = ["total", "average", "record"] as const;

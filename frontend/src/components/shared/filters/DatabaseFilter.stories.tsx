@@ -17,15 +17,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ZadarSelected: Story = {
+export const MainTeamSelected: Story = {
 	args: {
-		database: 'zadar' as PlayerDB,
+		database: 'main' as PlayerDB,
 		setDatabase: (database: PlayerDB) => {
 			void database;
 		}
 	},
 	render: () => {
-		const [database, setDatabase] = useState<PlayerDB>('zadar');
+		const [database, setDatabase] = useState<PlayerDB>('main');
 		return <DatabaseFilter database={database} setDatabase={setDatabase} />;
 	}
 };

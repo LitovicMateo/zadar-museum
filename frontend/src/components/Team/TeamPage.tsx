@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import TeamContent from '@/components/Team/Content/TeamContent';
 import { TeamErrorBoundary } from '@/components/Team/TeamErrorBoundary';
 import TeamHeader from '@/components/Team/TeamHeader/TeamHeader';
+import FloatingEditButton from '@/components/UI/FloatingEditButton/FloatingEditButton';
 import ProfilePageWrapper from '@/components/UI/ProfilePageWrapper/ProfilePageWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
 import { GamesProvider } from '@/context/GamesContext';
@@ -41,6 +42,7 @@ const TeamPage: React.FC = () => {
 					</main>
 				}
 			/>
+			<FloatingEditButton to={`${APP_ROUTES.dashboard.team.edit}${team.documentId}`} />
 		</GamesProvider>
 	);
 };

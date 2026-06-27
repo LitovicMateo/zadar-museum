@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import FloatingEditButton from '@/components/UI/FloatingEditButton/FloatingEditButton';
 import ProfilePageWrapper from '@/components/UI/ProfilePageWrapper/ProfilePageWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
 import { GamesProvider } from '@/context/GamesContext';
@@ -24,6 +25,7 @@ const Coach: React.FC = () => {
 	return (
 		<GamesProvider>
 			<ProfilePageWrapper header={<CoachHeader />} content={<CoachContent />} />
+			<FloatingEditButton to={`${APP_ROUTES.dashboard.coach.edit}${coachId}`} />
 		</GamesProvider>
 	);
 };

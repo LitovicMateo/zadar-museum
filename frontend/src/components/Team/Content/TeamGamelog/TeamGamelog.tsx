@@ -1,8 +1,9 @@
 import React from 'react';
 
-import CompetitionList from '@/components/Games/GamesFilter/CompetitionList';
-import RightControls from '@/components/Games/GamesFilter/RightControls';
-import GamesList from '@/components/Games/GamesList/GamesList';
+import CompetitionDropdown from '@/components/Schedule/Controls/CompetitionDropdown';
+import OpponentSearch from '@/components/Schedule/Controls/OpponentSearch';
+import SeasonPager from '@/components/Schedule/Controls/SeasonPager';
+import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import { useGamesContext } from '@/hooks/context/UseGamesContext';
 
@@ -10,45 +11,48 @@ import styles from './TeamGamelog.module.css';
 
 const TeamGamelog: React.FC = () => {
 	const {
-		selectedCompetitions,
-		competitions,
-		toggleCompetition,
 		seasons,
 		selectedSeason,
 		setSelectedSeason,
-		scheduleLoading
+		isPending,
+		competitions,
+		selectedCompetition,
+		setSelectedCompetition,
+		searchTerm,
+		setSearchTerm,
+		filteredSchedule,
+		scheduleLoading,
+		teamSlug
 	} = useGamesContext();
+
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.gamelogControls}>
 				{scheduleLoading || !seasons ? (
-					<span className={styles.loadingText}>Loading...</span>
+					<span>Loading...</span>
 				) : (
 					<>
-						<div className={styles.gamelogSeasonSelect}>
-							<RightControls
-								seasons={seasons}
-								selectedSeason={selectedSeason}
-								onSeasonChange={setSelectedSeason}
-								compact
-							/>
-						</div>
-						<CompetitionList
-							competitions={competitions}
-							selectedCompetitions={selectedCompetitions}
-							toggleCompetition={toggleCompetition}
+						<SeasonPager
+							seasons={seasons}
+							selectedSeason={selectedSeason}
+							onSeasonChange={setSelectedSeason}
+							isPending={isPending}
 						/>
+						<CompetitionDropdown
+							competitions={competitions}
+							selected={selectedCompetition}
+							onChange={setSelectedCompetition}
+						/>
+						<OpponentSearch value={searchTerm} onChange={setSearchTerm} />
 					</>
 				)}
 			</div>
 			<DynamicContentWrapper>
-				<div className={styles.gamelogContent}>
-					{selectedCompetitions.map((slug) => (
-						<GamesList key={slug} competitionSlug={slug} />
-					))}
-					{selectedCompetitions.length === 0 && (
-						<div className={styles.emptyState}>No competitions selected</div>
-					)}
+				<div
+					className={styles.gamelogContent}
+					style={{ opacity: isPending ? 0.6 : 1, transition: 'opacity 0.15s ease' }}
+				>
+					<ScheduleList schedule={filteredSchedule} perspectiveSlug={teamSlug} />
 				</div>
 			</DynamicContentWrapper>
 		</div>

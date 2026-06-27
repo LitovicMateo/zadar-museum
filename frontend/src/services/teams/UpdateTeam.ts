@@ -44,7 +44,8 @@ export const updateTeam = async ({ id, ...data }: { id: string } & TeamFormData)
 		short_name: data.short_name.toUpperCase(),
 		slug: slugify(data.name),
 		city: data.city,
-		country: data.country
+		country: data.country,
+		isMainTeam: data.isMainTeam
 	};
 
 	if (imagePayload !== undefined) {

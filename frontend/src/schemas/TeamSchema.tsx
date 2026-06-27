@@ -6,7 +6,8 @@ export const teamSchema = z.object({
 	short_name: z.string().length(3),
 	city: z.string().min(1),
 	country: z.string().min(1),
-	image: z.any().nullable()
+	image: z.any().nullable(),
+	isMainTeam: z.boolean()
 });
 
 export type TeamFormData = z.infer<typeof teamSchema>;

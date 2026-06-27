@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
 import NoContent from '@/components/NoContent/NoContent';
-import TableWrapper from '@/components/UI/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
-import { useVenueSeasonStatsTable } from '@/components/Venue/Content/VenueSeasonStats/UseVenueSeasonStatsTable';
+import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { useVenueSeasonLeagueStats } from '@/hooks/queries/venue/UseVenueSeasonLeagueStats';
 import { useVenueSeasonStats } from '@/hooks/queries/venue/UseVenueSeasonStats';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
+import { VenueLeagueStats, VenueSeasonStats as VenueSeasonStatsType } from '@/types/api/Venue';
+
+import { venueLeagueHeading, venueStatsColumns } from '../venueColumns';
 
 import styles from './VenueSeasonStats.module.css';
 
@@ -23,8 +24,23 @@ const VenueSeasonStats = () => {
 		selectedSeason
 	);
 
-	const { table } = useVenueSeasonStatsTable(seasonLeagueStats);
-	const { table: footTable } = useVenueSeasonStatsTable(seasonStats);
+	const groups = useMemo(
+		() =>
+			buildPhaseGroups<VenueSeasonStatsType, VenueLeagueStats>(seasonLeagueStats, {
+				combined: (e) => e,
+				regular: (e) => (e.regular as VenueLeagueStats) ?? null,
+				playoff: (e) => (e.playoff as VenueLeagueStats) ?? null,
+				split: (e) => !!e.hasPhaseSplit,
+				keyOf: (r) => r.league_slug ?? 'total',
+				heading: (r) => venueLeagueHeading(r),
+			}),
+		[seasonLeagueStats]
+	);
+
+	const footerRows = useMemo<StatsDataRow<VenueLeagueStats>[]>(
+		() => (seasonStats ?? []).map((data, i) => ({ key: `season-${i}`, data: data as unknown as VenueLeagueStats })),
+		[seasonStats]
+	);
 
 	useEffect(() => {
 		if (seasons && seasons.length > 0) {
@@ -50,11 +66,12 @@ const VenueSeasonStats = () => {
 				selectedSeason={selectedSeason}
 				onSeasonChange={setSelectedSeason}
 			/>
-			<TableWrapper>
-				<UniversalTableHead table={table} />
-				<UniversalTableBody table={table} />
-				<UniversalTableFooter table={footTable} variant="light" />
-			</TableWrapper>
+			<StatsTable
+				columns={venueStatsColumns}
+				groups={groups}
+				footer={{ rows: footerRows, variant: 'light' }}
+				initialSort={{ columnId: 'games', dir: 'desc' }}
+			/>
 		</section>
 	);
 };

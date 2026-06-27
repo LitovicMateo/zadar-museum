@@ -2,11 +2,11 @@
 set -euo pipefail
 
 # deploy_frontend_on_vps.sh
-# Usage: run on the VPS inside the repo root that contains docker-compose.vps.yml
+# Usage: run on the VPS inside the repo root that contains docker-compose.prod.yml
 # Adjust APP_DIR if your repo is in a different location.
 
 APP_DIR="/root/zadar-museum"
-COMPOSE_FILE="docker-compose.vps.yml"
+COMPOSE_FILE="docker-compose.prod.yml"
 FRONTEND_SERVICE="frontend"
 BACKEND_SERVICE="backend"
 FRONTEND_CONTAINER_NAME="react_prod"

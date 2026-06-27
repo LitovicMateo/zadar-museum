@@ -7,15 +7,35 @@ import styles from './DatabaseSelect.module.css';
 type DatabaseSelectProps = {
 	selected: 'total' | 'home' | 'away' | 'neutral';
 	setSelected: React.Dispatch<React.SetStateAction<'total' | 'home' | 'away' | 'neutral'>>;
+	homeDisabled?: boolean;
+	awayDisabled?: boolean;
 	neutralDisabled?: boolean;
 };
 
-const DatabaseSelect: React.FC<DatabaseSelectProps> = ({ selected, setSelected, neutralDisabled }) => {
+const DatabaseSelect: React.FC<DatabaseSelectProps> = ({
+	selected,
+	setSelected,
+	homeDisabled,
+	awayDisabled,
+	neutralDisabled
+}) => {
 	return (
 		<fieldset className={styles.fieldset}>
 			<Pill label="total" isActive={selected === 'total'} onClick={() => setSelected('total')} />
-			<Pill label="home" isActive={selected === 'home'} onClick={() => setSelected('home')} />
-			<Pill label="away" isActive={selected === 'away'} onClick={() => setSelected('away')} />
+			<Pill
+				label="home"
+				isActive={selected === 'home'}
+				isDisabled={homeDisabled}
+				disabled={homeDisabled}
+				onClick={() => !homeDisabled && setSelected('home')}
+			/>
+			<Pill
+				label="away"
+				isActive={selected === 'away'}
+				isDisabled={awayDisabled}
+				disabled={awayDisabled}
+				onClick={() => !awayDisabled && setSelected('away')}
+			/>
 			<Pill
 				label="neutral"
 				isActive={selected === 'neutral'}

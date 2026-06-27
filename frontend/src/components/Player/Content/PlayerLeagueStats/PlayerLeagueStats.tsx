@@ -24,11 +24,15 @@ const PlayerLeagueStats: React.FC = React.memo(() => {
 	};
 
 	const { data: leagueData } = useAllTimeLeagueStats(playerId!, selectedDatabase);
+	const hasHome = !!leagueData?.some((d) => (d.total?.home?.games ?? 0) > 0);
+	const hasAway = !!leagueData?.some((d) => (d.total?.away?.games ?? 0) > 0);
 	const hasNeutral = !!leagueData?.some((d) => (d.total?.neutral?.games ?? 0) > 0);
 
 	React.useEffect(() => {
-		if (!hasNeutral && location === 'neutral') setLocation('total');
-	}, [hasNeutral, location]);
+		if (location === 'home' && !hasHome) setLocation('total');
+		else if (location === 'away' && !hasAway) setLocation('total');
+		else if (location === 'neutral' && !hasNeutral) setLocation('total');
+	}, [hasHome, hasAway, hasNeutral, location]);
 
 	const hasAppearances = usePlayerHasAppearances(playerId!, selectedDatabase);
 
@@ -38,6 +42,8 @@ const PlayerLeagueStats: React.FC = React.memo(() => {
 		<section className={styles.section}>
 			{/* Mobile: react-select dropdowns */}
 			<MobileControls
+				hasHome={hasHome}
+				hasAway={hasAway}
 				hasNeutral={hasNeutral}
 				view={view}
 				location={location}
@@ -56,7 +62,9 @@ const PlayerLeagueStats: React.FC = React.memo(() => {
 						<Radio
 							label={loc.charAt(0).toUpperCase() + loc.slice(1)}
 							isActive={location === loc}
-							isDisabled={loc === 'neutral' && !hasNeutral}
+							isDisabled={
+								(loc === 'home' && !hasHome) || (loc === 'away' && !hasAway) || (loc === 'neutral' && !hasNeutral)
+							}
 							onClick={() => setLocation(loc)}
 							key={loc}
 						/>

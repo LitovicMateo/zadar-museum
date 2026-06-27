@@ -38,6 +38,16 @@ export interface RefereSeasonStatsResponse {
 		away: RefereeStats;
 		neutral: RefereeStats | null;
 	};
+	regular?: RefereeLocationRecord | null;
+	playoff?: RefereeLocationRecord | null;
+	hasPhaseSplit?: boolean;
+}
+
+export interface RefereeLocationRecord {
+	total: RefereeStats | null;
+	home: RefereeStats | null;
+	away: RefereeStats | null;
+	neutral: RefereeStats | null;
 }
 
 export interface RefereeLeagueStatsResponse {
@@ -50,6 +60,12 @@ export interface RefereeLeagueStatsResponse {
 	home: RefereeStats;
 	away: RefereeStats;
 	neutral: RefereeStats | null;
+	/** Regular-season-only split (stage IN league/group). */
+	regular?: RefereeLocationRecord | null;
+	/** Playoff-only split (stage = playoff). */
+	playoff?: RefereeLocationRecord | null;
+	/** True only when the referee has games in both phases for this competition. */
+	hasPhaseSplit?: boolean;
 }
 
 export type RefereeStats = {

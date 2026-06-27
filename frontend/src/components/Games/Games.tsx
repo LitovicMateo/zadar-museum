@@ -1,8 +1,8 @@
 import React from 'react';
 
 import GamesFilter from '@/components/Games/GamesFilter/GamesFilter';
-import GamesList from '@/components/Games/GamesList/GamesList';
 import NoContent from '@/components/NoContent/NoContent';
+import { ScheduleList } from '@/components/Schedule/ScheduleList';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import PageContentWrapper from '@/components/UI/PageContentWrapper';
 import { useGamesContext } from '@/hooks/context/UseGamesContext';
@@ -10,7 +10,10 @@ import { useGamesContext } from '@/hooks/context/UseGamesContext';
 import styles from '@/components/Games/Games.module.css';
 
 const GamesContent: React.FC = () => {
-	const { selectedCompetitions, schedule, scheduleLoading } = useGamesContext();
+	const { schedule, filteredSchedule, scheduleLoading, isPending, teamSlug } = useGamesContext();
+
+	const noGames = !scheduleLoading && schedule && schedule.length === 0;
+	const noMatches = !scheduleLoading && !noGames && (filteredSchedule?.length ?? 0) === 0;
 
 	return (
 		<PageContentWrapper>
@@ -18,17 +21,14 @@ const GamesContent: React.FC = () => {
 				<GamesFilter />
 				<DynamicContentWrapper>
 					{scheduleLoading && <div>Loading...</div>}
-					{!schedule && !scheduleLoading && (
-						<NoContent type="info" description={<p>No games in database.</p>} />
-					)}
-					{schedule && schedule.length === 0 && !scheduleLoading && (
-						<NoContent type="info" description={<p>There are no games in the database.</p>} />
-					)}
+					{noGames && <NoContent type="info" description={<p>There are no games in the database.</p>} />}
+					{noMatches && <NoContent type="info" description={<p>No games match the current filters.</p>} />}
 
-					<div className={styles.container}>
-						{selectedCompetitions.map((slug) => (
-							<GamesList key={slug} competitionSlug={slug} />
-						))}
+					<div
+						className={styles.container}
+						style={{ opacity: isPending ? 0.6 : 1, transition: 'opacity 0.15s ease' }}
+					>
+						<ScheduleList schedule={filteredSchedule} perspectiveSlug={teamSlug} />
 					</div>
 				</DynamicContentWrapper>
 			</div>

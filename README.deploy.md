@@ -27,9 +27,9 @@ git pull origin main
 
 2. Backup the DB (recommended)
 
-# If your Postgres is a container in `docker-compose.vps.yml` and the service is named `postgres`:
+# If your Postgres is a container in `docker-compose.prod.yml` and the service is named `postgres`:
 
-docker compose -f docker-compose.vps.yml exec -T postgres pg_dump -U $DB_USER -Fc -f /tmp/pre_migration_backup.dump $DB_NAME
+docker compose -f docker-compose.prod.yml exec -T postgres pg_dump -U $DB_USER -Fc -f /tmp/pre_migration_backup.dump $DB_NAME
 
 If you don't have PGPASSWORD env exported, docker will prompt for password. Copy the backup off the VPS or keep it in `/tmp` temporarily.
 
@@ -40,7 +40,7 @@ If you don't have PGPASSWORD env exported, docker will prompt for password. Copy
 docker network ls
 
 # Or inspect compose to see networks in use
-docker compose -f docker-compose.vps.yml ps
+docker compose -f docker-compose.prod.yml ps
 ```
 
 You'll need that network name in step 4. If your project uses default compose naming, the network is often `<foldername>_default`.
@@ -73,10 +73,10 @@ Notes:
 After the runner completes successfully, start or restart your backend service so it picks up any code changes:
 
 ```bash
-docker compose -f docker-compose.vps.yml pull
-docker compose -f docker-compose.vps.yml up -d --remove-orphans --build backend
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up -d --remove-orphans --build backend
 # or restart only backend
-docker compose -f docker-compose.vps.yml restart backend
+docker compose -f docker-compose.prod.yml restart backend
 ```
 
 6. Verify
@@ -125,3 +125,39 @@ Extra tips for a beginner
 - Test the full flow once on a staging VPS before running in production.
 
 If you want, I can create a `backend/README.deploy.md` with these exact commands placed in the repo (or create a small `deploy.sh` that encapsulates the steps). Which would you prefer?
+
+## Backups (production)
+
+Backups write timestamped files to `backups/prod/` (a DB dump + an uploads archive) and keep the most recent 15 of each.
+
+Manual full backup:
+
+```bash
+make backup-prod-full
+```
+
+Restore the latest pair into the running prod stack:
+
+```bash
+make restore-prod
+```
+
+### Scheduled backups (every 2 days)
+
+Install the systemd timer on the VPS (run from the deploy directory):
+
+```bash
+make install-backup-timer
+systemctl list-timers zadar-backup.timer   # verify it is scheduled
+```
+
+Plain-cron alternative (instead of the timer):
+
+```cron
+# Every 2 days at 03:00 — adjust the path to your deploy directory
+0 3 */2 * * cd /path/to/zadar-museum && ./scripts/backups/backup.sh >> /var/log/zadar-backup.log 2>&1
+```
+
+### SSL certificates
+
+Certificates are issued by the certbot sidecar and auto-renewed (12 h loop); nginx reloads every 6 h to pick up renewed certs — no manual action needed. For a from-scratch re-issuance, temporarily swap nginx to `nginx/nginx.ssl-init.conf` (HTTP-only ACME bootstrap), run `certbot certonly --webroot -w /var/www/certbot -d ovdjejekosarkasve.com -d www.ovdjejekosarkasve.com`, then switch back to `nginx.prod.conf`.

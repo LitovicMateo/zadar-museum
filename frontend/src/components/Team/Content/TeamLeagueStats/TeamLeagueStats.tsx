@@ -1,14 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import TableWrapper from '@/components/UI/TableWrapper';
-import { UniversalTableBody, UniversalTableFooter, UniversalTableHead } from '@/components/UI/table';
-import { useTeamLeagueStatsTable } from '@/hooks/UseTeamLeagueStats';
+import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { useTeamLeagueStats } from '@/hooks/queries/team/UseTeamLeagueStats';
 import { useTeamTotalStats } from '@/hooks/queries/team/UseTeamTotalStats';
-import { TeamStats } from '@/types/api/Team';
+import { TeamStats, TeamStatsResponse } from '@/types/api/Team';
 
 import DatabaseSelect from './DatabaseSelect';
+import { TeamLeagueCell, teamStatsColumns } from '../teamColumns';
 
 import styles from './TeamLeagueStats.module.css';
 
@@ -19,31 +18,51 @@ const TeamLeagueStats: React.FC = () => {
 	const { data: leagueStats } = useTeamLeagueStats(teamSlug!);
 	const { data: totalStats } = useTeamTotalStats(teamSlug!);
 
-	const leagueStatsRow: TeamStats[] = useMemo(() => {
-		if (!leagueStats?.length) return [];
-		return leagueStats.map((team) => {
-			return team[selected];
-		});
-	}, [leagueStats, selected]);
+	const hasHome = !!leagueStats?.some((team) => (team.home?.games ?? 0) > 0);
+	const hasAway = !!leagueStats?.some((team) => (team.away?.games ?? 0) > 0);
+	const hasNeutral = !!leagueStats?.some((team) => (team.neutral?.games ?? 0) > 0);
 
-	const selectTotalStats: TeamStats[] = useMemo(() => {
-		if (!totalStats) return [];
-		return [totalStats[selected]];
-	}, [totalStats, selected]);
+	// If the current selection becomes unavailable, fall back to 'total'.
+	const effectiveSelected: 'total' | 'home' | 'away' | 'neutral' =
+		(selected === 'home' && !hasHome) || (selected === 'away' && !hasAway) || (selected === 'neutral' && !hasNeutral)
+			? 'total'
+			: selected;
 
-	const { table: mainTable } = useTeamLeagueStatsTable(leagueStatsRow);
-	const { table: footTable } = useTeamLeagueStatsTable(selectTotalStats);
+	const groups = useMemo(
+		() =>
+			buildPhaseGroups<TeamStatsResponse, TeamStats>(leagueStats, {
+				combined: (e) => e[effectiveSelected],
+				regular: (e) => e.regular?.[effectiveSelected] ?? null,
+				playoff: (e) => e.playoff?.[effectiveSelected] ?? null,
+				split: (e) => !!e.hasPhaseSplit,
+				keyOf: (r) => r.league_slug ?? 'total',
+				heading: (r) => <TeamLeagueCell leagueSlug={r.league_slug} />,
+			}),
+		[leagueStats, effectiveSelected],
+	);
+
+	const footerRows = useMemo<StatsDataRow<TeamStats>[]>(() => {
+		const row = totalStats?.[effectiveSelected];
+		return row ? [{ key: 'total', data: row }] : [];
+	}, [totalStats, effectiveSelected]);
 
 	if (!leagueStats || !totalStats) return null;
 
 	return (
 		<section className={styles.section}>
-			<DatabaseSelect selected={selected} setSelected={setSelected} />
-			<TableWrapper>
-				<UniversalTableHead table={mainTable} />
-				<UniversalTableBody table={mainTable} />
-				<UniversalTableFooter table={footTable} variant="default" />
-			</TableWrapper>
+			<DatabaseSelect
+				selected={effectiveSelected}
+				setSelected={setSelected}
+				homeDisabled={!hasHome}
+				awayDisabled={!hasAway}
+				neutralDisabled={!hasNeutral}
+			/>
+			<StatsTable
+				columns={teamStatsColumns}
+				groups={groups}
+				footer={{ rows: footerRows, variant: 'default' }}
+				initialSort={{ columnId: 'games', dir: 'desc' }}
+			/>
 		</section>
 	);
 };
