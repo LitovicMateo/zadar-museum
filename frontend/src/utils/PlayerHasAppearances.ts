@@ -6,6 +6,7 @@ export const usePlayerHasAppearances = (playerId: string, db: PlayerDB) => {
 
 	if (!data || data.length === 0) return null;
 
-	const gamesPlayed = data[0].total.total.games;
+	const gamesPlayed = data[0].total?.total?.games;
+	if (gamesPlayed == null) return null;
 	return gamesPlayed !== 0;
 };

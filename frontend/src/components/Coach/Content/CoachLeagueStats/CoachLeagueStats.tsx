@@ -57,7 +57,7 @@ const CoachLeagueStats: React.FC = () => {
 
 	const footerRows = useMemo<StatsDataRow<CoachStats>[]>(() => {
 		const row = coachRecord?.[coachRole as Role]?.[location as Loc];
-		return row && row.games ? [{ key: 'total', data: row }] : [];
+		return row && row.games ? [{ key: 'total', data: { ...row, league_id: null, league_slug: null } }] : [];
 	}, [coachRecord, coachRole, location]);
 
 	const coachRoleOptions = useMemo<OptionType[]>(() => {

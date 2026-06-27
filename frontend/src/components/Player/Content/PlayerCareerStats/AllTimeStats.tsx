@@ -59,6 +59,7 @@ const AllTimeStats: React.FC = React.memo(() => {
 	if (!hasAppearances) return null;
 
 	const totalStats = data[0].total[location] ?? data[0].total.total;
+	if (!totalStats) return null;
 
 	return (
 		<section className={styles.section}>
