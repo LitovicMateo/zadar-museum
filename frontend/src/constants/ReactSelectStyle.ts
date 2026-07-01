@@ -7,18 +7,19 @@ export interface OptionType {
 
 // ✅ Default generic = OptionType
 export const selectStyle = <Option extends OptionType = OptionType>(
-	width?: string
+	width?: string,
+	height = '40px'
 ): StylesConfig<Option, false, GroupBase<Option>> => ({
 	control: (provided, state) => ({
 		...provided,
-		maxHeight: '40px',
+		maxHeight: height,
 		borderRadius: 'var(--radius)',
 		border: state.isFocused ? '2px solid var(--ring)' : '1px solid var(--border)',
 		fontSize: '14px',
-		minHeight: '40px',
-		height: '40px',
+		minHeight: height,
+		height,
 		padding: '0 4px',
-		background: 'var(--background)',
+		background: 'var(--card)',
 		boxShadow: state.isFocused
 			? '0 0 0 3px color-mix(in oklch, var(--ring) 50%, transparent)'
 			: 'none',
@@ -29,7 +30,7 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 	}),
 	valueContainer: (provided) => ({
 		...provided,
-		height: '40px',
+		height,
 		padding: '0 12px'
 	}),
 	input: (provided) => ({
@@ -40,7 +41,7 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 	}),
 	indicatorsContainer: (provided) => ({
 		...provided,
-		height: '40px'
+		height
 	}),
 	indicatorSeparator: (provided) => ({
 		...provided,

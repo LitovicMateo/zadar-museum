@@ -1,8 +1,0 @@
-import React from 'react';
-import styles from './FormFieldsWrapper.module.css';
-
-const FormFieldsWrapper: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-	return <div className={styles.wrapper}>{children}</div>;
-};
-
-export default FormFieldsWrapper;
