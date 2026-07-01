@@ -18,12 +18,12 @@ export const staffListConfig: EntityListConfig<StaffDetailsResponse> = {
         <div className="flex items-center gap-2">
           {row.image?.url
             ? <img src={row.image.url} className="w-7 h-7 rounded-full object-cover flex-shrink-0" alt="" />
-            : <div className="w-7 h-7 rounded-full bg-slate-700 flex-shrink-0" />}
+            : <div className="w-7 h-7 rounded-full bg-muted flex-shrink-0" />}
           <span className="font-medium">{row.first_name} {row.last_name}</span>
         </div>
       ),
     },
-    { header: 'Role', cell: (row) => row.role ?? '—', className: 'text-slate-400' },
-    { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-slate-400 text-sm' },
+    { header: 'Role', cell: (row) => row.role ?? '—', className: 'text-muted-foreground' },
+    { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-muted-foreground text-sm' },
   ],
 };

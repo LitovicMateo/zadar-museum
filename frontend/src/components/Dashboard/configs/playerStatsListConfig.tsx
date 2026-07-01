@@ -21,13 +21,13 @@ export const playerStatsListConfig: EntityListConfig<PlayerStatsResponse> = {
         </span>
       ),
     },
-    { header: 'Team', cell: (row) => row.team?.name ?? '—', className: 'text-slate-400' },
+    { header: 'Team', cell: (row) => row.team?.name ?? '—', className: 'text-muted-foreground' },
     {
       header: 'Game',
       cell: (row) => row.game ? `${row.game.home_team_name} vs ${row.game.away_team_name}` : '—',
-      className: 'text-slate-400 text-sm',
+      className: 'text-muted-foreground text-sm',
     },
-    { header: 'Pts', cell: (row) => row.points ?? '—', className: 'text-slate-400' },
-    { header: 'Status', cell: (row) => row.status, className: 'text-slate-400 text-sm' },
+    { header: 'Pts', cell: (row) => row.points ?? '—', className: 'text-muted-foreground' },
+    { header: 'Status', cell: (row) => row.status, className: 'text-muted-foreground text-sm' },
   ],
 };

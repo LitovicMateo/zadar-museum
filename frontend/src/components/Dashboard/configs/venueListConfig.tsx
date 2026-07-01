@@ -18,12 +18,12 @@ export const venueListConfig: EntityListConfig<VenueDetailsResponse> = {
         <div className="flex items-center gap-2">
           {row.image?.url
             ? <img src={row.image.url} className="w-7 h-7 rounded object-cover flex-shrink-0" alt="" />
-            : <div className="w-7 h-7 rounded bg-slate-700 flex-shrink-0" />}
+            : <div className="w-7 h-7 rounded bg-muted flex-shrink-0" />}
           <span className="font-medium">{row.name}</span>
         </div>
       ),
     },
-    { header: 'City', cell: (row) => row.city ?? '—', className: 'text-slate-400' },
-    { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-slate-400 text-sm' },
+    { header: 'City', cell: (row) => row.city ?? '—', className: 'text-muted-foreground' },
+    { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-muted-foreground text-sm' },
   ],
 };
