@@ -3,18 +3,26 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/UI/Input';
 import { GameFormData } from '@/schemas/GameSchema';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const Season: React.FC = () => {
-	const { register } = useFormContext<GameFormData>();
-	return (
-		<Input
-			className="text-gray-700 placeholder:text-xs placeholder:text-gray-400"
-			type="text"
-			maxLength={4}
-			{...register('season', { required: 'Season is required' })}
-			placeholder="Season (e.g. 2025)"
-		/>
-	);
+  const { control } = useFormContext<GameFormData>();
+  return (
+    <FormField
+      control={control}
+      name="season"
+      rules={{ required: 'Season is required' }}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Season <span className="text-destructive text-xs">*</span></FormLabel>
+          <FormControl>
+            <Input type="text" maxLength={4} placeholder="Season (e.g. 2025)" {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default Season;

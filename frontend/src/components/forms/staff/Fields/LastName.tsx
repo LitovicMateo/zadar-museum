@@ -3,24 +3,26 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/UI/Input';
 import { StaffFormData } from '@/schemas/StaffSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const LastName: React.FC = () => {
-	const { register } = useFormContext<StaffFormData>();
-	return (
-		<label>
-			<span className={styles.label}>
-				Last Name: <span className={styles.required}>*</span>
-			</span>
-			<Input
-				type="text"
-				placeholder="Last Name"
-				{...register('last_name', { required: 'Last name is required' })}
-				className="text-gray-500 placeholder:text-xs"
-			/>
-		</label>
-	);
+  const { control } = useFormContext<StaffFormData>();
+  return (
+    <FormField
+      control={control}
+      name="last_name"
+      rules={{ required: 'Last name is required' }}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Last Name <span className="text-destructive text-xs">*</span></FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="Last Name" {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default LastName;

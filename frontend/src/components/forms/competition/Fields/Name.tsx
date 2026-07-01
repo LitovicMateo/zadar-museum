@@ -3,24 +3,26 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/UI/Input';
 import { CompetitionFormData } from '@/schemas/CompetitionSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const Name: React.FC = () => {
-	const { register } = useFormContext<CompetitionFormData>();
-	return (
-		<label>
-			<span className={styles.label}>
-				Competition Name: <span className={styles.required}>*</span>
-			</span>
-			<Input
-				type="text"
-				placeholder="Competition name (e.g. FAVBET Premijer Liga)"
-				{...register('name', { required: 'Name is required' })}
-				className="text-gray-500 placeholder:text-xs"
-			/>
-		</label>
-	);
+  const { control } = useFormContext<CompetitionFormData>();
+  return (
+    <FormField
+      control={control}
+      name="name"
+      rules={{ required: 'Name is required' }}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Competition Name <span className="text-destructive text-xs">*</span></FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="Competition name (e.g. FAVBET Premijer Liga)" {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default Name;
