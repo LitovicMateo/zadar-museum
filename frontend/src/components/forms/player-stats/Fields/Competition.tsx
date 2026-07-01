@@ -1,10 +1,11 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useSeasonCompetitions } from '@/hooks/queries/dasboard/UseSeasonCompetitions';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const Competition: React.FC = () => {
 	const { watch, control, setValue } = useFormContext<PlayerStatsFormData>();
@@ -20,23 +21,29 @@ const Competition: React.FC = () => {
 		})) || [];
 
 	return (
-		<Controller
+		<FormField
 			control={control}
 			name="league"
 			render={({ field }) => (
-				<Select
-					value={competitionsOptions.find((option) => option.value === field.value) || null}
-					onChange={(option) => {
-						field.onChange(option?.value || '');
-						setValue('gameId', '');
-						setValue('teamId', '');
-					}}
-					placeholder="Select Competition"
-					options={competitionsOptions}
-					isClearable
-					isDisabled={!season}
-					styles={selectStyle()}
-				/>
+				<FormItem>
+					<FormLabel>Competition</FormLabel>
+					<FormControl>
+						<Select
+							value={competitionsOptions.find((option) => option.value === field.value) || null}
+							onChange={(option) => {
+								field.onChange(option?.value || '');
+								setValue('gameId', '');
+								setValue('teamId', '');
+							}}
+							placeholder="Select Competition"
+							options={competitionsOptions}
+							isClearable
+							isDisabled={!season}
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
 			)}
 		/>
 	);

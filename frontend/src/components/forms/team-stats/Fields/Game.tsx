@@ -1,10 +1,11 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useCompetitionGames } from '@/hooks/queries/dasboard/UseCompetitionGames';
 import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const Game: React.FC = () => {
 	const { control, setValue, watch } = useFormContext<TeamStatsFormData>();
@@ -23,22 +24,28 @@ const Game: React.FC = () => {
 	}));
 
 	return (
-		<Controller
+		<FormField
 			control={control}
 			name="gameId"
 			render={({ field }) => (
-				<Select
-					value={gameOptions?.find((option) => option.value === field.value) || null}
-					onChange={(option) => {
-						field.onChange(option?.value || '');
-						setValue('teamId', '');
-					}}
-					placeholder="Select Game"
-					options={gameOptions}
-					isClearable
-					isDisabled={!league}
-					styles={selectStyle()}
-				/>
+				<FormItem>
+					<FormLabel>Game</FormLabel>
+					<FormControl>
+						<Select
+							value={gameOptions?.find((option) => option.value === field.value) || null}
+							onChange={(option) => {
+								field.onChange(option?.value || '');
+								setValue('teamId', '');
+							}}
+							placeholder="Select Game"
+							options={gameOptions}
+							isClearable
+							isDisabled={!league}
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
 			)}
 		/>
 	);

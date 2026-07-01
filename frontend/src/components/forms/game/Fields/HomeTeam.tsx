@@ -1,10 +1,11 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useTeams } from '@/hooks/queries/team/UseTeams';
 import { GameFormData } from '@/schemas/GameSchema';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const HomeTeam = () => {
 	const { control, setValue, watch } = useFormContext<GameFormData>();
@@ -28,22 +29,27 @@ const HomeTeam = () => {
 		label: team.name
 	}));
 	return (
-		<Controller
+		<FormField
 			control={control}
 			name="home_team"
 			render={({ field }) => (
-				<Select<OptionType, false>
-					className="rounded-md text-gray-500 placeholder:text-xs text-xs"
-					onChange={(option) => {
-						field.onChange(option?.value);
-						setValue('home_team_name', '');
-						setValue('home_team_short_name', '');
-					}}
-					value={teamOptions.find((opt) => opt.value === field.value)}
-					options={teamOptions}
-					isClearable
-					styles={selectStyle()}
-				/>
+				<FormItem>
+					<FormLabel>Home Team</FormLabel>
+					<FormControl>
+						<Select<OptionType, false>
+							onChange={(option) => {
+								field.onChange(option?.value);
+								setValue('home_team_name', '');
+								setValue('home_team_short_name', '');
+							}}
+							value={teamOptions.find((opt) => opt.value === field.value)}
+							options={teamOptions}
+							isClearable
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
 			)}
 		/>
 	);

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useReferees } from '@/hooks/queries/referee/UseReferees';
 import { GameFormData } from '@/schemas/GameSchema';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const ThirdReferee: React.FC = () => {
 	const { control, watch } = useFormContext<GameFormData>();
@@ -24,20 +25,25 @@ const ThirdReferee: React.FC = () => {
 		}));
 
 	return (
-		<Controller
+		<FormField
 			control={control}
 			name="thirdReferee"
 			render={({ field }) => (
-				<Select
-					className=" rounded-md text-gray-500 placeholder:text-xs  text-xs"
-					placeholder="Select Referee #2"
-					options={refereeOptions}
-					value={refereeOptions.find((opt) => opt.value === field.value)}
-					onChange={(opt) => field.onChange(opt?.value)}
-					isClearable
-					isDisabled={!secondReferee}
-					styles={selectStyle()}
-				/>
+				<FormItem>
+					<FormLabel>Referee #3</FormLabel>
+					<FormControl>
+						<Select
+							placeholder="Select Referee #3"
+							options={refereeOptions}
+							value={refereeOptions.find((opt) => opt.value === field.value)}
+							onChange={(opt) => field.onChange(opt?.value)}
+							isClearable
+							isDisabled={!secondReferee}
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
 			)}
 		/>
 	);
