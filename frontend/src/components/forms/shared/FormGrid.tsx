@@ -7,7 +7,7 @@ type FormGridProps = {
   className?: string;
 };
 
-const colsMap: Record<number, string> = {
+const colsMap: Record<2 | 3 | 5, string> = {
   2: 'grid grid-cols-2 gap-2',
   3: 'grid grid-cols-3 gap-2',
   5: 'grid grid-cols-5 gap-2',

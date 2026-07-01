@@ -6,7 +6,7 @@ import { Input } from '@/components/UI/Input';
 import { CompetitionFormData } from '@/schemas/CompetitionSchema';
 import { Plus, X } from 'lucide-react';
 
-import { FormLabel } from '@/components/ui/form';
+import { Label } from '@/components/ui/label';
 
 const WinningSeasons: React.FC = () => {
 	const { control, register } = useFormContext<CompetitionFormData>();
@@ -25,7 +25,7 @@ const WinningSeasons: React.FC = () => {
 	});
 	return (
 		<div className="space-y-2">
-			<FormLabel>Winning Seasons</FormLabel>
+			<Label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Winning Seasons</Label>
 			{trophies.map((field, index) => (
 				<div key={field.id} className="flex items-center gap-2">
 					<Input
