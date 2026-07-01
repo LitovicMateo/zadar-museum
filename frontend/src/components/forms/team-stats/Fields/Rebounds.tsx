@@ -3,8 +3,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/UI/Input';
 import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import FormGrid from '@/components/forms/shared/FormGrid';
 
 const Rebounds: React.FC = () => {
 	const { register, watch } = useFormContext<TeamStatsFormData>();
@@ -14,10 +13,8 @@ const Rebounds: React.FC = () => {
 	const offensiveRebounds = watch('offensiveRebounds');
 	const defensiveRebounds = watch('defensiveRebounds');
 
-	// disable total rebounds if offensive or defensive rebounds are filled, but enable if rebounds is filled
-
 	return (
-		<div className={styles.statsGrid3}>
+		<FormGrid cols={3}>
 			<Input {...register('offensiveRebounds')} disabled={!game || !!rebounds} placeholder="Offensive" />
 			<Input {...register('defensiveRebounds')} disabled={!game || !!rebounds} placeholder="Defensive" />
 			<Input
@@ -25,7 +22,7 @@ const Rebounds: React.FC = () => {
 				disabled={!rebounds && (!!offensiveRebounds || !!defensiveRebounds)}
 				placeholder="Total"
 			/>
-		</div>
+		</FormGrid>
 	);
 };
 

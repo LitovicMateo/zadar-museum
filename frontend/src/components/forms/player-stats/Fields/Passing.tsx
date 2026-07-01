@@ -3,18 +3,17 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/UI/Input';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import FormGrid from '@/components/forms/shared/FormGrid';
 
 const Passing: React.FC = () => {
 	const { register, watch } = useFormContext<PlayerStatsFormData>();
 
 	const team = watch('teamId');
 	return (
-		<div className={styles.statsGrid2}>
+		<FormGrid cols={2}>
 			<Input disabled={!team} {...register('assists')} placeholder="Assists" />
 			<Input disabled={!team} {...register('turnovers')} placeholder="Turnovers" />
-		</div>
+		</FormGrid>
 	);
 };
 

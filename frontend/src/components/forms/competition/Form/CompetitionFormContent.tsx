@@ -1,8 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/UI/Fieldset';
-import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import FormCard from '@/components/forms/shared/FormCard';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { CompetitionFormData } from '@/schemas/CompetitionSchema';
 
@@ -24,26 +23,26 @@ const CompetitionFormContent: React.FC<CompetitionFormContentProps> = ({ mode })
 	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	return (
-		<FormFieldsWrapper>
-			<Fieldset label="Competition Information">
+		<div className="flex flex-col gap-3">
+			<FormCard label="Competition Information">
 				<Name />
 				<ShortName />
 				<AlternateNames />
 				<WinningSeasons />
-			</Fieldset>
-			<Fieldset label="Competition Logo">
+			</FormCard>
+			<FormCard label="Competition Logo">
 				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
-			<Fieldset label="Logo Preview">
+			</FormCard>
+			<FormCard label="Logo Preview">
 				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
+			</FormCard>
 			<div>
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Competition' : 'Create Competition'}
 				/>
 			</div>
-		</FormFieldsWrapper>
+		</div>
 	);
 };
 

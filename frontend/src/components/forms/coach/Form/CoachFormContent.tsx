@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/UI/Fieldset';
-import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import FormCard from '@/components/forms/shared/FormCard';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { CoachFormData } from '@/schemas/CoachSchema';
 
@@ -14,8 +13,6 @@ import Nationality from '../Fields/Nationality';
 import ProfileImage from '../Fields/ProfileImage';
 import ProfileImagePreview from '../Fields/ProfileImagePreview';
 
-import styles from '@/components/forms/shared/FormLabel.module.css';
-
 const CoachFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 	const { setFocus, formState } = useFormContext<CoachFormData>();
 	const [preview, setPreview] = useState<string | null>(null);
@@ -26,29 +23,29 @@ const CoachFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 	}, [formState.isSubmitSuccessful, setFocus]);
 
 	return (
-		<FormFieldsWrapper>
-			<Fieldset label="Personal Information">
+		<div className="flex flex-col gap-3">
+			<FormCard label="Personal Information">
 				<FirstName />
 				<LastName />
 				<DateOfBirth />
 				<DateOfDeath />
 				<Nationality />
-			</Fieldset>
+			</FormCard>
 
-			<Fieldset label="Profile Picture">
+			<FormCard label="Profile Picture">
 				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
-			<Fieldset label="Picture Preview">
+			</FormCard>
+			<FormCard label="Picture Preview">
 				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
+			</FormCard>
 
-			<div className={styles.centerWrapper}>
+			<div className="flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Coach' : 'Create Coach'}
 				/>
 			</div>
-		</FormFieldsWrapper>
+		</div>
 	);
 };
 

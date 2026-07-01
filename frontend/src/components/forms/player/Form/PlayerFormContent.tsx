@@ -1,8 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/UI/Fieldset';
-import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import FormCard from '@/components/forms/shared/FormCard';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
 
@@ -18,8 +17,6 @@ import Nationality from '../Fields/Nationality';
 import PrimaryPosition from '../Fields/PrimaryPosition';
 import { SecondaryPosition } from '../Fields/SecondaryPosition';
 
-import styles from '@/components/forms/shared/FormLabel.module.css';
-
 type PlayerFormContentProps = {
 	mode: 'create' | 'edit';
 };
@@ -31,8 +28,8 @@ const PlayerFormContent: React.FC<PlayerFormContentProps> = ({ mode }) => {
 	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	return (
-		<FormFieldsWrapper>
-			<Fieldset label="Player Bio">
+		<div className="flex flex-col gap-3">
+			<FormCard label="Player Bio">
 				<FirstName />
 				<LastName />
 				<Height />
@@ -40,24 +37,24 @@ const PlayerFormContent: React.FC<PlayerFormContentProps> = ({ mode }) => {
 				<DateOfDeath />
 				<Nationality />
 				<ActivePlayer />
-			</Fieldset>
-			<Fieldset label="Positions">
+			</FormCard>
+			<FormCard label="Positions">
 				<PrimaryPosition />
 				<SecondaryPosition />
-			</Fieldset>
-			<Fieldset label="Profile Picture">
+			</FormCard>
+			<FormCard label="Profile Picture">
 				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
-			<Fieldset label="Picture Preview">
+			</FormCard>
+			<FormCard label="Picture Preview">
 				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
-			<div className={styles.centerWrapper}>
+			</FormCard>
+			<div className="flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Player' : 'Create Player'}
 				/>
 			</div>
-		</FormFieldsWrapper>
+		</div>
 	);
 };
 

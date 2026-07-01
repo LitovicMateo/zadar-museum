@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/UI/Fieldset';
-import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import FormCard from '@/components/forms/shared/FormCard';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { StaffFormData } from '@/schemas/StaffSchema';
 
@@ -11,8 +10,6 @@ import ProfileImagePreview from '../../coach/Fields/ProfileImagePreview';
 import FirstName from '../Fields/FirstName';
 import LastName from '../Fields/LastName';
 import Role from '../Fields/Role';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
 
 const StaffFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 	const { formState, setFocus } = useFormContext<StaffFormData>();
@@ -25,25 +22,25 @@ const StaffFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 	}, [formState.isSubmitSuccessful, setFocus]);
 
 	return (
-		<FormFieldsWrapper>
-			<Fieldset label="Personal Information">
+		<div className="flex flex-col gap-3">
+			<FormCard label="Personal Information">
 				<FirstName />
 				<LastName />
 				<Role />
-			</Fieldset>
-			<Fieldset label="Profile Picture">
+			</FormCard>
+			<FormCard label="Profile Picture">
 				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
-			<Fieldset label="Picture Preview">
+			</FormCard>
+			<FormCard label="Picture Preview">
 				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
-			<div className={styles.centerWrapper}>
+			</FormCard>
+			<div className="flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Staff' : 'Create Staff'}
 				/>
 			</div>
-		</FormFieldsWrapper>
+		</div>
 	);
 };
 

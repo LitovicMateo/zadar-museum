@@ -1,8 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/UI/Fieldset';
-import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import FormCard from '@/components/forms/shared/FormCard';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { GameFormData } from '@/schemas/GameSchema';
 
@@ -42,8 +41,8 @@ const GameFormContent: React.FC<GameFormContentProps> = ({ mode }) => {
 	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	return (
-		<FormFieldsWrapper>
-			<Fieldset label="Game Details">
+		<div className="flex flex-col gap-3">
+			<FormCard label="Game Details">
 				<Competition />
 				<CompetitionName />
 				<Season />
@@ -57,34 +56,34 @@ const GameFormContent: React.FC<GameFormContentProps> = ({ mode }) => {
 				<Nulled />
 				<Forfieted />
 				<ForfeitedBy />
-			</Fieldset>
-			<Fieldset label="Teams">
+			</FormCard>
+			<FormCard label="Teams">
 				<HomeTeam />
 				<HomeTeamName />
 				<AwayTeam />
 				<AwayTeamName />
-			</Fieldset>
-			<Fieldset label="Referees">
+			</FormCard>
+			<FormCard label="Referees">
 				<MainReferee />
 				<SecondReferee />
 				<ThirdReferee />
-			</Fieldset>
-			<Fieldset label="Staff">
+			</FormCard>
+			<FormCard label="Staff">
 				<Staffers />
-			</Fieldset>
-			<Fieldset label="Gallery">
+			</FormCard>
+			<FormCard label="Gallery">
 				<Gallery ref={fileInputRef} previews={previews} setPreviews={setPreviews} />
-			</Fieldset>
-			<Fieldset label="Gallery Preview">
+			</FormCard>
+			<FormCard label="Gallery Preview">
 				<GalleryPreview previews={previews} setPreviews={setPreviews} ref={fileInputRef} />
-			</Fieldset>
+			</FormCard>
 			<div className="w-full flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Game' : 'Create Game'}
 				/>
 			</div>
-		</FormFieldsWrapper>
+		</div>
 	);
 };
 

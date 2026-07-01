@@ -1,8 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/UI/Fieldset';
-import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import FormCard from '@/components/forms/shared/FormCard';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { VenueFormData } from '@/schemas/VenueSchema';
 
@@ -19,25 +18,25 @@ const VenueFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	return (
-		<FormFieldsWrapper>
-			<Fieldset label="Venue Information">
+		<div className="flex flex-col gap-3">
+			<FormCard label="Venue Information">
 				<Name />
 				<City />
 				<Country />
-			</Fieldset>
-			<Fieldset label="Venue Image">
+			</FormCard>
+			<FormCard label="Venue Image">
 				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
-			<Fieldset label="Image Preview">
+			</FormCard>
+			<FormCard label="Image Preview">
 				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
+			</FormCard>
 			<div>
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Venue' : 'Create Venue'}
 				/>
 			</div>
-		</FormFieldsWrapper>
+		</div>
 	);
 };
 

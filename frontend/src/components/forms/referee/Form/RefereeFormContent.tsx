@@ -1,8 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/UI/Fieldset';
-import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import FormCard from '@/components/forms/shared/FormCard';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { RefereeFormData } from '@/schemas/RefereeSchema';
 
@@ -11,8 +10,6 @@ import ProfileImagePreview from '../../coach/Fields/ProfileImagePreview';
 import FirstName from '../Fields/FirstName';
 import LastName from '../Fields/LastName';
 import Nationality from '../Fields/Nationality';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
 
 type RefereeFormContentProps = {
 	mode: 'create' | 'edit';
@@ -25,25 +22,25 @@ const RefereeFormContent: React.FC<RefereeFormContentProps> = ({ mode }) => {
 	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	return (
-		<FormFieldsWrapper>
-			<Fieldset label="Referee Bio">
+		<div className="flex flex-col gap-3">
+			<FormCard label="Referee Bio">
 				<FirstName />
 				<LastName />
 				<Nationality />
-			</Fieldset>
-			<Fieldset label="Profile Picture">
+			</FormCard>
+			<FormCard label="Profile Picture">
 				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
-			<Fieldset label="Picture Preview">
+			</FormCard>
+			<FormCard label="Picture Preview">
 				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</Fieldset>
-			<div className={styles.centerWrapper}>
+			</FormCard>
+			<div className="flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Referee' : 'Create Referee'}
 				/>
 			</div>
-		</FormFieldsWrapper>
+		</div>
 	);
 };
 

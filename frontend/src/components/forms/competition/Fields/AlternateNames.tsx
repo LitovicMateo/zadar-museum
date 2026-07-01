@@ -6,7 +6,7 @@ import { Input } from '@/components/UI/Input';
 import { CompetitionFormData } from '@/schemas/CompetitionSchema';
 import { Plus, X } from 'lucide-react';
 
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import { FormLabel } from '@/components/ui/form';
 
 const AlternateNames: React.FC = () => {
 	const { control, register } = useFormContext<CompetitionFormData>();
@@ -22,7 +22,7 @@ const AlternateNames: React.FC = () => {
 
 	return (
 		<div className="space-y-2">
-			<span className={styles.label}>Alternate Names:</span>
+			<FormLabel>Alternate Names</FormLabel>
 			{fields.map((field, index) => (
 				<div key={field.id} className="flex items-center gap-2">
 					<Input
