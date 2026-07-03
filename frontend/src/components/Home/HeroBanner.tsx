@@ -50,7 +50,7 @@ const HeroBanner: React.FC = () => (
 				</div>
 			</div>
 
-			<div className="shrink-0 self-center rounded-3xl bg-white p-6 shadow-[0_20px_45px_rgba(0,0,0,0.45)] ring-1 ring-inset ring-record/40 sm:p-8">
+			<div className="hidden shrink-0 self-center rounded-3xl bg-white p-6 shadow-[0_20px_45px_rgba(0,0,0,0.45)] ring-1 ring-inset ring-record/40 sm:p-8 md:block">
 				<img
 					src={crest}
 					alt="KK Zadar"

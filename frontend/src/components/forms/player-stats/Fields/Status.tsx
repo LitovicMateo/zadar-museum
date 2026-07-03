@@ -5,7 +5,7 @@ import { SingleValue } from 'react-select';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
-import { FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 type StatusOption = {
 	value: PlayerStatsFormData['status'];
@@ -40,6 +40,9 @@ const Status: React.FC = () => {
 			name="status"
 			render={({ field }) => (
 				<FormItem>
+					<FormLabel className="text-[9px] font-mono font-medium uppercase tracking-wider text-muted-foreground leading-none">
+						Status
+					</FormLabel>
 					<FormControl>
 						<AppSelect<StatusOption>
 							isDisabled={!player}

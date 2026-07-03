@@ -43,9 +43,8 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 		...provided,
 		height
 	}),
-	indicatorSeparator: (provided) => ({
-		...provided,
-		backgroundColor: 'var(--color-gray-400)'
+	indicatorSeparator: () => ({
+		display: 'none'
 	}),
 	dropdownIndicator: (provided) => ({
 		...provided,

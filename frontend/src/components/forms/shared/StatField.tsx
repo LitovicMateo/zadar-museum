@@ -11,7 +11,7 @@ function StatField({ label, className, ...props }: StatFieldProps) {
 			<span className="text-[9px] font-mono font-medium uppercase tracking-wider text-muted-foreground leading-none">
 				{label}
 			</span>
-			<Input className={cn('h-7 text-center font-mono tabular-nums', className)} {...props} />
+			<Input className={cn('h-8 text-center font-mono tabular-nums', className)} {...props} />
 		</div>
 	);
 }

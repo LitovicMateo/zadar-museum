@@ -25,7 +25,7 @@ const EntityGrid: React.FC = () => (
 			{sections.map(({ label, link, icon: Icon }) => (
 				<Link key={label} to={link} className="group focus:outline-none">
 					<Card className="h-full gap-3 py-5 transition-colors group-hover:border-court group-focus-visible:border-court">
-						<div className="flex flex-col gap-3 px-5">
+						<div className="flex flex-col items-center gap-3 px-5 text-center">
 							<span className="flex h-11 w-11 items-center justify-center rounded-lg bg-court text-court-foreground">
 								<Icon size={22} />
 							</span>
