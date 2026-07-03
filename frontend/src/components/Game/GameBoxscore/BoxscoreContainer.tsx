@@ -10,7 +10,6 @@ import Boxscore from './Boxscore';
 import Coaches from './coaches/Coaches';
 import Staffers from './staffers/Staffers';
 import TeamName from './team-name/TeamName';
-import styles from './BoxscoreContainer.module.css';
 
 type BoxscoreContainerProps = {
 	teamSlug: string;
@@ -23,9 +22,10 @@ const BoxscoreContainer: React.FC<BoxscoreContainerProps> = ({ teamSlug, teamNam
 
 	const { data: boxscore, isLoading: isBoxscoreLoading } = useGameBoxscore(gameId!, teamSlug);
 
-	if (isBoxscoreLoading || !boxscore) return <p>Loading...</p>;
+	if (isBoxscoreLoading || !boxscore) return <p className="text-sm text-muted-foreground">Loading...</p>;
 
-	if (boxscore.length === 0) return <p className={styles.noPlayers}>{`No ${teamName} players found`}</p>;
+	if (boxscore.length === 0)
+		return <p className="text-sm text-muted-foreground">{`No ${teamName} players found`}</p>;
 
 	if (!team) return null;
 
@@ -33,12 +33,10 @@ const BoxscoreContainer: React.FC<BoxscoreContainerProps> = ({ teamSlug, teamNam
 	const imageUrl = getImageUrl(imagePath);
 
 	return (
-		<section className={styles.section}>
-			<div className={styles.header}>
-				<div className={styles.headerInner}>
-					<TeamName name={teamName} imageUrl={imageUrl} slug={teamSlug || ''} />
-					<Coaches teamSlug={teamSlug} />
-				</div>
+		<section className="flex flex-col gap-3">
+			<div className="flex flex-col gap-3 rounded-lg border-l-4 border-record bg-court px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:py-3">
+				<TeamName name={teamName} imageUrl={imageUrl} slug={teamSlug || ''} />
+				<Coaches teamSlug={teamSlug} />
 			</div>
 			<Boxscore boxscore={sortTeamBoxscore(boxscore)} />
 			<Staffers teamSlug={teamSlug} />

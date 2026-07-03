@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import LeaderRank from '@/components/Stats/UI/LeaderRank';
 import '@/components/UI/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
 import { PlayerAllTimeStats } from '@/types/api/Player';
@@ -208,34 +209,7 @@ export const usePlayerStatsTable = (
 		// delta: if current rank improved, it’s negative (e.g. 5 → 3 = -2)
 		const rankDelta = currentRank - previousRank;
 
-		let arrow = '';
-		let color = '';
-		if (rankDelta < 0) {
-			arrow = '▲'; // moved up in rank
-			color = 'text-green-600';
-		} else if (rankDelta > 0) {
-			arrow = '▼'; // dropped in rank
-			color = 'text-red-600';
-		}
-
-		if (+games === 1) {
-			return (
-				<div className="grid grid-cols-[3ch_5ch] gap-1 items-center justify-center">
-					<span>{currentRank}</span>
-				</div>
-			);
-		}
-
-		return (
-			<div className="grid grid-cols-[3ch_5ch] gap-1 items-center justify-center">
-				<span>{currentRank}</span>
-				{rankDelta !== 0 && (
-					<span className={`text-xs ${color}`}>
-						{arrow} {Math.abs(rankDelta)}
-					</span>
-				)}
-			</div>
-		);
+		return <LeaderRank rank={currentRank} delta={rankDelta} />;
 	};
 
 	const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData, TValue> }) => {

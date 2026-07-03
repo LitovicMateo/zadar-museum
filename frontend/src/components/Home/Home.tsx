@@ -1,40 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
-import { APP_ROUTES } from '@/constants/Routes';
-import { usePlayers } from '@/hooks/queries/player/UsePlayers';
-import { PlayerResponse } from '@/types/api/Player';
-import { getImageUrl } from '@/utils/GetImageUrl';
+import AboutMuseum from '@/components/Home/AboutMuseum';
+import EntityGrid from '@/components/Home/EntityGrid';
+import HeroBanner from '@/components/Home/HeroBanner';
+import Legends from '@/components/Home/Legends';
+import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper/DynamicContentWrapper';
 
-import styles from '@/components/Home/Home.module.css';
-
-const Home: React.FC = () => {
-	const { data: players } = usePlayers('last_name', 'asc');
-
-	return (
-		<div>
-			<h2>Home</h2>
-			<DynamicContentWrapper>
-				<ul>
-					{players?.map((player: PlayerResponse) => {
-						const imageUrl = player.image?.url && getImageUrl(player.image?.url);
-
-						return (
-							<li key={player.id}>
-								<Link to={APP_ROUTES.player(player.documentId)} className={styles.item}>
-									{imageUrl && <img src={imageUrl} alt="" className={styles.img} />}
-									<span>
-										{player.first_name} {player.last_name}
-									</span>
-								</Link>
-							</li>
-						);
-					})}
-				</ul>
-			</DynamicContentWrapper>
-		</div>
-	);
-};
+const Home: React.FC = () => (
+	<DynamicContentWrapper>
+		<HeroBanner />
+		<EntityGrid />
+		<Legends />
+		<AboutMuseum />
+	</DynamicContentWrapper>
+);
 
 export default Home;

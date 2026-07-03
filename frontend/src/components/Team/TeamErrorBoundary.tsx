@@ -21,6 +21,10 @@ export class TeamErrorBoundary extends React.Component<ErrorBoundaryProps, Error
 		return { hasError: true };
 	}
 
+	componentDidCatch(error: Error) {
+		console.error('[TeamErrorBoundary] caught error', error);
+	}
+
 	render() {
 		if (this.state.hasError) {
 			return (

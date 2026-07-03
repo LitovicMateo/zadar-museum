@@ -1,21 +1,20 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/UI/Input';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import FormGrid from '@/components/forms/shared/FormGrid';
+import StatField from '@/components/forms/shared/StatField';
 
 const Misc: React.FC = () => {
 	const { register, watch } = useFormContext<PlayerStatsFormData>();
 
 	const team = watch('teamId');
 	return (
-		<div className={styles.statsGrid}>
-			<Input {...register('blocksReceived')} disabled={!team} placeholder="Blocks Received" />
-			<Input {...register('plusMinus')} disabled={!team} placeholder="Plus-Minus" />
-			<Input {...register('efficiency')} disabled={!team} placeholder="Efficiency" />
-		</div>
+		<FormGrid cols={3}>
+			<StatField label="BLK Rcv" {...register('blocksReceived')} disabled={!team} />
+			<StatField label="+/−" {...register('plusMinus')} disabled={!team} />
+			<StatField label="EFF" {...register('efficiency')} disabled={!team} />
+		</FormGrid>
 	);
 };
 

@@ -3,6 +3,7 @@ import { API_ROUTES } from '@/constants/Routes';
 import { useQuery } from '@/hooks/UseQueryWithToast';
 import apiClient from '@/lib/ApiClient';
 import { CoachStatsRanking } from '@/types/api/Coach';
+import { keepPreviousData } from '@tanstack/react-query';
 
 export const useCoachAllTimeStats = (
 	database: PlayerDB,
@@ -14,6 +15,7 @@ export const useCoachAllTimeStats = (
 	return useQuery({
 		queryKey: ['coach-all-time-stats', database, role, location, league, season],
 		queryFn: getCoachAllTimeStats.bind(null, database, role, location, league, season),
+		placeholderData: keepPreviousData,
 		errorMessage: 'Failed to load coach statistics'
 	});
 };

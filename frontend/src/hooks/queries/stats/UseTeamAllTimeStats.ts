@@ -2,11 +2,13 @@ import { API_ROUTES } from '@/constants/Routes';
 import { useQuery } from '@/hooks/UseQueryWithToast';
 import apiClient from '@/lib/ApiClient';
 import { TeamStatsRanking } from '@/types/api/Team';
+import { keepPreviousData } from '@tanstack/react-query';
 
 export const useTeamAllTimeStats = (location: 'home' | 'away' | 'all', league: string, season: string) => {
 	return useQuery({
 		queryKey: ['team-all-time-stats', location, league, season],
 		queryFn: getTeamAllTimeStats.bind(null, location, league, season),
+		placeholderData: keepPreviousData,
 		errorMessage: 'Failed to load team statistics'
 	});
 };

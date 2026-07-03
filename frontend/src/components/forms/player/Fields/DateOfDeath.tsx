@@ -3,18 +3,25 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/UI/Input';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const DateOfDeath: React.FC = () => {
-	const { register } = useFormContext<PlayerFormData>();
-
-	return (
-		<label htmlFor="">
-			<span className={styles.label}>Date of Death (Optional): </span>
-			<Input type="date" {...register('date_of_death')} className="text-gray-500 placeholder:text-xs" />
-		</label>
-	);
+  const { control } = useFormContext<PlayerFormData>();
+  return (
+    <FormField
+      control={control}
+      name="date_of_death"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Date of Death (Optional)</FormLabel>
+          <FormControl>
+            <Input type="date" {...field} value={field.value ?? ''} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default DateOfDeath;

@@ -24,6 +24,24 @@ CREATE INDEX IF NOT EXISTS idx_player_boxscore_game_date
     ON public.player_boxscore (game_date);
 
 -- ============================================================
+-- player_boxscore_unified
+-- (per-game rows + game-less aggregate lines; no unique key because
+--  aggregate rows have a NULL game_id, so only plain b-tree indexes)
+-- ============================================================
+
+CREATE INDEX IF NOT EXISTS idx_player_boxscore_unified_player_id
+    ON public.player_boxscore_unified (player_id);
+
+CREATE INDEX IF NOT EXISTS idx_player_boxscore_unified_team_slug
+    ON public.player_boxscore_unified (team_slug);
+
+CREATE INDEX IF NOT EXISTS idx_player_boxscore_unified_league_slug
+    ON public.player_boxscore_unified (league_slug);
+
+CREATE INDEX IF NOT EXISTS idx_player_boxscore_unified_season
+    ON public.player_boxscore_unified (season);
+
+-- ============================================================
 -- team_boxscore
 -- ============================================================
 

@@ -197,9 +197,11 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
       const away    = toTeamStats(record.away,    "Away");
       const neutral = toTeamStats(record.neutral, "Neutral");
 
-      const stats = [home, away];
+      const stats: Record<string, any>[] = [];
+      if (home) stats.push(home);
+      if (away) stats.push(away);
       if (neutral) stats.push(neutral);
-      stats.push(total);
+      if (total) stats.push(total);
 
       return {
         teamId:   anyRow.team_id,
@@ -273,10 +275,18 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
         if (validatedDb === "player") {
           // Aggregate from player_boxscore directly, grouped by player + team
           return knex("player_boxscore as b")
+            .leftJoin("players as p", "p.document_id", "b.player_id")
+            .leftJoin("files_related_mph as m", function () {
+              this.on("m.related_id", "=", "p.id")
+                .andOnVal("m.related_type", "=", "api::player.player")
+                .andOnVal("m.field", "=", "image");
+            })
+            .leftJoin("files as f", "f.id", "m.file_id")
             .select(
               knex.raw(`b.player_id as id`),
               "b.first_name",
               "b.last_name",
+              knex.raw(`MAX(f.url) as image_url`),
               knex.raw(`SUM(b.??) as ??`, [statKey, statKey]),
             )
             .where("b.team_slug", teamSlug)
@@ -314,8 +324,12 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
                 cb.coach_id as id,
                 cb.first_name,
                 cb.last_name,
+                MAX(f.url) AS image_url,
                 ${statExpr} AS ??
               FROM coach_boxscore cb
+              LEFT JOIN coaches c ON c.document_id = cb.coach_id
+              LEFT JOIN files_related_mph m ON m.related_id = c.id AND m.related_type = 'api::coach.coach' AND m.field = 'image'
+              LEFT JOIN files f ON f.id = m.file_id
               WHERE cb.team_slug = ?
                 AND cb.is_nulled = false
                 AND cb.coach_role = 'head'
@@ -352,9 +366,11 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
         const away    = toTeamStats(record.away,    "Away");
         const neutral = toTeamStats(record.neutral, "Neutral");
 
-        const stats = [home, away];
+        const stats: Record<string, any>[] = [];
+        if (home) stats.push(home);
+        if (away) stats.push(away);
         if (neutral) stats.push(neutral);
-        stats.push(total);
+        if (total) stats.push(total);
 
         return {
           teamId:   anyRow.team_id,
@@ -413,11 +429,20 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
         const knex = strapi.db.connection;
         return knex("player_boxscore as pb")
           .join("schedule as s", "pb.game_id", "s.game_document_id")
+          .leftJoin("players as p", "p.document_id", "pb.player_id")
+          .leftJoin("files_related_mph as m", function () {
+            this.on("m.related_id", "=", "p.id")
+              .andOnVal("m.related_type", "=", "api::player.player")
+              .andOnVal("m.field", "=", "image");
+          })
+          .leftJoin("files as f", "f.id", "m.file_id")
           .select(
             "pb.game_id",
+            "pb.player_id",
             "pb.first_name",
             "pb.last_name",
             "pb.season",
+            "f.url as image_url",
             knex.raw(`pb.?? as stat_value`, [statKey]),
           )
           .where("pb.team_slug", teamSlug)

@@ -50,10 +50,12 @@ export function StatsTable<T>({
 
 	const renderCell = (col: StatsColumn<T>, row: StatsDataRow<T>, colIndex: number) => {
 		const { meta, isSticky, isLeft } = colClasses(col);
+		const isSorted = sort?.columnId === col.id;
 		const tdClass = [
 			tableStyles.td,
 			isLeft ? tableStyles.tdLeft : '',
 			isSticky ? tableStyles.tdSticky : '',
+			isSorted && !isSticky ? tableStyles.tdSorted : '',
 			meta?.isLastInGroup ? tableStyles.groupBorder : '',
 		]
 			.filter(Boolean)
@@ -93,6 +95,7 @@ export function StatsTable<T>({
 							tableStyles.th,
 							isLeft ? tableStyles.thLeft : '',
 							isSticky ? tableStyles.thSticky : '',
+							sorted ? tableStyles.thSorted : '',
 							meta?.isLastInGroup ? tableStyles.groupBorder : '',
 							canSort ? tableStyles.thSortable : '',
 						]

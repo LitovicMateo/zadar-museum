@@ -1,6 +1,42 @@
+import { CompetitionDetailsResponse } from './Competition';
 import { GameDetailsResponse } from './Game';
 import { PlayerBoxscoreResponse, PlayerResponse } from './Player';
 import { TeamDetailsResponse } from './Team';
+
+/**
+ * A game-less "aggregate line" (historic season/tournament summary). Unlike
+ * PlayerStatsResponse there is no game; season + competition + gamesPlayed are
+ * stored directly on the row. All stat fields are optional (only what's known).
+ */
+export type AggregatePlayerStatResponse = {
+	id: number;
+	documentId: string;
+	season: string;
+	gamesPlayed: number | null;
+	competition: CompetitionDetailsResponse | null;
+	team: TeamDetailsResponse;
+	player: PlayerResponse;
+	status: 'starter' | 'bench' | 'dnp-cd' | 'no-data';
+	points: number | null;
+	fieldGoalsMade: number | null;
+	fieldGoalsAttempted: number | null;
+	threePointersMade: number | null;
+	threePointersAttempted: number | null;
+	freeThrowsMade: number | null;
+	freeThrowsAttempted: number | null;
+	rebounds: number | null;
+	offensiveRebounds: number | null;
+	defensiveRebounds: number | null;
+	assists: number | null;
+	steals: number | null;
+	blocks: number | null;
+	turnovers: number | null;
+	fouls: number | null;
+	foulsOn: number | null;
+	blocksReceived: number | null;
+	plusMinus: number | null;
+	efficiency: number | null;
+};
 
 export type PlayerStatsResponse = {
 	id: number;

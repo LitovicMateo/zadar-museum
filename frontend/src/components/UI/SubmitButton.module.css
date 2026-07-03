@@ -6,6 +6,23 @@
 
 .button {
   width: 100%;
-  max-width: 15.625rem; /* 250px */
+  max-width: 15.625rem;
   border-radius: 100rem;
+  background-color: var(--record);
+  color: var(--court);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px color-mix(in oklch, var(--record) 40%, transparent);
+}
+
+.button:hover:not(:disabled) {
+  background-color: color-mix(in oklch, var(--record) 88%, black);
+  box-shadow: 0 4px 12px color-mix(in oklch, var(--record) 50%, transparent);
+  outline: none;
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 1px 4px color-mix(in oklch, var(--record) 30%, transparent);
 }

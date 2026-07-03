@@ -1,16 +1,17 @@
 import React from 'react';
 
-import MobileFilters from '@/components/MobileFilters/MobileFilters';
 import PaginationControls from '@/components/Pagination/PaginationControls';
 import { PlayerDB } from '@/components/Player/PlayerPage';
 import PlayerRecordsTable from '@/components/Stats/PlayerRecords/PlayerRecordsTable';
+import StatsFilterBar from '@/components/Stats/UI/StatsFilterBar';
+import StatsPageHeader from '@/components/Stats/UI/StatsPageHeader';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { usePlayerRecords } from '@/hooks/queries/stats/UsePlayerRecords';
+import { cn } from '@/lib/Utils';
 import { SortingState } from '@tanstack/react-table';
 
 import PlayerStatsFilter from '../PlayerStats/filter/PlayerStatsFilter';
-import PageWrapper from '../UI/PageWrapper';
 
 const PlayerRecords = () => {
 	const [database, setDatabase] = React.useState<PlayerDB>('main');
@@ -19,7 +20,7 @@ const PlayerRecords = () => {
 	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');
 	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'points', desc: true }]);
 
-	const { data: stats } = usePlayerRecords(database, season, league, location, sorting[0]?.id);
+	const { data: stats, isPlaceholderData } = usePlayerRecords(database, season, league, location, sorting[0]?.id);
 
 	const { paginated, total, page, pageSize, setPage, setPageSize } = usePagedSortedList(stats, sorting, {
 		initialPage: 1,
@@ -33,8 +34,10 @@ const PlayerRecords = () => {
 	const handleSetSeason = React.useCallback((ssn: string) => setSeason(ssn), []);
 
 	return (
-		<PageWrapper>
-			<MobileFilters>
+		<div className="w-full">
+			<StatsPageHeader title="Player records" count={total} countLabel="records" />
+
+			<StatsFilterBar sheetTitle="Filter records">
 				<PlayerStatsFilter
 					database={database}
 					setDatabase={handleSetDatabase}
@@ -45,18 +48,20 @@ const PlayerRecords = () => {
 					season={season}
 					setSeason={handleSetSeason}
 				/>
-			</MobileFilters>
-			<PaginationControls
-				total={total}
-				page={page}
-				pageSize={pageSize}
-				onPageChange={setPage}
-				onPageSizeChange={setPageSize}
-			/>
-			<DynamicContentWrapper>
-				<PlayerRecordsTable data={paginated} sorting={sorting} setSorting={setSorting} />
-			</DynamicContentWrapper>
-		</PageWrapper>
+			</StatsFilterBar>
+			<div className={cn('transition-opacity', isPlaceholderData && 'pointer-events-none opacity-60')}>
+				<PaginationControls
+					total={total}
+					page={page}
+					pageSize={pageSize}
+					onPageChange={setPage}
+					onPageSizeChange={setPageSize}
+				/>
+				<DynamicContentWrapper>
+					<PlayerRecordsTable data={paginated} sorting={sorting} setSorting={setSorting} />
+				</DynamicContentWrapper>
+			</div>
+		</div>
 	);
 };
 

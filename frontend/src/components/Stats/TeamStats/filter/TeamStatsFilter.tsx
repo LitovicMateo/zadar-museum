@@ -1,6 +1,5 @@
 import React from 'react';
 
-import FilterWrapper from '@/components/Stats/UI/FilterWrapper';
 import LeagueFilter from '@/components/shared/filters/LeagueFilter';
 import LocationFilter from '@/components/shared/filters/LocationFilter';
 import SeasonFilter from '@/components/shared/filters/SeasonFilter';
@@ -30,11 +29,11 @@ const TeamStatsFilter: React.FC<TeamStatsFilterProps> = ({
 	if (!seasons || !competitions) return null;
 
 	return (
-		<FilterWrapper>
+		<>
 			<LocationFilter location={location} setLocation={setLocation} />
 			<LeagueFilter competitions={competitions} league={league} setLeague={setLeague} />
 			<SeasonFilter seasons={seasons} season={season} onSeasonChange={setSeason} />
-		</FilterWrapper>
+		</>
 	);
 };
 

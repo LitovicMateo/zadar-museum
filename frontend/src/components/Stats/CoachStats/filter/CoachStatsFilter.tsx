@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { PlayerDB } from '@/components/Player/PlayerPage';
-import FilterWrapper from '@/components/Stats/UI/FilterWrapper';
 import DatabaseFilter from '@/components/shared/filters/DatabaseFilter';
 import LeagueFilter from '@/components/shared/filters/LeagueFilter';
 import LocationFilter from '@/components/shared/filters/LocationFilter';
@@ -46,13 +45,13 @@ const CoachStatsFilter: React.FC<CoachStatsFilterProps> = ({
 	if (!seasons || !competitions) return null;
 
 	return (
-		<FilterWrapper>
+		<>
 			<DatabaseFilter database={database} setDatabase={setDatabase} />
 			<RoleFilter role={role} setRole={setRole} />
 			<LocationFilter location={location} setLocation={setLocation} />
 			<LeagueFilter league={league} setLeague={setLeague} competitions={competitions} />
 			<SeasonFilter seasons={seasons} season={season} onSeasonChange={setSeason} />
-		</FilterWrapper>
+		</>
 	);
 };
 

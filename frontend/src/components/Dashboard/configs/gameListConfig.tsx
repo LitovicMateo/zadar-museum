@@ -16,12 +16,12 @@ export const gameListConfig: EntityListConfig<GameDetailsResponse> = {
       header: 'Match',
       cell: (row) => <span className="font-medium">{row.home_team_name} vs {row.away_team_name}</span>,
     },
-    { header: 'Season', cell: (row) => row.season, className: 'text-slate-400' },
-    { header: 'Round', cell: (row) => row.round ?? '—', className: 'text-slate-400' },
+    { header: 'Season', cell: (row) => row.season, className: 'text-muted-foreground' },
+    { header: 'Round', cell: (row) => row.round ?? '—', className: 'text-muted-foreground' },
     {
       header: 'Date',
       cell: (row) => row.date ? new Date(row.date).toLocaleDateString() : '—',
-      className: 'text-slate-400 text-sm',
+      className: 'text-muted-foreground text-sm',
     },
   ],
 };

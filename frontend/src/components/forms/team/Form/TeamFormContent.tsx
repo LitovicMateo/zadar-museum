@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/UI/Fieldset';
-import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import FormCard from '@/components/forms/shared/FormCard';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { TeamFormData } from '@/schemas/TeamSchema';
 
@@ -42,28 +41,32 @@ const TeamFormContent: React.FC<TeamFormContentProps> = ({ mode }) => {
 	};
 
 	return (
-		<FormFieldsWrapper>
-			<Fieldset label="Team Information">
-				<Name />
-				<AlternateNames />
-				<ShortName />
-				<City />
-				<Country />
-				<IsMainTeam />
-			</Fieldset>
-			<Fieldset label="Team Logo">
-				<Logo fileInputRef={fileInputRef} handleImageChange={handleImageChange} />
-			</Fieldset>
-			<Fieldset label="Logo Preview">
-				<LogoPreview preview={preview} removeImage={removeImage} />
-			</Fieldset>
+		<div className="flex flex-col gap-2">
+			<div className="grid grid-cols-1 lg:grid-cols-[minmax(360px,1fr)_1fr] gap-2 items-start">
+				<FormCard label="Team Information">
+					<Name />
+					<AlternateNames />
+					<ShortName />
+					<City />
+					<Country />
+					<IsMainTeam />
+				</FormCard>
+				<div className="flex flex-col gap-2">
+					<FormCard label="Team Logo">
+						<Logo fileInputRef={fileInputRef} handleImageChange={handleImageChange} />
+					</FormCard>
+					<FormCard label="Logo Preview">
+						<LogoPreview preview={preview} removeImage={removeImage} />
+					</FormCard>
+				</div>
+			</div>
 			<div className="w-full flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Team' : 'Create Team'}
 				/>
 			</div>
-		</FormFieldsWrapper>
+		</div>
 	);
 };
 

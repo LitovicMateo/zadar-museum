@@ -4,7 +4,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Pencil, Trash2 } from 'lucide-react';
 
+import { cn } from '@/lib/Utils';
 import apiClient from '@/lib/ApiClient';
+import styles from './EntityListPage.module.css';
 import { useAdminList } from '@/hooks/queries/dashboard/UseAdminList';
 import Button from '@/components/UI/Button';
 import { Input } from '@/components/UI/Input';
@@ -71,84 +73,108 @@ export function EntityListPage<T extends { documentId: string }>({
 
   return (
     <div className="p-6 space-y-4">
-      <div className="flex items-center justify-between">
+      {/* Court Navy header banner — -mx-6 -mt-6 cancels the p-6 above */}
+      <div className="-mx-6 -mt-6 mb-4 px-6 py-4 bg-court flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100">{config.title}</h1>
-          <p className="text-sm text-slate-500">{total} total</p>
+          <h1 className="font-display text-xl font-bold text-white">{config.title}</h1>
+          <span className="font-mono text-[11px] text-white/60 uppercase tracking-wider">
+            {total} records
+          </span>
         </div>
-        <Button onClick={() => navigate(config.createPath)}>
-          + Create new {config.title.replace(/s$/, '')}
-        </Button>
-      </div>
-
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <Input
-          placeholder={config.searchPlaceholder}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-xs"
-        />
-        <div className="flex items-center gap-2 text-sm text-slate-400 whitespace-nowrap">
-          <span className="text-slate-500">Showing {from}–{to} of {total}</span>
-          <Button variant="outline" size="sm" onClick={() => setPage((p) => p - 1)} disabled={page <= 1 || isFetching}>
-            ← Prev
-          </Button>
-          <span className="font-semibold text-slate-200">{page} / {totalPages}</span>
-          <Button variant="outline" size="sm" onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages || isFetching}>
-            Next →
+        <div className="flex items-center gap-2">
+          {config.secondaryCreate && (
+            <Button
+              variant="outline"
+              onClick={() => navigate(config.secondaryCreate!.path)}
+            >
+              {config.secondaryCreate.label}
+            </Button>
+          )}
+          <Button onClick={() => navigate(config.createPath)} className={styles.createBtn}>
+            + Create {config.title.replace(/s$/, '')}
           </Button>
         </div>
       </div>
 
-      <Table className={isFetching ? 'opacity-60 transition-opacity' : ''}>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-10">#</TableHead>
-            {config.columns.map((col) => (
-              <TableHead key={col.header} className={col.className}>
-                {col.header}
-              </TableHead>
-            ))}
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isPending && (
-            <TableRow>
-              <TableCell colSpan={config.columns.length + 2} className="text-center text-slate-500 py-8">
-                Loading...
-              </TableCell>
-            </TableRow>
-          )}
-          {!isPending && items.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={config.columns.length + 2} className="text-center text-slate-500 py-8">
-                No results
-              </TableCell>
-            </TableRow>
-          )}
-          {items.map((row, idx) => (
-            <TableRow key={row.documentId}>
-              <TableCell className="text-slate-500 text-sm">{from + idx}</TableCell>
-              {config.columns.map((col) => (
-                <TableCell key={col.header} className={col.className}>
-                  {col.cell(row)}
-                </TableCell>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <Input
+            placeholder={config.searchPlaceholder}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="max-w-xs"
+          />
+          <div className="flex items-center gap-2 text-sm text-muted-foreground whitespace-nowrap">
+            <span>Showing {from}–{to} of {total}</span>
+            <Button variant="outline" size="sm" onClick={() => setPage((p) => p - 1)} disabled={page <= 1 || isFetching}>
+              ← Prev
+            </Button>
+            <span className="font-semibold text-foreground">{page} / {totalPages}</span>
+            <Button variant="outline" size="sm" onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages || isFetching}>
+              Next →
+            </Button>
+          </div>
+        </div>
+
+        <div className="border border-border rounded-lg overflow-hidden">
+          <Table className={isFetching ? 'opacity-60 transition-opacity' : ''}>
+            <TableHeader className="bg-muted/50">
+              <TableRow>
+                <TableHead className="w-10 text-[11px] font-mono uppercase tracking-wider">#</TableHead>
+                {config.columns.map((col) => (
+                  <TableHead key={col.header} className={cn('text-[11px] font-mono uppercase tracking-wider', col.className)}>
+                    {col.header}
+                  </TableHead>
+                ))}
+                <TableHead className="text-right text-[11px] font-mono uppercase tracking-wider">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isPending && (
+                <TableRow>
+                  <TableCell colSpan={config.columns.length + 2} className="text-center text-muted-foreground py-8">
+                    Loading...
+                  </TableCell>
+                </TableRow>
+              )}
+              {!isPending && items.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={config.columns.length + 2} className="text-center text-muted-foreground py-8">
+                    No results
+                  </TableCell>
+                </TableRow>
+              )}
+              {items.map((row, idx) => (
+                <TableRow key={row.documentId} className="even:bg-muted/30">
+                  <TableCell className="text-muted-foreground text-sm">{from + idx}</TableCell>
+                  {config.columns.map((col) => (
+                    <TableCell key={col.header} className={col.className}>
+                      {col.cell(row)}
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    <div className="flex gap-2 justify-end">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          navigate(config.editPathFor?.(row) ?? config.editPath(row.documentId))
+                        }
+                        className={styles.editBtn}
+                      >
+                        <Pencil size={13} className="mr-1" /> Edit
+                      </Button>
+                      <Button variant="destructive" size="sm" onClick={() => setDeleteTarget(row)}>
+                        <Trash2 size={13} className="mr-1" /> Delete
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
               ))}
-              <TableCell>
-                <div className="flex gap-2 justify-end">
-                  <Button variant="outline" size="sm" onClick={() => navigate(config.editPath(row.documentId))}>
-                    <Pencil size={13} className="mr-1" /> Edit
-                  </Button>
-                  <Button variant="destructive" size="sm" onClick={() => setDeleteTarget(row)}>
-                    <Trash2 size={13} className="mr-1" /> Delete
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+            </TableBody>
+          </Table>
+        </div>
+      </div>
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>

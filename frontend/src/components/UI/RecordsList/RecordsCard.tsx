@@ -1,13 +1,11 @@
 import { type ReactNode } from 'react';
 
-import styles from './RecordsCard.module.css';
-
 type RecordsCardProps = {
 	children: ReactNode;
 };
 
 const RecordsCard = ({ children }: RecordsCardProps) => {
-	return <div className={styles.card}>{children}</div>;
+	return <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">{children}</div>;
 };
 
 export default RecordsCard;

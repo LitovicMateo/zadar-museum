@@ -63,7 +63,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, roundLabel, perspectiveSlug, 
 	return (
 		<Link to={APP_ROUTES.game(game.game_document_id.toString())} className="block">
 			<Card className="flex-row items-center gap-3 px-3 py-2.5 transition-colors hover:bg-accent">
-				<div className="flex w-16 shrink-0 flex-col text-xs text-muted-foreground">
+				<div className="hidden sm:flex w-16 shrink-0 flex-col text-xs text-muted-foreground">
 					<span>{date}</span>
 					{roundLabel && <span className="truncate">{roundLabel}</span>}
 				</div>
@@ -74,13 +74,21 @@ const GameCard: React.FC<GameCardProps> = ({ game, roundLabel, perspectiveSlug, 
 					logos={logos}
 					align="right"
 				/>
-				<div
-					className={cn(
-						'shrink-0 rounded-md px-2.5 py-1 text-sm font-semibold tabular-nums',
-						scoreClasses[outcome]
+				<div className="shrink-0 flex flex-col items-center gap-0.5">
+					<span className="sm:hidden text-[0.65rem] leading-tight text-muted-foreground">{date}</span>
+					<div
+						className={cn(
+							'rounded-md px-2.5 py-1 text-sm font-semibold tabular-nums',
+							scoreClasses[outcome]
+						)}
+					>
+						{scoreLabel}
+					</div>
+					{roundLabel && (
+						<span className="sm:hidden truncate text-[0.65rem] leading-tight text-muted-foreground">
+							{roundLabel}
+						</span>
 					)}
-				>
-					{scoreLabel}
 				</div>
 				<TeamSide
 					name={game.away_team_name}

@@ -1,21 +1,16 @@
 import React from 'react';
-import Select from 'react-select';
 
-import Category from '@/components/Stats/Category';
-import Container from '@/components/Stats/Container';
-import { selectStyle } from '@/constants/ReactSelectStyle';
+import FilterField from '@/components/Stats/UI/FilterField';
+import SegmentedToggle from '@/components/UI/SegmentedToggle/SegmentedToggle';
 
-type Option = {
-	value: 'all' | 'head' | 'assistant';
-	label: string;
-};
+type Role = 'all' | 'head' | 'assistant';
 
 type RoleFilterProps = {
-	role: 'all' | 'head' | 'assistant';
-	setRole: (role: 'all' | 'head' | 'assistant') => void;
+	role: Role;
+	setRole: (role: Role) => void;
 };
 
-const roleOptions: Option[] = [
+const roleOptions: { value: Role; label: string }[] = [
 	{ value: 'all', label: 'Total' },
 	{ value: 'head', label: 'Head' },
 	{ value: 'assistant', label: 'Assistant' }
@@ -23,15 +18,9 @@ const roleOptions: Option[] = [
 
 const RoleFilter: React.FC<RoleFilterProps> = ({ role, setRole }) => {
 	return (
-		<Container>
-			<Category>Role</Category>
-			<Select
-				styles={selectStyle()}
-				value={roleOptions.find((opt) => opt.value === role)}
-				onChange={(opt) => setRole((opt?.value as 'all' | 'head' | 'assistant') ?? 'all')}
-				options={roleOptions}
-			/>
-		</Container>
+		<FilterField label="Role">
+			<SegmentedToggle value={role} onValueChange={setRole} options={roleOptions} ariaLabel="Coach role filter" />
+		</FilterField>
 	);
 };
 

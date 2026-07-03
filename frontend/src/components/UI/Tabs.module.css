@@ -46,7 +46,7 @@
 	padding: 0.5rem 1.125rem;
 	font-size: 0.9rem;
 	font-weight: 500;
-	color: #64748b;
+	color: var(--muted-foreground);
 	border: none;
 	cursor: pointer;
 	white-space: nowrap;
@@ -57,11 +57,11 @@
 }
 
 .tabsTrigger:hover {
-	color: #1e40af;
+	color: var(--court);
 }
 
 .tabsTrigger[data-state='active'] {
-	color: #1d4ed8;
+	color: #fff;
 	background: transparent !important;
 }
 
@@ -70,8 +70,8 @@
 	position: absolute;
 	inset: 0;
 	border-radius: 6px;
-	background-color: #f8f4f7;
-	border: 1.5px solid #bfdbfe;
+	background-color: var(--court);
+	border: 1.5px solid color-mix(in oklab, var(--record) 40%, transparent);
 	z-index: 0;
 }
 
@@ -110,8 +110,8 @@
 	position: absolute;
 	inset: 0;
 	border-radius: 6px;
-	background-color: #eff6ff;
-	border: 1.5px solid #bfdbfe;
+	background-color: var(--court);
+	border: 1.5px solid color-mix(in oklab, var(--record) 40%, transparent);
 	z-index: 0;
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import { selectStyle } from '@/constants/ReactSelectStyle';
@@ -8,8 +8,6 @@ import { CoachStatsRanking } from '@/types/api/Coach';
 
 import { coachRankingOptions } from './CoachRankingOptions';
 import LeagueCoachLeaderList from './LeagueCoachLeaderList';
-
-import styles from './CoachRankings.module.css';
 
 type Option = {
 	value: keyof CoachStatsRanking;
@@ -21,8 +19,8 @@ const LeagueCoachRankings: React.FC = () => {
 	const [selectedOption, setSelectedOption] = useState<keyof CoachStatsRanking>('games');
 
 	return (
-		<section className={styles.section}>
-			<Select
+		<section className="space-y-4">
+			<AppSelect
 				value={coachRankingOptions.find((opt) => opt.value === selectedOption)}
 				options={coachRankingOptions}
 				onChange={(opt) => setSelectedOption(opt?.value ?? 'games')}

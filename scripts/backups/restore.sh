@@ -6,8 +6,8 @@ set -euo pipefail
 COMPOSE_FILE="docker-compose.prod.yml"
 ENV_FILE=".env.prod"
 BACKUP_DIR="backups/prod"
-DB_USER="strapi"
-DB_NAME="strapi"
+DB_USER=""
+DB_NAME=""
 UPLOADS_PATH="/app/public/uploads"
 
 usage(){
@@ -35,6 +35,16 @@ if command -v docker-compose >/dev/null 2>&1; then
 else
   COMPOSE_CMD="docker compose"
 fi
+
+# Resolve DB user/name: CLI flags win, else read from the env file, else default to 'strapi'
+if [ -z "$DB_USER" ] && [ -f "$ENV_FILE" ]; then
+  DB_USER=$(grep -E '^(POSTGRES_USER|DATABASE_USERNAME)=' "$ENV_FILE" | head -n1 | sed -E 's/^[^=]+=//') || true
+fi
+if [ -z "$DB_NAME" ] && [ -f "$ENV_FILE" ]; then
+  DB_NAME=$(grep -E '^(POSTGRES_DB|DATABASE_NAME)=' "$ENV_FILE" | head -n1 | sed -E 's/^[^=]+=//') || true
+fi
+DB_USER="${DB_USER:-strapi}"
+DB_NAME="${DB_NAME:-strapi}"
 
 [ -d "$BACKUP_DIR" ] || { echo "Backup dir not found: $BACKUP_DIR" >&2; exit 1; }
 

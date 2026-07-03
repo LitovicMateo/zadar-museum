@@ -1,9 +1,7 @@
 import React from 'react';
-import Select from 'react-select';
 
-import Category from '@/components/Stats/Category';
-import Container from '@/components/Stats/Container';
-import { selectStyle } from '@/constants/ReactSelectStyle';
+import FilterField from '@/components/Stats/UI/FilterField';
+import SegmentedToggle from '@/components/UI/SegmentedToggle/SegmentedToggle';
 
 type LocationValue = 'home' | 'away' | 'all';
 
@@ -12,26 +10,22 @@ type LocationFilterProps = {
 	setLocation: (location: LocationValue) => void;
 };
 
-const locationOptions: { label: string; value: LocationValue }[] = [
-	{ label: 'All', value: 'all' },
-	{ label: 'Home', value: 'home' },
-	{ label: 'Away', value: 'away' }
+const locationOptions: { value: LocationValue; label: string }[] = [
+	{ value: 'all', label: 'All' },
+	{ value: 'home', label: 'Home' },
+	{ value: 'away', label: 'Away' }
 ];
 
 const LocationFilter: React.FC<LocationFilterProps> = ({ location, setLocation }) => {
 	return (
-		<Container>
-			<Category>Home / Away</Category>
-			<Select
-				styles={selectStyle()}
-				value={locationOptions.find((opt) => opt.value === location)}
-				onChange={(opt) => setLocation((opt?.value as LocationValue) ?? 'all')}
+		<FilterField label="Home / Away">
+			<SegmentedToggle
+				value={location}
+				onValueChange={setLocation}
 				options={locationOptions}
-				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
-				menuPosition="fixed"
-				menuPlacement="auto"
+				ariaLabel="Home or away filter"
 			/>
-		</Container>
+		</FilterField>
 	);
 };
 

@@ -2,14 +2,15 @@ import React from 'react';
 
 import BoxscoreFilter from '@/components/Player/Content/PlayerBoxscore/filter/BoxscoreFilter';
 import SeasonAverage from '@/components/Player/Content/PlayerBoxscore/season-average/SeasonAverage';
-
-import styles from './PlayerSeasonStats.module.css';
+import { MobileFilterSheet } from '@/components/UI/MobileFilterSheet';
 
 const SeasonTab: React.FC = () => (
-	<div className={styles.wrapper}>
-		<BoxscoreFilter />
+	<section className="space-y-4">
+		<MobileFilterSheet title="Filter season">
+			<BoxscoreFilter />
+		</MobileFilterSheet>
 		<SeasonAverage />
-	</div>
+	</section>
 );
 
 export default SeasonTab;

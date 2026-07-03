@@ -2,9 +2,10 @@
 	overflow-x: auto;
 	width: fit-content;
 	max-width: 100%;
-	border-radius: 0.5rem;
-	border: 1px solid #e5e7eb; /* gray-200 */
-	background-color: #ffffff;
+	border-radius: 0.75rem;
+	border: 1px solid var(--border);
+	background-color: var(--card);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 /* Used when the parent scroll container handles overflow (e.g. gamelog scroll area). */
@@ -17,7 +18,7 @@
 .table {
 	font-family: var(--font-sans);
 	font-variant-numeric: tabular-nums;
-	font-size: 20px; /* text-sm */
+	font-size: var(--font-size-mobile);
 	width: 100%;
 	border-collapse: separate;
 	border-spacing: 0;
@@ -25,6 +26,6 @@
 
 @media (min-width: 768px) {
 	.table {
-		font-size: 1rem; /* text-base */
+		font-size: var(--font-size-desktop);
 	}
 }

@@ -7,17 +7,17 @@
   border-radius: 0.375rem;
   background: transparent;
   border: none;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.55);
   cursor: pointer;
   transition: color 150ms, background-color 150ms;
 }
 .button:hover {
-  color: #374151;
-  background-color: rgba(239, 246, 255, 0.5);
+  color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.10);
 }
 .button:focus {
   outline: none;
-  box-shadow: 0 0 0 1px #dbeafe;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 .icon {
   width: 0.75rem;

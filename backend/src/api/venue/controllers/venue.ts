@@ -33,8 +33,11 @@ export default factories.createCoreController(
     },
 
     async getVenuesTeamRecord(ctx) {
+      const { location } = ctx.query as { location?: string };
+      const resolvedLocation = location === "away" ? "away" : "home";
+
       const service = strapi.service("api::venue.venue");
-      const data = await service.findVenuesTeamRecord();
+      const data = await service.findVenuesTeamRecord(resolvedLocation);
       ctx.body = data;
     },
 

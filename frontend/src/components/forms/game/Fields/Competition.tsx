@@ -1,10 +1,11 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import { useFormContext } from 'react-hook-form';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
 import { GameFormData } from '@/schemas/GameSchema';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 interface OptionType {
 	value: string;
@@ -22,23 +23,28 @@ const Competition: React.FC = () => {
 		label: c.name
 	}));
 	return (
-		<Controller
+		<FormField
 			control={control}
 			name="competition"
 			render={({ field }) => (
-				<Select<OptionType, false>
-					className="rounded-md text-gray-500 placeholder:text-xs text-xs"
-					placeholder="Select competition"
-					options={competitionOptions}
-					value={competitionOptions.find((opt) => opt.value === field.value)}
-					onChange={(option) => {
-						field.onChange(option?.value);
-						setValue('league_name', '');
-						setValue('league_short_name', '');
-					}}
-					isClearable
-					styles={selectStyle()}
-				/>
+				<FormItem>
+					<FormLabel>Competition</FormLabel>
+					<FormControl>
+						<AppSelect<OptionType, false>
+							placeholder="Select competition"
+							options={competitionOptions}
+							value={competitionOptions.find((opt) => opt.value === field.value)}
+							onChange={(option) => {
+								field.onChange(option?.value);
+								setValue('league_name', '');
+								setValue('league_short_name', '');
+							}}
+							isClearable
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
 			)}
 		/>
 	);

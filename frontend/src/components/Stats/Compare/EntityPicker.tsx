@@ -1,8 +1,7 @@
 import React from 'react';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
-import Category from '@/components/Stats/Category';
-import Container from '@/components/Stats/Container';
+import FilterField from '@/components/Stats/UI/FilterField';
 import { selectStyle } from '@/constants/ReactSelectStyle';
 
 type Option = { value: string; label: string };
@@ -20,10 +19,9 @@ const EntityPicker: React.FC<EntityPickerProps> = ({ label, options, value, onCh
 	const availableOptions = excludeValue ? options.filter((opt) => opt.value !== excludeValue) : options;
 
 	return (
-		<Container>
-			<Category>{label}</Category>
-			<Select
-				styles={selectStyle()}
+		<FilterField label={label}>
+			<AppSelect
+				styles={selectStyle('190px')}
 				options={availableOptions}
 				value={availableOptions.find((opt) => opt.value === value) ?? null}
 				onChange={(opt) => onChange((opt?.value as string) ?? '')}
@@ -33,7 +31,7 @@ const EntityPicker: React.FC<EntityPickerProps> = ({ label, options, value, onCh
 				menuPosition="fixed"
 				menuPlacement="auto"
 			/>
-		</Container>
+		</FilterField>
 	);
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldValues, useFieldArray, useFormContext, Controller, useWatch } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import NoContent from '@/components/NoContent/NoContent';
 import Button from '@/components/UI/Button';
@@ -59,7 +59,7 @@ const Staffers: React.FC = () => {
 							});
 
 							return (
-								<Select
+								<AppSelect
 									className=" rounded-md text-gray-500 placeholder:text-xs  text-xs"
 									placeholder="Select staff member"
 									options={availableOptions}

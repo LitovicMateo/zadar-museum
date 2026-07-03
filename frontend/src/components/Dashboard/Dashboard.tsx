@@ -1,82 +1,78 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import Select from 'react-select';
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import {
+  UserRound, Users, Scale, Shield, ClipboardList,
+  Trophy, MapPin, Award, BarChart2, PieChart, Menu,
+} from 'lucide-react';
 
 import DashboardSidebar from '@/components/Sidebar/DashboardSidebar';
 import { type DashboardNavItem } from '@/components/Sidebar/DashboardSidebarRow';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
+import { Sheet, SheetContent } from '@/components/UI/Sheet';
+import Button from '@/components/UI/Button';
 import { APP_ROUTES } from '@/constants/Routes';
 
 import styles from './Dashboard.module.css';
 
 const navItems: DashboardNavItem[] = [
-	{ label: 'Player', listPath: APP_ROUTES.dashboard.player.list },
-	{ label: 'Staff', listPath: APP_ROUTES.dashboard.staff.list },
-	{ label: 'Referee', listPath: APP_ROUTES.dashboard.referee.list },
-	{ label: 'Team', listPath: APP_ROUTES.dashboard.team.list },
-	{ label: 'Coach', listPath: APP_ROUTES.dashboard.coach.list },
-	{ label: 'Game', listPath: APP_ROUTES.dashboard.game.list },
-	{ label: 'Venue', listPath: APP_ROUTES.dashboard.venue.list },
-	{ label: 'Competition', listPath: APP_ROUTES.dashboard.competition.list },
+  { label: 'Player', listPath: APP_ROUTES.dashboard.player.list, icon: UserRound },
+  { label: 'Staff', listPath: APP_ROUTES.dashboard.staff.list, icon: Users },
+  { label: 'Referee', listPath: APP_ROUTES.dashboard.referee.list, icon: Scale },
+  { label: 'Team', listPath: APP_ROUTES.dashboard.team.list, icon: Shield },
+  { label: 'Coach', listPath: APP_ROUTES.dashboard.coach.list, icon: ClipboardList },
+  { label: 'Game', listPath: APP_ROUTES.dashboard.game.list, icon: Trophy },
+  { label: 'Venue', listPath: APP_ROUTES.dashboard.venue.list, icon: MapPin },
+  { label: 'Competition', listPath: APP_ROUTES.dashboard.competition.list, icon: Award },
 ];
 
 const statsItems: DashboardNavItem[] = [
-	{ label: 'Player Stats', listPath: APP_ROUTES.dashboard.playerStats.list },
-	{ label: 'Team Stats', listPath: APP_ROUTES.dashboard.teamStats.list },
+  { label: 'Player Stats', listPath: APP_ROUTES.dashboard.playerStats.list, icon: BarChart2 },
+  { label: 'Team Stats', listPath: APP_ROUTES.dashboard.teamStats.list, icon: PieChart },
 ];
 
 const Dashboard: React.FC = () => {
-	const navigate = useNavigate();
-	const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-	const [isMobile, setIsMobile] = useState<boolean>(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+  return (
+    <div className={styles.layout}>
+      {/* Desktop sidebar */}
+      <div className={styles.desktopSidebar}>
+        <DashboardSidebar navItems={navItems} statsItems={statsItems} />
+      </div>
 
-	useEffect(() => {
-		const onResize = () => setIsMobile(window.innerWidth <= 768);
-		window.addEventListener('resize', onResize);
-		return () => window.removeEventListener('resize', onResize);
-	}, []);
+      {/* Mobile Sheet */}
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <SheetContent side="left" className="w-64 p-0 bg-court border-r border-white/15">
+          <DashboardSidebar
+            navItems={navItems}
+            statsItems={statsItems}
+            isEmbedded
+            onLinkClick={() => setMobileOpen(false)}
+          />
+        </SheetContent>
+      </Sheet>
 
-	type Option = { value: string; label: string };
+      <div className={styles.content}>
+        {/* Mobile top bar */}
+        <div className="flex items-center gap-3 md:hidden mb-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open navigation"
+            className="text-court hover:bg-court/10"
+          >
+            <Menu size={20} />
+          </Button>
+          <span className="font-display font-bold text-court text-lg">Dashboard</span>
+        </div>
 
-	const options: Option[] = useMemo(() => {
-		return [...navItems, ...statsItems].map((item) => ({
-			value: item.listPath,
-			label: item.label,
-		}));
-	}, []);
-
-	const currentOption: Option | null =
-		options.find((o) => location.pathname.startsWith(o.value.replace('/list', ''))) || null;
-
-	const handleChange = (selected: Option | null) => {
-		if (selected?.value) navigate(selected.value);
-	};
-
-	return (
-		<div className={styles.layout}>
-			<div className={styles.desktopSidebar}>
-				<DashboardSidebar navItems={navItems} statsItems={statsItems} />
-			</div>
-			<div className={styles.content}>
-				{isMobile && (
-					<div className={styles.mobileNav}>
-						<Select<Option, false>
-							options={options}
-							defaultValue={currentOption ?? undefined}
-							onChange={handleChange}
-							isSearchable
-							styles={{ container: (provided) => ({ ...provided, width: '100%' }) }}
-							placeholder="Choose form..."
-						/>
-					</div>
-				)}
-				<DynamicContentWrapper>
-					<Outlet />
-				</DynamicContentWrapper>
-			</div>
-		</div>
-	);
+        <DynamicContentWrapper>
+          <Outlet />
+        </DynamicContentWrapper>
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;

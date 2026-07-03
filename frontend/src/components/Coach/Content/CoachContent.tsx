@@ -1,15 +1,11 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useState } from 'react';
 
-import PageContentWrapper from '@/components/UI/PageContentWrapper';
-import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/UI/Tabs';
-import { AnimatePresence } from 'framer-motion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/radix-tabs';
 
 import CoachCareerStats from './CoachCareerStats/CoachCareerStats';
 import CoachGamelog from './CoachGamelog/CoachGamelog';
 import CoachLeagueStats from './CoachLeagueStats/CoachLeagueStats';
 import CoachSeasonStats from './CoachSeasonStats/CoachSeasonStats';
-
-import styles from './CoachContent.module.css';
 
 const TABS = [
 	{ value: 'alltime', label: 'All Time' },
@@ -27,44 +23,41 @@ const TAB_PANELS: { value: TabValue; content: React.ReactNode }[] = [
 	{ value: 'gamelog', content: <CoachGamelog /> }
 ];
 
-const CoachContent = () => {
+const CoachContent: React.FC = React.memo(() => {
 	const [activeTab, setActiveTab] = useState<string>('alltime');
-	const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-
-	const handleTabChange = useCallback((value: string) => {
-		setActiveTab(value);
-		const el = tabRefs.current[value];
-		if (el) {
-			el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-		}
-	}, []);
 
 	return (
-		<PageContentWrapper>
-			<Tabs value={activeTab} onValueChange={handleTabChange}>
-				<TabsList aria-label="Player statistics sections">
-					{TABS.map((tab) => (
-						<TabsTrigger
-							key={tab.value}
-							value={tab.value}
-							ref={(el) => {
-								tabRefs.current[tab.value] = el;
-							}}
-						>
-							<AnimatePresence>{activeTab === tab.value && <ActiveTab />}</AnimatePresence>
-							<ActiveTabLabel label={tab.label} />
-						</TabsTrigger>
-					))}
-				</TabsList>
+		<Tabs value={activeTab} onValueChange={setActiveTab} className="gap-0">
+			<div className="sticky top-0 z-20 -mx-4 border-b border-border bg-chalk/85 px-4 backdrop-blur sm:-mx-6 sm:px-6">
+				<div className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:justify-between">
+					<TabsList
+						aria-label="Coach statistics sections"
+						className="h-auto max-w-full justify-start gap-1 overflow-x-auto rounded-lg bg-muted p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+					>
+						{TABS.map((tab) => (
+							<TabsTrigger
+								key={tab.value}
+								value={tab.value}
+								className="flex-none rounded-md px-3 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground data-[state=active]:bg-court data-[state=active]:text-record"
+							>
+								{tab.label}
+							</TabsTrigger>
+						))}
+					</TabsList>
+				</div>
+			</div>
 
+			<div className="pt-6">
 				{TAB_PANELS.map(({ value, content }) => (
 					<TabsContent key={value} value={value}>
-						<div className={styles.contentWrapper}>{content}</div>
+						{content}
 					</TabsContent>
 				))}
-			</Tabs>
-		</PageContentWrapper>
+			</div>
+		</Tabs>
 	);
-};
+});
+
+CoachContent.displayName = 'CoachContent';
 
 export default CoachContent;

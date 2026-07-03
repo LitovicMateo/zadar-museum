@@ -1,20 +1,19 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/UI/Input';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import FormGrid from '@/components/forms/shared/FormGrid';
+import StatField from '@/components/forms/shared/StatField';
 
 const Passing: React.FC = () => {
 	const { register, watch } = useFormContext<PlayerStatsFormData>();
 
 	const team = watch('teamId');
 	return (
-		<div className={styles.statsGrid2}>
-			<Input disabled={!team} {...register('assists')} placeholder="Assists" />
-			<Input disabled={!team} {...register('turnovers')} placeholder="Turnovers" />
-		</div>
+		<FormGrid cols={2}>
+			<StatField label="AST" disabled={!team} {...register('assists')} />
+			<StatField label="TO" disabled={!team} {...register('turnovers')} />
+		</FormGrid>
 	);
 };
 

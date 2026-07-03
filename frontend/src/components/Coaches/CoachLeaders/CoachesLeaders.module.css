@@ -1,60 +1,90 @@
 .sidebar {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 10px;
 }
 
 .title {
-	font-size: 1rem;
-	font-weight: 700;
-	color: var(--foreground);
+	font-family: 'DM Mono', monospace;
+	font-size: 0.65rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: var(--muted-foreground);
 	margin: 0;
 }
 
-.category {
-	border: 1px solid var(--border);
-	border-radius: 8px;
-	padding: 12px;
-	background: var(--card);
+.categoryHeader {
+	background: var(--court);
+	padding: 7px 12px;
 }
 
-.categoryTitle {
-	font-size: 0.8rem;
+.categoryLabel {
+	font-family: 'DM Mono', monospace;
+	font-size: 0.62rem;
 	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
-	color: var(--muted-foreground);
-	margin: 0 0 8px 0;
+	letter-spacing: 0.1em;
+	color: var(--record);
 }
 
 .list {
 	list-style: none;
 	margin: 0;
-	padding: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
+	padding: 3px 0;
 }
 
 .row {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	font-size: 0.82rem;
-	padding: 4px 0;
+	padding: 5px 12px;
+	font-size: 0.8rem;
+}
+
+.rowFirst {
+	background: color-mix(in oklab, var(--record) 10%, var(--card));
+}
+
+.rowSecond {
+	background: color-mix(in oklab, var(--medal-silver) 12%, var(--card));
+}
+
+.rowThird {
+	background: color-mix(in oklab, var(--medal-bronze) 12%, var(--card));
 }
 
 .row:not(:last-child) {
 	border-bottom: 1px solid var(--border);
-	padding-bottom: 6px;
 }
 
 .rank {
 	width: 18px;
-	font-weight: 600;
-	color: var(--muted-foreground);
-	text-align: center;
+	height: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	font-family: 'DM Mono', monospace;
+	font-size: 0.62rem;
+	font-weight: 700;
 	flex-shrink: 0;
+	background: var(--muted);
+	color: var(--muted-foreground);
+}
+
+.rankFirst {
+	background: var(--record);
+	color: #0a0a0a;
+}
+
+.rankSecond {
+	background: var(--medal-silver);
+	color: #0a0a0a;
+}
+
+.rankThird {
+	background: var(--medal-bronze);
+	color: #0a0a0a;
 }
 
 .coachName {
@@ -65,32 +95,37 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-size: 0.78rem;
 }
 
 .coachName:hover {
+	color: var(--primary);
 	text-decoration: underline;
 }
 
 .statValue {
+	font-family: 'Inter', sans-serif;
 	font-weight: 700;
 	color: var(--foreground);
 	flex-shrink: 0;
+	font-variant-numeric: tabular-nums;
+	font-size: 0.8rem;
 }
 
 @media (max-width: 1023px) {
 	.sidebar {
 		flex-direction: row;
 		overflow-x: auto;
-		gap: 12px;
+		gap: 10px;
 		padding-bottom: 4px;
+	}
+
+	.sidebar > * {
+		min-width: 220px;
+		flex-shrink: 0;
 	}
 
 	.title {
 		display: none;
-	}
-
-	.category {
-		min-width: 220px;
-		flex-shrink: 0;
 	}
 }

@@ -10,7 +10,7 @@ import VenueLeaders from '@/components/Venues/VenueLeaders/VenueLeaders';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
 import { useVenuesDirectory } from '@/hooks/queries/venue/useVenuesDirectory';
-import { VenueDirectoryEntry } from '@/types/api/Venue';
+import { VenueDirectoryEntry, VenueLocation } from '@/types/api/Venue';
 import { searchVenues } from '@/utils/SearchFunctions';
 
 import styles from '@/components/Venues/VenuesPage.module.css';
@@ -20,13 +20,14 @@ const PAGE_SIZE = 12;
 const VenuesPage: React.FC = () => {
 	const wrapperRef = React.useRef<DynamicContentWrapperHandle>(null);
 
-	const { directory, isLoading } = useVenuesDirectory();
+	const [location, setLocation] = React.useState<VenueLocation>('home');
+	const { directory, isLoading } = useVenuesDirectory(location);
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search venues...' });
 
 	const filteredVenues = searchVenues(directory as never[], searchTerm) as unknown as VenueDirectoryEntry[];
 	const { paginated, page, pageSize, total, setPage, setPageSize } = usePagedSortedList(filteredVenues, undefined, {
 		initialPageSize: PAGE_SIZE,
-		resetDeps: [searchTerm]
+		resetDeps: [searchTerm, location]
 	});
 
 	React.useEffect(() => {
@@ -36,61 +37,80 @@ const VenuesPage: React.FC = () => {
 	if (isLoading) {
 		return (
 			<div className={styles.page}>
-				<VenueFilterBar SearchInput={SearchInput} />
-				<DynamicContentWrapper>
-					<div className={styles.layout}>
-						<div className={styles.loadingGrid}>
-							{Array.from({ length: 8 }).map((_, i) => (
-								<Skeleton key={i} className={styles.skeletonCard} />
-							))}
-						</div>
+				<div className={styles.pageHeader}>
+					<div className={styles.pageHeaderInner}>
+						<h1 className={styles.pageTitle}>Venues</h1>
 					</div>
-				</DynamicContentWrapper>
+				</div>
+				<div className={styles.contentWrap}>
+					<VenueFilterBar SearchInput={SearchInput} location={location} onLocationChange={setLocation} />
+					<DynamicContentWrapper>
+						<div className={styles.layout}>
+							<div className={styles.loadingGrid}>
+								{Array.from({ length: 8 }).map((_, i) => (
+									<Skeleton key={i} className={styles.skeletonCard} />
+								))}
+							</div>
+						</div>
+					</DynamicContentWrapper>
+				</div>
 			</div>
 		);
 	}
 
 	if (!directory || directory.length === 0) {
-		return <NoContent type="info" description="No venues in database." />;
+		return (
+			<NoContent
+				type="info"
+				description={location === 'home' ? 'No home courts found.' : 'No away courts found.'}
+			/>
+		);
 	}
 
 	const hasResults = paginated && paginated.length > 0;
 
 	return (
 		<div className={styles.page}>
-			<VenueFilterBar SearchInput={SearchInput} />
-			<DynamicContentWrapper ref={wrapperRef}>
-				<div className={styles.layout}>
-					<div className={styles.main}>
-						{hasResults ? (
-							<>
-								<div className={styles.grid}>
-									{paginated.map((venue) => (
-										<VenueCard key={venue.id} venue={venue} />
-									))}
-								</div>
-								<PaginationControls
-									page={page}
-									pageSize={pageSize}
-									total={total}
-									onPageChange={setPage}
-									onPageSizeChange={setPageSize}
-								/>
-							</>
-						) : (
-							<div className={styles.noResults}>
-								<NoContent type="info" description="No venues match the current filters." />
-							</div>
-						)}
-					</div>
-
-					<VenueLeaders stats={directory} />
+			<div className={styles.pageHeader}>
+				<div className={styles.pageHeaderInner}>
+					<h1 className={styles.pageTitle}>Venues</h1>
+					<span className={styles.venueCount}>{directory.length} total</span>
 				</div>
-			</DynamicContentWrapper>
+			</div>
+
+			<div className={styles.contentWrap}>
+				<VenueFilterBar SearchInput={SearchInput} location={location} onLocationChange={setLocation} />
+				<DynamicContentWrapper ref={wrapperRef}>
+					<div className={styles.layout}>
+						<div className={styles.main}>
+							{hasResults ? (
+								<>
+									<div className={styles.grid}>
+										{paginated.map((venue) => (
+											<VenueCard key={venue.id} venue={venue} />
+										))}
+									</div>
+									<PaginationControls
+										page={page}
+										pageSize={pageSize}
+										total={total}
+										onPageChange={setPage}
+										onPageSizeChange={setPageSize}
+									/>
+								</>
+							) : (
+								<div className={styles.noResults}>
+									<NoContent type="info" description="No venues match the current filters." />
+								</div>
+							)}
+						</div>
+
+						<VenueLeaders stats={directory} />
+					</div>
+				</DynamicContentWrapper>
+			</div>
 		</div>
 	);
-
-	return <div></div>;
 };
 
 export default VenuesPage;

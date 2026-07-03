@@ -1,40 +1,42 @@
 import React, { useState } from 'react';
 
-import { ActiveTab, ActiveTabLabel, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/UI/Tabs';
-import { AnimatePresence } from 'framer-motion';
+import StatsPageHeader from '@/components/Stats/UI/StatsPageHeader';
+import SegmentedToggle from '@/components/UI/SegmentedToggle/SegmentedToggle';
 
-import PageWrapper from '../UI/PageWrapper';
 import CoachCompare from './CoachCompare';
 import PlayerCompare from './PlayerCompare';
 
-const TABS = [
+type Entity = 'player' | 'coach';
+
+const ENTITY_OPTIONS: { value: Entity; label: string }[] = [
 	{ value: 'player', label: 'Players' },
 	{ value: 'coach', label: 'Coaches' }
-] as const;
+];
 
 const ComparePage: React.FC = () => {
-	const [activeTab, setActiveTab] = useState<string>('player');
+	const [entity, setEntity] = useState<Entity>('player');
+
+	// Rendered inline at the start of the compare filter bar so the entity switch
+	// shares a row with the filters instead of sitting alone above them.
+	const entityToggle = (
+		<SegmentedToggle
+			value={entity}
+			onValueChange={setEntity}
+			options={ENTITY_OPTIONS}
+			ariaLabel="Compare entity type"
+		/>
+	);
 
 	return (
-		<PageWrapper>
-			<Tabs value={activeTab} onValueChange={setActiveTab}>
-				<TabsList aria-label="Compare entity type">
-					{TABS.map((tab) => (
-						<TabsTrigger key={tab.value} value={tab.value}>
-							<AnimatePresence>{activeTab === tab.value && <ActiveTab />}</AnimatePresence>
-							<ActiveTabLabel label={tab.label} />
-						</TabsTrigger>
-					))}
-				</TabsList>
+		<div className="w-full">
+			<StatsPageHeader title="Compare" />
 
-				<TabsContent value="player">
-					<PlayerCompare />
-				</TabsContent>
-				<TabsContent value="coach">
-					<CoachCompare />
-				</TabsContent>
-			</Tabs>
-		</PageWrapper>
+			{entity === 'player' ? (
+				<PlayerCompare leading={entityToggle} />
+			) : (
+				<CoachCompare leading={entityToggle} />
+			)}
+		</div>
 	);
 };
 

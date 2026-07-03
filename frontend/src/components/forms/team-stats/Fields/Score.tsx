@@ -1,10 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/UI/Input';
 import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import FormGrid from '@/components/forms/shared/FormGrid';
+import StatField from '@/components/forms/shared/StatField';
 
 const Score: React.FC = () => {
 	const { register, watch } = useFormContext<TeamStatsFormData>();
@@ -12,13 +11,13 @@ const Score: React.FC = () => {
 	const game = watch('gameId');
 
 	return (
-		<div className={styles.statsGrid5}>
-			<Input {...register('firstQuarter')} disabled={!game} placeholder="Q1" />
-			<Input {...register('secondQuarter')} disabled={!game} placeholder="Q2" />
-			<Input {...register('thirdQuarter')} disabled={!game} placeholder="Q3" />
-			<Input {...register('fourthQuarter')} disabled={!game} placeholder="Q4" />
-			<Input {...register('overtime')} disabled={!game} placeholder="OT" />
-		</div>
+		<FormGrid cols={5}>
+			<StatField label="Q1" {...register('firstQuarter')} disabled={!game} />
+			<StatField label="Q2" {...register('secondQuarter')} disabled={!game} />
+			<StatField label="Q3" {...register('thirdQuarter')} disabled={!game} />
+			<StatField label="Q4" {...register('fourthQuarter')} disabled={!game} />
+			<StatField label="OT" {...register('overtime')} disabled={!game} />
+		</FormGrid>
 	);
 };
 

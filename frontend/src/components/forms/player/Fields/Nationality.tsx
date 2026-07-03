@@ -1,33 +1,29 @@
-import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import CountrySelect from '@/components/CountrySelect/CountrySelect';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const Nationality = () => {
-	const { control, setValue, register, watch } = useFormContext<PlayerFormData>();
-
-	React.useEffect(() => {
-		// nationality is optional now
-		register('nationality');
-	}, [setValue, register]);
-	return (
-		<label>
-			<span className={styles.label}>Nationality:</span>
-			<Controller
-				control={control}
-				name="nationality"
-				render={() => (
-					<CountrySelect
-						selectedValue={watch('nationality')}
-						onChange={(value) => setValue('nationality', value ?? null)}
-					/>
-				)}
-			/>
-		</label>
-	);
+  const { control } = useFormContext<PlayerFormData>();
+  return (
+    <FormField
+      control={control}
+      name="nationality"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Nationality</FormLabel>
+          <FormControl>
+            <CountrySelect
+              selectedValue={field.value}
+              onChange={(value) => field.onChange(value ?? null)}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default Nationality;

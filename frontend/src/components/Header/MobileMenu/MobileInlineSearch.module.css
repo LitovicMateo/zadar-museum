@@ -1,6 +1,6 @@
 .wrapper {
 	width: 100%;
-	background: oklch(from var(--primary) calc(l - 0.06) c h);
+	background: var(--court);
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 	overflow: hidden;
 }

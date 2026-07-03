@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import ClearCacheButton from '../UI/ClearCacheButton/ClearCacheButton';
 import SidebarContent from './SidebarContent';
 import SidebarGroup from './SidebarGroup';
 import SidebarItem from './SidebarItem';
@@ -64,7 +63,6 @@ const Sidebar: React.FC<SidebarProps> = ({ groups, title, basePath }) => {
 									</SidebarList>
 								</SidebarGroup>
 							))}
-							<ClearCacheButton />
 						</SidebarContent>
 					</>
 				)}

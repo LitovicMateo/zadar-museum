@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
 import NoContent from '@/components/NoContent/NoContent';
+import { Skeleton } from '@/components/UI/Skeleton';
 import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { useVenueSeasonLeagueStats } from '@/hooks/queries/venue/UseVenueSeasonLeagueStats';
 import { useVenueSeasonStats } from '@/hooks/queries/venue/UseVenueSeasonStats';
@@ -10,8 +11,6 @@ import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
 import { VenueLeagueStats, VenueSeasonStats as VenueSeasonStatsType } from '@/types/api/Venue';
 
 import { venueLeagueHeading, venueStatsColumns } from '../venueColumns';
-
-import styles from './VenueSeasonStats.module.css';
 
 const VenueSeasonStats = () => {
 	const { venueSlug } = useParams();
@@ -32,7 +31,7 @@ const VenueSeasonStats = () => {
 				playoff: (e) => (e.playoff as VenueLeagueStats) ?? null,
 				split: (e) => !!e.hasPhaseSplit,
 				keyOf: (r) => r.league_slug ?? 'total',
-				heading: (r) => venueLeagueHeading(r),
+				heading: (r) => venueLeagueHeading(r)
 			}),
 		[seasonLeagueStats]
 	);
@@ -46,20 +45,27 @@ const VenueSeasonStats = () => {
 		if (seasons && seasons.length > 0) {
 			setSelectedSeason(seasons[0]);
 		}
-	}, [seasons, setSelectedSeason]);
+	}, [seasons]);
 
 	if (!seasons || seasons.length === 0) {
 		return <NoContent type="info" description="No season stats available for this venue." />;
 	}
+
 	if (isLoadingSeasonStats || isLoadingSeasonLeagueStats) {
-		return <div className={styles.loading}>Loading...</div>;
+		return (
+			<section className="space-y-4">
+				<Skeleton className="h-9 w-48 rounded-lg" />
+				<Skeleton className="h-48 rounded-xl" />
+			</section>
+		);
 	}
+
 	if (!seasonStats || !seasonLeagueStats || seasonStats.length === 0) {
 		return <NoContent type="info" description="No season stats available for this venue." />;
 	}
 
 	return (
-		<section className={styles.content}>
+		<section className="space-y-4">
 			<SeasonSelect
 				compact
 				seasons={seasons}

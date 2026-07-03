@@ -1,36 +1,32 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import CountrySelect from '@/components/CountrySelect/CountrySelect';
 import { VenueFormData } from '@/schemas/VenueSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const Country: React.FC = () => {
-	const { control, register } = useFormContext<VenueFormData>();
-
-	React.useEffect(() => {
-		register('country', { required: 'Country is required' });
-	}, [register]);
-
-	return (
-		<label>
-			<span className={styles.label}>
-				Country: <span className={styles.required}>*</span>
-			</span>
-			<Controller
-				control={control}
-				name="country"
-				render={({ field }) => (
-					<CountrySelect
-						{...field}
-						selectedValue={(field.value as string) || ''}
-						onChange={(value) => field.onChange(value)}
-					/>
-				)}
-			/>
-		</label>
-	);
+  const { control } = useFormContext<VenueFormData>();
+  return (
+    <FormField
+      control={control}
+      name="country"
+      rules={{ required: 'Country is required' }}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Country <span className="text-destructive text-xs">*</span></FormLabel>
+          <FormControl>
+            <CountrySelect
+              {...field}
+              selectedValue={(field.value as string) || ''}
+              onChange={(value) => field.onChange(value)}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default Country;

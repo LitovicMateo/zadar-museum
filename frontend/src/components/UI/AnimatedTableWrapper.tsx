@@ -23,7 +23,7 @@ import TableWrapper from './TableWrapper';
  * natural height of the content, regardless of what the outer motion.div is
  * currently animating to.
  */
-const AnimatedTableWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AnimatedTableWrapper: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => {
 	const innerRef = useRef<HTMLDivElement>(null);
 	const [height, setHeight] = useState<number | 'auto'>('auto');
 
@@ -42,7 +42,7 @@ const AnimatedTableWrapper: React.FC<{ children: React.ReactNode }> = ({ childre
 			style={{ overflow: 'hidden' }}
 		>
 			<div ref={innerRef}>
-				<TableWrapper>{children}</TableWrapper>
+				<TableWrapper className={className}>{children}</TableWrapper>
 			</div>
 		</motion.div>
 	);

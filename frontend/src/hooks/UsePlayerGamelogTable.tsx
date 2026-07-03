@@ -26,7 +26,10 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 				cell: (info) => {
 					const isHome = info.row.original.is_home_team;
 					return (
-						<Link to={APP_ROUTES.game(info.row.original.game_id)} className="py-2 font-semibold">
+						<Link
+							to={APP_ROUTES.game(info.row.original.game_id)}
+							className="block max-w-[7rem] truncate font-semibold sm:max-w-none"
+						>
 							{isHome ? '' : '@ '}
 							{info.getValue()}
 						</Link>

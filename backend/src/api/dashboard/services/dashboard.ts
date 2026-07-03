@@ -507,4 +507,18 @@ export default ({ strapi }: FactoryArgs) => ({
     ]);
     return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
   },
+
+  async findPlayerStatByIdAdmin(documentId: string) {
+    return strapi.db.query("api::player-stats.player-stat").findOne({
+      where: { documentId },
+      populate: ["player", "team", "game", "game.home_team", "game.away_team", "game.competition", "competition"],
+    });
+  },
+
+  async findTeamStatByIdAdmin(documentId: string) {
+    return strapi.db.query("api::team-stats.team-stat").findOne({
+      where: { documentId },
+      populate: ["game", "game.home_team", "game.away_team", "game.competition", "team", "coach", "assistantCoach"],
+    });
+  },
 });
