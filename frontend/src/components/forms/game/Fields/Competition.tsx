@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
@@ -30,7 +30,7 @@ const Competition: React.FC = () => {
 				<FormItem>
 					<FormLabel>Competition</FormLabel>
 					<FormControl>
-						<Select<OptionType, false>
+						<AppSelect<OptionType, false>
 							placeholder="Select competition"
 							options={competitionOptions}
 							value={competitionOptions.find((opt) => opt.value === field.value)}

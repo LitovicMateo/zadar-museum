@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useSeasons } from '@/hooks/queries/dasboard/UseSeasons';
@@ -16,7 +16,7 @@ const SeasonFilter: React.FC<SeasonFilterProps> = ({ setSeason, selectedSeason }
 
 	const seasonsOptions: OptionType[] = seasons.map((season) => ({ label: season, value: season }));
 	return (
-		<Select<OptionType>
+		<AppSelect<OptionType>
 			value={seasonsOptions?.find((opt) => opt.value === selectedSeason)}
 			onChange={(opt) => setSeason(opt?.value as string)}
 			options={seasonsOptions}

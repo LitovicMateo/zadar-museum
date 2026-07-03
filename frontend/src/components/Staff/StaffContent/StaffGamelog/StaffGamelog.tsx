@@ -9,8 +9,6 @@ import { useScheduleFilters, useSeasonState } from '@/hooks/UseScheduleFilters';
 
 import { deriveSeasons } from './StaffGamelog.utils';
 
-import styles from './StaffGamelog.module.css';
-
 const StaffGamelog: React.FC = () => {
 	const { staffId } = useParams();
 
@@ -22,22 +20,18 @@ const StaffGamelog: React.FC = () => {
 	const filters = useScheduleFilters(gamelog, selectedSeason);
 
 	return (
-		<section className={styles.section}>
-			<div className={styles.topFilters}>
-				<ScheduleControls
-					seasons={seasons}
-					selectedSeason={selectedSeason}
-					setSelectedSeason={setSelectedSeason}
-					{...filters}
-				/>
-			</div>
+		<section className="space-y-4">
+			<ScheduleControls
+				seasons={seasons}
+				selectedSeason={selectedSeason}
+				setSelectedSeason={setSelectedSeason}
+				{...filters}
+			/>
 			<DynamicContentWrapper>
-				<div className={styles.gamelogCard}>
-					{filters.filteredGames.length === 0 && (
-						<p className={styles.empty}>No games match the current filters.</p>
-					)}
-					<ScheduleList schedule={filters.filteredGames} />
-				</div>
+				{filters.filteredGames.length === 0 && (
+					<p className="py-8 text-center text-sm text-muted-foreground">No games match the current filters.</p>
+				)}
+				<ScheduleList schedule={filters.filteredGames} />
 			</DynamicContentWrapper>
 		</section>
 	);

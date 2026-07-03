@@ -182,5 +182,17 @@ export default {
       handler: "dashboard.getTeamStatsAdmin",
       config: { auth: false },
     },
+    {
+      method: "GET",
+      path: "/dashboard/admin/player-stats/:documentId",
+      handler: "dashboard.getPlayerStatByIdAdmin",
+      config: { auth: false },
+    },
+    {
+      method: "GET",
+      path: "/dashboard/admin/team-stats/:documentId",
+      handler: "dashboard.getTeamStatByIdAdmin",
+      config: { auth: false },
+    },
   ],
 };

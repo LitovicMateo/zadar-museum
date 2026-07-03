@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useVenues } from '@/hooks/queries/venue/UseVenues';
@@ -26,7 +26,7 @@ const Venue: React.FC = () => {
 				<FormItem>
 					<FormLabel>Venue</FormLabel>
 					<FormControl>
-						<Select<OptionType, false>
+						<AppSelect<OptionType, false>
 							placeholder="Select venue"
 							options={venueOptions}
 							value={venueOptions.find((opt) => opt.value === field.value)}

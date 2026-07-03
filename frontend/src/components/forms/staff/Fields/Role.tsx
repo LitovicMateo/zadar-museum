@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { StaffFormData } from '@/schemas/StaffSchema';
@@ -24,7 +24,7 @@ const Role: React.FC = () => {
 				<FormItem>
 					<FormLabel>Role <span className="text-destructive text-xs">*</span></FormLabel>
 					<FormControl>
-						<Select
+						<AppSelect
 							{...field}
 							styles={selectStyle()}
 							options={options}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { Input } from '@/components/UI/Input';
 import { selectStyle, OptionType } from '@/constants/ReactSelectStyle';
@@ -33,7 +33,7 @@ const Round: React.FC = () => {
           <FormItem>
             <FormLabel>Round</FormLabel>
             <FormControl>
-              <Select<OptionType, false>
+              <AppSelect<OptionType, false>
                 placeholder="Select round"
                 options={playoffRounds}
                 value={playoffRounds.find((opt) => opt.value === field.value) ?? null}

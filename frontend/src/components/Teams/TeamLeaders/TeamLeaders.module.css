@@ -2,94 +2,121 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	width: 220px;
+	flex-shrink: 0;
 }
 
 .title {
-	font-size: 1rem;
+	font-family: 'Archivo', sans-serif;
+	font-size: 0.75rem;
 	font-weight: 700;
-	color: var(--foreground);
-	margin: 0;
-}
-
-.category {
-	border: 1px solid var(--border);
-	border-radius: 8px;
-	padding: 12px;
-	background: var(--card);
-}
-
-.categoryTitle {
-	font-size: 0.8rem;
-	font-weight: 600;
 	text-transform: uppercase;
-	letter-spacing: 0.04em;
+	letter-spacing: 0.1em;
 	color: var(--muted-foreground);
-	margin: 0 0 8px 0;
+	margin: 0 0 4px;
+}
+
+.categoryHeader {
+	background: var(--court);
+	padding: 8px 12px;
+}
+
+.categoryLabel {
+	font-family: 'DM Mono', monospace;
+	font-size: 0.6rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	color: var(--record);
 }
 
 .list {
 	list-style: none;
 	margin: 0;
-	padding: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
+	padding: 4px 0;
 }
 
 .row {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	font-size: 0.82rem;
-	padding: 4px 0;
+	padding: 5px 10px;
 }
 
-.row:not(:last-child) {
-	border-bottom: 1px solid var(--border);
-	padding-bottom: 6px;
+.rowFirst {
+	background: color-mix(in oklab, var(--record) 8%, transparent);
+}
+
+.rowSecond {
+	background: color-mix(in oklab, var(--medal-silver) 12%, transparent);
+}
+
+.rowThird {
+	background: color-mix(in oklab, var(--medal-bronze) 12%, transparent);
 }
 
 .rank {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: var(--muted);
+	font-family: 'DM Mono', monospace;
+	font-size: 0.62rem;
 	font-weight: 600;
 	color: var(--muted-foreground);
-	text-align: center;
 	flex-shrink: 0;
+}
+
+.rankFirst {
+	background: var(--record);
+	color: #0a0a0a;
+}
+
+.rankSecond {
+	background: var(--medal-silver);
+	color: #0a0a0a;
+}
+
+.rankThird {
+	background: var(--medal-bronze);
+	color: #0a0a0a;
 }
 
 .teamName {
 	flex: 1;
+	font-size: 0.78rem;
+	font-weight: 500;
 	color: var(--foreground);
 	text-decoration: none;
-	font-weight: 500;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
 .teamName:hover {
-	text-decoration: underline;
+	color: var(--record);
 }
 
 .statValue {
-	font-weight: 700;
+	font-family: 'Inter', sans-serif;
+	font-size: 0.75rem;
+	font-weight: 600;
 	color: var(--foreground);
+	font-variant-numeric: tabular-nums;
 	flex-shrink: 0;
 }
 
 @media (max-width: 1023px) {
 	.sidebar {
+		width: 100%;
 		flex-direction: row;
 		overflow-x: auto;
-		gap: 12px;
-		padding-bottom: 4px;
+		padding-bottom: 8px;
 	}
 
-	.title {
-		display: none;
-	}
-
-	.category {
+	.sidebar > * {
 		min-width: 220px;
 		flex-shrink: 0;
 	}

@@ -8,24 +8,24 @@ export interface OptionType {
 // ✅ Default generic = OptionType
 export const selectStyle = <Option extends OptionType = OptionType>(
 	width?: string,
-	height = '40px'
+	height = '32px'
 ): StylesConfig<Option, false, GroupBase<Option>> => ({
 	control: (provided, state) => ({
 		...provided,
 		maxHeight: height,
-		borderRadius: 'var(--radius)',
-		border: state.isFocused ? '2px solid var(--ring)' : '1px solid var(--border)',
+		borderRadius: '0.25rem',
+		border: `1px solid ${state.isFocused ? 'var(--record)' : 'var(--color-gray-400)'}`,
 		fontSize: '14px',
 		minHeight: height,
 		height,
-		padding: '0 4px',
-		background: 'var(--card)',
+		padding: '0',
+		background: 'transparent',
 		boxShadow: state.isFocused
-			? '0 0 0 3px color-mix(in oklch, var(--ring) 50%, transparent)'
+			? '0 0 0 2px color-mix(in oklch, var(--record) 35%, transparent)'
 			: 'none',
 		transition: 'color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease',
 		'&:hover': {
-			borderColor: 'var(--muted-foreground)'
+			borderColor: state.isFocused ? 'var(--record)' : 'var(--color-gray-400)'
 		}
 	}),
 	valueContainer: (provided) => ({
@@ -37,7 +37,7 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 		...provided,
 		margin: '0',
 		padding: '0',
-		color: 'var(--foreground)'
+		color: 'var(--color-gray-800)'
 	}),
 	indicatorsContainer: (provided) => ({
 		...provided,
@@ -45,30 +45,33 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 	}),
 	indicatorSeparator: (provided) => ({
 		...provided,
-		backgroundColor: 'var(--border)'
+		backgroundColor: 'var(--color-gray-400)'
 	}),
 	dropdownIndicator: (provided) => ({
 		...provided,
-		color: 'var(--muted-foreground)',
+		padding: '0 6px',
+		color: 'var(--color-gray-500)',
 		'&:hover': {
-			color: 'var(--foreground)'
+			color: 'var(--color-gray-800)'
 		}
 	}),
 	clearIndicator: (provided) => ({
 		...provided,
-		color: 'var(--muted-foreground)',
+		padding: '0 4px',
+		color: 'var(--color-gray-500)',
 		'&:hover': {
-			color: 'var(--foreground)'
+			color: 'var(--color-gray-800)'
 		}
 	}),
 	placeholder: (provided) => ({
 		...provided,
-		fontSize: '14px',
-		color: 'var(--muted-foreground)'
+		fontSize: '12px',
+		color: 'var(--color-gray-500)'
 	}),
 	singleValue: (provided) => ({
 		...provided,
-		color: 'var(--foreground)'
+		fontSize: '14px',
+		color: 'var(--color-gray-800)'
 	}),
 	container: (provided) => ({
 		...provided,
@@ -84,8 +87,12 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 		backgroundColor: state.isSelected ? 'var(--primary)' : state.isFocused ? 'var(--accent)' : 'transparent',
 		color: state.isSelected ? 'var(--primary-foreground)' : 'var(--foreground)',
 		padding: '10px 12px',
+		fontSize: '14px',
 		cursor: 'pointer',
 		transition: 'background-color 0.1s ease',
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
 		'&:active': {
 			backgroundColor: 'var(--primary)',
 			color: 'var(--primary-foreground)'
@@ -98,6 +105,7 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 		border: '1px solid var(--border)',
 		background: 'var(--popover)',
 		overflow: 'hidden',
+		fontSize: '14px',
 		zIndex: 2147483647
 	}),
 	menuPortal: (base) => ({ ...base, zIndex: 2147483647 })

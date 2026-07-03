@@ -1,8 +1,6 @@
 import React from 'react';
 
-import Pill from '@/components/UI/Pill';
-
-import styles from './RadioButtons.module.css';
+import SegmentedToggle from '@/components/UI/SegmentedToggle/SegmentedToggle';
 
 type RadioButtonsProps = {
 	selected: 'player' | 'coach';
@@ -11,10 +9,15 @@ type RadioButtonsProps = {
 
 const RadioButtons: React.FC<RadioButtonsProps> = ({ selected, setSelected }) => {
 	return (
-		<fieldset className={styles.fieldset}>
-			<Pill label="Player" isActive={selected === 'player'} onClick={() => setSelected('player')} />
-			<Pill label="Coach" isActive={selected === 'coach'} onClick={() => setSelected('coach')} />
-		</fieldset>
+		<SegmentedToggle
+			value={selected}
+			onValueChange={setSelected}
+			ariaLabel="Leaders source"
+			options={[
+				{ value: 'player', label: 'Player' },
+				{ value: 'coach', label: 'Coach' }
+			]}
+		/>
 	);
 };
 

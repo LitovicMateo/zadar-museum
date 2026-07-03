@@ -165,4 +165,20 @@ export default ({ strapi }: FactoryArgs) => ({
     const service = strapi.service("api::dashboard.dashboard");
     ctx.body = await service.findTeamStatsAdmin({ sort, direction, page, pageSize, search });
   },
+
+  async getPlayerStatByIdAdmin(ctx: Context) {
+    const { documentId } = ctx.params;
+    const service = strapi.service("api::dashboard.dashboard");
+    const data = await service.findPlayerStatByIdAdmin(documentId);
+    if (!data) return ctx.notFound();
+    ctx.body = { data };
+  },
+
+  async getTeamStatByIdAdmin(ctx: Context) {
+    const { documentId } = ctx.params;
+    const service = strapi.service("api::dashboard.dashboard");
+    const data = await service.findTeamStatByIdAdmin(documentId);
+    if (!data) return ctx.notFound();
+    ctx.body = { data };
+  },
 });

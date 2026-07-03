@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useGameTeams } from '@/hooks/queries/game/UseGameTeams';
@@ -27,7 +27,7 @@ const Team: React.FC = () => {
 				<FormItem>
 					<FormLabel>Team</FormLabel>
 					<FormControl>
-						<Select
+						<AppSelect
 							value={teamOptions?.find((option) => option.value === field.value) || null}
 							onChange={(e) => field.onChange(e ? e.value : '')}
 							placeholder="Select Team"

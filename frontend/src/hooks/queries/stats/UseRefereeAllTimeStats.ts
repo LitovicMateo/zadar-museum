@@ -2,11 +2,13 @@ import { API_ROUTES } from '@/constants/Routes';
 import { useQuery } from '@/hooks/UseQueryWithToast';
 import apiClient from '@/lib/ApiClient';
 import { RefereeStatsRanking } from '@/types/api/Referee';
+import { keepPreviousData } from '@tanstack/react-query';
 
 export const useRefereeAllTimeStats = (location: 'home' | 'away' | 'all', league: string, season: string) => {
 	return useQuery({
 		queryKey: ['referee-all-time-stats', location, league, season],
 		queryFn: getRefereeAllTimeStats.bind(null, location, league, season),
+		placeholderData: keepPreviousData,
 		errorMessage: 'Failed to load referee statistics'
 	});
 };

@@ -27,12 +27,7 @@ function ActiveTab() {
 		<motion.div
 			className={styles.activeIndicator}
 			initial={{ opacity: 0 }}
-			animate={{
-				opacity: 1,
-				background: '#ffffff'
-				// boxShadow: `inset 1px 1px 1px rgba(0, 0, 0, 0.1),
-				// 	 inset -1px -1px 1px rgba(0, 0, 0, 0.1)`
-			}}
+			animate={{ opacity: 1 }}
 			exit={{ opacity: 0 }}
 			transition={{ duration: 0.25 }}
 		/>

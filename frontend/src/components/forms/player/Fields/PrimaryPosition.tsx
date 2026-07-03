@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
@@ -17,7 +17,7 @@ const PrimaryPosition: React.FC = () => {
         <FormItem>
           <FormLabel>Primary Position</FormLabel>
           <FormControl>
-            <Select<PositionOption, false>
+            <AppSelect<PositionOption, false>
               options={positionOptions}
               value={positionOptions.find((opt) => opt.value === field.value) || null}
               onChange={(selected) => field.onChange(selected?.value ?? null)}

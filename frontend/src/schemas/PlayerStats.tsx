@@ -9,6 +9,9 @@ export const playerStatsSchema = z.object({
 	status: z.enum(['starter', 'bench', 'dnp-cd', 'no-data']),
 	isCaptain: z.boolean(),
 	playerNumber: z.string(),
+	// aggregate "summary line" count (historic tournaments with no per-game data);
+	// optional so the regular per-game form is unaffected
+	gamesPlayed: z.string().optional(),
 	minutes: z.string(),
 	seconds: z.string(),
 	points: z.string(),

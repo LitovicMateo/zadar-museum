@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import NoContent from '@/components/NoContent/NoContent';
+import { MobileFilterSheet } from '@/components/UI/MobileFilterSheet';
 import { StatsTable, buildPhaseGroups, type StatsDataRow } from '@/components/UI/stats-table';
 import { useTeamLeagueStats } from '@/hooks/queries/team/UseTeamLeagueStats';
 import { useTeamTotalStats } from '@/hooks/queries/team/UseTeamTotalStats';
@@ -8,8 +10,6 @@ import { TeamStats, TeamStatsResponse } from '@/types/api/Team';
 
 import DatabaseSelect from './DatabaseSelect';
 import { TeamLeagueCell, teamStatsColumns } from '../teamColumns';
-
-import styles from './TeamLeagueStats.module.css';
 
 const TeamLeagueStats: React.FC = () => {
 	const { teamSlug } = useParams();
@@ -46,17 +46,21 @@ const TeamLeagueStats: React.FC = () => {
 		return row ? [{ key: 'total', data: row }] : [];
 	}, [totalStats, effectiveSelected]);
 
-	if (!leagueStats || !totalStats) return null;
+	if (!leagueStats || !totalStats) {
+		return <NoContent type="info" description="No league stats available for this team yet." />;
+	}
 
 	return (
-		<section className={styles.section}>
-			<DatabaseSelect
-				selected={effectiveSelected}
-				setSelected={setSelected}
-				homeDisabled={!hasHome}
-				awayDisabled={!hasAway}
-				neutralDisabled={!hasNeutral}
-			/>
+		<section className="space-y-4">
+			<MobileFilterSheet title="Filter stats">
+				<DatabaseSelect
+					selected={effectiveSelected}
+					setSelected={setSelected}
+					homeDisabled={!hasHome}
+					awayDisabled={!hasAway}
+					neutralDisabled={!hasNeutral}
+				/>
+			</MobileFilterSheet>
 			<StatsTable
 				columns={teamStatsColumns}
 				groups={groups}

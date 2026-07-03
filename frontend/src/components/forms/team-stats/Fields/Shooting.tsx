@@ -1,9 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/UI/Input';
 import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
 import FormGrid from '@/components/forms/shared/FormGrid';
+import StatField from '@/components/forms/shared/StatField';
 
 const Shooting: React.FC = () => {
 	const { register, watch } = useFormContext<TeamStatsFormData>();
@@ -12,12 +12,12 @@ const Shooting: React.FC = () => {
 
 	return (
 		<FormGrid cols={2}>
-			<Input {...register('fieldGoalsMade')} disabled={!game} placeholder="FGM" />
-			<Input {...register('fieldGoalsAttempted')} disabled={!game} placeholder="FGA" />
-			<Input {...register('threePointersMade')} disabled={!game} placeholder="3PM" />
-			<Input {...register('threePointersAttempted')} disabled={!game} placeholder="3PA" />
-			<Input {...register('freeThrowsMade')} disabled={!game} placeholder="FTM" />
-			<Input {...register('freeThrowsAttempted')} disabled={!game} placeholder="FTA" />
+			<StatField label="FGM" {...register('fieldGoalsMade')} disabled={!game} />
+			<StatField label="FGA" {...register('fieldGoalsAttempted')} disabled={!game} />
+			<StatField label="3PM" {...register('threePointersMade')} disabled={!game} />
+			<StatField label="3PA" {...register('threePointersAttempted')} disabled={!game} />
+			<StatField label="FTM" {...register('freeThrowsMade')} disabled={!game} />
+			<StatField label="FTA" {...register('freeThrowsAttempted')} disabled={!game} />
 		</FormGrid>
 	);
 };

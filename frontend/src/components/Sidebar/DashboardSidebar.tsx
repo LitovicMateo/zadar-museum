@@ -73,7 +73,11 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 
   return (
     <div className={styles.container}>
-      <SidebarWrapper isOpen={isOpen} className="bg-court border-r border-white/15">
+      <SidebarWrapper
+        isOpen={isOpen}
+        className="border-r border-white/15"
+        style={{ background: 'var(--court)' }}
+      >
         {content}
       </SidebarWrapper>
       <div className={styles.toggle}>

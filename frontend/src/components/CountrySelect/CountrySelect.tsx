@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import countries from 'i18n-iso-countries';
@@ -22,7 +22,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ onChange, selectedValue }
 		selectedValue && selectedValue !== '' ? options.find((option) => option.value === selectedValue) : null;
 
 	return (
-		<Select
+		<AppSelect
 			options={options}
 			onChange={(option) => onChange(option?.value.toString() || '')}
 			value={selectedOption}

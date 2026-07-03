@@ -51,7 +51,13 @@ const ClearCacheButton: React.FC = () => {
 
 	return (
 		<div>
-			<Button onClick={handleClearCache} disabled={loading} className={styles.btn}>
+			<Button
+				variant="outline"
+				size="sm"
+				onClick={handleClearCache}
+				disabled={loading}
+				className={styles.btn}
+			>
 				{loading ? 'Clearing cache…' : 'Clear cache'}
 			</Button>
 		</div>

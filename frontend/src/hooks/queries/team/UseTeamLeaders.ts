@@ -8,7 +8,8 @@ export type TeamLeaders = {
 	id: string;
 	first_name: string;
 	last_name: string;
-	[key: string]: string | number;
+	image_url?: string | null;
+	[key: string]: string | number | null | undefined;
 };
 
 export const useTeamLeaders = (

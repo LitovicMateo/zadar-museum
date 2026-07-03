@@ -1,17 +1,17 @@
 import React from 'react';
 
-import MobileFilters from '@/components/MobileFilters/MobileFilters';
 import PaginationControls from '@/components/Pagination/PaginationControls';
 import RefereeStatsFilter from '@/components/Stats/RefereeStats/filter/RefereeStatsFilter';
 import RefereeStatsTable from '@/components/Stats/RefereeStats/table/RefereeStatsTable';
+import StatsFilterBar from '@/components/Stats/UI/StatsFilterBar';
+import StatsPageHeader from '@/components/Stats/UI/StatsPageHeader';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
 import { useRefereeAllTimeStats } from '@/hooks/queries/stats/UseRefereeAllTimeStats';
 import { searchRefereeStats } from '@/utils/SearchFunctions';
+import { cn } from '@/lib/Utils';
 import { SortingState } from '@tanstack/react-table';
-
-import PageWrapper from '../UI/PageWrapper';
 
 const RefereeStats: React.FC = () => {
 	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');
@@ -19,7 +19,7 @@ const RefereeStats: React.FC = () => {
 	const [season, setSeason] = React.useState<string>('all');
 	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'wins', desc: true }]);
 
-	const { data: refereeAllTime, isFetching } = useRefereeAllTimeStats(location, league, season);
+	const { data: refereeAllTime, isPlaceholderData } = useRefereeAllTimeStats(location, league, season);
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search by referee name' });
 
 	const handleSetLocation = React.useCallback((loc: 'home' | 'away' | 'all') => setLocation(loc), []);
@@ -33,8 +33,10 @@ const RefereeStats: React.FC = () => {
 	});
 
 	return (
-		<PageWrapper>
-			<MobileFilters SearchInput={SearchInput}>
+		<div className="w-full">
+			<StatsPageHeader title="Referee stats" count={total} countLabel="referees" />
+
+			<StatsFilterBar searchInput={SearchInput} sheetTitle="Filter referees">
 				<RefereeStatsFilter
 					location={location}
 					setLocation={handleSetLocation}
@@ -43,25 +45,21 @@ const RefereeStats: React.FC = () => {
 					season={season}
 					setSeason={setSeason}
 				/>
-			</MobileFilters>
+			</StatsFilterBar>
 
-			{isFetching ? (
-				<div>Loading...</div>
-			) : (
-				<>
-					<PaginationControls
-						total={total}
-						page={page}
-						pageSize={pageSize}
-						onPageChange={setPage}
-						onPageSizeChange={setPageSize}
-					/>
-					<DynamicContentWrapper>
-						<RefereeStatsTable stats={paginated} sorting={sorting} setSorting={setSorting} />
-					</DynamicContentWrapper>
-				</>
-			)}
-		</PageWrapper>
+			<div className={cn('transition-opacity', isPlaceholderData && 'pointer-events-none opacity-60')}>
+				<PaginationControls
+					total={total}
+					page={page}
+					pageSize={pageSize}
+					onPageChange={setPage}
+					onPageSizeChange={setPageSize}
+				/>
+				<DynamicContentWrapper>
+					<RefereeStatsTable stats={paginated} sorting={sorting} setSorting={setSorting} />
+				</DynamicContentWrapper>
+			</div>
+		</div>
 	);
 };
 

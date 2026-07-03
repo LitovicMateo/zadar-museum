@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useTeams } from '@/hooks/queries/team/UseTeams';
@@ -36,7 +36,7 @@ const HomeTeam = () => {
 				<FormItem>
 					<FormLabel>Home Team</FormLabel>
 					<FormControl>
-						<Select<OptionType, false>
+						<AppSelect<OptionType, false>
 							onChange={(option) => {
 								field.onChange(option?.value);
 								setValue('home_team_name', '');

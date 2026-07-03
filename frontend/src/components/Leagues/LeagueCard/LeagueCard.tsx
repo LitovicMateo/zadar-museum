@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Trophy } from 'lucide-react';
 
 import { APP_ROUTES } from '@/constants/Routes';
 import { CompetitionDirectoryEntry } from '@/types/api/Competition';
 import { getImageUrl } from '@/utils/GetImageUrl';
-import { Trophy } from 'lucide-react';
 
 import styles from './LeagueCard.module.css';
 
@@ -17,36 +17,38 @@ const LeagueCard: React.FC<LeagueCardProps> = ({ league }) => {
 	const hasImage = !!imageUrl && !imageUrl.includes('undefined');
 
 	return (
-		<Link to={APP_ROUTES.league(league.slug)} className={styles.card}>
-			<div className={styles.imageWrapper}>
-				{hasImage ? (
-					<img src={imageUrl} alt={league.name} className={styles.image} loading="lazy" />
-				) : (
-					<Trophy size={64} color="var(--muted-foreground)" strokeWidth={1} />
-				)}
-			</div>
+		<Link to={APP_ROUTES.league(league.slug)} className={styles.cardLink}>
+			<div className={styles.card}>
+				<div className={styles.imageWrapper}>
+					{hasImage ? (
+						<img src={imageUrl} alt={league.name} className={styles.image} loading="lazy" />
+					) : (
+						<div className={styles.placeholder}>
+							<Trophy size={52} strokeWidth={1} opacity={0.4} />
+						</div>
+					)}
+				</div>
 
-			<div className={styles.body}>
-				<div className={styles.name}>{league.name}</div>
+				<div className={styles.body}>
+					<p className={styles.name}>{league.name}</p>
+				</div>
 
-				<div className={styles.stats}>
-					<div className={styles.stat}>
-						<span className={styles.statLabel}>G</span>
-						<span className={styles.statValue}>{league.games ?? '-'}</span>
-					</div>
-					<div className={styles.stat}>
-						<span className={styles.statLabel}>W</span>
-						<span className={styles.statValue}>{league.wins ?? '-'}</span>
-					</div>
-					<div className={styles.stat}>
-						<span className={styles.statLabel}>L</span>
-						<span className={styles.statValue}>{league.losses ?? '-'}</span>
-					</div>
+				<div className={styles.statsStrip}>
+					{[
+						{ label: 'G', value: league.games },
+						{ label: 'W', value: league.wins },
+						{ label: 'L', value: league.losses },
+					].map(({ label, value }) => (
+						<div key={label} className={styles.stat}>
+							<span className={styles.statLabel}>{label}</span>
+							<span className={styles.statValue}>{value ?? '–'}</span>
+						</div>
+					))}
 					<div className={styles.stat}>
 						<span className={styles.statLabel}>
-							<Trophy size={16} color="var(--muted-foreground)" strokeWidth={1} />
+							<Trophy size={10} strokeWidth={1.5} />
 						</span>
-						<span className={styles.statValue}>{league.trophies.length ?? '-'}</span>
+						<span className={styles.statValue}>{league.trophies.length ?? '–'}</span>
 					</div>
 				</div>
 			</div>

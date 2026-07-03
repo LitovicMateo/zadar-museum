@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useReferees } from '@/hooks/queries/referee/UseReferees';
@@ -32,7 +32,7 @@ const ThirdReferee: React.FC = () => {
 				<FormItem>
 					<FormLabel>Referee #3</FormLabel>
 					<FormControl>
-						<Select
+						<AppSelect
 							placeholder="Select Referee #3"
 							options={refereeOptions}
 							value={refereeOptions.find((opt) => opt.value === field.value)}

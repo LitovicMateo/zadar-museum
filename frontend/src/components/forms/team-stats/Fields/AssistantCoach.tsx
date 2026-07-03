@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useCoaches } from '@/hooks/queries/coach/UseCoaches';
@@ -37,7 +37,7 @@ const AssistantCoach: React.FC = () => {
 				<FormItem>
 					<FormLabel>Assistant Coach</FormLabel>
 					<FormControl>
-						<Select
+						<AppSelect
 							name={field.name}
 							onBlur={field.onBlur}
 							onChange={(selected) => field.onChange(selected ? selected.value : '')}

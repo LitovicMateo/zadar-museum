@@ -8,7 +8,14 @@ export const playerStatsListConfig: EntityListConfig<PlayerStatsResponse> = {
   apiRoute: API_ROUTES.adminList.playerStats,
   searchPlaceholder: 'Search by season...',
   createPath: APP_ROUTES.dashboard.playerStats.create,
+  secondaryCreate: {
+    label: '+ Aggregate line',
+    path: APP_ROUTES.dashboard.playerStats.aggregateCreate,
+  },
   editPath: (id) => `${APP_ROUTES.dashboard.playerStats.edit}${id}`,
+  // Game-less aggregate lines edit in the dedicated aggregate form
+  editPathFor: (row) =>
+    row.game ? undefined : `${APP_ROUTES.dashboard.playerStats.aggregateEdit}${row.documentId}`,
   deleteApiRoute: API_ROUTES.delete.playerStats,
   deleteLabel: (row) =>
     `${row.player?.first_name ?? ''} ${row.player?.last_name ?? ''} — ${row.game?.home_team_name ?? ''} vs ${row.game?.away_team_name ?? ''}`,

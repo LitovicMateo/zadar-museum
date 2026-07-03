@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useSeasons } from '@/hooks/queries/dasboard/UseSeasons';
@@ -24,7 +24,7 @@ const Season: React.FC = () => {
 				<FormItem>
 					<FormLabel>Season</FormLabel>
 					<FormControl>
-						<Select
+						<AppSelect
 							value={field.value ? { value: field.value, label: field.value } : null}
 							onChange={(option) => {
 								field.onChange(option?.value || '');

@@ -3,6 +3,7 @@ import { API_ROUTES } from '@/constants/Routes';
 import { useQuery } from '@/hooks/UseQueryWithToast';
 import apiClient from '@/lib/ApiClient';
 import { PlayerRecords } from '@/types/api/PlayerStats';
+import { keepPreviousData } from '@tanstack/react-query';
 
 export const usePlayerRecords = (
 	database: PlayerDB,
@@ -14,6 +15,7 @@ export const usePlayerRecords = (
 	return useQuery({
 		queryKey: ['player-records', database, season, league, location, sortKey],
 		queryFn: getPlayerRecords.bind(null, database, season, league, location, sortKey),
+		placeholderData: keepPreviousData,
 		errorMessage: 'Failed to load player records'
 	});
 };

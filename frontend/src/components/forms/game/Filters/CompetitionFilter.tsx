@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Select, { SingleValue } from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
+import { SingleValue } from 'react-select';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useSeasonCompetitions } from '@/hooks/queries/dasboard/UseSeasonCompetitions';
@@ -33,7 +34,7 @@ const CompetitionFilter: React.FC<CompetitionFilterProps> = ({ season, setLeague
 	};
 
 	return (
-		<Select
+		<AppSelect
 			value={selectedOption}
 			onChange={handleChange}
 			placeholder="Select Competition"

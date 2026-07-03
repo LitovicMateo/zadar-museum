@@ -25,7 +25,7 @@ type TeamStatsFormContentProps = {
 const TeamStatsFormContent: React.FC<TeamStatsFormContentProps> = ({ mode }) => {
 	const { formState } = useFormContext<TeamStatsFormData>();
 	return (
-		<div className="flex flex-col gap-3">
+		<div className="flex flex-col gap-2 w-full max-w-4xl mx-auto">
 			{mode === 'create' && (
 				<FormCard label="Filters">
 					<Season />
@@ -42,21 +42,23 @@ const TeamStatsFormContent: React.FC<TeamStatsFormContentProps> = ({ mode }) => 
 				<Score />
 				<span className="text-sm text-muted-foreground">* If game was played in two halfs, use Q1 and Q2 field</span>
 			</FormCard>
-			<FormCard label="Shooting">
-				<Shooting />
-			</FormCard>
-			<FormCard label="Rebounds">
-				<Rebounds />
-			</FormCard>
-			<FormCard label="Passing">
-				<Passing />
-			</FormCard>
-			<FormCard label="Defense">
-				<Defense />
-			</FormCard>
-			<FormCard label="Misc">
-				<Misc />
-			</FormCard>
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-start">
+				<FormCard label="Shooting">
+					<Shooting />
+				</FormCard>
+				<FormCard label="Rebounds">
+					<Rebounds />
+				</FormCard>
+				<FormCard label="Passing">
+					<Passing />
+				</FormCard>
+				<FormCard label="Defense">
+					<Defense />
+				</FormCard>
+				<FormCard label="Misc">
+					<Misc />
+				</FormCard>
+			</div>
 			<div className="flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}

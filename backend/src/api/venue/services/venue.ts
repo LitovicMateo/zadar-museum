@@ -85,10 +85,10 @@ export default factories.createCoreService(
       });
     },
 
-    async findVenuesTeamRecord() {
-      return getCached(`${CACHE_PREFIX}venue:all-team-records`, TTL_24H, () => {
+    async findVenuesTeamRecord(location: "home" | "away") {
+      return getCached(`${CACHE_PREFIX}venue:all-team-records:${location}`, TTL_24H, () => {
         const knex = strapi.db.connection;
-        return aggregateVenueRecord(knex, { location: "all" });
+        return aggregateVenueRecord(knex, { location });
       });
     },
 

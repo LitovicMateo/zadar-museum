@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Pill from '@/components/UI/Pill';
+import SegmentedToggle, { SegmentedOption } from '@/components/UI/SegmentedToggle/SegmentedToggle';
 
-import styles from './DatabaseSelect.module.css';
+type Location = 'total' | 'home' | 'away' | 'neutral';
 
 type DatabaseSelectProps = {
-	selected: 'total' | 'home' | 'away' | 'neutral';
-	setSelected: React.Dispatch<React.SetStateAction<'total' | 'home' | 'away' | 'neutral'>>;
+	selected: Location;
+	setSelected: React.Dispatch<React.SetStateAction<Location>>;
 	homeDisabled?: boolean;
 	awayDisabled?: boolean;
 	neutralDisabled?: boolean;
@@ -19,32 +19,14 @@ const DatabaseSelect: React.FC<DatabaseSelectProps> = ({
 	awayDisabled,
 	neutralDisabled
 }) => {
-	return (
-		<fieldset className={styles.fieldset}>
-			<Pill label="total" isActive={selected === 'total'} onClick={() => setSelected('total')} />
-			<Pill
-				label="home"
-				isActive={selected === 'home'}
-				isDisabled={homeDisabled}
-				disabled={homeDisabled}
-				onClick={() => !homeDisabled && setSelected('home')}
-			/>
-			<Pill
-				label="away"
-				isActive={selected === 'away'}
-				isDisabled={awayDisabled}
-				disabled={awayDisabled}
-				onClick={() => !awayDisabled && setSelected('away')}
-			/>
-			<Pill
-				label="neutral"
-				isActive={selected === 'neutral'}
-				isDisabled={neutralDisabled}
-				disabled={neutralDisabled}
-				onClick={() => !neutralDisabled && setSelected('neutral')}
-			/>
-		</fieldset>
-	);
+	const options: SegmentedOption<Location>[] = [
+		{ value: 'total', label: 'Total' },
+		{ value: 'home', label: 'Home', disabled: homeDisabled },
+		{ value: 'away', label: 'Away', disabled: awayDisabled },
+		{ value: 'neutral', label: 'Neutral', disabled: neutralDisabled }
+	];
+
+	return <SegmentedToggle value={selected} onValueChange={setSelected} options={options} ariaLabel="Location filter" />;
 };
 
 export default DatabaseSelect;

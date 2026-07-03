@@ -18,18 +18,22 @@ const VenueFormContent: React.FC<{ mode: 'create' | 'edit' }> = ({ mode }) => {
 	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	return (
-		<div className="flex flex-col gap-3">
-			<FormCard label="Venue Information">
-				<Name />
-				<City />
-				<Country />
-			</FormCard>
-			<FormCard label="Venue Image">
-				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</FormCard>
-			<FormCard label="Image Preview">
-				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</FormCard>
+		<div className="flex flex-col gap-2">
+			<div className="grid grid-cols-1 lg:grid-cols-[minmax(360px,1fr)_1fr] gap-2 items-start">
+				<FormCard label="Venue Information">
+					<Name />
+					<City />
+					<Country />
+				</FormCard>
+				<div className="flex flex-col gap-2">
+					<FormCard label="Venue Image">
+						<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
+					</FormCard>
+					<FormCard label="Image Preview">
+						<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
+					</FormCard>
+				</div>
+			</div>
 			<div>
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}

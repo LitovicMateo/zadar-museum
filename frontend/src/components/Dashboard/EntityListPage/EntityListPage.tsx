@@ -4,7 +4,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Pencil, Trash2 } from 'lucide-react';
 
+import { cn } from '@/lib/Utils';
 import apiClient from '@/lib/ApiClient';
+import styles from './EntityListPage.module.css';
 import { useAdminList } from '@/hooks/queries/dashboard/UseAdminList';
 import Button from '@/components/UI/Button';
 import { Input } from '@/components/UI/Input';
@@ -79,12 +81,19 @@ export function EntityListPage<T extends { documentId: string }>({
             {total} records
           </span>
         </div>
-        <Button
-          onClick={() => navigate(config.createPath)}
-          className="bg-record text-record-foreground hover:bg-record/90 font-semibold text-sm"
-        >
-          + Create {config.title.replace(/s$/, '')}
-        </Button>
+        <div className="flex items-center gap-2">
+          {config.secondaryCreate && (
+            <Button
+              variant="outline"
+              onClick={() => navigate(config.secondaryCreate!.path)}
+            >
+              {config.secondaryCreate.label}
+            </Button>
+          )}
+          <Button onClick={() => navigate(config.createPath)} className={styles.createBtn}>
+            + Create {config.title.replace(/s$/, '')}
+          </Button>
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -107,55 +116,64 @@ export function EntityListPage<T extends { documentId: string }>({
           </div>
         </div>
 
-        <Table className={isFetching ? 'opacity-60 transition-opacity' : ''}>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-10">#</TableHead>
-              {config.columns.map((col) => (
-                <TableHead key={col.header} className={col.className}>
-                  {col.header}
-                </TableHead>
-              ))}
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isPending && (
+        <div className="border border-border rounded-lg overflow-hidden">
+          <Table className={isFetching ? 'opacity-60 transition-opacity' : ''}>
+            <TableHeader className="bg-muted/50">
               <TableRow>
-                <TableCell colSpan={config.columns.length + 2} className="text-center text-muted-foreground py-8">
-                  Loading...
-                </TableCell>
-              </TableRow>
-            )}
-            {!isPending && items.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={config.columns.length + 2} className="text-center text-muted-foreground py-8">
-                  No results
-                </TableCell>
-              </TableRow>
-            )}
-            {items.map((row, idx) => (
-              <TableRow key={row.documentId}>
-                <TableCell className="text-muted-foreground text-sm">{from + idx}</TableCell>
+                <TableHead className="w-10 text-[11px] font-mono uppercase tracking-wider">#</TableHead>
                 {config.columns.map((col) => (
-                  <TableCell key={col.header} className={col.className}>
-                    {col.cell(row)}
-                  </TableCell>
+                  <TableHead key={col.header} className={cn('text-[11px] font-mono uppercase tracking-wider', col.className)}>
+                    {col.header}
+                  </TableHead>
                 ))}
-                <TableCell>
-                  <div className="flex gap-2 justify-end">
-                    <Button variant="outline" size="sm" onClick={() => navigate(config.editPath(row.documentId))}>
-                      <Pencil size={13} className="mr-1" /> Edit
-                    </Button>
-                    <Button variant="destructive" size="sm" onClick={() => setDeleteTarget(row)}>
-                      <Trash2 size={13} className="mr-1" /> Delete
-                    </Button>
-                  </div>
-                </TableCell>
+                <TableHead className="text-right text-[11px] font-mono uppercase tracking-wider">Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {isPending && (
+                <TableRow>
+                  <TableCell colSpan={config.columns.length + 2} className="text-center text-muted-foreground py-8">
+                    Loading...
+                  </TableCell>
+                </TableRow>
+              )}
+              {!isPending && items.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={config.columns.length + 2} className="text-center text-muted-foreground py-8">
+                    No results
+                  </TableCell>
+                </TableRow>
+              )}
+              {items.map((row, idx) => (
+                <TableRow key={row.documentId} className="even:bg-muted/30">
+                  <TableCell className="text-muted-foreground text-sm">{from + idx}</TableCell>
+                  {config.columns.map((col) => (
+                    <TableCell key={col.header} className={col.className}>
+                      {col.cell(row)}
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    <div className="flex gap-2 justify-end">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          navigate(config.editPathFor?.(row) ?? config.editPath(row.documentId))
+                        }
+                        className={styles.editBtn}
+                      >
+                        <Pencil size={13} className="mr-1" /> Edit
+                      </Button>
+                      <Button variant="destructive" size="sm" onClick={() => setDeleteTarget(row)}>
+                        <Trash2 size={13} className="mr-1" /> Delete
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>

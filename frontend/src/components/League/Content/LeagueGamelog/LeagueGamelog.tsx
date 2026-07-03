@@ -7,8 +7,6 @@ import { useLeagueGames } from '@/hooks/queries/league/UseLeagueGames';
 import { useLeagueSeasons } from '@/hooks/queries/league/UseLeagueSeasons';
 import { useScheduleFilters, useSeasonState } from '@/hooks/UseScheduleFilters';
 
-import styles from './LeagueGamelog.module.css';
-
 const LeagueGamelog = () => {
 	const { leagueSlug } = useParams();
 
@@ -21,7 +19,7 @@ const LeagueGamelog = () => {
 	if (!seasons) return null;
 
 	return (
-		<section className={styles.section}>
+		<section className="space-y-4">
 			<ScheduleControls
 				seasons={seasons}
 				selectedSeason={selectedSeason}

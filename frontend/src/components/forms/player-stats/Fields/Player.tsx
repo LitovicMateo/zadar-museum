@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { usePlayers } from '@/hooks/queries/player/UsePlayers';
@@ -32,7 +32,7 @@ const Player: React.FC = () => {
 				<FormItem>
 					<FormLabel>Player</FormLabel>
 					<FormControl>
-						<Select
+						<AppSelect
 							{...field}
 							value={options?.find((opt) => opt.value === field.value) ?? null}
 							isDisabled={!team || isEdit}

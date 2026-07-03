@@ -1,27 +1,23 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import Radio from '@/components/UI/Radio/Radio';
-import RadioGroup from '@/components/UI/RadioGroup';
+import { MobileFilterSheet } from '@/components/UI/MobileFilterSheet';
+import SegmentedToggle, { SegmentedOption } from '@/components/UI/SegmentedToggle/SegmentedToggle';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { useAllTimeLeagueStats } from '@/hooks/queries/player/UseAllTimeLeagueStats';
 import { usePlayerHasAppearances } from '@/utils/PlayerHasAppearances';
 
-import MobileControls from './Controls/MobileControls';
 import MainTable from './main-table/MainTable';
 
-import styles from './PlayerLeagueStats.module.css';
+type View = 'total' | 'average';
+type Location = 'total' | 'home' | 'away' | 'neutral';
 
 const PlayerLeagueStats: React.FC = React.memo(() => {
 	const { playerId } = useParams();
 	const { selectedDatabase } = useBoxscore();
 
-	const [view, setView] = React.useState<'total' | 'average'>('total');
-	const [location, setLocation] = React.useState<'total' | 'home' | 'away' | 'neutral'>('total');
-
-	const handleViewChange = (view: 'total' | 'average') => {
-		setView(view);
-	};
+	const [view, setView] = React.useState<View>('total');
+	const [location, setLocation] = React.useState<Location>('total');
 
 	const { data: leagueData } = useAllTimeLeagueStats(playerId!, selectedDatabase);
 	const hasHome = !!leagueData?.some((d) => (d.total?.home?.games ?? 0) > 0);
@@ -38,39 +34,32 @@ const PlayerLeagueStats: React.FC = React.memo(() => {
 
 	if (!hasAppearances) return null;
 
-	return (
-		<section className={styles.section}>
-			{/* Mobile: react-select dropdowns */}
-			<MobileControls
-				hasHome={hasHome}
-				hasAway={hasAway}
-				hasNeutral={hasNeutral}
-				view={view}
-				location={location}
-				setView={setView}
-				setLocation={setLocation}
-			/>
-			{/* Desktop: original radio controls */}
-			<div className={styles.desktopControls}>
-				<RadioGroup>
-					<Radio label="Total" isActive={view === 'total'} onClick={() => handleViewChange('total')} />
-					<Radio label="Average" isActive={view === 'average'} onClick={() => handleViewChange('average')} />
-				</RadioGroup>
+	const viewOptions: SegmentedOption<View>[] = [
+		{ value: 'total', label: 'Total' },
+		{ value: 'average', label: 'Average' }
+	];
 
-				<RadioGroup>
-					{(['total', 'home', 'away', 'neutral'] as const).map((loc) => (
-						<Radio
-							label={loc.charAt(0).toUpperCase() + loc.slice(1)}
-							isActive={location === loc}
-							isDisabled={
-								(loc === 'home' && !hasHome) || (loc === 'away' && !hasAway) || (loc === 'neutral' && !hasNeutral)
-							}
-							onClick={() => setLocation(loc)}
-							key={loc}
-						/>
-					))}
-				</RadioGroup>
-			</div>
+	const locations: SegmentedOption<Location>[] = [
+		{ value: 'total', label: 'Total' },
+		{ value: 'home', label: 'Home', disabled: !hasHome },
+		{ value: 'away', label: 'Away', disabled: !hasAway },
+		{ value: 'neutral', label: 'Neutral', disabled: !hasNeutral }
+	];
+
+	return (
+		<section className="space-y-4">
+			<MobileFilterSheet title="Filter stats">
+				<div className="flex flex-wrap items-center gap-3">
+					<SegmentedToggle value={view} onValueChange={setView} options={viewOptions} ariaLabel="Total or average" />
+					<SegmentedToggle
+						value={location}
+						onValueChange={setLocation}
+						options={locations}
+						ariaLabel="Location filter"
+					/>
+				</div>
+			</MobileFilterSheet>
+
 			<MainTable view={view} location={location} />
 		</section>
 	);

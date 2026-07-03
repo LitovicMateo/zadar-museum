@@ -41,21 +41,25 @@ const TeamFormContent: React.FC<TeamFormContentProps> = ({ mode }) => {
 	};
 
 	return (
-		<div className="flex flex-col gap-3">
-			<FormCard label="Team Information">
-				<Name />
-				<AlternateNames />
-				<ShortName />
-				<City />
-				<Country />
-				<IsMainTeam />
-			</FormCard>
-			<FormCard label="Team Logo">
-				<Logo fileInputRef={fileInputRef} handleImageChange={handleImageChange} />
-			</FormCard>
-			<FormCard label="Logo Preview">
-				<LogoPreview preview={preview} removeImage={removeImage} />
-			</FormCard>
+		<div className="flex flex-col gap-2">
+			<div className="grid grid-cols-1 lg:grid-cols-[minmax(360px,1fr)_1fr] gap-2 items-start">
+				<FormCard label="Team Information">
+					<Name />
+					<AlternateNames />
+					<ShortName />
+					<City />
+					<Country />
+					<IsMainTeam />
+				</FormCard>
+				<div className="flex flex-col gap-2">
+					<FormCard label="Team Logo">
+						<Logo fileInputRef={fileInputRef} handleImageChange={handleImageChange} />
+					</FormCard>
+					<FormCard label="Logo Preview">
+						<LogoPreview preview={preview} removeImage={removeImage} />
+					</FormCard>
+				</div>
+			</div>
 			<div className="w-full flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}

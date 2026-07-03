@@ -18,6 +18,8 @@ export interface VenueDetailsResponse {
 	documentId: string;
 }
 
+export type VenueLocation = 'home' | 'away';
+
 export interface VenueTeamRecordResponse {
 	venue_slug: string;
 	games: number;

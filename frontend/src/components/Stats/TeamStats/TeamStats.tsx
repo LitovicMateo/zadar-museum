@@ -1,17 +1,17 @@
 import React from 'react';
 
-import MobileFilters from '@/components/MobileFilters/MobileFilters';
 import PaginationControls from '@/components/Pagination/PaginationControls';
 import TeamStatsFilter from '@/components/Stats/TeamStats/filter/TeamStatsFilter';
 import TeamStatsTable from '@/components/Stats/TeamStats/table/TeamStatsTable';
+import StatsFilterBar from '@/components/Stats/UI/StatsFilterBar';
+import StatsPageHeader from '@/components/Stats/UI/StatsPageHeader';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
 import { useTeamAllTimeStats } from '@/hooks/queries/stats/UseTeamAllTimeStats';
 import { searchTeamStats } from '@/utils/SearchFunctions';
+import { cn } from '@/lib/Utils';
 import { SortingState } from '@tanstack/react-table';
-
-import PageWrapper from '../UI/PageWrapper';
 
 const TeamStats: React.FC = () => {
 	const [location, setLocation] = React.useState<'home' | 'away' | 'all'>('all');
@@ -21,7 +21,7 @@ const TeamStats: React.FC = () => {
 
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search by team name' });
 
-	const { data: allTimeStats, isFetching } = useTeamAllTimeStats(location, league, season);
+	const { data: allTimeStats, isPlaceholderData } = useTeamAllTimeStats(location, league, season);
 
 	const filteredTeams = searchTeamStats(allTimeStats, searchTerm);
 
@@ -32,8 +32,10 @@ const TeamStats: React.FC = () => {
 	});
 
 	return (
-		<PageWrapper>
-			<MobileFilters SearchInput={SearchInput}>
+		<div className="w-full">
+			<StatsPageHeader title="Team stats" count={total} countLabel="teams" />
+
+			<StatsFilterBar searchInput={SearchInput} sheetTitle="Filter teams">
 				<TeamStatsFilter
 					location={location}
 					setLocation={setLocation}
@@ -42,19 +44,21 @@ const TeamStats: React.FC = () => {
 					season={season}
 					setSeason={setSeason}
 				/>
-			</MobileFilters>
+			</StatsFilterBar>
 
-			<PaginationControls
-				total={total}
-				page={page}
-				pageSize={pageSize}
-				onPageChange={setPage}
-				onPageSizeChange={setPageSize}
-			/>
-			<DynamicContentWrapper>
-				<TeamStatsTable stats={paginated} isFetching={isFetching} sorting={sorting} setSorting={setSorting} />
-			</DynamicContentWrapper>
-		</PageWrapper>
+			<div className={cn('transition-opacity', isPlaceholderData && 'pointer-events-none opacity-60')}>
+				<PaginationControls
+					total={total}
+					page={page}
+					pageSize={pageSize}
+					onPageChange={setPage}
+					onPageSizeChange={setPageSize}
+				/>
+				<DynamicContentWrapper>
+					<TeamStatsTable stats={paginated} sorting={sorting} setSorting={setSorting} />
+				</DynamicContentWrapper>
+			</div>
+		</div>
 	);
 };
 

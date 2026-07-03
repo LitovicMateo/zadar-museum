@@ -1,11 +1,11 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 import { SingleValue } from 'react-select';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
 
 type StatusOption = {
 	value: PlayerStatsFormData['status'];
@@ -40,9 +40,8 @@ const Status: React.FC = () => {
 			name="status"
 			render={({ field }) => (
 				<FormItem>
-					<FormLabel>Status</FormLabel>
 					<FormControl>
-						<Select<StatusOption>
+						<AppSelect<StatusOption>
 							isDisabled={!player}
 							placeholder="Status"
 							options={statusOptions}

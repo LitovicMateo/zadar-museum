@@ -1,25 +1,26 @@
 .row {
 	display: block;
-	padding: 0.35rem 0.5rem;
+	padding: 0.45rem 0.6rem;
 	border-radius: 0.5rem;
-	border-bottom: 1px solid var(--sidebar-border);
-	transition: background-color 0.15s ease;
+	transition: background-color 0.15s ease, color 0.15s ease;
 	text-decoration: none;
 	color: var(--sidebar-foreground);
 	font-size: 0.8125rem;
 	font-weight: 500;
 }
 
-.row:last-child {
-	border-bottom: none;
-}
-
 .row:hover {
-	background-color: var(--muted);
+	background-color: color-mix(in oklab, var(--court) 8%, transparent);
+	color: var(--court);
 }
 
 .rowActive {
-	background-color: var(--sidebar-accent);
-	color: var(--sidebar-accent-foreground);
+	background-color: var(--court);
+	color: #fff;
 	font-weight: 600;
+}
+
+.rowActive:hover {
+	background-color: var(--court);
+	color: #fff;
 }

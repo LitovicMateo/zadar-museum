@@ -1,6 +1,7 @@
 import React from 'react';
+import { Search } from 'lucide-react';
 
-import Pill from '@/components/UI/Pill/Pill';
+import SegmentedToggle from '@/components/UI/SegmentedToggle/SegmentedToggle';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/UI/Select';
 import { type PositionFilter, type StatusFilter } from '@/hooks/UsePlayersFilters';
 
@@ -38,7 +39,10 @@ const PlayersFilterBar: React.FC<PlayersFilterBarProps> = ({
 }) => {
 	return (
 		<div className={styles.filterBar}>
-			<div className={styles.searchWrap}>{SearchInput}</div>
+			<div className={styles.searchWrap}>
+				<Search size={13} className={styles.searchIcon} aria-hidden />
+				{SearchInput}
+			</div>
 
 			<div className={styles.filters}>
 				<Select value={position} onValueChange={onPositionChange}>
@@ -54,16 +58,12 @@ const PlayersFilterBar: React.FC<PlayersFilterBarProps> = ({
 					</SelectContent>
 				</Select>
 
-				<div className={styles.statusGroup} role="radiogroup" aria-label="Player status filter">
-					{STATUS_OPTIONS.map((opt) => (
-						<Pill
-							key={opt.value}
-							label={opt.label}
-							isActive={status === opt.value}
-							onClick={() => onStatusChange(opt.value)}
-						/>
-					))}
-				</div>
+				<SegmentedToggle
+					value={status}
+					onValueChange={onStatusChange}
+					options={STATUS_OPTIONS}
+					ariaLabel="Player status filter"
+				/>
 			</div>
 		</div>
 	);

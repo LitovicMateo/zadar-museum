@@ -23,19 +23,23 @@ const CompetitionFormContent: React.FC<CompetitionFormContentProps> = ({ mode })
 	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	return (
-		<div className="flex flex-col gap-3">
-			<FormCard label="Competition Information">
-				<Name />
-				<ShortName />
-				<AlternateNames />
-				<WinningSeasons />
-			</FormCard>
-			<FormCard label="Competition Logo">
-				<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</FormCard>
-			<FormCard label="Logo Preview">
-				<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
-			</FormCard>
+		<div className="flex flex-col gap-2">
+			<div className="grid grid-cols-1 lg:grid-cols-[minmax(360px,1fr)_1fr] gap-2 items-start">
+				<FormCard label="Competition Information">
+					<Name />
+					<ShortName />
+					<AlternateNames />
+					<WinningSeasons />
+				</FormCard>
+				<div className="flex flex-col gap-2">
+					<FormCard label="Competition Logo">
+						<ProfileImage fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
+					</FormCard>
+					<FormCard label="Logo Preview">
+						<ProfileImagePreview fileInputRef={fileInputRef} preview={preview} setPreview={setPreview} />
+					</FormCard>
+				</div>
+			</div>
 			<div>
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}

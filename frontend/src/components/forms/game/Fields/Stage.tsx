@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { GameFormData } from '@/schemas/GameSchema';
@@ -22,7 +22,7 @@ const Stage: React.FC = () => {
 				<FormItem>
 					<FormLabel>Stage</FormLabel>
 					<FormControl>
-						<Select<OptionType, false>
+						<AppSelect<OptionType, false>
 							placeholder="Select stage"
 							options={stageOptions}
 							value={stageOptions.find((opt) => opt.value === field.value)}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Select, { SingleValue } from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
+import { SingleValue } from 'react-select';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useGameTeams } from '@/hooks/queries/game/UseGameTeams';
@@ -33,7 +34,7 @@ const TeamFilter: React.FC<TeamFilterProps> = ({ game, setTeam }) => {
 	};
 
 	return (
-		<Select
+		<AppSelect
 			value={selectedOption}
 			onChange={handleChange}
 			placeholder="Select Team"

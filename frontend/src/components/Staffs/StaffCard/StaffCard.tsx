@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { User } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import { APP_ROUTES } from '@/constants/Routes';
 import { StaffDetailsResponse } from '@/types/api/Staff';
 import { getImageUrl } from '@/utils/GetImageUrl';
-import { User } from 'lucide-react';
 
 import styles from './StaffCard.module.css';
 
@@ -17,33 +18,35 @@ const StaffCard: React.FC<StaffCardProps> = ({ staff }) => {
 	const hasImage = !!imageUrl && !imageUrl.includes('undefined');
 
 	return (
-		<Link to={APP_ROUTES.staff(staff.documentId)} className={styles.card}>
-			<div className={styles.imageWrapper}>
-				{hasImage ? (
-					<img
-						src={imageUrl}
-						alt={`${staff.first_name} ${staff.last_name}`}
-						className={styles.image}
-						loading="lazy"
-					/>
-				) : (
-					<User size={64} color="var(--muted-foreground)" strokeWidth={1} />
-				)}
-			</div>
-
-			<div className={styles.body}>
-				<div className={styles.name}>
-					<span className={styles.firstName}>{staff.first_name} </span>
-					{staff.last_name}
-				</div>{' '}
-				<div className={styles.meta}>
-					{staff.role && <span className={styles.positionBadge}>ROLE</span>}
-					{staff.role && (
-						<>
-							<span className={styles.dot} />
-							<span className={styles.positionBadge}>{staff.role}</span>
-						</>
+		<Link to={APP_ROUTES.staff(staff.documentId)} className={styles.cardLink}>
+			<div className={styles.card}>
+				<div className={styles.imageWrapper}>
+					{hasImage ? (
+						<img
+							src={imageUrl}
+							alt={`${staff.first_name} ${staff.last_name}`}
+							className={styles.image}
+							loading="lazy"
+						/>
+					) : (
+						<div className={styles.placeholder}>
+							<User size={52} strokeWidth={1} opacity={0.4} />
+						</div>
 					)}
+
+					<div className={styles.gradient} />
+
+					<div className={styles.nameplate}>
+						{staff.role && (
+							<Badge variant="outline" className={styles.roleBadge}>
+								{staff.role}
+							</Badge>
+						)}
+						<p className={styles.name}>
+							<span className={styles.firstName}>{staff.first_name} </span>
+							<span className={styles.lastName}>{staff.last_name}</span>
+						</p>
+					</div>
 				</div>
 			</div>
 		</Link>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import NoContent from '@/components/NoContent/NoContent';
 import PaginationControls from '@/components/Pagination/PaginationControls';
@@ -31,6 +31,15 @@ const PlayersPage: React.FC = () => {
 		resetDeps: [searchTerm, position, status]
 	});
 
+	const leaderIds = useMemo(() => {
+		if (!allTimeStats) return new Set<string>();
+		return new Set(
+			allTimeStats
+				.filter((s) => s.points_rank === 1 || s.rebounds_rank === 1 || s.assists_rank === 1)
+				.map((s) => s.player_id)
+		);
+	}, [allTimeStats]);
+
 	React.useEffect(() => {
 		wrapperRef.current?.scrollToTop();
 	}, [page]);
@@ -38,27 +47,34 @@ const PlayersPage: React.FC = () => {
 	if (isLoading) {
 		return (
 			<div className={styles.page}>
-				<PlayersFilterBar
-					SearchInput={SearchInput}
-					position={position}
-					onPositionChange={setPosition}
-					status={status}
-					onStatusChange={setStatus}
-				/>
-				<DynamicContentWrapper>
-					<div className={styles.layout}>
-						<div className={styles.loadingGrid}>
-							{Array.from({ length: 8 }).map((_, i) => (
-								<Skeleton key={i} className={styles.skeletonCard} />
-							))}
-						</div>
-						<div>
-							{Array.from({ length: 3 }).map((_, i) => (
-								<Skeleton key={i} className={styles.skeletonLeader} />
-							))}
-						</div>
+				<div className={styles.pageHeader}>
+					<div className={styles.pageHeaderInner}>
+						<h1 className={styles.pageTitle}>Players</h1>
 					</div>
-				</DynamicContentWrapper>
+				</div>
+				<div className={styles.contentWrap}>
+					<PlayersFilterBar
+						SearchInput={SearchInput}
+						position={position}
+						onPositionChange={setPosition}
+						status={status}
+						onStatusChange={setStatus}
+					/>
+					<DynamicContentWrapper>
+						<div className={styles.layout}>
+							<div className={styles.loadingGrid}>
+								{Array.from({ length: 8 }).map((_, i) => (
+									<Skeleton key={i} className={styles.skeletonCard} />
+								))}
+							</div>
+							<div>
+								{Array.from({ length: 3 }).map((_, i) => (
+									<Skeleton key={i} className={styles.skeletonLeader} />
+								))}
+							</div>
+						</div>
+					</DynamicContentWrapper>
+				</div>
 			</div>
 		);
 	}
@@ -71,7 +87,15 @@ const PlayersPage: React.FC = () => {
 
 	return (
 		<div className={styles.page}>
+			<div className={styles.pageHeader}>
+				<div className={styles.pageHeaderInner}>
+					<h1 className={styles.pageTitle}>Players</h1>
+					<span className={styles.playerCount}>{directory.length} total</span>
+				</div>
+			</div>
+
 			<DynamicContentWrapper ref={wrapperRef}>
+				<div className={styles.contentWrap}>
 				<PlayersFilterBar
 					SearchInput={SearchInput}
 					position={position}
@@ -86,7 +110,11 @@ const PlayersPage: React.FC = () => {
 							<>
 								<div className={styles.grid}>
 									{paginated.map((player) => (
-										<PlayerCard key={player.id} player={player} />
+										<PlayerCard
+											key={player.id}
+											player={player}
+											isLeader={leaderIds.has(player.documentId)}
+										/>
 									))}
 								</div>
 								<PaginationControls
@@ -110,7 +138,8 @@ const PlayersPage: React.FC = () => {
 						)}
 					</div>
 
-					<PlayersLeaders stats={allTimeStats} />
+						<PlayersLeaders stats={allTimeStats} />
+				</div>
 				</div>
 			</DynamicContentWrapper>
 		</div>

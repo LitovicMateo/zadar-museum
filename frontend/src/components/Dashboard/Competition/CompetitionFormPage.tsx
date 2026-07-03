@@ -4,28 +4,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast, { Toaster } from 'react-hot-toast';
 
 import CompetitionForm from '@/components/forms/competition/CompetitionForm';
-import { useQuery } from '@/hooks/UseQueryWithToast';
+import { useCompetitionAdminDetails } from '@/hooks/queries/competition/UseCompetitionAdminDetails';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import apiClient from '@/lib/ApiClient';
-import { API_ROUTES } from '@/constants/Routes';
 import { createCompetiton as createCompetition } from '@/services/competitions/CreateCompetition';
 import { updateCompetition } from '@/services/competitions/UpdateCompetition';
-import { CompetitionDetailsResponse } from '@/types/api/Competition';
 
 const CompetitionFormPage: React.FC = () => {
 	const { id: documentId } = useParams<{ id: string }>();
 	const queryClient = useQueryClient();
 	const mode = documentId ? 'edit' : 'create';
 
-	const { data: competition } = useQuery<CompetitionDetailsResponse>({
-		queryKey: ['competition-admin', documentId],
-		queryFn: async () => {
-			const res = await apiClient.get(`${API_ROUTES.edit.competition(documentId!)}?populate=*`);
-			return res.data.data;
-		},
-		enabled: !!documentId,
-		errorMessage: 'Failed to load competition'
-	});
+	const { data: competition } = useCompetitionAdminDetails(documentId ?? '');
 
 	const mutation = useMutation({
 		mutationFn: (data: any) =>

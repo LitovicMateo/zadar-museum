@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useTeams } from '@/hooks/queries/team/UseTeams';
@@ -43,7 +43,7 @@ const HomeTeamName: React.FC = () => {
           <FormItem>
             <FormLabel>Home Team Display Name</FormLabel>
             <FormControl>
-              <Select<DisplayNameOption, false>
+              <AppSelect<DisplayNameOption, false>
                 onChange={(option) => {
                   field.onChange(option?.value);
                   setValue('home_team_short_name', option?.short_name ?? '');

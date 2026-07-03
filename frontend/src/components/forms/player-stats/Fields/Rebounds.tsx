@@ -1,9 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/UI/Input';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
 import FormGrid from '@/components/forms/shared/FormGrid';
+import StatField from '@/components/forms/shared/StatField';
 
 const Rebounds: React.FC = () => {
 	const { register, watch } = useFormContext<PlayerStatsFormData>();
@@ -15,12 +15,12 @@ const Rebounds: React.FC = () => {
 
 	return (
 		<FormGrid cols={3}>
-			<Input {...register('offensiveRebounds')} disabled={!!rebounds || !team} placeholder="Offensive" />
-			<Input {...register('defensiveRebounds')} disabled={!!rebounds || !team} placeholder="Defensive" />
-			<Input
+			<StatField label="OFF" {...register('offensiveRebounds')} disabled={!!rebounds || !team} />
+			<StatField label="DEF" {...register('defensiveRebounds')} disabled={!!rebounds || !team} />
+			<StatField
+				label="Total"
 				{...register('rebounds')}
 				disabled={!!offensiveRebounds || !!defensiveRebounds || !team}
-				placeholder="Total Rebounds"
 			/>
 		</FormGrid>
 	);

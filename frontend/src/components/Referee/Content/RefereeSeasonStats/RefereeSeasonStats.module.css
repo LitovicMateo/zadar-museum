@@ -1,9 +1,0 @@
-.section {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 1rem;
-	margin: 0 auto;
-	width: fit-content;
-	max-width: 100%;
-}

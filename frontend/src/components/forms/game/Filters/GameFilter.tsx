@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useCompetitionGames } from '@/hooks/queries/dasboard/UseCompetitionGames';
@@ -21,7 +21,7 @@ const GameFilter: React.FC<GameFilterProps> = ({ season, league, selectedGame, s
 		})) || [];
 
 	return (
-		<Select
+		<AppSelect
 			value={selectedGame ? gameOptions?.find((opt) => opt.value === selectedGame) : null}
 			onChange={(opt) => setSelectedGame(opt?.value as string)}
 			placeholder="Select Game"

@@ -4,28 +4,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast, { Toaster } from 'react-hot-toast';
 
 import TeamForm from '@/components/forms/team/TeamForm';
-import { useQuery } from '@/hooks/UseQueryWithToast';
+import { useTeamAdminDetails } from '@/hooks/queries/team/UseTeamAdminDetails';
 import FormPageLayout from '@/layouts/FormPageLayout';
-import apiClient from '@/lib/ApiClient';
-import { API_ROUTES } from '@/constants/Routes';
 import { createTeam } from '@/services/teams/CreateTeam';
 import { updateTeam } from '@/services/teams/UpdateTeam';
-import { TeamDetailsResponse } from '@/types/api/Team';
 
 const TeamFormPage: React.FC = () => {
 	const { id: documentId } = useParams<{ id: string }>();
 	const queryClient = useQueryClient();
 	const mode = documentId ? 'edit' : 'create';
 
-	const { data: team } = useQuery<TeamDetailsResponse>({
-		queryKey: ['team-admin', documentId],
-		queryFn: async () => {
-			const res = await apiClient.get(`${API_ROUTES.edit.team(documentId!)}?populate=*`);
-			return res.data.data;
-		},
-		enabled: !!documentId,
-		errorMessage: 'Failed to load team'
-	});
+	const { data: team } = useTeamAdminDetails(documentId ?? '');
 
 	const mutation = useMutation({
 		mutationFn: (data: any) =>

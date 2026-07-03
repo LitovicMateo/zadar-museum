@@ -41,7 +41,7 @@ const GameFormContent: React.FC<GameFormContentProps> = ({ mode }) => {
 	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	return (
-		<div className="flex flex-col gap-3">
+		<div className="flex flex-col gap-2">
 			<FormCard label="Game Details">
 				<Competition />
 				<CompetitionName />

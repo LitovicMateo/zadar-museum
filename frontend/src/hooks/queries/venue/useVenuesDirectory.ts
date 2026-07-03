@@ -1,35 +1,37 @@
 import { useMemo } from 'react';
 
 import { useVenues } from '@/hooks/queries/venue/UseVenues';
-import { VenueDirectoryEntry } from '@/types/api/Venue';
+import { VenueDirectoryEntry, VenueLocation } from '@/types/api/Venue';
 
 import { useVenuesTeamRecord } from './useVenuesTeamRecord';
 
-export const useVenuesDirectory = () => {
+export const useVenuesDirectory = (location: VenueLocation) => {
 	const { data: venues, isLoading } = useVenues('name', 'asc');
-	const { data: venueStats, isLoading: isTeamRecordLoading } = useVenuesTeamRecord();
+	const { data: venueStats, isLoading: isTeamRecordLoading } = useVenuesTeamRecord(location);
 
 	const directory = useMemo<VenueDirectoryEntry[] | undefined>(() => {
 		if (!venues || isTeamRecordLoading) return undefined;
 
 		const statsMap = new Map(venueStats ? venueStats.map((s) => [String(s.venue_slug), s]) : []);
 
-		return venues.map((venue) => {
-			const stats = statsMap.get(venue.slug);
+		return venues
+			.filter((venue) => statsMap.has(venue.slug))
+			.map((venue) => {
+				const stats = statsMap.get(venue.slug);
 
-			return {
-				id: venue.id,
-				name: venue.name,
-				slug: venue.slug,
-				nation: venue.country,
-				image: venue.image,
-				city: venue.city,
-				games: stats ? String(stats.games) : null,
-				wins: stats ? String(stats.wins) : null,
-				losses: stats ? String(stats.losses) : null,
-				win_percentage: stats ? String(stats.win_percentage) : null
-			} as VenueDirectoryEntry;
-		});
+				return {
+					id: venue.id,
+					name: venue.name,
+					slug: venue.slug,
+					nation: venue.country,
+					image: venue.image,
+					city: venue.city,
+					games: stats ? String(stats.games) : null,
+					wins: stats ? String(stats.wins) : null,
+					losses: stats ? String(stats.losses) : null,
+					win_percentage: stats ? String(stats.win_percentage) : null
+				} as VenueDirectoryEntry;
+			});
 	}, [venues, venueStats, isTeamRecordLoading]);
 
 	return {

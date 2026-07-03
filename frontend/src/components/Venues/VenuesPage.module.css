@@ -1,16 +1,49 @@
 .page {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
-	/* padding: 2em; */
+}
+
+.pageHeader {
+	background: var(--court);
+	padding: 20px 0 18px;
+}
+
+.pageHeaderInner {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 2em;
+	display: flex;
+	align-items: baseline;
+	gap: 12px;
+}
+
+.pageTitle {
+	font-family: 'Archivo', sans-serif;
+	font-size: 1.6rem;
+	font-weight: 900;
+	text-transform: uppercase;
+	color: white;
+	margin: 0;
+}
+
+.venueCount {
+	font-family: 'DM Mono', monospace;
+	font-size: 0.75rem;
+	color: rgba(255, 255, 255, 0.4);
+}
+
+.contentWrap {
+	max-width: 1280px;
+	margin: 0 auto;
+	width: 100%;
 }
 
 .layout {
 	display: grid;
-	grid-template-columns: 1fr 260px;
+	grid-template-columns: 1fr 220px;
 	gap: 24px;
 	align-items: start;
-	padding: 2em;
+	padding: 1.25em 2em 2em;
 }
 
 .main {
@@ -22,8 +55,8 @@
 
 .grid {
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 16px;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 14px;
 }
 
 .noResults {
@@ -37,41 +70,28 @@
 
 .loadingGrid {
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 16px;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 14px;
 }
 
 .skeletonCard {
 	border-radius: 8px;
-	height: 320px;
-}
-
-.skeletonLeader {
-	border-radius: 8px;
-	height: 200px;
-}
-
-@media (max-width: 1200px) {
-	.grid,
-	.loadingGrid {
-		grid-template-columns: repeat(3, 1fr);
-	}
+	aspect-ratio: 4 / 3;
 }
 
 @media (max-width: 1023px) {
 	.layout {
 		grid-template-columns: 1fr;
+		padding: 1em 1.25em 2em;
 	}
-}
 
-@media (max-width: 900px) {
 	.grid,
 	.loadingGrid {
 		grid-template-columns: repeat(2, 1fr);
 	}
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
 	.grid,
 	.loadingGrid {
 		grid-template-columns: 1fr;

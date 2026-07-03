@@ -21,7 +21,7 @@ const LogoPreview: React.FC<LogoPreviewProps> = ({ preview, removeImage }) => {
 			>
 				<X size={14} />
 			</button>
-			<img src={preview} alt="Preview" className="aspect-square object-cover rounded" />
+			<img src={preview} alt="Preview" className="block h-[150px] w-[150px] aspect-square object-cover rounded" />
 		</div>
 	);
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useCompetitions } from '@/hooks/queries/dasboard/UseCompetitions';
@@ -45,13 +45,13 @@ const CompetitionSelect: React.FC<CompetitionSelectProps> = ({ selectedCompetiti
 	});
 
 	return (
-		<Select
+		<AppSelect
 			placeholder="Competition"
-			className="text-sm shadow-sm "
+			className="text-sm"
 			options={competitionOptions}
 			value={competitionOptions.find((option) => option.value === selectedCompetition)}
 			onChange={(option) => setSelectedCompetition(option?.value.toString() || '')}
-			styles={selectStyle('fit-content')}
+			styles={selectStyle()}
 		/>
 	);
 };

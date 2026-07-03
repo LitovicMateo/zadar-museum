@@ -25,6 +25,18 @@ const num = (id: string, header: string, key: keyof TeamStats): StatsColumn<Team
 	sortDescFirst: true,
 });
 
+/** Point-differential column: green when positive, red when negative. */
+const diff = (id: string, header: string, key: keyof TeamStats): StatsColumn<TeamStats> => ({
+	...num(id, header, key),
+	cell: (row) => {
+		const v = row[key];
+		if (v === null || v === undefined) return '-';
+		const n = Number(v);
+		const tone = n > 0 ? 'text-positive' : n < 0 ? 'text-negative' : undefined;
+		return <span className={tone}>{String(v)}</span>;
+	},
+});
+
 /** Columns for the team league / season stats tables. */
 export const teamStatsColumns: StatsColumn<TeamStats>[] = [
 	{
@@ -39,6 +51,6 @@ export const teamStatsColumns: StatsColumn<TeamStats>[] = [
 	num('win_percentage', 'W%', 'win_percentage'),
 	num('points_scored', 'PTS S', 'points_scored'),
 	num('points_received', 'PTS R', 'points_received'),
-	num('points_diff', 'Diff', 'points_diff'),
+	diff('points_diff', 'Diff', 'points_diff'),
 	num('attendance', 'ATT', 'attendance'),
 ];
