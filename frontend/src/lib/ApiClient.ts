@@ -14,8 +14,8 @@ const apiClient = axios.create({
 	baseURL: '',
 	headers: {
 		'Content-Type': 'application/json'
-	},
-	timeout: 30000 // 30 second timeout,
+	}
+	// No request timeout — long-running stat aggregation queries must not be aborted
 });
 
 /**
