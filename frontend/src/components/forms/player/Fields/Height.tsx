@@ -3,23 +3,25 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/UI/Input';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const Height: React.FC = () => {
-	const { register } = useFormContext<PlayerFormData>();
-
-	return (
-		<label>
-			<span className={styles.label}>Height: </span>
-			<Input
-				type="text"
-				placeholder="e.g. 203 cm"
-				{...register('height')}
-				className="text-gray-500 placeholder:text-xs"
-			/>
-		</label>
-	);
+  const { control } = useFormContext<PlayerFormData>();
+  return (
+    <FormField
+      control={control}
+      name="height"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Height</FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="e.g. 203 cm" {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default Height;

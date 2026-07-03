@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { Medal } from 'lucide-react';
 
+import { Card } from '@/components/ui/card';
 import { APP_ROUTES } from '@/constants/Routes';
 import { TeamDirectoryEntry } from '@/types/api/Team';
 
@@ -27,8 +29,6 @@ const TeamLeaders: React.FC<TeamLeadersProps> = ({ stats }) => {
 
 		return LEADER_CATEGORIES.map(({ key, label }) => {
 			if (key === 'win_percentage') {
-				// For win percentage, we want to sort in ascending order to get the lowest percentages
-				// If teams have the same win percentage, we can further sort by games played to break ties (more games = more impressive)
 				const sorted = [...stats]
 					.sort((a, b) => {
 						if (+a[key] === +b[key]) {
@@ -38,7 +38,6 @@ const TeamLeaders: React.FC<TeamLeadersProps> = ({ stats }) => {
 					})
 					.slice(0, TOP_N);
 
-				// Deduct win_percentage from 100 to get the loss percentage for display
 				sorted.forEach((team) => {
 					(team as any).win_percentage = 100 - Number(team.win_percentage);
 				});
@@ -55,20 +54,28 @@ const TeamLeaders: React.FC<TeamLeadersProps> = ({ stats }) => {
 		<aside className={styles.sidebar}>
 			<h3 className={styles.title}>Leaders</h3>
 			{leadersByCategory.map(({ key, label, leaders }) => (
-				<div key={key} className={styles.category}>
-					<h4 className={styles.categoryTitle}>{label}</h4>
+				<Card key={key} className="p-0 gap-0 rounded-[10px] overflow-hidden shadow-sm">
+					<div className={styles.categoryHeader}>
+						<span className={styles.categoryLabel}>{label.toUpperCase()}</span>
+					</div>
 					<ol className={styles.list}>
-						{leaders.map((team, index) => (
-							<li key={team.id} className={styles.row}>
-								<span className={styles.rank}>{index + 1}</span>
-								<Link to={APP_ROUTES.team(team.slug)} className={styles.teamName}>
-									{team.name}
-								</Link>
-								<span className={styles.statValue}>{team[key as StatKey].toLocaleString()}</span>
-							</li>
-						))}
+						{leaders.map((team, index) => {
+							const rankRowClass = [styles.rowFirst, styles.rowSecond, styles.rowThird][index];
+							const rankBadgeClass = [styles.rankFirst, styles.rankSecond, styles.rankThird][index];
+							return (
+								<li key={team.id} className={`${styles.row} ${rankRowClass ?? ''}`}>
+									<span className={`${styles.rank} ${rankBadgeClass ?? ''}`}>
+										{index < 3 ? <Medal size={11} /> : index + 1}
+									</span>
+									<Link to={APP_ROUTES.team(team.slug)} className={styles.teamName}>
+										{team.name}
+									</Link>
+									<span className={styles.statValue}>{team[key as StatKey].toLocaleString()}</span>
+								</li>
+							);
+						})}
 					</ol>
-				</div>
+				</Card>
 			))}
 		</aside>
 	);

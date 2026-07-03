@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import LeagueCard from '@/components/Leagues/LeagueCard/LeagueCard';
 import LeagueFilterBar from '@/components/Leagues/LeagueFilterBar/LeagueFilterBar';
@@ -7,7 +6,6 @@ import NoContent from '@/components/NoContent/NoContent';
 import PaginationControls from '@/components/Pagination/PaginationControls';
 import DynamicContentWrapper, { DynamicContentWrapperHandle } from '@/components/UI/DynamicContentWrapper';
 import { Skeleton } from '@/components/UI/Skeleton';
-import { APP_ROUTES } from '@/constants/Routes';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
 import { useCompetitionsDirectory } from '@/hooks/queries/league/useCompetitionsDirectory';
@@ -37,16 +35,23 @@ const LeaguesPage: React.FC = () => {
 	if (isLoading) {
 		return (
 			<div className={styles.page}>
-				<LeagueFilterBar SearchInput={SearchInput} />
-				<DynamicContentWrapper>
-					<div className={styles.layout}>
-						<div className={styles.loadingGrid}>
-							{Array.from({ length: 8 }).map((_, i) => (
-								<Skeleton key={i} className={styles.skeletonCard} />
-							))}
-						</div>
+				<div className={styles.pageHeader}>
+					<div className={styles.pageHeaderInner}>
+						<h1 className={styles.pageTitle}>Competitions</h1>
 					</div>
-				</DynamicContentWrapper>
+				</div>
+				<div className={styles.contentWrap}>
+					<LeagueFilterBar SearchInput={SearchInput} />
+					<DynamicContentWrapper>
+						<div className={styles.layout}>
+							<div className={styles.loadingGrid}>
+								{Array.from({ length: 8 }).map((_, i) => (
+									<Skeleton key={i} className={styles.skeletonCard} />
+								))}
+							</div>
+						</div>
+					</DynamicContentWrapper>
+				</div>
 			</div>
 		);
 	}
@@ -59,37 +64,40 @@ const LeaguesPage: React.FC = () => {
 
 	return (
 		<div className={styles.page}>
-			<LeagueFilterBar SearchInput={SearchInput} />
-			<DynamicContentWrapper ref={wrapperRef}>
-				<div className={styles.layout}>
-					{hasResults ? (
-						<>
-							<div className={styles.grid}>
-								{paginated.map((league) => (
-									<Link
-										to={APP_ROUTES.league(league.slug)}
-										key={league.id}
-										className={styles.cardLink}
-									>
-										<LeagueCard league={league} />
-									</Link>
-								))}
-							</div>
-							<PaginationControls
-								page={page}
-								pageSize={pageSize}
-								total={total}
-								onPageChange={setPage}
-								onPageSizeChange={setPageSize}
-							/>
-						</>
-					) : (
-						<div className={styles.noResults}>
-							<NoContent type="info" description="No leagues match the current filters." />
-						</div>
-					)}
+			<div className={styles.pageHeader}>
+				<div className={styles.pageHeaderInner}>
+					<h1 className={styles.pageTitle}>Competitions</h1>
+					<span className={styles.leagueCount}>{directory.length} total</span>
 				</div>
-			</DynamicContentWrapper>
+			</div>
+
+			<div className={styles.contentWrap}>
+				<LeagueFilterBar SearchInput={SearchInput} />
+				<DynamicContentWrapper ref={wrapperRef}>
+					<div className={styles.layout}>
+						{hasResults ? (
+							<>
+								<div className={styles.grid}>
+									{paginated.map((league) => (
+										<LeagueCard key={league.id} league={league} />
+									))}
+								</div>
+								<PaginationControls
+									page={page}
+									pageSize={pageSize}
+									total={total}
+									onPageChange={setPage}
+									onPageSizeChange={setPageSize}
+								/>
+							</>
+						) : (
+							<div className={styles.noResults}>
+								<NoContent type="info" description="No leagues match the current filters." />
+							</div>
+						)}
+					</div>
+				</DynamicContentWrapper>
+			</div>
 		</div>
 	);
 };

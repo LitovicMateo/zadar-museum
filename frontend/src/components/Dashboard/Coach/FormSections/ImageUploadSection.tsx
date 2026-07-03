@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Fieldset from '@/components/UI/Fieldset';
+import FormCard from '@/components/forms/shared/FormCard';
 import ImagePreview from '@/components/UI/ImagePreview/ImagePreview';
 import NoImage from '@/components/UI/ImagePreview/NoImage';
 import UploadButtonWrapper from '@/components/UI/UploadButtonWrapper';
@@ -20,7 +20,7 @@ const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
 }) => {
 	return (
 		<>
-			<Fieldset label="Profile Picture">
+			<FormCard label="Profile Picture">
 				<UploadButtonWrapper label="Upload Image">
 					<input
 						type="file"
@@ -32,11 +32,11 @@ const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
 						ref={fileInputRef}
 					/>
 				</UploadButtonWrapper>
-			</Fieldset>
+			</FormCard>
 
-			<Fieldset label="Picture Preview">
+			<FormCard label="Picture Preview">
 				{preview ? <ImagePreview preview={preview} removeImage={removeImage} /> : <NoImage />}
-			</Fieldset>
+			</FormCard>
 		</>
 	);
 };

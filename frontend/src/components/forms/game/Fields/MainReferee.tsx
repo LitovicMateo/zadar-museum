@@ -1,10 +1,11 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import { useFormContext } from 'react-hook-form';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useReferees } from '@/hooks/queries/referee/UseReferees';
 import { GameFormData } from '@/schemas/GameSchema';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const MainReferee: React.FC = () => {
 	const { control } = useFormContext<GameFormData>();
@@ -19,19 +20,24 @@ const MainReferee: React.FC = () => {
 	}));
 
 	return (
-		<Controller
+		<FormField
 			control={control}
 			name="mainReferee"
 			render={({ field }) => (
-				<Select
-					className=" rounded-md text-gray-500 placeholder:text-xs  text-xs"
-					placeholder="Select Referee #1"
-					options={refereeOptions}
-					value={refereeOptions.find((opt) => opt.value === field.value)}
-					onChange={(opt) => field.onChange(opt?.value)}
-					isClearable
-					styles={selectStyle()}
-				/>
+				<FormItem>
+					<FormLabel>Referee #1</FormLabel>
+					<FormControl>
+						<AppSelect
+							placeholder="Select Referee #1"
+							options={refereeOptions}
+							value={refereeOptions.find((opt) => opt.value === field.value)}
+							onChange={(opt) => field.onChange(opt?.value)}
+							isClearable
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
 			)}
 		/>
 	);

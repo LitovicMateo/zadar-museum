@@ -1,8 +1,7 @@
 import React from 'react';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
-import Category from '@/components/Stats/Category';
-import Container from '@/components/Stats/Container';
+import FilterField from '@/components/Stats/UI/FilterField';
 import { selectStyle } from '@/constants/ReactSelectStyle';
 
 type SeasonFilterProps = {
@@ -18,11 +17,8 @@ const SeasonFilter: React.FC<SeasonFilterProps> = ({ seasons, season, onSeasonCh
 	];
 
 	return (
-		<Container>
-			<Category>
-				<p>Season</p>
-			</Category>
-			<Select
+		<FilterField label="Season">
+			<AppSelect
 				styles={selectStyle()}
 				value={seasonOptions.find((opt) => opt.value === season) ?? null}
 				onChange={(opt) => onSeasonChange((opt?.value as string) ?? 'all')}
@@ -31,7 +27,7 @@ const SeasonFilter: React.FC<SeasonFilterProps> = ({ seasons, season, onSeasonCh
 				menuPosition="fixed"
 				menuPlacement="auto"
 			/>
-		</Container>
+		</FilterField>
 	);
 };
 

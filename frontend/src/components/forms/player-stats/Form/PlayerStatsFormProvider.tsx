@@ -37,10 +37,19 @@ const PlayerStatsFormProvider: React.FC<PlayerStatsFormProviderProps> = ({
 
 	React.useEffect(() => {
 		if (playerStats) {
+			// When a player has both offensive and defensive rebounds, leave the Total
+			// field blank so the OFF/DEF fields stay enabled (they are mutually exclusive
+			// with Total in Rebounds.tsx).
+			const hasOffAndDef =
+				playerStats.offensiveRebounds !== null &&
+				playerStats.offensiveRebounds !== undefined &&
+				playerStats.defensiveRebounds !== null &&
+				playerStats.defensiveRebounds !== undefined;
+
 			methods.reset({
-				gameId: playerStats.game.id.toString(),
-				teamId: playerStats.team.id.toString(),
-				playerId: playerStats.player.id.toString(),
+				gameId: playerStats.game?.id?.toString() ?? '',
+				teamId: playerStats.team?.id?.toString() ?? '',
+				playerId: playerStats.player?.id?.toString() ?? '',
 				status: playerStats.status,
 				isCaptain: playerStats.isCaptain,
 				playerNumber: playerStats.playerNumber,
@@ -53,7 +62,7 @@ const PlayerStatsFormProvider: React.FC<PlayerStatsFormProviderProps> = ({
 				threePointersAttempted: playerStats.threePointersAttempted,
 				freeThrowsMade: playerStats.freeThrowsMade,
 				freeThrowsAttempted: playerStats.freeThrowsAttempted,
-				rebounds: playerStats.rebounds,
+				rebounds: hasOffAndDef ? '' : playerStats.rebounds,
 				offensiveRebounds: playerStats.offensiveRebounds,
 				defensiveRebounds: playerStats.defensiveRebounds,
 				assists: playerStats.assists,

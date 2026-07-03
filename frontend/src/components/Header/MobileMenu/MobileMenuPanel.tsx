@@ -1,10 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { AnimatePresence, motion } from 'framer-motion';
-import { LogOut, LucideIcon, X } from 'lucide-react';
-
-import styles from './MobileMenuPanel.module.css';
+import { Sheet, SheetContent, SheetTitle } from '@/components/UI/Sheet';
+import { LogOut, LucideIcon } from 'lucide-react';
 
 interface NavItem {
 	name: string;
@@ -21,77 +19,53 @@ interface Props {
 
 const MobileMenuPanel: React.FC<Props> = ({ open, setOpen, navItems, logout }) => {
 	return (
-		<AnimatePresence>
-			{open && (
-				<>
-					<motion.div
-						key="backdrop"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{ duration: 0.2 }}
-						onClick={() => setOpen(false)}
-						className={styles.overlay}
-					/>
+		<Sheet open={open} onOpenChange={setOpen}>
+			<SheetContent
+				side="left"
+				className="bg-court border-r border-white/15 text-court-foreground flex flex-col p-0 w-[80vw] max-w-xs gap-0 [&>button]:text-white/70 [&>button]:hover:bg-white/10 [&>button]:hover:text-white"
+			>
+				<SheetTitle className="sr-only">Navigation Menu</SheetTitle>
 
-					<motion.aside
-						id="mobile-panel"
-						key="panel"
-						initial={{ x: '-100%' }}
-						animate={{ x: 0 }}
-						exit={{ x: '-100%' }}
-						transition={{ type: 'tween', duration: 0.25 }}
-						className={styles.panel}
+				<div className="flex items-center px-4 py-3 border-b border-white/10">
+					<span className="font-display text-xs uppercase tracking-[0.05em] font-extrabold text-white">
+						Menu
+					</span>
+				</div>
+
+				<nav className="flex-1 overflow-y-auto p-3">
+					<ul className="flex flex-col gap-0.5 list-none m-0 p-0 text-sm font-medium">
+						{navItems.map((item) => {
+							const Icon = item.icon;
+							return (
+								<li key={item.name}>
+									<Link
+										to={item.link}
+										onClick={() => setOpen(false)}
+										className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+									>
+										{Icon && <Icon size={18} strokeWidth={1.75} />}
+										{item.name}
+									</Link>
+								</li>
+							);
+						})}
+					</ul>
+				</nav>
+
+				<div className="border-t border-white/10 p-3">
+					<button
+						onClick={() => {
+							setOpen(false);
+							logout();
+						}}
+						className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white/70 transition-colors hover:bg-destructive/20 hover:text-red-400"
 					>
-						<div className={styles.panelHeader}>
-							<h2 className={styles.panelTitle}>Menu</h2>
-							<div className={styles.panelActions}>
-								<button
-									aria-label="Close menu"
-									onClick={() => setOpen(false)}
-									className={styles.closeBtn}
-								>
-									<X size={20} />
-								</button>
-							</div>
-						</div>
-
-						<nav className={styles.nav}>
-							<ul className={styles.navList}>
-								{navItems.map((item) => {
-									const Icon = item.icon;
-									return (
-										<li key={item.name}>
-											<Link
-												to={item.link}
-												className={styles.navLink}
-												onClick={() => setOpen(false)}
-											>
-												{Icon && <Icon size={18} strokeWidth={1.75} />}
-												{item.name}
-											</Link>
-										</li>
-									);
-								})}
-							</ul>
-						</nav>
-
-						<div className={styles.footer}>
-							<button
-								onClick={() => {
-									setOpen(false);
-									logout();
-								}}
-								className={styles.logoutBtn}
-							>
-								<LogOut size={18} strokeWidth={1.75} />
-								<span>Logout</span>
-							</button>
-						</div>
-					</motion.aside>
-				</>
-			)}
-		</AnimatePresence>
+						<LogOut size={18} strokeWidth={1.75} />
+						<span>Logout</span>
+					</button>
+				</div>
+			</SheetContent>
+		</Sheet>
 	);
 };
 

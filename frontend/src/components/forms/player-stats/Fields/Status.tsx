@@ -1,10 +1,11 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import { useFormContext } from 'react-hook-form';
+import AppSelect from '@/components/forms/shared/AppSelect';
 import { SingleValue } from 'react-select';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 type StatusOption = {
 	value: PlayerStatsFormData['status'];
@@ -34,18 +35,26 @@ const Status: React.FC = () => {
 	const { control, watch } = useFormContext<PlayerStatsFormData>();
 	const player = watch('playerId');
 	return (
-		<Controller
-			name="status"
+		<FormField
 			control={control}
+			name="status"
 			render={({ field }) => (
-				<Select<StatusOption> // ✅ Tell react-select what the option type is
-					isDisabled={!player}
-					placeholder="Status"
-					options={statusOptions}
-					value={statusOptions.find((opt) => opt.value === field.value) ?? null}
-					onChange={(option: SingleValue<StatusOption>) => field.onChange(option ? option.value : null)}
-					styles={selectStyle()}
-				/>
+				<FormItem>
+					<FormLabel className="text-[9px] font-mono font-medium uppercase tracking-wider text-muted-foreground leading-none">
+						Status
+					</FormLabel>
+					<FormControl>
+						<AppSelect<StatusOption>
+							isDisabled={!player}
+							placeholder="Status"
+							options={statusOptions}
+							value={statusOptions.find((opt) => opt.value === field.value) ?? null}
+							onChange={(option: SingleValue<StatusOption>) => field.onChange(option ? option.value : null)}
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
 			)}
 		/>
 	);

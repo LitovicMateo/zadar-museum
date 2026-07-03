@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Select, { SingleValue } from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
+import { SingleValue } from 'react-select';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useGamePlayerStats } from '@/hooks/queries/player-stats/UseGamePlayerStats';
@@ -35,7 +36,7 @@ const PlayerFilter: React.FC<PlayerFilterProps> = ({ game, team, setPlayerStatsI
 	};
 
 	return (
-		<Select
+		<AppSelect
 			value={selectedOption}
 			onChange={handleChange}
 			options={playerStatsOptions}

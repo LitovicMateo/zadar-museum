@@ -7,9 +7,7 @@ export const useTeamStatById = (documentId: string) => {
 	return useQuery<TeamStatsResponse>({
 		queryKey: ['team-stat', documentId],
 		queryFn: async () => {
-			const res = await apiClient.get(
-				`${API_ROUTES.edit.teamStats(documentId)}?populate[game][populate]=home_team,away_team,competition&populate[team]=*&populate[coach]=*&populate[assistantCoach]=*`
-			);
+			const res = await apiClient.get(API_ROUTES.adminById.teamStats(documentId));
 			return res.data.data;
 		},
 		enabled: !!documentId,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import FilterWrapper from '@/components/Stats/UI/FilterWrapper';
+import StatsFilterBar from '@/components/Stats/UI/StatsFilterBar';
 import LeagueFilter from '@/components/shared/filters/LeagueFilter';
 import LocationFilter from '@/components/shared/filters/LocationFilter';
 import SeasonFilter from '@/components/shared/filters/SeasonFilter';
@@ -23,7 +23,7 @@ const COACH_COMPARE_ROWS: CompareRow<CoachStatsRanking>[] = [
 	{ label: 'Point difference', key: 'points_difference' }
 ];
 
-const CoachCompare: React.FC = () => {
+const CoachCompare: React.FC<{ leading?: React.ReactNode }> = ({ leading }) => {
 	const [coach1Id, setCoach1Id] = useState<string>('');
 	const [coach2Id, setCoach2Id] = useState<string>('');
 	const [location, setLocation] = useState<'home' | 'away' | 'all'>('all');
@@ -47,30 +47,34 @@ const CoachCompare: React.FC = () => {
 
 	return (
 		<div className="flex flex-col gap-4 mt-4">
-			<FilterWrapper>
+			<StatsFilterBar
+				leading={
+					<>
+						{leading}
+						<EntityPicker
+							label="Coach A"
+							options={options}
+							value={coach1Id}
+							onChange={setCoach1Id}
+							excludeValue={coach2Id}
+							placeholder="Select a coach"
+						/>
+						<EntityPicker
+							label="Coach B"
+							options={options}
+							value={coach2Id}
+							onChange={setCoach2Id}
+							excludeValue={coach1Id}
+							placeholder="Select a coach"
+						/>
+					</>
+				}
+				sheetTitle="Filter comparison"
+			>
 				<LocationFilter location={location} setLocation={setLocation} />
 				<LeagueFilter league={league} setLeague={setLeague} competitions={competitions} />
 				<SeasonFilter seasons={seasons} season={season} onSeasonChange={setSeason} />
-			</FilterWrapper>
-
-			<div className="flex flex-col md:flex-row gap-4">
-				<EntityPicker
-					label="Coach A"
-					options={options}
-					value={coach1Id}
-					onChange={setCoach1Id}
-					excludeValue={coach2Id}
-					placeholder="Select a coach"
-				/>
-				<EntityPicker
-					label="Coach B"
-					options={options}
-					value={coach2Id}
-					onChange={setCoach2Id}
-					excludeValue={coach1Id}
-					placeholder="Select a coach"
-				/>
-			</div>
+			</StatsFilterBar>
 
 			{coach1Id && coach2Id && (
 				<CompareTable

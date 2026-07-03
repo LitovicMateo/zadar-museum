@@ -20,6 +20,9 @@ const CompetitionFormPage = lazy(() => import('@/components/Dashboard/Competitio
 const GameFormPage = lazy(() => import('@/components/Dashboard/Game/GameFormPage'));
 const PlayerFormPage = lazy(() => import('@/components/Dashboard/Player/PlayerFormPage'));
 const PlayerStatsFormPage = lazy(() => import('@/components/Dashboard/PlayerStats/PlayerStatsFormPage'));
+const AggregatePlayerStatsFormPage = lazy(
+  () => import('@/components/Dashboard/PlayerStats/AggregatePlayerStatsFormPage')
+);
 const RefereeFormPage = lazy(() => import('@/components/Dashboard/Referee/RefereeFormPage'));
 const StaffFormPage = lazy(() => import('@/components/Dashboard/Staff/StaffFormPage'));
 const TeamFormPage = lazy(() => import('@/components/Dashboard/Team/TeamFormPage'));
@@ -121,6 +124,8 @@ export const dashboardRoutes: RouteObject = {
         { path: 'list', element: <EntityListPage config={playerStatsListConfig} /> },
         { path: 'create', element: <PlayerStatsFormPage /> },
         { path: 'edit/:id', element: <PlayerStatsFormPage /> },
+        { path: 'aggregate/create', element: <AggregatePlayerStatsFormPage /> },
+        { path: 'aggregate/edit/:id', element: <AggregatePlayerStatsFormPage /> },
       ],
     },
 

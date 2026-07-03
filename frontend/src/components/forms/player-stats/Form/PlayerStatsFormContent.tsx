@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import Fieldset from '@/components/UI/Fieldset';
-import FormFieldsWrapper from '@/components/UI/FormFieldsWrapper';
+import FormCard from '@/components/forms/shared/FormCard';
+import FormGrid from '@/components/forms/shared/FormGrid';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
 
@@ -23,8 +23,6 @@ import Shooting from '../Fields/Shooting';
 import Status from '../Fields/Status';
 import Team from '../Fields/Team';
 
-import styles from '@/components/forms/shared/FormLabel.module.css';
-
 type PlayerStatsFormContentProps = {
 	mode: 'create' | 'edit';
 };
@@ -32,50 +30,52 @@ type PlayerStatsFormContentProps = {
 const PlayerStatsFormContent: React.FC<PlayerStatsFormContentProps> = ({ mode }) => {
 	const { formState } = useFormContext<PlayerStatsFormData>();
 	return (
-		<FormFieldsWrapper>
+		<div className="flex flex-col gap-2 w-full max-w-4xl mx-auto">
 			{mode === 'create' && (
-				<Fieldset label="Filters">
+				<FormCard label="Filters">
 					<Season />
 					<Competition />
 					<Game />
 					<Team />
-				</Fieldset>
+				</FormCard>
 			)}
-			<Fieldset label="Player">
+			<FormCard label="Player">
 				<Player />
-			</Fieldset>
-			<Fieldset label="Details">
-				<div className={styles.statsGrid3}>
+			</FormCard>
+			<FormCard label="Details">
+				<FormGrid cols={3}>
 					<Status />
 					<Number />
 					<Captain />
 					<Minutes />
 					<Seconds />
 					<Points />
-				</div>
-			</Fieldset>
-			<Fieldset label="Shooting">
-				<Shooting />
-			</Fieldset>
-			<Fieldset label="Rebounds">
-				<Rebounds />
-			</Fieldset>
-			<Fieldset label="Passing">
-				<Passing />
-			</Fieldset>
-			<Fieldset label="Defense">
-				<Defense />
-			</Fieldset>
-			<Fieldset label="Misc">
-				<Misc />
-			</Fieldset>
-			<div className={styles.centerWrapper}>
+				</FormGrid>
+			</FormCard>
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-start">
+				<FormCard label="Shooting">
+					<Shooting />
+				</FormCard>
+				<FormCard label="Rebounds">
+					<Rebounds />
+				</FormCard>
+				<FormCard label="Passing">
+					<Passing />
+				</FormCard>
+				<FormCard label="Defense">
+					<Defense />
+				</FormCard>
+				<FormCard label="Misc">
+					<Misc />
+				</FormCard>
+			</div>
+			<div className="flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
 					label={mode === 'edit' ? 'Update Player Stats' : 'Create Player Stats'}
 				/>
 			</div>
-		</FormFieldsWrapper>
+		</div>
 	);
 };
 

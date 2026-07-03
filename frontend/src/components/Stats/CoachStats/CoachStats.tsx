@@ -1,18 +1,18 @@
 import React from 'react';
 
-import MobileFilters from '@/components/MobileFilters/MobileFilters';
 import PaginationControls from '@/components/Pagination/PaginationControls';
 import { PlayerDB } from '@/components/Player/PlayerPage';
 import CoachStatsFilter from '@/components/Stats/CoachStats/filter/CoachStatsFilter';
 import CoachStatsTable from '@/components/Stats/CoachStats/table/CoachStatsTable';
+import StatsFilterBar from '@/components/Stats/UI/StatsFilterBar';
+import StatsPageHeader from '@/components/Stats/UI/StatsPageHeader';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
 import { useCoachAllTimeStats } from '@/hooks/queries/stats/UseCoachAllTimeStats';
 import { searchCoachStats } from '@/utils/SearchFunctions';
+import { cn } from '@/lib/Utils';
 import { SortingState } from '@tanstack/react-table';
-
-import PageWrapper from '../UI/PageWrapper';
 
 const CoachStats: React.FC = () => {
 	const [database, setDatabase] = React.useState<PlayerDB>('main');
@@ -22,7 +22,7 @@ const CoachStats: React.FC = () => {
 	const [season, setSeason] = React.useState<string>('all');
 	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'wins', desc: true }]);
 
-	const { data: coachAllTimeStats } = useCoachAllTimeStats(database, role, location, league, season);
+	const { data: coachAllTimeStats, isPlaceholderData } = useCoachAllTimeStats(database, role, location, league, season);
 	const { SearchInput, searchTerm } = useSearch({ placeholder: 'Search by coach name' });
 
 	const filteredCoaches = searchCoachStats(coachAllTimeStats?.current, searchTerm);
@@ -42,8 +42,10 @@ const CoachStats: React.FC = () => {
 		: undefined;
 
 	return (
-		<PageWrapper>
-			<MobileFilters SearchInput={SearchInput}>
+		<div className="w-full">
+			<StatsPageHeader title="Coach stats" count={total} countLabel="coaches" />
+
+			<StatsFilterBar searchInput={SearchInput} sheetTitle="Filter coaches">
 				<CoachStatsFilter
 					database={database}
 					setDatabase={setDatabase}
@@ -56,19 +58,21 @@ const CoachStats: React.FC = () => {
 					season={season}
 					setSeason={setSeason}
 				/>
-			</MobileFilters>
+			</StatsFilterBar>
 
-			<PaginationControls
-				total={total}
-				page={page}
-				pageSize={pageSize}
-				onPageChange={setPage}
-				onPageSizeChange={setPageSize}
-			/>
-			<DynamicContentWrapper>
-				<CoachStatsTable stats={paginated} prev={paginatedPrev} sorting={sorting} setSorting={setSorting} />
-			</DynamicContentWrapper>
-		</PageWrapper>
+			<div className={cn('transition-opacity', isPlaceholderData && 'pointer-events-none opacity-60')}>
+				<PaginationControls
+					total={total}
+					page={page}
+					pageSize={pageSize}
+					onPageChange={setPage}
+					onPageSizeChange={setPageSize}
+				/>
+				<DynamicContentWrapper>
+					<CoachStatsTable stats={paginated} prev={paginatedPrev} sorting={sorting} setSorting={setSorting} />
+				</DynamicContentWrapper>
+			</div>
+		</div>
 	);
 };
 

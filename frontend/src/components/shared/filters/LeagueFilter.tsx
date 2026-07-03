@@ -1,8 +1,7 @@
 import React from 'react';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
-import Category from '@/components/Stats/Category';
-import Container from '@/components/Stats/Container';
+import FilterField from '@/components/Stats/UI/FilterField';
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { CompetitionDetailsResponse } from '@/types/api/Competition';
 
@@ -19,9 +18,8 @@ const LeagueFilter: React.FC<LeagueFilterProps> = ({ league, setLeague, competit
 	];
 
 	return (
-		<Container>
-			<Category>League</Category>
-			<Select
+		<FilterField label="League">
+			<AppSelect
 				styles={selectStyle()}
 				options={leagueOptions}
 				value={leagueOptions.find((opt) => opt.value === league) ?? null}
@@ -30,7 +28,7 @@ const LeagueFilter: React.FC<LeagueFilterProps> = ({ league, setLeague, competit
 				menuPosition="fixed"
 				menuPlacement="auto"
 			/>
-		</Container>
+		</FilterField>
 	);
 };
 

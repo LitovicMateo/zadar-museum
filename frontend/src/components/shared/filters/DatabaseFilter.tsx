@@ -1,10 +1,8 @@
 import React from 'react';
-import Select from 'react-select';
 
 import { PlayerDB } from '@/components/Player/PlayerPage';
-import Category from '@/components/Stats/Category';
-import Container from '@/components/Stats/Container';
-import { selectStyle } from '@/constants/ReactSelectStyle';
+import FilterField from '@/components/Stats/UI/FilterField';
+import SegmentedToggle from '@/components/UI/SegmentedToggle/SegmentedToggle';
 import { useMainTeam } from '@/hooks/queries/team/UseMainTeam';
 
 type DatabaseFilterProps = {
@@ -15,24 +13,20 @@ type DatabaseFilterProps = {
 const DatabaseFilter: React.FC<DatabaseFilterProps> = ({ database, setDatabase }) => {
 	const { data: mainTeam } = useMainTeam();
 
-	const databaseOptions: { label: string; value: PlayerDB }[] = [
-		{ label: mainTeam?.name ?? 'Main', value: 'main' },
-		{ label: 'Opponents', value: 'opponent' }
+	const options: { value: PlayerDB; label: string }[] = [
+		{ value: 'main', label: mainTeam?.name ?? 'Main' },
+		{ value: 'opponent', label: 'Opponents' }
 	];
 
 	return (
-		<Container>
-			<Category>Database</Category>
-			<Select
-				styles={selectStyle()}
-				value={databaseOptions.find((opt) => opt.value === database)}
-				onChange={(opt) => setDatabase((opt?.value as PlayerDB) ?? 'main')}
-				options={databaseOptions}
-				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
-				menuPosition="fixed"
-				menuPlacement="auto"
+		<FilterField label="Database">
+			<SegmentedToggle
+				value={database}
+				onValueChange={setDatabase}
+				options={options}
+				ariaLabel="Database filter"
 			/>
-		</Container>
+		</FilterField>
 	);
 };
 

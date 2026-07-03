@@ -3,6 +3,7 @@ import React from 'react';
 import NoContent from '@/components/NoContent/NoContent';
 import AnimatedTableWrapper from '@/components/UI/AnimatedTableWrapper';
 import { UniversalTableBody, UniversalTableHead } from '@/components/UI/table';
+import tableStyles from '@/components/UI/table/table.module.css';
 import { PlayerAllTimeStats } from '@/types/api/Player';
 import { Row, SortingState } from '@tanstack/react-table';
 
@@ -25,7 +26,7 @@ const PlayerStatsTable: React.FC<PlayerStatsTableProps> = ({ stats, prev, sortin
 	const rowVariant = (row: Row<PlayerAllTimeStats>) => (row.original.is_active_player ? 'trActive' : undefined);
 
 	return (
-		<AnimatedTableWrapper>
+		<AnimatedTableWrapper className={tableStyles.leaderboard}>
 			<UniversalTableHead table={table} />
 			<UniversalTableBody table={table} rowVariant={rowVariant} />
 		</AnimatedTableWrapper>

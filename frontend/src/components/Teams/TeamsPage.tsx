@@ -39,21 +39,23 @@ const TeamsPage: React.FC = () => {
 	if (isLoading) {
 		return (
 			<div className={styles.page}>
-				<TeamFilterBar SearchInput={SearchInput} />
-				<DynamicContentWrapper>
-					<div className={styles.layout}>
-						<div className={styles.loadingGrid}>
-							{Array.from({ length: 8 }).map((_, i) => (
-								<Skeleton key={i} className={styles.skeletonCard} />
-							))}
-						</div>
-						<div>
-							{Array.from({ length: 3 }).map((_, i) => (
-								<Skeleton key={i} className={styles.skeletonLeader} />
-							))}
-						</div>
+				<div className={styles.pageHeader}>
+					<div className={styles.pageHeaderInner}>
+						<h1 className={styles.pageTitle}>Teams</h1>
 					</div>
-				</DynamicContentWrapper>
+				</div>
+				<div className={styles.contentWrap}>
+					<TeamFilterBar SearchInput={SearchInput} />
+					<DynamicContentWrapper>
+						<div className={styles.layout}>
+							<div className={styles.loadingGrid}>
+								{Array.from({ length: 8 }).map((_, i) => (
+									<Skeleton key={i} className={styles.skeletonCard} />
+								))}
+							</div>
+						</div>
+					</DynamicContentWrapper>
+				</div>
 			</div>
 		);
 	}
@@ -66,36 +68,45 @@ const TeamsPage: React.FC = () => {
 
 	return (
 		<div className={styles.page}>
-			<TeamFilterBar SearchInput={SearchInput} />
-			<DynamicContentWrapper ref={wrapperRef}>
-				<div className={styles.layout}>
-					<div className={styles.main}>
-						{hasResults ? (
-							<>
-								<div className={styles.grid}>
-									{paginated.map((team) => (
-										<TeamCard key={team.id} team={team} />
-									))}
-								</div>
-								<PaginationControls
-									total={total}
-									page={page}
-									pageSize={pageSize}
-									onPageChange={setPage}
-									onPageSizeChange={setPageSize}
-									pageSizeOptions={[12, 24, 48]}
-								/>
-							</>
-						) : (
-							<div className={styles.noResults}>
-								<NoContent type="info" description="No teams match the current filters." />
-							</div>
-						)}
-					</div>
-
-					<TeamLeaders stats={directory} />
+			<div className={styles.pageHeader}>
+				<div className={styles.pageHeaderInner}>
+					<h1 className={styles.pageTitle}>Teams</h1>
+					<span className={styles.teamCount}>{directory.length} total</span>
 				</div>
-			</DynamicContentWrapper>
+			</div>
+
+			<div className={styles.contentWrap}>
+				<TeamFilterBar SearchInput={SearchInput} />
+				<DynamicContentWrapper ref={wrapperRef}>
+					<div className={styles.layout}>
+						<div className={styles.main}>
+							{hasResults ? (
+								<>
+									<div className={styles.grid}>
+										{paginated.map((team) => (
+											<TeamCard key={team.id} team={team} />
+										))}
+									</div>
+									<PaginationControls
+										total={total}
+										page={page}
+										pageSize={pageSize}
+										onPageChange={setPage}
+										onPageSizeChange={setPageSize}
+										pageSizeOptions={[12, 24, 48]}
+									/>
+								</>
+							) : (
+								<div className={styles.noResults}>
+									<NoContent type="info" description="No teams match the current filters." />
+								</div>
+							)}
+						</div>
+
+						<TeamLeaders stats={directory} />
+					</div>
+				</DynamicContentWrapper>
+			</div>
 		</div>
 	);
 };

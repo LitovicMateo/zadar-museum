@@ -46,12 +46,9 @@ const MainTable: React.FC<MainTableProps> = ({ view, location }) => {
 			.filter((r): r is StatsDataRow<GameStatsEntry> => r != null);
 	}, [career, view, location]);
 
-	const wrapperClass =
-		'max-w-[800px] mx-auto overflow-x-auto rounded-lg m-4 drop-shadow-2xl bg-linear-to-br from-white to-slate-100';
-
 	if (isLoadingAverage || isLoadingTotal) {
 		return (
-			<div className={wrapperClass}>
+			<div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
 				<TableSkeleton rows={5} columns={8} />
 			</div>
 		);
@@ -61,7 +58,7 @@ const MainTable: React.FC<MainTableProps> = ({ view, location }) => {
 		<StatsTable
 			columns={playerLeagueStatsColumns}
 			groups={groups}
-			footer={{ rows: footerRows, variant: 'gradient' }}
+			footer={{ rows: footerRows, variant: 'default' }}
 		/>
 	);
 };

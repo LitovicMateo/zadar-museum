@@ -227,20 +227,28 @@ export async function aggregatePlayerStats(
   // -- stat columns differ by stats mode
   const isAvg = params.stats === 'average';
 
+  // Per-game averages divide by SUM(b.games), not AVG/COUNT, so that game-less
+  // "aggregate lines" (games = games_played, one row standing in for many games)
+  // are weighted correctly. For regular per-game rows each contributes games = 1,
+  // making SUM(col) / SUM(games) identical to the previous AVG(col).
   const minutesExpr = isAvg
-    ? `ROUND(AVG(b.minutes + (b.seconds / 60.0)), 1)`
+    ? `ROUND(SUM(b.minutes + (b.seconds / 60.0)) / NULLIF(SUM(b.games), 0), 1)`
     : `ROUND(SUM(b.minutes + (b.seconds / 60.0)), 1)`;
 
   const minutesRankExpr = isAvg
-    ? `RANK() OVER (ORDER BY AVG(b.minutes + (b.seconds / 60.0)) DESC NULLS LAST)`
+    ? `RANK() OVER (ORDER BY SUM(b.minutes + (b.seconds / 60.0)) / NULLIF(SUM(b.games), 0) DESC NULLS LAST)`
     : `RANK() OVER (ORDER BY SUM(b.minutes + (b.seconds / 60.0)) DESC NULLS LAST)`;
 
   function statCol(col: string): string {
-    return isAvg ? `ROUND(AVG(b.${col}), 1)` : `SUM(b.${col})`;
+    return isAvg
+      ? `ROUND(SUM(b.${col})::numeric / NULLIF(SUM(b.games), 0), 1)`
+      : `SUM(b.${col})`;
   }
 
   function rankCol(col: string, direction: 'DESC' | 'ASC' = 'DESC'): string {
-    const aggFn = isAvg ? `AVG(b.${col})` : `SUM(b.${col})`;
+    const aggFn = isAvg
+      ? `SUM(b.${col})::numeric / NULLIF(SUM(b.games), 0)`
+      : `SUM(b.${col})`;
     return `RANK() OVER (ORDER BY ${aggFn} ${direction} NULLS LAST)`;
   }
 
@@ -270,8 +278,8 @@ export async function aggregatePlayerStats(
       b.last_name,
       BOOL_OR(b.is_active_player) AS is_active_player,
 
-      COUNT(b.game_id) AS games,
-      RANK() OVER (ORDER BY COUNT(b.game_id) DESC NULLS LAST) AS games_rank,
+      SUM(b.games) AS games,
+      RANK() OVER (ORDER BY SUM(b.games) DESC NULLS LAST) AS games_rank,
       SUM(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) AS games_started,
       RANK() OVER (ORDER BY SUM(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) DESC NULLS LAST) AS games_started_rank,
 
@@ -329,7 +337,7 @@ export async function aggregatePlayerStats(
       ${statCol('efficiency')} AS efficiency,
       ${rankCol('efficiency')} AS efficiency_rank
 
-    FROM player_boxscore b
+    FROM player_boxscore_unified b
     WHERE ${whereSQL}
     GROUP BY b.player_id, b.first_name, b.last_name
   `;

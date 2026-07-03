@@ -1,10 +1,11 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import { useFormContext } from 'react-hook-form';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useVenues } from '@/hooks/queries/venue/UseVenues';
 import { GameFormData } from '@/schemas/GameSchema';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const Venue: React.FC = () => {
 	const { control } = useFormContext<GameFormData>();
@@ -18,19 +19,24 @@ const Venue: React.FC = () => {
 	}));
 
 	return (
-		<Controller
+		<FormField
 			control={control}
-			name={'venue'}
+			name="venue"
 			render={({ field }) => (
-				<Select<OptionType, false>
-					className="rounded-md text-xs text-gray-500"
-					placeholder={'Select venue'}
-					options={venueOptions}
-					value={venueOptions.find((opt) => opt.value === field.value)}
-					onChange={(opt) => field.onChange(opt?.value)}
-					isClearable
-					styles={selectStyle()}
-				/>
+				<FormItem>
+					<FormLabel>Venue</FormLabel>
+					<FormControl>
+						<AppSelect<OptionType, false>
+							placeholder="Select venue"
+							options={venueOptions}
+							value={venueOptions.find((opt) => opt.value === field.value)}
+							onChange={(opt) => field.onChange(opt?.value)}
+							isClearable
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
 			)}
 		/>
 	);

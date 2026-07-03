@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import LeaderRank from '@/components/Stats/UI/LeaderRank';
 import '@/components/UI/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
 import { TeamStatsRanking } from '@/types/api/Team';
@@ -110,11 +111,7 @@ export const useTeamStatsTable = (
 		// get current and previous ranks safely
 		const currentRank = Number(row[rankKey]) || 0;
 
-		return (
-			<div className="w-[3ch]">
-				<span>{currentRank}</span>
-			</div>
-		);
+		return <LeaderRank rank={currentRank} />;
 	};
 
 	const Cell = <TData extends object, TValue>({ info }: { info: CellContext<TData, TValue> }) => {

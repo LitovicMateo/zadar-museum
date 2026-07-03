@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { ALL_COMPETITIONS } from '@/context/GamesUtils';
@@ -22,7 +22,7 @@ const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({ competitions,
 	}, [competitions]);
 
 	return (
-		<Select<OptionType, false>
+		<AppSelect<OptionType, false>
 			value={options.find((o) => o.value === selected) ?? options[0]}
 			options={options}
 			onChange={(opt) => opt && onChange(String(opt.value))}

@@ -3,24 +3,26 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/UI/Input';
 import { RefereeFormData } from '@/schemas/RefereeSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const FirstName: React.FC = () => {
-	const { register } = useFormContext<RefereeFormData>();
-	return (
-		<label>
-			<span className={styles.label}>
-				First Name: <span className={styles.required}>*</span>
-			</span>
-			<Input
-				type="text"
-				placeholder="First Name"
-				{...register('first_name', { required: 'First name is required' })}
-				className="text-gray-500 placeholder:text-xs"
-			/>
-		</label>
-	);
+  const { control } = useFormContext<RefereeFormData>();
+  return (
+    <FormField
+      control={control}
+      name="first_name"
+      rules={{ required: 'First name is required' }}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>First Name <span className="text-destructive text-xs">*</span></FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="First Name" {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default FirstName;

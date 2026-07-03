@@ -1,41 +1,30 @@
 import React from 'react';
-import Select from 'react-select';
 
-import { selectStyle } from '@/constants/ReactSelectStyle';
+import FilterField from '@/components/Stats/UI/FilterField';
+import SegmentedToggle from '@/components/UI/SegmentedToggle/SegmentedToggle';
 
-import Category from '../../Category';
-import Container from '../../Container';
+type StatScope = 'total' | 'average';
 
 type StatsFilterProps = {
-	stats?: 'total' | 'average';
-	setStats?: (stats: 'total' | 'average') => void;
+	stats?: StatScope;
+	setStats?: (stats: StatScope) => void;
 };
 
-const statsOptions: { label: string; value: 'total' | 'average' }[] = [
-	{
-		label: 'Total',
-		value: 'total'
-	},
-	{
-		label: 'Average',
-		value: 'average'
-	}
+const statsOptions: { value: StatScope; label: string }[] = [
+	{ value: 'total', label: 'Total' },
+	{ value: 'average', label: 'Average' }
 ];
 
-const StatsFilter: React.FC<StatsFilterProps> = ({ setStats, stats }) => {
+const StatsFilter: React.FC<StatsFilterProps> = ({ stats = 'total', setStats }) => {
 	return (
-		<Container>
-			<Category>Stats</Category>
-			<Select
-				styles={selectStyle()}
-				value={statsOptions.find((opt) => opt.value === stats)}
-				onChange={(opt) => setStats!((opt?.value as 'total' | 'average') ?? 'total')}
+		<FilterField label="Stats">
+			<SegmentedToggle
+				value={stats}
+				onValueChange={(v) => setStats?.(v)}
 				options={statsOptions}
-				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
-				menuPosition="fixed"
-				menuPlacement="auto"
+				ariaLabel="Total or average filter"
 			/>
-		</Container>
+		</FilterField>
 	);
 };
 

@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import ErrorBoundary from '@/components/UI/ErrorBoundary';
 import FloatingEditButton from '@/components/UI/FloatingEditButton/FloatingEditButton';
-import ProfilePageWrapper from '@/components/UI/ProfilePageWrapper/ProfilePageWrapper';
 import { APP_ROUTES } from '@/constants/Routes';
+import { GamesProvider } from '@/context/GamesContext';
 import { useStaffDetails } from '@/hooks/queries/staff/UseStaffDetails';
 
+import StaffHero from './StaffHero/StaffHero';
 import StaffContent from './StaffContent/StaffContent';
-import StaffHeader from './StaffContent/StaffHeader/StaffHeader';
-
-export type PlayerDB = 'main' | 'opponent';
 
 const StaffPage: React.FC = () => {
 	const { staffId } = useParams();
@@ -26,10 +25,19 @@ const StaffPage: React.FC = () => {
 	if (!staffDetails) return null;
 
 	return (
-		<>
-			<ProfilePageWrapper header={<StaffHeader />} content={<StaffContent />} />
+		<GamesProvider>
+			<div className="h-[calc(100svh-3.5rem)] overflow-y-auto bg-chalk">
+				<ErrorBoundary>
+					<StaffHero />
+				</ErrorBoundary>
+				<main id="staff-content" tabIndex={-1} className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+					<ErrorBoundary>
+						<StaffContent />
+					</ErrorBoundary>
+				</main>
+			</div>
 			<FloatingEditButton to={`${APP_ROUTES.dashboard.staff.edit}${staffId}`} />
-		</>
+		</GamesProvider>
 	);
 };
 

@@ -17,12 +17,12 @@ export const teamStatsListConfig: EntityListConfig<TeamStatsResponse> = {
     {
       header: 'Game',
       cell: (row) => row.game ? `${row.game.home_team_name} vs ${row.game.away_team_name}` : '—',
-      className: 'text-slate-400 text-sm',
+      className: 'text-muted-foreground text-sm',
     },
     {
       header: 'Coach',
       cell: (row) => row.coach ? `${row.coach.first_name} ${row.coach.last_name}` : '—',
-      className: 'text-slate-400',
+      className: 'text-muted-foreground',
     },
   ],
 };

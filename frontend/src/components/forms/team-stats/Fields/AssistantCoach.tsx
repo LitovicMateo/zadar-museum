@@ -1,10 +1,11 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import { useFormContext } from 'react-hook-form';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { useCoaches } from '@/hooks/queries/coach/UseCoaches';
 import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const AssistantCoach: React.FC = () => {
 	const { watch, control, setValue } = useFormContext<TeamStatsFormData>();
@@ -29,21 +30,27 @@ const AssistantCoach: React.FC = () => {
 			})) || [];
 
 	return (
-		<Controller
-			name="assistantCoachId"
+		<FormField
 			control={control}
+			name="assistantCoachId"
 			render={({ field }) => (
-				<Select
-					name={field.name}
-					onBlur={field.onBlur}
-					onChange={(selected) => field.onChange(selected ? selected.value : '')}
-					value={assistantOptions.find((option) => option.value === field.value) ?? null}
-					isDisabled={!headCoach || !game}
-					isClearable
-					placeholder="Select Assistant Coach"
-					options={assistantOptions}
-					styles={selectStyle()}
-				/>
+				<FormItem>
+					<FormLabel>Assistant Coach</FormLabel>
+					<FormControl>
+						<AppSelect
+							name={field.name}
+							onBlur={field.onBlur}
+							onChange={(selected) => field.onChange(selected ? selected.value : '')}
+							value={assistantOptions.find((option) => option.value === field.value) ?? null}
+							isDisabled={!headCoach || !game}
+							isClearable
+							placeholder="Select Assistant Coach"
+							options={assistantOptions}
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
 			)}
 		/>
 	);

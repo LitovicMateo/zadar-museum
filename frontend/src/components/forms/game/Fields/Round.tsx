@@ -1,68 +1,70 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import { useFormContext } from 'react-hook-form';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { Input } from '@/components/UI/Input';
 import { selectStyle, OptionType } from '@/constants/ReactSelectStyle';
 import { GameFormData } from '@/schemas/GameSchema';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const playoffRounds: OptionType[] = [
-	{ label: 'Round of 64', value: 'R64' },
-	{ label: 'Round of 32', value: 'R32' },
-	{ label: 'Round of 16', value: 'R16' },
-	{ label: 'Quarter-finals', value: 'QF' },
-	{ label: 'Semi-finals', value: 'SF' },
-	{ label: 'Third place', value: '3RD' },
-	{ label: 'Final', value: 'F' }
+  { label: 'Round of 64', value: 'R64' },
+  { label: 'Round of 32', value: 'R32' },
+  { label: 'Round of 16', value: 'R16' },
+  { label: 'Quarter-finals', value: 'QF' },
+  { label: 'Semi-finals', value: 'SF' },
+  { label: 'Third place', value: '3RD' },
+  { label: 'Final', value: 'F' },
 ];
 
 const Round: React.FC = () => {
-	const { register, watch, control } = useFormContext<GameFormData>();
+  const { control, watch } = useFormContext<GameFormData>();
 
-	const stage = watch('stage');
+  const stage = watch('stage');
 
-	if (!stage) return null;
+  if (!stage) return null;
 
-	if (stage === 'league') {
-		return (
-			<Input
-				className="text-gray-700 placeholder:text-xs placeholder:text-gray-400"
-				type="text"
-				{...register('round', { required: 'Round is required' })}
-				placeholder="Round (e.g. 1, 2, etc.)"
-			/>
-		);
-	}
+  if (stage === 'playoff') {
+    return (
+      <FormField
+        control={control}
+        name="round"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Round</FormLabel>
+            <FormControl>
+              <AppSelect<OptionType, false>
+                placeholder="Select round"
+                options={playoffRounds}
+                value={playoffRounds.find((opt) => opt.value === field.value) ?? null}
+                onChange={(opt) => field.onChange(opt?.value)}
+                isClearable
+                styles={selectStyle()}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    );
+  }
 
-	if (stage === 'playoff') {
-		return (
-			<Controller
-				control={control}
-				name={'round'}
-				render={({ field }) => (
-					<Select<OptionType, false>
-						className="rounded-md text-xs text-gray-500"
-						placeholder={'Select round'}
-						options={playoffRounds}
-						value={playoffRounds.find((opt) => opt.value === field.value)}
-						onChange={(opt) => field.onChange(opt?.value)}
-						isClearable
-						styles={selectStyle()}
-					/>
-				)}
-			/>
-		);
-	}
-
-	// default to 'group' — round number within the group
-	return (
-		<Input
-			className="text-gray-700 placeholder:text-xs placeholder:text-gray-400"
-			type="text"
-			{...register('round', { required: 'Round is required' })}
-			placeholder="Round (e.g. 1, 2, etc.)"
-		/>
-	);
+  return (
+    <FormField
+      control={control}
+      name="round"
+      rules={{ required: 'Round is required' }}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Round <span className="text-destructive text-xs">*</span></FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="Round (e.g. 1, 2, etc.)" {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default Round;

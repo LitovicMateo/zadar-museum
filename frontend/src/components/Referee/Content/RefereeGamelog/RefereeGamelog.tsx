@@ -8,8 +8,6 @@ import { useRefereeGamelog } from '@/hooks/queries/referee/UseRefereeGamelog';
 import { useRefereeSeasons } from '@/hooks/queries/referee/UseRefereeSeasons';
 import { useScheduleFilters, useSeasonState } from '@/hooks/UseScheduleFilters';
 
-import styles from './RefereeGamelog.module.css';
-
 const RefereeGamelog: React.FC = () => {
 	const { refereeId } = useParams();
 
@@ -22,19 +20,15 @@ const RefereeGamelog: React.FC = () => {
 	if (refereeGamelog === undefined || !seasons) return null;
 
 	return (
-		<section className={styles.section}>
-			<div className={styles.topFilters}>
-				<ScheduleControls
-					seasons={seasons}
-					selectedSeason={selectedSeason}
-					setSelectedSeason={setSelectedSeason}
-					{...filters}
-				/>
-			</div>
+		<section className="space-y-4">
+			<ScheduleControls
+				seasons={seasons}
+				selectedSeason={selectedSeason}
+				setSelectedSeason={setSelectedSeason}
+				{...filters}
+			/>
 			<DynamicContentWrapper>
-				<div className={styles.gamelogCard}>
-					<ScheduleList schedule={filters.filteredGames} />
-				</div>
+				<ScheduleList schedule={filters.filteredGames} />
 			</DynamicContentWrapper>
 		</section>
 	);

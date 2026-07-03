@@ -8,8 +8,8 @@ COMPOSE_FILE="docker-compose.prod.yml"
 ENV_FILE=".env.prod"
 PG_SERVICE="postgres"
 BACKEND_SERVICE="backend"
-DB_USER="strapi"
-DB_NAME="strapi"
+DB_USER=""
+DB_NAME=""
 OUTPUT_DIR="backups/prod"
 RETENTION=15
 UPLOADS_PATH="/app/public/uploads"
@@ -56,6 +56,16 @@ fi
 if [ -z "$DB_PASSWORD" ] && [ -n "${DATABASE_PASSWORD:-}" ]; then
   DB_PASSWORD="$DATABASE_PASSWORD"
 fi
+
+# Resolve DB user/name: CLI flags win, else read from the env file, else default to 'strapi'
+if [ -z "$DB_USER" ] && [ -f "$ENV_FILE" ]; then
+  DB_USER=$(grep -E '^(POSTGRES_USER|DATABASE_USERNAME)=' "$ENV_FILE" | head -n1 | sed -E 's/^[^=]+=//') || true
+fi
+if [ -z "$DB_NAME" ] && [ -f "$ENV_FILE" ]; then
+  DB_NAME=$(grep -E '^(POSTGRES_DB|DATABASE_NAME)=' "$ENV_FILE" | head -n1 | sed -E 's/^[^=]+=//') || true
+fi
+DB_USER="${DB_USER:-strapi}"
+DB_NAME="${DB_NAME:-strapi}"
 
 mkdir -p "$OUTPUT_DIR"
 TS=$(date +%Y%m%d_%H%M%S)

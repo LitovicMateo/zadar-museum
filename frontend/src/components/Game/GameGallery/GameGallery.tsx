@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Heading from '@/components/UI/Heading';
 import { useGameDetails } from '@/hooks/queries/game/UseGameDetails';
 
+import SectionHeading from '../SectionHeading';
 import GalleryGrid from './GalleryGrid';
 import GalleryLightbox from './GalleryLightbox';
 
@@ -18,7 +18,7 @@ const GameGallery: React.FC = () => {
 
 	return (
 		<section className="my-8">
-			<Heading title="Gallery" />
+			<SectionHeading title="Gallery" />
 			<GalleryGrid items={images} onSelect={setSelectedIndex} />
 			<GalleryLightbox
 				items={images}

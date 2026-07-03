@@ -9,8 +9,6 @@ import { usePlayerGamelogTable } from '@/hooks/UsePlayerGamelogTable';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { usePlayerBoxscore } from '@/hooks/queries/player/UsePlayerBoxscore';
 
-import styles from './Boxscore.module.css';
-
 const Boxscore: React.FC = () => {
 	const { playerId } = useParams();
 	const { season, selectedCompetitions } = useBoxscore();
@@ -28,7 +26,7 @@ const Boxscore: React.FC = () => {
 	if (isLoading) return <TableSkeleton rows={5} columns={8} />;
 
 	if (filteredGames.length === 0) {
-		return <div className={styles.emptyState}>No competitions selected.</div>;
+		return <div className="w-full py-4 text-center text-lg text-muted-foreground">No competitions selected.</div>;
 	}
 
 	return (

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import SeasonSelect from '@/components/Games/GamesFilter/SeasonSelect';
 import NoContent from '@/components/NoContent/NoContent';
@@ -12,8 +12,6 @@ import { useVenuePlayerRecords } from '@/hooks/queries/venue/UseVenuePlayerRecor
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
 
 import { playerRecordOptions } from './Options';
-
-import styles from './VenuePlayerRecords.module.css';
 
 type Option = { value: string; label: string };
 
@@ -33,9 +31,9 @@ const VenuePlayerRecords = () => {
 	}));
 
 	return (
-		<section className={styles.section}>
-			<div className={styles.filters}>
-				<Select<Option>
+		<section className="space-y-4">
+			<div className="flex flex-wrap items-center gap-3">
+				<AppSelect<Option>
 					options={playerRecordOptions as unknown as Option[]}
 					value={playerRecordOptions.find((o) => o.value === statKey) as unknown as Option}
 					onChange={(opt) => opt && setStatKey(opt.value)}

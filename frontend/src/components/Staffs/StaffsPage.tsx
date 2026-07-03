@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import NoContent from '@/components/NoContent/NoContent';
 import PaginationControls from '@/components/Pagination/PaginationControls';
@@ -7,7 +6,6 @@ import StaffCard from '@/components/Staffs/StaffCard/StaffCard';
 import StaffFilterBar from '@/components/Staffs/StaffFilterBar/StaffFilterBar';
 import DynamicContentWrapper, { DynamicContentWrapperHandle } from '@/components/UI/DynamicContentWrapper';
 import { Skeleton } from '@/components/UI/Skeleton';
-import { APP_ROUTES } from '@/constants/Routes';
 import usePagedSortedList from '@/hooks/UsePagedSortedList';
 import { useSearch } from '@/hooks/UseSearch';
 import { useStaffs } from '@/hooks/queries/staff/UseStaffs';
@@ -37,16 +35,23 @@ const StaffsPage: React.FC = () => {
 	if (isLoading) {
 		return (
 			<div className={styles.page}>
-				<StaffFilterBar SearchInput={SearchInput} />
-				<DynamicContentWrapper>
-					<div className={styles.layout}>
-						<div className={styles.loadingGrid}>
-							{Array.from({ length: 8 }).map((_, i) => (
-								<Skeleton key={i} className={styles.skeletonCard} />
-							))}
-						</div>
+				<div className={styles.pageHeader}>
+					<div className={styles.pageHeaderInner}>
+						<h1 className={styles.pageTitle}>Staff</h1>
 					</div>
-				</DynamicContentWrapper>
+				</div>
+				<div className={styles.contentWrap}>
+					<StaffFilterBar SearchInput={SearchInput} />
+					<DynamicContentWrapper>
+						<div className={styles.layout}>
+							<div className={styles.loadingGrid}>
+								{Array.from({ length: 8 }).map((_, i) => (
+									<Skeleton key={i} className={styles.skeletonCard} />
+								))}
+							</div>
+						</div>
+					</DynamicContentWrapper>
+				</div>
 			</div>
 		);
 	}
@@ -59,37 +64,40 @@ const StaffsPage: React.FC = () => {
 
 	return (
 		<div className={styles.page}>
-			<StaffFilterBar SearchInput={SearchInput} />
-			<DynamicContentWrapper ref={wrapperRef}>
-				<div className={styles.layout}>
-					{hasResults ? (
-						<>
-							<div className={styles.grid}>
-								{paginated.map((staff) => (
-									<Link
-										to={APP_ROUTES.staff(staff.documentId)}
-										key={staff.id}
-										className={styles.cardLink}
-									>
-										<StaffCard staff={staff} />
-									</Link>
-								))}
-							</div>
-							<PaginationControls
-								page={page}
-								pageSize={pageSize}
-								total={total}
-								onPageChange={setPage}
-								onPageSizeChange={setPageSize}
-							/>
-						</>
-					) : (
-						<div className={styles.noResults}>
-							<NoContent type="info" description="No staff match the current filters." />
-						</div>
-					)}
+			<div className={styles.pageHeader}>
+				<div className={styles.pageHeaderInner}>
+					<h1 className={styles.pageTitle}>Staff</h1>
+					<span className={styles.staffCount}>{staffs.length} total</span>
 				</div>
-			</DynamicContentWrapper>
+			</div>
+
+			<div className={styles.contentWrap}>
+				<StaffFilterBar SearchInput={SearchInput} />
+				<DynamicContentWrapper ref={wrapperRef}>
+					<div className={styles.layout}>
+						{hasResults ? (
+							<>
+								<div className={styles.grid}>
+									{paginated.map((staff) => (
+										<StaffCard key={staff.id} staff={staff} />
+									))}
+								</div>
+								<PaginationControls
+									page={page}
+									pageSize={pageSize}
+									total={total}
+									onPageChange={setPage}
+									onPageSizeChange={setPageSize}
+								/>
+							</>
+						) : (
+							<div className={styles.noResults}>
+								<NoContent type="info" description="No staff match the current filters." />
+							</div>
+						)}
+					</div>
+				</DynamicContentWrapper>
+			</div>
 		</div>
 	);
 };

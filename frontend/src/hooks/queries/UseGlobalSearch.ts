@@ -1,4 +1,5 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData } from '@tanstack/react-query';
+import { useQuery } from '@/hooks/UseQueryWithToast';
 
 import apiClient from '@/lib/ApiClient';
 import { API_ROUTES } from '@/constants/Routes';

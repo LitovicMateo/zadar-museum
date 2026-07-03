@@ -244,10 +244,12 @@ export type TeamStatsRanking = {
 
 export interface TeamPlayerRecord {
 	game_id: string;
+	player_id: string;
 	first_name: string;
 	last_name: string;
 	season: string;
 	stat_value: number;
+	image_url: string | null;
 }
 
 export interface TeamTeamRecord {

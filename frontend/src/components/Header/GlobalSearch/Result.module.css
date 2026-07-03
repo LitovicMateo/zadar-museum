@@ -9,9 +9,9 @@
 	text-decoration: none;
 }
 .itemActive {
-	background-color: #eff6ff;
+	background-color: oklch(from var(--court) calc(l + 0.08) c h);
 	border-radius: 0.125rem;
 }
 .itemActive a {
-	color: #1d4ed8;
+	color: var(--record);
 }

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -12,9 +12,11 @@ type SeasonPagerProps = {
 	selectedSeason: string;
 	onSeasonChange: (season: string) => void;
 	isPending?: boolean;
+	/** Render smaller controls (32px height, narrower select). */
+	compact?: boolean;
 };
 
-const SeasonPager: React.FC<SeasonPagerProps> = ({ seasons, selectedSeason, onSeasonChange, isPending }) => {
+const SeasonPager: React.FC<SeasonPagerProps> = ({ seasons, selectedSeason, onSeasonChange, isPending, compact }) => {
 	const options: OptionType[] = useMemo(() => seasons.map((s) => ({ value: s, label: s })), [seasons]);
 	const index = seasons.indexOf(selectedSeason);
 
@@ -24,7 +26,8 @@ const SeasonPager: React.FC<SeasonPagerProps> = ({ seasons, selectedSeason, onSe
 
 	const arrowClass = (disabled: boolean) =>
 		cn(
-			'flex h-10 w-10 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors',
+			'flex items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors',
+			compact ? 'h-8 w-8' : 'h-10 w-10',
 			disabled ? 'cursor-not-allowed opacity-40' : 'hover:bg-accent hover:text-foreground'
 		);
 
@@ -40,13 +43,13 @@ const SeasonPager: React.FC<SeasonPagerProps> = ({ seasons, selectedSeason, onSe
 				onClick={() => !olderDisabled && onSeasonChange(seasons[index + 1])}
 				className={arrowClass(olderDisabled)}
 			>
-				<ChevronLeft size={18} />
+				<ChevronLeft size={compact ? 15 : 18} />
 			</button>
-			<Select<OptionType, false>
+			<AppSelect<OptionType, false>
 				value={options.find((o) => o.value === selectedSeason) ?? null}
 				options={options}
 				onChange={(opt) => opt && onSeasonChange(String(opt.value))}
-				styles={selectStyle('140px')}
+				styles={selectStyle(compact ? '110px' : '140px', compact ? '32px' : '40px')}
 				isSearchable={false}
 				placeholder="Season"
 				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
@@ -60,7 +63,7 @@ const SeasonPager: React.FC<SeasonPagerProps> = ({ seasons, selectedSeason, onSe
 				onClick={() => !newerDisabled && onSeasonChange(seasons[index - 1])}
 				className={arrowClass(newerDisabled)}
 			>
-				<ChevronRight size={18} />
+				<ChevronRight size={compact ? 15 : 18} />
 			</button>
 		</div>
 	);

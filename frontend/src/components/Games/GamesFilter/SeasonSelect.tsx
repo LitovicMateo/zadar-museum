@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Select from 'react-select';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { useSeasonTransition } from '@/hooks/UseSeasonTransition';
@@ -17,6 +17,7 @@ type SeasonSelectProps = {
 	onSeasonChange?: (season: string) => void;
 	compact?: boolean;
 	showAll?: boolean;
+	fullWidth?: boolean;
 };
 
 const SeasonSelect: React.FC<SeasonSelectProps> = ({
@@ -24,7 +25,8 @@ const SeasonSelect: React.FC<SeasonSelectProps> = ({
 	selectedSeason,
 	onSeasonChange,
 	compact = false,
-	showAll = false
+	showAll = false,
+	fullWidth = false
 }) => {
 	const { selectSeason, isPending } = useSeasonTransition(onSeasonChange ?? (() => {}));
 
@@ -50,10 +52,10 @@ const SeasonSelect: React.FC<SeasonSelectProps> = ({
 	if (compact) {
 		return (
 			<div
-				className={styles.wrapperCompact}
+				className={fullWidth ? 'w-full' : styles.wrapperCompact}
 				style={{ opacity: isPending ? 0.6 : 1, transition: 'opacity 0.15s ease' }}
 			>
-				<Select<SeasonOption, false> {...selectProps} styles={selectStyle('160px ')} />
+				<AppSelect<SeasonOption, false> {...selectProps} styles={selectStyle(fullWidth ? '100%' : '160px ')} />
 			</div>
 		);
 	}
@@ -61,7 +63,7 @@ const SeasonSelect: React.FC<SeasonSelectProps> = ({
 	return (
 		<div className={styles.wrapper} style={{ opacity: isPending ? 0.6 : 1, transition: 'opacity 0.15s ease' }}>
 			<label className={styles.label}>Season</label>
-			<Select<SeasonOption, false> {...selectProps} styles={selectStyle('180px')} />
+			<AppSelect<SeasonOption, false> {...selectProps} styles={selectStyle('180px')} />
 		</div>
 	);
 };

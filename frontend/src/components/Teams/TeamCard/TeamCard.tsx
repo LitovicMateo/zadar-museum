@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Shield, Star } from 'lucide-react';
 import Flag from 'react-world-flags';
 
 import { APP_ROUTES } from '@/constants/Routes';
 import { TeamDirectoryEntry } from '@/types/api/Team';
 import { getImageUrl } from '@/utils/GetImageUrl';
-import { Shield, Star } from 'lucide-react';
 
 import styles from './TeamCard.module.css';
 
@@ -18,41 +18,46 @@ const TeamCard: React.FC<TeamCardProps> = ({ team }) => {
 	const hasImage = !!imageUrl && !imageUrl.includes('undefined');
 
 	return (
-		<Link to={APP_ROUTES.team(team.slug)} className={styles.card}>
-			<div className={styles.imageWrapper}>
-				{hasImage ? (
-					<img src={imageUrl} alt={team.name} className={styles.image} loading="lazy" />
-				) : (
-					<Shield size={64} color="var(--muted-foreground)" strokeWidth={1} />
-				)}
-				{team.nation && <Flag className={styles.flagBadge} code={team.nation} aria-label={team.nation} />}
-				{team.isMainTeam && (
-					<div className={styles.mainTeamBadge} aria-label="Main team" title="Main team">
-						<Star size={14} fill="currentColor" />
-					</div>
-				)}
-			</div>
+		<Link to={APP_ROUTES.team(team.slug)} className={styles.cardLink}>
+			<div className={styles.card}>
+				<div className={styles.imageWrapper}>
+					{hasImage ? (
+						<img src={imageUrl} alt={team.name} className={styles.image} loading="lazy" />
+					) : (
+						<div className={styles.placeholder}>
+							<Shield size={52} strokeWidth={1} opacity={0.4} />
+						</div>
+					)}
 
-			<div className={styles.body}>
-				<div className={styles.name}>{team.name}</div>
+					{team.nation && (
+						<Flag className={styles.flagBadge} code={team.nation} aria-label={team.nation} />
+					)}
 
-				<div className={styles.stats}>
-					<div className={styles.stat}>
-						<span className={styles.statLabel}>G</span>
-						<span className={styles.statValue}>{team.games ?? '-'}</span>
-					</div>
-					<div className={styles.stat}>
-						<span className={styles.statLabel}>W</span>
-						<span className={styles.statValue}>{team.wins ?? '-'}</span>
-					</div>
-					<div className={styles.stat}>
-						<span className={styles.statLabel}>L</span>
-						<span className={styles.statValue}>{team.losses ?? '-'}</span>
-					</div>
-					<div className={styles.stat}>
-						<span className={styles.statLabel}>%</span>
-						<span className={styles.statValue}>{team.win_percentage ?? '-'}</span>
-					</div>
+					{team.isMainTeam && (
+						<div className={styles.mainTeamBadge} aria-label="Main team" title="Main team">
+							<Star size={10} fill="currentColor" />
+						</div>
+					)}
+				</div>
+
+				<div className={styles.body}>
+					<p className={styles.name}>{team.name}</p>
+				</div>
+
+				<div className={styles.statsStrip}>
+					{(
+						[
+							{ label: 'G', value: team.games },
+							{ label: 'W', value: team.wins },
+							{ label: 'L', value: team.losses },
+							{ label: '%', value: team.win_percentage },
+						] as const
+					).map(({ label, value }) => (
+						<div key={label} className={styles.stat}>
+							<span className={styles.statLabel}>{label}</span>
+							<span className={styles.statValue}>{value ?? '–'}</span>
+						</div>
+					))}
 				</div>
 			</div>
 		</Link>

@@ -18,19 +18,19 @@ export const teamListConfig: EntityListConfig<TeamDetailsResponse> = {
         <div className="flex items-center gap-2">
           {row.image?.url
             ? <img src={row.image.url} className="w-7 h-7 rounded object-cover flex-shrink-0" alt="" />
-            : <div className="w-7 h-7 rounded bg-slate-700 flex-shrink-0" />}
+            : <div className="w-7 h-7 rounded bg-muted flex-shrink-0" />}
           <span className="font-medium">{row.name}</span>
         </div>
       ),
     },
-    { header: 'Short', cell: (row) => row.short_name ?? '—', className: 'text-slate-400' },
-    { header: 'City', cell: (row) => row.city ?? '—', className: 'text-slate-400' },
+    { header: 'Short', cell: (row) => row.short_name ?? '—', className: 'text-muted-foreground' },
+    { header: 'City', cell: (row) => row.city ?? '—', className: 'text-muted-foreground' },
     {
       header: 'Main team',
       cell: (row) => row.isMainTeam
         ? <span className="text-xs font-medium px-2 py-0.5 rounded bg-blue-900/60 text-blue-200">Main</span>
         : null,
     },
-    { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-slate-400 text-sm' },
+    { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-muted-foreground text-sm' },
   ],
 };

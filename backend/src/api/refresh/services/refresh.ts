@@ -2,8 +2,8 @@
  * Refresh service
  *
  * Refreshes the 4 Layer 1 base materialized views concurrently in parallel,
- * then flushes the Redis cache so aggregated stats are recomputed on the next
- * request. See src/utils/cache.ts.
+ * then the dependent player_boxscore_unified view, then flushes the Redis cache
+ * so aggregated stats are recomputed on the next request. See src/utils/cache.ts.
  *
  * Layer 1 MVs have unique indexes (added in Stage 1) which are required for
  * REFRESH MATERIALIZED VIEW CONCURRENTLY. They have no inter-dependencies that
@@ -30,9 +30,14 @@ async function refreshView(knex: any, view: string): Promise<void> {
   try {
     await knex.raw(`REFRESH MATERIALIZED VIEW CONCURRENTLY ${view}`);
   } catch (err: any) {
-    if (err?.message?.includes('unique') || err?.message?.includes('duplicate')) {
+    const msg: string = err?.message ?? '';
+    // CONCURRENTLY requires a unique index on the MV. It fails when the view has
+    // no unique index ("...cannot refresh ... concurrently") or when duplicate
+    // source rows break that index ("...unique"/"duplicate"). In every such case
+    // fall back to a plain (blocking) refresh instead of failing the whole request.
+    if (msg.includes('concurrently') || msg.includes('unique') || msg.includes('duplicate')) {
       strapi.log.warn(
-        `[refresh] CONCURRENT refresh failed for "${view}" (duplicate key); falling back to non-concurrent.`
+        `[refresh] CONCURRENT refresh not possible for "${view}"; falling back to non-concurrent.`
       );
       await knex.raw(`REFRESH MATERIALIZED VIEW ${view}`);
     } else {
@@ -54,8 +59,15 @@ const refreshService = {
       LAYER_1_VIEWS.map((view) => refreshView(knex, view))
     );
 
+    // player_boxscore_unified reads FROM player_boxscore, so it must be refreshed
+    // AFTER the base views above. It has no unique index (aggregate lines have a
+    // NULL game_id), so it can only be refreshed non-concurrently.
+    await knex.raw('REFRESH MATERIALIZED VIEW public.player_boxscore_unified');
+
     await flushCache();
-    return { count: LAYER_1_VIEWS.length, refreshedViews: [...LAYER_1_VIEWS] };
+
+    const refreshedViews = [...LAYER_1_VIEWS, 'player_boxscore_unified'];
+    return { count: refreshedViews.length, refreshedViews };
   },
 
   /**

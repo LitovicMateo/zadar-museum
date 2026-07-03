@@ -8,7 +8,7 @@ const Captain: React.FC = () => {
 	const { register, setValue, watch } = useFormContext<PlayerStatsFormData>();
 	const player = watch('playerId');
 	return (
-		<label htmlFor="captain" className="flex gap-2 items-center">
+		<label htmlFor="captain" className="flex gap-2 items-center h-full">
 			<Input
 				type="checkbox"
 				{...register('isCaptain')}

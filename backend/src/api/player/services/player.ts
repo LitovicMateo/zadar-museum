@@ -87,15 +87,19 @@ export default factories.createCoreService(
             const isAvg = mode === "average";
 
             const minutesExpr = isAvg
-              ? `ROUND(AVG(b.minutes + (b.seconds / 60.0)), 1)`
+              ? `ROUND(SUM(b.minutes + (b.seconds / 60.0)) / NULLIF(SUM(b.games), 0), 1)`
               : `SUM(b.minutes + (b.seconds / 60.0))`;
 
             function statCol(col: string): string {
-              return isAvg ? `ROUND(AVG(b.${col}), 1)` : `SUM(b.${col})`;
+              return isAvg
+                ? `ROUND(SUM(b.${col})::numeric / NULLIF(SUM(b.games), 0), 1)`
+                : `SUM(b.${col})`;
             }
 
             function rankCol(col: string): string {
-              const aggFn = isAvg ? `AVG(b.${col})` : `SUM(b.${col})`;
+              const aggFn = isAvg
+                ? `SUM(b.${col})::numeric / NULLIF(SUM(b.games), 0)`
+                : `SUM(b.${col})`;
               return `RANK() OVER (PARTITION BY b.league_id ORDER BY ${aggFn} DESC NULLS LAST)`;
             }
 
@@ -131,8 +135,8 @@ export default factories.createCoreService(
                 b.last_name,
                 BOOL_OR(b.is_active_player) AS is_active_player,
 
-                COUNT(b.game_id) AS games,
-                RANK() OVER (PARTITION BY b.league_id ORDER BY COUNT(b.game_id) DESC NULLS LAST) AS games_rank,
+                SUM(b.games) AS games,
+                RANK() OVER (PARTITION BY b.league_id ORDER BY SUM(b.games) DESC NULLS LAST) AS games_rank,
                 SUM(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) AS games_started,
                 RANK() OVER (PARTITION BY b.league_id ORDER BY SUM(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) DESC NULLS LAST) AS games_started_rank,
 
@@ -190,7 +194,7 @@ export default factories.createCoreService(
                 ${statCol("efficiency")} AS efficiency,
                 ${rankCol("efficiency")} AS efficiency_rank
 
-              FROM player_boxscore b
+              FROM player_boxscore_unified b
               WHERE
                 b.player_id = :playerId
                 AND ${teamClause}
@@ -367,13 +371,13 @@ export default factories.createCoreService(
           const mainTeamSlug = await getMainTeamSlug();
 
           if (validatedDatabase === "main") {
-            return knex("player_boxscore")
+            return knex("player_boxscore_unified")
               .distinct("season")
               .where("player_id", playerId)
               .andWhere("team_slug", mainTeamSlug);
           }
 
-          return knex("player_boxscore")
+          return knex("player_boxscore_unified")
             .distinct("season")
             .where("player_id", playerId)
             .andWhereNot("team_slug", mainTeamSlug);
@@ -392,7 +396,7 @@ export default factories.createCoreService(
         TTL_1H,
         () => {
           const knex = strapi.db.connection;
-          return knex("player_boxscore")
+          return knex("player_boxscore_unified")
             .select(
               "league_id",
               "league_name",
@@ -564,6 +568,19 @@ export default factories.createCoreService(
 
           // Returns one row per league (same structure as the Layer 2 MV
           // main_player_season_average_all_time_league, grouped by league_id).
+          // Per-game averages are weighted as SUM(col) / SUM(b.games) so game-less
+          // aggregate lines (games = games_played) are included, matching
+          // aggregatePlayerStats. Games are SUM(b.games), not COUNT(game_id).
+          const partition = "PARTITION BY b.league_id, b.season";
+          const avgCol = (col: string) =>
+            `ROUND(SUM(b.${col})::numeric / NULLIF(SUM(b.games), 0), 1)`;
+          const avgRankCol = (col: string) =>
+            `RANK() OVER (${partition} ORDER BY SUM(b.${col})::numeric / NULLIF(SUM(b.games), 0) DESC NULLS LAST)`;
+          const pctCol = (made: string, att: string) =>
+            `CASE WHEN SUM(b.${att}) = 0 THEN 0 ELSE ROUND(SUM(b.${made})::numeric / NULLIF(SUM(b.${att}), 0) * 100, 1) END`;
+          const pctRankCol = (made: string, att: string) =>
+            `RANK() OVER (${partition} ORDER BY (CASE WHEN SUM(b.${att}) = 0 THEN 0 ELSE ROUND(SUM(b.${made})::numeric / NULLIF(SUM(b.${att}), 0) * 100, 1) END) DESC NULLS LAST)`;
+
           const buildSeasonLeagueSql = (phaseSql: string | null) => `
             SELECT
               b.player_id,
@@ -573,70 +590,64 @@ export default factories.createCoreService(
               b.last_name,
               b.season,
 
-              COUNT(b.game_id) AS games,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY COUNT(b.game_id) DESC NULLS LAST) AS games_rank,
+              SUM(b.games) AS games,
+              RANK() OVER (${partition} ORDER BY SUM(b.games) DESC NULLS LAST) AS games_rank,
               SUM(CASE WHEN b.status::text = 'starter'::text THEN 1 ELSE 0 END) AS games_started,
 
-              ROUND(AVG(b.minutes + (b.seconds / 60.0)), 1) AS minutes,
+              ROUND(SUM(b.minutes + (b.seconds / 60.0)) / NULLIF(SUM(b.games), 0), 1) AS minutes,
 
-              ROUND(AVG(b.points), 1) AS points,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.points) DESC NULLS LAST) AS points_rank,
+              ${avgCol("points")} AS points,
+              ${avgRankCol("points")} AS points_rank,
 
-              ROUND(AVG(b.assists), 1) AS assists,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.assists) DESC NULLS LAST) AS assists_rank,
+              ${avgCol("assists")} AS assists,
+              ${avgRankCol("assists")} AS assists_rank,
 
-              ROUND(AVG(b.offensive_rebounds), 1) AS off_rebounds,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.offensive_rebounds) DESC NULLS LAST) AS off_rebounds_rank,
+              ${avgCol("offensive_rebounds")} AS off_rebounds,
+              ${avgRankCol("offensive_rebounds")} AS off_rebounds_rank,
 
-              ROUND(AVG(b.defensive_rebounds), 1) AS def_rebounds,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.defensive_rebounds) DESC NULLS LAST) AS def_rebounds_rank,
+              ${avgCol("defensive_rebounds")} AS def_rebounds,
+              ${avgRankCol("defensive_rebounds")} AS def_rebounds_rank,
 
-              ROUND(AVG(b.rebounds), 1) AS rebounds,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.rebounds) DESC NULLS LAST) AS rebounds_rank,
+              ${avgCol("rebounds")} AS rebounds,
+              ${avgRankCol("rebounds")} AS rebounds_rank,
 
-              ROUND(AVG(b.steals), 1) AS steals,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.steals) DESC NULLS LAST) AS steals_rank,
+              ${avgCol("steals")} AS steals,
+              ${avgRankCol("steals")} AS steals_rank,
 
-              ROUND(AVG(b.blocks), 1) AS blocks,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.blocks) DESC NULLS LAST) AS blocks_rank,
+              ${avgCol("blocks")} AS blocks,
+              ${avgRankCol("blocks")} AS blocks_rank,
 
-              ROUND(AVG(b.field_goals_made), 1) AS field_goals_made,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.field_goals_made) DESC NULLS LAST) AS field_goals_made_rank,
+              ${avgCol("field_goals_made")} AS field_goals_made,
+              ${avgRankCol("field_goals_made")} AS field_goals_made_rank,
 
-              ROUND(AVG(b.field_goals_attempted), 1) AS field_goals_attempted,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.field_goals_attempted) DESC NULLS LAST) AS field_goals_attempted_rank,
+              ${avgCol("field_goals_attempted")} AS field_goals_attempted,
+              ${avgRankCol("field_goals_attempted")} AS field_goals_attempted_rank,
 
-              CASE WHEN AVG(b.field_goals_attempted) = 0 THEN 0
-                ELSE ROUND(AVG(b.field_goals_made) / NULLIF(AVG(b.field_goals_attempted), 0) * 100, 1)
-              END AS field_goal_percentage,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY CASE WHEN AVG(b.field_goals_attempted) = 0 THEN 0 ELSE ROUND(AVG(b.field_goals_made) / NULLIF(AVG(b.field_goals_attempted), 0) * 100, 1) END DESC NULLS LAST) AS field_goal_percentage_rank,
+              ${pctCol("field_goals_made", "field_goals_attempted")} AS field_goal_percentage,
+              ${pctRankCol("field_goals_made", "field_goals_attempted")} AS field_goal_percentage_rank,
 
-              ROUND(AVG(b.three_pointers_made), 1) AS three_pointers_made,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.three_pointers_made) DESC NULLS LAST) AS three_pointers_made_rank,
+              ${avgCol("three_pointers_made")} AS three_pointers_made,
+              ${avgRankCol("three_pointers_made")} AS three_pointers_made_rank,
 
-              ROUND(AVG(b.three_pointers_attempted), 1) AS three_pointers_attempted,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.three_pointers_attempted) DESC NULLS LAST) AS three_pointers_attempted_rank,
+              ${avgCol("three_pointers_attempted")} AS three_pointers_attempted,
+              ${avgRankCol("three_pointers_attempted")} AS three_pointers_attempted_rank,
 
-              CASE WHEN AVG(b.three_pointers_attempted) = 0 THEN 0
-                ELSE ROUND(AVG(b.three_pointers_made) / NULLIF(AVG(b.three_pointers_attempted), 0) * 100, 1)
-              END AS three_point_percentage,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY CASE WHEN AVG(b.three_pointers_attempted) = 0 THEN 0 ELSE ROUND(AVG(b.three_pointers_made) / NULLIF(AVG(b.three_pointers_attempted), 0) * 100, 1) END DESC NULLS LAST) AS three_point_percentage_rank,
+              ${pctCol("three_pointers_made", "three_pointers_attempted")} AS three_point_percentage,
+              ${pctRankCol("three_pointers_made", "three_pointers_attempted")} AS three_point_percentage_rank,
 
-              ROUND(AVG(b.free_throws_made), 1) AS free_throws_made,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.free_throws_made) DESC NULLS LAST) AS free_throws_made_rank,
+              ${avgCol("free_throws_made")} AS free_throws_made,
+              ${avgRankCol("free_throws_made")} AS free_throws_made_rank,
 
-              ROUND(AVG(b.free_throws_attempted), 1) AS free_throws_attempted,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.free_throws_attempted) DESC NULLS LAST) AS free_throws_attempted_rank,
+              ${avgCol("free_throws_attempted")} AS free_throws_attempted,
+              ${avgRankCol("free_throws_attempted")} AS free_throws_attempted_rank,
 
-              CASE WHEN AVG(b.free_throws_attempted) = 0 THEN 0
-                ELSE ROUND(AVG(b.free_throws_made) / NULLIF(AVG(b.free_throws_attempted), 0) * 100, 1)
-              END AS free_throw_percentage,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY CASE WHEN AVG(b.free_throws_attempted) = 0 THEN 0 ELSE ROUND(AVG(b.free_throws_made) / NULLIF(AVG(b.free_throws_attempted), 0) * 100, 1) END DESC NULLS LAST) AS free_throw_percentage_rank,
+              ${pctCol("free_throws_made", "free_throws_attempted")} AS free_throw_percentage,
+              ${pctRankCol("free_throws_made", "free_throws_attempted")} AS free_throw_percentage_rank,
 
-              ROUND(AVG(b.efficiency), 1) AS efficiency,
-              RANK() OVER (PARTITION BY b.league_id, b.season ORDER BY AVG(b.efficiency) DESC NULLS LAST) AS efficiency_rank
+              ${avgCol("efficiency")} AS efficiency,
+              ${avgRankCol("efficiency")} AS efficiency_rank
 
-            FROM player_boxscore b
+            FROM player_boxscore_unified b
             WHERE
               b.player_id = :playerId
               AND ${teamClause}

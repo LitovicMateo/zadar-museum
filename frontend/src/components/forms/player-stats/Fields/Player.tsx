@@ -1,11 +1,12 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import Select from 'react-select';
+import { useFormContext } from 'react-hook-form';
+import AppSelect from '@/components/forms/shared/AppSelect';
 
 import { OptionType, selectStyle } from '@/constants/ReactSelectStyle';
 import { usePlayers } from '@/hooks/queries/player/UsePlayers';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
 import { PlayerResponse } from '@/types/api/Player';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const Player: React.FC = () => {
 	const { control, watch } = useFormContext<PlayerStatsFormData>();
@@ -24,22 +25,26 @@ const Player: React.FC = () => {
 	}));
 
 	return (
-		<Controller
-			name="playerId"
+		<FormField
 			control={control}
-			render={({ field }) => {
-				return (
-					<Select
-						{...field}
-						value={options?.find((opt) => opt.value === field.value) ?? null}
-						isDisabled={!team || isEdit}
-						placeholder="Select Player"
-						options={options}
-						onChange={(option) => field.onChange(option?.value)} // store only the ID in form state
-						styles={selectStyle()}
-					/>
-				);
-			}}
+			name="playerId"
+			render={({ field }) => (
+				<FormItem>
+					<FormLabel>Player</FormLabel>
+					<FormControl>
+						<AppSelect
+							{...field}
+							value={options?.find((opt) => opt.value === field.value) ?? null}
+							isDisabled={!team || isEdit}
+							placeholder="Select Player"
+							options={options}
+							onChange={(option) => field.onChange(option?.value)}
+							styles={selectStyle()}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
+			)}
 		/>
 	);
 };

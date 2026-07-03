@@ -57,7 +57,7 @@ const SeasonAverage: React.FC = () => {
 		<StatsTable
 			columns={playerLeagueStatsColumns}
 			groups={groups}
-			footer={{ rows: footerRows, variant: 'gradient' }}
+			footer={{ rows: footerRows, variant: 'default' }}
 		/>
 	);
 };

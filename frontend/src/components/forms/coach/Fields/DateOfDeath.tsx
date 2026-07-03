@@ -3,22 +3,25 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/UI/Input';
 import { CoachFormData } from '@/schemas/CoachSchema';
-
-import styles from '@/components/forms/shared/FormLabel.module.css';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 const DateOfDeath: React.FC = () => {
-	const { register } = useFormContext<CoachFormData>();
-
-	return (
-		<label>
-			<span className={styles.label}>Date of Death: </span>
-			<Input
-				type="date"
-				{...register('date_of_death', { required: false })}
-				className="text-gray-500 placeholder:text-xs"
-			/>
-		</label>
-	);
+  const { control } = useFormContext<CoachFormData>();
+  return (
+    <FormField
+      control={control}
+      name="date_of_death"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Date of Death</FormLabel>
+          <FormControl>
+            <Input type="date" {...field} value={field.value ?? ''} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
 
 export default DateOfDeath;

@@ -8,8 +8,6 @@ import { useVenueGamelog } from '@/hooks/queries/venue/UseVenueGamelog';
 import { useVenueSeasons } from '@/hooks/queries/venue/UseVenueSeasons';
 import { useScheduleFilters, useSeasonState } from '@/hooks/UseScheduleFilters';
 
-import styles from './VenueGamelog.module.css';
-
 const VenueGamelog = () => {
 	const { venueSlug } = useParams();
 
@@ -28,19 +26,17 @@ const VenueGamelog = () => {
 	}
 
 	return (
-		<div className={styles.section}>
-			<div className={styles.topFilters}>
-				<ScheduleControls
-					seasons={seasons}
-					selectedSeason={selectedSeason}
-					setSelectedSeason={setSelectedSeason}
-					{...filters}
-				/>
-			</div>
+		<section className="space-y-4">
+			<ScheduleControls
+				seasons={seasons}
+				selectedSeason={selectedSeason}
+				setSelectedSeason={setSelectedSeason}
+				{...filters}
+			/>
 			<DynamicContentWrapper>
 				<ScheduleList schedule={filters.filteredGames} />
 			</DynamicContentWrapper>
-		</div>
+		</section>
 	);
 };
 

@@ -1,0 +1,23 @@
+.editBtn {
+  background-color: var(--court);
+  color: #ffffff;
+  border-color: var(--court);
+  font-weight: 500;
+}
+
+.editBtn:hover:not(:disabled) {
+  background-color: color-mix(in oklch, var(--court) 85%, white);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.createBtn {
+  background-color: var(--record);
+  color: var(--court);
+  font-weight: 600;
+}
+
+.createBtn:hover:not(:disabled) {
+  background-color: color-mix(in oklch, var(--record) 88%, black);
+  color: var(--court);
+}

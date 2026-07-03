@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import FilterWrapper from '@/components/Stats/UI/FilterWrapper';
+import StatsFilterBar from '@/components/Stats/UI/StatsFilterBar';
 import LeagueFilter from '@/components/shared/filters/LeagueFilter';
 import LocationFilter from '@/components/shared/filters/LocationFilter';
 import SeasonFilter from '@/components/shared/filters/SeasonFilter';
@@ -37,7 +37,7 @@ const PLAYER_COMPARE_ROWS: CompareRow<GameStats>[] = [
 	{ label: 'Efficiency', key: 'efficiency' }
 ];
 
-const PlayerCompare: React.FC = () => {
+const PlayerCompare: React.FC<{ leading?: React.ReactNode }> = ({ leading }) => {
 	const [player1Id, setPlayer1Id] = useState<string>('');
 	const [player2Id, setPlayer2Id] = useState<string>('');
 	const [stats, setStats] = useState<'total' | 'average'>('total');
@@ -62,31 +62,35 @@ const PlayerCompare: React.FC = () => {
 
 	return (
 		<div className="flex flex-col gap-4 mt-4">
-			<FilterWrapper>
+			<StatsFilterBar
+				leading={
+					<>
+						{leading}
+						<EntityPicker
+							label="Player A"
+							options={options}
+							value={player1Id}
+							onChange={setPlayer1Id}
+							excludeValue={player2Id}
+							placeholder="Select a player"
+						/>
+						<EntityPicker
+							label="Player B"
+							options={options}
+							value={player2Id}
+							onChange={setPlayer2Id}
+							excludeValue={player1Id}
+							placeholder="Select a player"
+						/>
+					</>
+				}
+				sheetTitle="Filter comparison"
+			>
 				<StatsFilter stats={stats} setStats={setStats} />
 				<LocationFilter location={location} setLocation={setLocation} />
 				<LeagueFilter league={league} setLeague={setLeague} competitions={competitions} />
 				<SeasonFilter seasons={seasons} season={season} onSeasonChange={setSeason} />
-			</FilterWrapper>
-
-			<div className="flex flex-col md:flex-row gap-4">
-				<EntityPicker
-					label="Player A"
-					options={options}
-					value={player1Id}
-					onChange={setPlayer1Id}
-					excludeValue={player2Id}
-					placeholder="Select a player"
-				/>
-				<EntityPicker
-					label="Player B"
-					options={options}
-					value={player2Id}
-					onChange={setPlayer2Id}
-					excludeValue={player1Id}
-					placeholder="Select a player"
-				/>
-			</div>
+			</StatsFilterBar>
 
 			{player1Id && player2Id && (
 				<CompareTable

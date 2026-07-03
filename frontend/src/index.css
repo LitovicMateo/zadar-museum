@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&subset=latin,latin-ext&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Archivo:wght@600;700;800;900&subset=latin,latin-ext&display=swap');
 
 @import 'tailwindcss';
 @import 'tw-animate-css';
@@ -10,14 +10,12 @@
 		color: #213547;
 		background-color: #ffffff;
 	}
-	a:hover {
-		color: #747bff;
-	}
 }
 
 @theme inline {
 	--font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--font-mono: 'DM Mono', 'Courier New', monospace;
+	--font-display: 'Archivo', 'Inter', system-ui, sans-serif;
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
@@ -40,6 +38,13 @@
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
+	--color-court: var(--court);
+	--color-court-foreground: var(--court-foreground);
+	--color-record: var(--record);
+	--color-record-foreground: var(--record-foreground);
+	--color-chalk: var(--chalk);
+	--color-positive: var(--positive);
+	--color-negative: var(--negative);
 	--color-chart-1: var(--chart-1);
 	--color-chart-2: var(--chart-2);
 	--color-chart-3: var(--chart-3);
@@ -67,6 +72,16 @@
 	--popover-foreground: oklch(0.145 0 0);
 	--primary: oklch(49.531% 0.18498 265.23);
 	--primary-foreground: oklch(0.985 0 0);
+	/* Editorial sportscard tokens ("The Nameplate") */
+	--court: oklch(0.22 0.085 264); /* Court Navy ~ #0E1B3A — hero banner */
+	--court-foreground: oklch(0.985 0 0);
+	--record: oklch(0.79 0.155 80); /* Record Gold ~ #F0B429 — marks records / #1 only */
+	--record-foreground: oklch(0.26 0.04 264);
+	--medal-silver: oklch(0.78 0.02 260); /* ~ #B4BCC7 — marks #2 */
+	--medal-bronze: oklch(0.65 0.09 55); /* ~ #C0813F — marks #3 */
+	--chalk: oklch(0.975 0.003 264); /* page background ~ #F6F7F9 */
+	--positive: oklch(0.6 0.14 150); /* positive differential — green */
+	--negative: var(--destructive); /* negative differential — red */
 	--secondary: oklch(0.97 0 0);
 	--secondary-foreground: oklch(0.205 0 0);
 	--muted: oklch(0.97 0 0);

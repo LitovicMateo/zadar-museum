@@ -55,7 +55,7 @@ const GlobalSearch: React.FC = () => {
 
 	const { SearchInput, debouncedTerm, showPortal, clearSearch, inputRef } = useSearch({
 		placeholder: 'Search',
-		className: 'w-full max-w-[300px] rounded-[6px] !border-[#194F95] border-1 h-[32px]',
+		className: 'w-full max-w-[300px] rounded-[6px] !border-court border-1 h-[32px]',
 		onKeyDown: handleKeyDown
 	});
 

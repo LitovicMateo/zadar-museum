@@ -10,8 +10,6 @@ import { RefereSeasonStatsResponse, RefereeStats } from '@/types/api/Referee';
 
 import { RefereeLeagueCell, refereeStatsColumns } from '../refereeColumns';
 
-import styles from './RefereeSeasonStats.module.css';
-
 const RefereeSeasonStats: React.FC = () => {
 	const { refereeId } = useParams();
 	const [selectedSeason, setSelectedSeason] = React.useState('');
@@ -28,7 +26,7 @@ const RefereeSeasonStats: React.FC = () => {
 				playoff: (e) => e.playoff?.total ?? null,
 				split: (e) => !!e.hasPhaseSplit,
 				keyOf: (r) => r.league_slug ?? 'total',
-				heading: (r) => <RefereeLeagueCell leagueSlug={r.league_slug} />,
+				heading: (r) => <RefereeLeagueCell leagueSlug={r.league_slug} />
 			}),
 		[seasonLeagueStats]
 	);
@@ -42,26 +40,25 @@ const RefereeSeasonStats: React.FC = () => {
 		if (seasons && seasons.length > 0) {
 			setSelectedSeason(seasons[0]);
 		}
-	}, [seasons, setSelectedSeason]);
+	}, [seasons]);
 
 	if (!seasonStats || !seasons || seasonStats.length === 0) return null;
 
 	return (
-		<div className={styles.section}>
+		<section className="space-y-4">
 			<SeasonSelect
 				seasons={seasons}
 				selectedSeason={selectedSeason}
 				compact
 				onSeasonChange={setSelectedSeason}
 			/>
-
 			<StatsTable
 				columns={refereeStatsColumns}
 				groups={groups}
 				footer={{ rows: footerRows, variant: 'light' }}
 				initialSort={{ columnId: 'games', dir: 'desc' }}
 			/>
-		</div>
+		</section>
 	);
 };
 

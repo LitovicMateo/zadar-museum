@@ -18,13 +18,13 @@ export const playerListConfig: EntityListConfig<PlayerResponse> = {
         <div className="flex items-center gap-2">
           {row.image?.url
             ? <img src={row.image.url} className="w-7 h-7 rounded-full object-cover flex-shrink-0" alt="" />
-            : <div className="w-7 h-7 rounded-full bg-slate-700 flex-shrink-0" />}
+            : <div className="w-7 h-7 rounded-full bg-muted flex-shrink-0" />}
           <span className="font-medium">{row.first_name} {row.last_name}</span>
         </div>
       ),
     },
-    { header: 'Position', cell: (row) => row.primary_position ?? '—', className: 'text-slate-400' },
-    { header: 'Active', cell: (row) => (row.is_active_player ? 'Yes' : 'No'), className: 'text-slate-400' },
-    { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-slate-400 text-sm' },
+    { header: 'Position', cell: (row) => row.primary_position ?? '—', className: 'text-muted-foreground' },
+    { header: 'Active', cell: (row) => (row.is_active_player ? 'Yes' : 'No'), className: 'text-muted-foreground' },
+    { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-muted-foreground text-sm' },
   ],
 };

@@ -37,16 +37,23 @@ const RefereesPage: React.FC = () => {
 	if (isLoading) {
 		return (
 			<div className={styles.page}>
-				<RefereeFilterBar SearchInput={SearchInput} />
-				<DynamicContentWrapper>
-					<div className={styles.layout}>
-						<div className={styles.loadingGrid}>
-							{Array.from({ length: 8 }).map((_, i) => (
-								<Skeleton key={i} className={styles.skeletonCard} />
-							))}
-						</div>
+				<div className={styles.pageHeader}>
+					<div className={styles.pageHeaderInner}>
+						<h1 className={styles.pageTitle}>Referees</h1>
 					</div>
-				</DynamicContentWrapper>
+				</div>
+				<div className={styles.contentWrap}>
+					<RefereeFilterBar SearchInput={SearchInput} />
+					<DynamicContentWrapper>
+						<div className={styles.layout}>
+							<div className={styles.loadingGrid}>
+								{Array.from({ length: 8 }).map((_, i) => (
+									<Skeleton key={i} className={styles.skeletonCard} />
+								))}
+							</div>
+						</div>
+					</DynamicContentWrapper>
+				</div>
 			</div>
 		);
 	}
@@ -59,35 +66,44 @@ const RefereesPage: React.FC = () => {
 
 	return (
 		<div className={styles.page}>
-			<RefereeFilterBar SearchInput={SearchInput} />
-			<DynamicContentWrapper ref={wrapperRef}>
-				<div className={styles.layout}>
-					<div className={styles.main}>
-						{hasResults ? (
-							<>
-								<div className={styles.grid}>
-									{paginated.map((referee) => (
-										<RefereeCard key={referee.id} referee={referee} />
-									))}
-								</div>
-								<PaginationControls
-									page={page}
-									pageSize={pageSize}
-									total={total}
-									onPageChange={setPage}
-									onPageSizeChange={setPageSize}
-								/>
-							</>
-						) : (
-							<div className={styles.noResults}>
-								<NoContent type="info" description="No referees match the current filters." />
-							</div>
-						)}
-					</div>
-
-					<RefereeLeaders stats={directory} />
+			<div className={styles.pageHeader}>
+				<div className={styles.pageHeaderInner}>
+					<h1 className={styles.pageTitle}>Referees</h1>
+					<span className={styles.refereeCount}>{directory.length} total</span>
 				</div>
-			</DynamicContentWrapper>
+			</div>
+
+			<div className={styles.contentWrap}>
+				<RefereeFilterBar SearchInput={SearchInput} />
+				<DynamicContentWrapper ref={wrapperRef}>
+					<div className={styles.layout}>
+						<div className={styles.main}>
+							{hasResults ? (
+								<>
+									<div className={styles.grid}>
+										{paginated.map((referee) => (
+											<RefereeCard key={referee.id} referee={referee} />
+										))}
+									</div>
+									<PaginationControls
+										page={page}
+										pageSize={pageSize}
+										total={total}
+										onPageChange={setPage}
+										onPageSizeChange={setPageSize}
+									/>
+								</>
+							) : (
+								<div className={styles.noResults}>
+									<NoContent type="info" description="No referees match the current filters." />
+								</div>
+							)}
+						</div>
+
+						<RefereeLeaders stats={directory} />
+					</div>
+				</DynamicContentWrapper>
+			</div>
 		</div>
 	);
 };

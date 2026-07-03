@@ -1,26 +1,28 @@
 .filterBar {
 	display: flex;
 	align-items: center;
-	gap: 12px;
+	gap: 10px;
 	flex-wrap: wrap;
-	margin: 0 auto;
-	width: fit-content;
-	padding: 1em 0;
+	padding: 0.75em 2em;
 }
 
 .searchWrap {
+	position: relative;
 	min-width: 200px;
 	max-width: 280px;
 	flex: 1;
-}
-
-.filters {
 	display: flex;
 	align-items: center;
-	gap: 8px;
 }
 
-.statusGroup {
-	display: flex;
-	gap: 4px;
+.searchIcon {
+	position: absolute;
+	left: 9px;
+	color: var(--muted-foreground);
+	pointer-events: none;
+	z-index: 1;
+}
+
+.searchWrap input {
+	padding-left: 28px;
 }

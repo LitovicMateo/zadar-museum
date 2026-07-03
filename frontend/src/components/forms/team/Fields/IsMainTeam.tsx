@@ -4,8 +4,6 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { TeamFormData } from '@/schemas/TeamSchema';
 
-import styles from '@/components/forms/shared/FormLabel.module.css';
-
 const IsMainTeam: React.FC = () => {
 	const { control } = useFormContext<TeamFormData>();
 
@@ -16,7 +14,7 @@ const IsMainTeam: React.FC = () => {
 			render={({ field }) => (
 				<label className="flex items-center gap-2">
 					<Checkbox checked={field.value} onCheckedChange={field.onChange} />
-					<span className={styles.label}>Main Team</span>
+					<span className="text-sm font-medium leading-none">Main Team</span>
 				</label>
 			)}
 		/>

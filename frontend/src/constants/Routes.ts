@@ -132,7 +132,7 @@ export const API_ROUTES = {
 		details: (slug: string) => `${root}/venue/${slug}`,
 		gamelog: (slug: string, season: string) => `${root}/venue/gamelog/${slug}/${season}`,
 		teamRecord: (slug: string) => `${root}/venue/team-record/${slug}`,
-		venueRecords: () => `${root}/venue/team-records`,
+		venueRecords: (location: 'home' | 'away') => `${root}/venue/team-records?location=${location}`,
 		seasons: (slug: string) => `${root}/venue/seasons/${slug}`,
 		competitions: (venueSlug: string, seasons: string) => `${root}/venue/competitions/${seasons}/${venueSlug}`,
 		seasonStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/total/${venueSlug}`,
@@ -193,6 +193,10 @@ export const API_ROUTES = {
 		games: (params: string) => `${root}/dashboard/admin/games?${params}`,
 		playerStats: (params: string) => `${root}/dashboard/admin/player-stats?${params}`,
 		teamStats: (params: string) => `${root}/dashboard/admin/team-stats?${params}`,
+	},
+	adminById: {
+		playerStats: (documentId: string) => `${root}/dashboard/admin/player-stats/${documentId}`,
+		teamStats: (documentId: string) => `${root}/dashboard/admin/team-stats/${documentId}`,
 	},
 	delete: {
 		player: (id: string) => `${root}/players/${id}`,
@@ -260,6 +264,8 @@ export const APP_ROUTES = {
 		playerStats: {
 			list: '/dashboard/player-stats/list',
 			create: '/dashboard/player-stats/create',
+			aggregateCreate: '/dashboard/player-stats/aggregate/create',
+			aggregateEdit: '/dashboard/player-stats/aggregate/edit/',
 			edit: '/dashboard/player-stats/edit/'
 		},
 		teamStats: {

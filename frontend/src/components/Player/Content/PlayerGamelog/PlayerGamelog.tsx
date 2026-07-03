@@ -4,9 +4,8 @@ import CompetitionSelectItem from '@/components/Games/GamesFilter/CompetitionSel
 import Boxscore from '@/components/Player/Content/PlayerBoxscore/boxscore/Boxscore';
 import BoxscoreFilter from '@/components/Player/Content/PlayerBoxscore/filter/BoxscoreFilter';
 import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
+import { MobileFilterSheet } from '@/components/UI/MobileFilterSheet';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
-
-import styles from './PlayerGamelog.module.css';
 
 const PlayerGamelog: React.FC = () => {
 	const { competitions, selectedCompetitions, toggleCompetition } = useBoxscore();
@@ -21,32 +20,32 @@ const PlayerGamelog: React.FC = () => {
 	}, [competitions]);
 
 	return (
-		<div className={styles.gamelog}>
-			<div className={styles.gamelogControls}>
-				<div className={styles.gamelogSeasonSelect}>
+		<section className="space-y-4">
+			<MobileFilterSheet title="Filter games">
+				<div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-5">
 					<BoxscoreFilter />
+					{uniqueCompetitions.length > 1 && (
+						<div className="flex flex-wrap items-center gap-2">
+							{uniqueCompetitions.map((c) => (
+								<CompetitionSelectItem
+									key={String(c.league_id)}
+									leagueId={String(c.league_id)}
+									leagueName={c.league_name}
+									leagueShortName={c.league_short_name}
+									onCompetitionChange={toggleCompetition}
+									selectedCompetitions={selectedCompetitions}
+								/>
+							))}
+						</div>
+					)}
 				</div>
-				{uniqueCompetitions.length > 1 && (
-					<div className={styles.competitionList}>
-						{uniqueCompetitions.map((c) => (
-							<CompetitionSelectItem
-								key={String(c.league_id)}
-								leagueId={String(c.league_id)}
-								leagueName={c.league_name}
-								leagueShortName={c.league_short_name}
-								onCompetitionChange={toggleCompetition}
-								selectedCompetitions={selectedCompetitions}
-							/>
-						))}
-					</div>
-				)}
-			</div>
-			<div className={styles.gamelogCard}>
+			</MobileFilterSheet>
+			<div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
 				<DynamicContentWrapper>
 					<Boxscore />
 				</DynamicContentWrapper>
 			</div>
-		</div>
+		</section>
 	);
 };
 
