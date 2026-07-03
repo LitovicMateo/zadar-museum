@@ -59,3 +59,4 @@ postgres_prod_data/
 certbot/nginx/nginx.ssl-init.conf
 nginx/*.vps.bak
 backend/types/
+graphify-out/
