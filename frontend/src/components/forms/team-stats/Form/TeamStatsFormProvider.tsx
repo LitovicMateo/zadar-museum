@@ -6,6 +6,8 @@ import { TeamStatsFormData, teamStatsSchema } from '@/schemas/TeamStatsSchema';
 import { TeamStatsResponse } from '@/types/api/TeamStats';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { buildTeamStatsDefaults } from './buildTeamStatsDefaults';
+
 type TeamStatsFormProviderProps = {
 	children?: React.ReactNode;
 	onSubmit: (data: TeamStatsFormData) => void;
@@ -37,38 +39,7 @@ const TeamStatsFormProvider: React.FC<TeamStatsFormProviderProps> = ({
 
 	React.useEffect(() => {
 		if (teamStats) {
-			methods.reset({
-				league: teamStats.game.competition.id.toString(),
-				season: teamStats.game.season,
-				gameId: teamStats.game.id.toString(),
-				teamId: teamStats.team.id.toString(),
-				coachId: teamStats.coach.id.toString(),
-				assistantCoachId: teamStats.assistantCoach ? teamStats.assistantCoach.id.toString() : '',
-				firstQuarter: teamStats.firstQuarter,
-				secondQuarter: teamStats.secondQuarter,
-				thirdQuarter: teamStats.thirdQuarter,
-				fourthQuarter: teamStats.fourthQuarter,
-				overtime: teamStats.overtime,
-				fieldGoalsMade: teamStats.fieldGoalsMade,
-				fieldGoalsAttempted: teamStats.fieldGoalsAttempted,
-				threePointersMade: teamStats.threePointersMade,
-				threePointersAttempted: teamStats.threePointersAttempted,
-				freeThrowsMade: teamStats.freeThrowsMade,
-				freeThrowsAttempted: teamStats.freeThrowsAttempted,
-				rebounds: teamStats.rebounds,
-				offensiveRebounds: teamStats.offensiveRebounds,
-				defensiveRebounds: teamStats.defensiveRebounds,
-				assists: teamStats.assists,
-				steals: teamStats.steals,
-				blocks: teamStats.blocks,
-				turnovers: teamStats.turnovers,
-				fouls: teamStats.fouls,
-				secondChancePoints: teamStats.secondChancePoints,
-				fastBreakPoints: teamStats.fastBreakPoints,
-				pointsOffTurnovers: teamStats.pointsOffTurnovers,
-				benchPoints: teamStats.benchPoints,
-				pointsInPaint: teamStats.pointsInPaint
-			});
+			methods.reset(buildTeamStatsDefaults(teamStats));
 		}
 	}, [teamStats, methods]);
 

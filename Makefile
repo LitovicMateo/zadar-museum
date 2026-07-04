@@ -3,7 +3,7 @@ SHELL := /bin/bash
 
 # Project root and compose detection
 PROJECT_ROOT := $(CURDIR)
-COMPOSE_CMD := $(shell command -v docker-compose >/dev/null 2>&1 && echo docker-compose || echo docker compose)
+COMPOSE_CMD := $(shell docker compose version >/dev/null 2>&1 && echo 'docker compose' || echo 'docker-compose')
 
 DEV_COMPOSE := docker-compose.dev.yml
 DEV_ENV := .env.dev
@@ -164,7 +164,9 @@ load-prod-backup:
 import-prod-backup:
 	@CONTAINER=$$($(COMPOSE_CMD) -f $(PROD_COMPOSE) ps -q postgres); \
 	if [ -z "$$CONTAINER" ]; then echo "No postgres container found (is the prod stack running?)"; exit 1; fi; \
-	docker exec -i "$$CONTAINER" sh -c "export PGCLIENTENCODING=UTF8; psql -U strapi -d strapi -f /tmp/zadar-backup.sql"
+	DB_USER=$$(grep -E '^(POSTGRES_USER|DATABASE_USERNAME)=' $(PROD_ENV) 2>/dev/null | head -n1 | sed -E 's/^[^=]+=//'); \
+	DB_NAME=$$(grep -E '^(POSTGRES_DB|DATABASE_NAME)=' $(PROD_ENV) 2>/dev/null | head -n1 | sed -E 's/^[^=]+=//'); \
+	docker exec -i "$$CONTAINER" sh -c "export PGCLIENTENCODING=UTF8; psql -U $${DB_USER:-strapi} -d $${DB_NAME:-strapi} -f /tmp/zadar-backup.sql"
 # Install the systemd timer that runs backup.sh every 2 days (run on the VPS)
 install-backup-timer:
 	@sed 's|__PROJECT_ROOT__|$(PROJECT_ROOT)|g' scripts/backups/systemd/zadar-backup.service | sudo tee /etc/systemd/system/zadar-backup.service >/dev/null
