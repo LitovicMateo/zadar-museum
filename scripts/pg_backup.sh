@@ -38,11 +38,13 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# detect compose command
-if command -v docker-compose >/dev/null 2>&1; then
+# detect compose command (prefer the v2 plugin, fall back to legacy v1)
+if docker compose version >/dev/null 2>&1; then
+  COMPOSE_CMD="docker compose"
+elif command -v docker-compose >/dev/null 2>&1; then
   COMPOSE_CMD="docker-compose"
 else
-  COMPOSE_CMD="docker compose"
+  echo "Neither 'docker compose' nor 'docker-compose' found in PATH" >&2; exit 1
 fi
 
 # try to read password from env file if present
@@ -54,6 +56,16 @@ fi
 # fallback to env var if present
 if [ -z "$DB_PASSWORD" ] && [ -n "${DATABASE_PASSWORD:-}" ]; then
   DB_PASSWORD="$DATABASE_PASSWORD"
+fi
+
+# Unless overridden by --db-user/--db-name, resolve DB user/name from the env file
+if [ "$DB_USER" = "strapi" ] && [ -f "$ENV_FILE" ]; then
+  DB_USER=$(grep -E '^(POSTGRES_USER|DATABASE_USERNAME)=' "$ENV_FILE" | head -n1 | sed -E 's/^[^=]+=//') || DB_USER="strapi"
+  DB_USER="${DB_USER:-strapi}"
+fi
+if [ "$DB_NAME" = "strapi" ] && [ -f "$ENV_FILE" ]; then
+  DB_NAME=$(grep -E '^(POSTGRES_DB|DATABASE_NAME)=' "$ENV_FILE" | head -n1 | sed -E 's/^[^=]+=//') || DB_NAME="strapi"
+  DB_NAME="${DB_NAME:-strapi}"
 fi
 
 echo "Using compose file: $COMPOSE_FILE (env: $ENV_FILE)"

@@ -6,6 +6,8 @@ import { PlayerStatsFormData, playerStatsSchema } from '@/schemas/PlayerStats';
 import { PlayerStatsResponse } from '@/types/api/PlayerStats';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { buildPlayerStatsDefaults } from './buildPlayerStatsDefaults';
+
 type PlayerStatsFormProviderProps = {
 	children?: React.ReactNode;
 	onSubmit: (data: PlayerStatsFormData) => void;
@@ -37,44 +39,7 @@ const PlayerStatsFormProvider: React.FC<PlayerStatsFormProviderProps> = ({
 
 	React.useEffect(() => {
 		if (playerStats) {
-			// When a player has both offensive and defensive rebounds, leave the Total
-			// field blank so the OFF/DEF fields stay enabled (they are mutually exclusive
-			// with Total in Rebounds.tsx).
-			const hasOffAndDef =
-				playerStats.offensiveRebounds !== null &&
-				playerStats.offensiveRebounds !== undefined &&
-				playerStats.defensiveRebounds !== null &&
-				playerStats.defensiveRebounds !== undefined;
-
-			methods.reset({
-				gameId: playerStats.game?.id?.toString() ?? '',
-				teamId: playerStats.team?.id?.toString() ?? '',
-				playerId: playerStats.player?.id?.toString() ?? '',
-				status: playerStats.status,
-				isCaptain: playerStats.isCaptain,
-				playerNumber: playerStats.playerNumber,
-				minutes: playerStats.minutes,
-				seconds: playerStats.seconds,
-				points: playerStats.points,
-				fieldGoalsMade: playerStats.fieldGoalsMade,
-				fieldGoalsAttempted: playerStats.fieldGoalsAttempted,
-				threePointersMade: playerStats.threePointersMade,
-				threePointersAttempted: playerStats.threePointersAttempted,
-				freeThrowsMade: playerStats.freeThrowsMade,
-				freeThrowsAttempted: playerStats.freeThrowsAttempted,
-				rebounds: hasOffAndDef ? '' : playerStats.rebounds,
-				offensiveRebounds: playerStats.offensiveRebounds,
-				defensiveRebounds: playerStats.defensiveRebounds,
-				assists: playerStats.assists,
-				steals: playerStats.steals,
-				blocks: playerStats.blocks,
-				turnovers: playerStats.turnovers,
-				fouls: playerStats.fouls,
-				foulsOn: playerStats.foulsOn,
-				blocksReceived: playerStats.blocksReceived,
-				plusMinus: playerStats.plusMinus,
-				efficiency: playerStats.efficiency
-			});
+			methods.reset(buildPlayerStatsDefaults(playerStats));
 		}
 	}, [playerStats, methods]);
 
