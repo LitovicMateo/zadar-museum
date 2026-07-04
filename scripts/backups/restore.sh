@@ -30,10 +30,12 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if command -v docker-compose >/dev/null 2>&1; then
+if docker compose version >/dev/null 2>&1; then
+  COMPOSE_CMD="docker compose"
+elif command -v docker-compose >/dev/null 2>&1; then
   COMPOSE_CMD="docker-compose"
 else
-  COMPOSE_CMD="docker compose"
+  echo "Neither 'docker compose' nor 'docker-compose' found in PATH" >&2; exit 1
 fi
 
 # Resolve DB user/name: CLI flags win, else read from the env file, else default to 'strapi'

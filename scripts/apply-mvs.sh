@@ -71,10 +71,11 @@ echo "Using Postgres user='${POSTGRES_USER}', db='${POSTGRES_DB}' (env-file: ${E
 mkdir -p "${LOG_DIR}"
 
 detect_compose_cmd(){
-  if command -v docker-compose >/dev/null 2>&1; then
-    echo "docker-compose"
-  elif docker compose version >/dev/null 2>&1; then
+  # Prefer the v2 plugin, fall back to legacy v1
+  if docker compose version >/dev/null 2>&1; then
     echo "docker compose"
+  elif command -v docker-compose >/dev/null 2>&1; then
+    echo "docker-compose"
   else
     echo "";
   fi
