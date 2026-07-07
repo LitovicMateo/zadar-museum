@@ -521,4 +521,28 @@ export default ({ strapi }: FactoryArgs) => ({
       populate: ["game", "game.home_team", "game.away_team", "game.competition", "team", "coach", "assistantCoach"],
     });
   },
+
+  async findLeagueTablesAdmin({ sort = "createdAt", direction = "desc", page = 1, pageSize = 20, search = "" }: { sort?: string; direction?: string; page?: number | string; pageSize?: number | string; search?: string }) {
+    const where = search ? { season: { $contains: search } } : {};
+    const offset = (Number(page) - 1) * Number(pageSize);
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::league-tables.league-table").findMany({
+        select: ["*"],
+        populate: ["competition"],
+        orderBy: { [sort]: direction },
+        where,
+        limit: Number(pageSize),
+        offset,
+      }),
+      strapi.db.query("api::league-tables.league-table").count({ where }),
+    ]);
+    return { data, meta: { total, page: Number(page), pageSize: Number(pageSize) } };
+  },
+
+  async findLeagueTableByIdAdmin(documentId: string) {
+    return strapi.db.query("api::league-tables.league-table").findOne({
+      where: { documentId },
+      populate: ["competition"],
+    });
+  },
 });

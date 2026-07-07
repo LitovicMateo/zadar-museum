@@ -27,7 +27,14 @@ export const API_ROUTES = {
 		playerStatsCheckDuplicate: (game: string | number, player: string | number) =>
 			`${root}/player-stats/check-duplicate?game=${game}&player=${player}`,
 		teamStatsCheckDuplicate: (game: string | number, team: string | number) =>
-			`${root}/team-stats/check-duplicate?game=${game}&team=${team}`
+			`${root}/team-stats/check-duplicate?game=${game}&team=${team}`,
+		leagueTable: (params?: string) => `${root}/league-tables?${params}`,
+		leagueTableCheckDuplicate: (
+			competition: string | number,
+			season: string,
+			stageNumber: string | number
+		) =>
+			`${root}/league-tables/check-duplicate?competition=${competition}&season=${season}&stageNumber=${stageNumber}`
 	},
 
 	edit: {
@@ -40,7 +47,13 @@ export const API_ROUTES = {
 		venue: (id: string) => `${root}/venues/${id}`,
 		competition: (id: string) => `${root}/competitions/${id}`,
 		playerStats: (id: string) => `${root}/player-stats/${id}`,
-		teamStats: (id: string) => `${root}/team-stats/${id}`
+		teamStats: (id: string) => `${root}/team-stats/${id}`,
+		leagueTable: (id: string) => `${root}/league-tables/${id}`
+	},
+
+	leagueTable: {
+		byLeague: (leagueSlug: string, season: string) =>
+			`${root}/league-tables/by-league/${leagueSlug}/${season}`
 	},
 
 	// player
@@ -195,10 +208,12 @@ export const API_ROUTES = {
 		games: (params: string) => `${root}/dashboard/admin/games?${params}`,
 		playerStats: (params: string) => `${root}/dashboard/admin/player-stats?${params}`,
 		teamStats: (params: string) => `${root}/dashboard/admin/team-stats?${params}`,
+		leagueTables: (params: string) => `${root}/dashboard/admin/league-tables?${params}`,
 	},
 	adminById: {
 		playerStats: (documentId: string) => `${root}/dashboard/admin/player-stats/${documentId}`,
 		teamStats: (documentId: string) => `${root}/dashboard/admin/team-stats/${documentId}`,
+		leagueTable: (documentId: string) => `${root}/dashboard/admin/league-tables/${documentId}`,
 	},
 	delete: {
 		player: (id: string) => `${root}/players/${id}`,
@@ -211,6 +226,7 @@ export const API_ROUTES = {
 		competition: (id: string) => `${root}/competitions/${id}`,
 		playerStats: (id: string) => `${root}/player-stats/${id}`,
 		teamStats: (id: string) => `${root}/team-stats/${id}`,
+		leagueTable: (id: string) => `${root}/league-tables/${id}`,
 	},
 };
 
@@ -274,6 +290,11 @@ export const APP_ROUTES = {
 			list: '/dashboard/team-stats/list',
 			create: '/dashboard/team-stats/create',
 			edit: '/dashboard/team-stats/edit/'
+		},
+		leagueTable: {
+			list: '/dashboard/league-table/list',
+			create: '/dashboard/league-table/create',
+			edit: '/dashboard/league-table/edit/'
 		}
 	},
 

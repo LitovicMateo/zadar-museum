@@ -11,6 +11,7 @@ import { venueListConfig } from '@/components/Dashboard/configs/venueListConfig'
 import { competitionListConfig } from '@/components/Dashboard/configs/competitionListConfig';
 import { playerStatsListConfig } from '@/components/Dashboard/configs/playerStatsListConfig';
 import { teamStatsListConfig } from '@/components/Dashboard/configs/teamStatsListConfig';
+import { leagueTableListConfig } from '@/components/Dashboard/configs/leagueTableListConfig';
 import { EntityListPage } from '@/components/Dashboard/EntityListPage/EntityListPage';
 import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 
@@ -27,6 +28,7 @@ const RefereeFormPage = lazy(() => import('@/components/Dashboard/Referee/Refere
 const StaffFormPage = lazy(() => import('@/components/Dashboard/Staff/StaffFormPage'));
 const TeamFormPage = lazy(() => import('@/components/Dashboard/Team/TeamFormPage'));
 const TeamStatsFormPage = lazy(() => import('@/components/Dashboard/TeamStats/TeamStatsFormPage'));
+const LeagueTableFormPage = lazy(() => import('@/components/Dashboard/LeagueTable/LeagueTableFormPage'));
 const VenueFormPage = lazy(() => import('@/components/Dashboard/Venue/VenueFormPage'));
 
 export const dashboardRoutes: RouteObject = {
@@ -148,6 +150,17 @@ export const dashboardRoutes: RouteObject = {
         { path: 'list', element: <EntityListPage config={teamStatsListConfig} /> },
         { path: 'create', element: <TeamStatsFormPage /> },
         { path: 'edit/:id', element: <TeamStatsFormPage /> },
+      ],
+    },
+
+    {
+      path: 'league-table',
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Navigate to="list" replace /> },
+        { path: 'list', element: <EntityListPage config={leagueTableListConfig} /> },
+        { path: 'create', element: <LeagueTableFormPage /> },
+        { path: 'edit/:id', element: <LeagueTableFormPage /> },
       ],
     },
   ],

@@ -181,4 +181,18 @@ export default ({ strapi }: FactoryArgs) => ({
     if (!data) return ctx.notFound();
     ctx.body = { data };
   },
+
+  async getLeagueTablesAdmin(ctx: Context) {
+    const { sort = "createdAt", direction = "desc", page = "1", pageSize = "20", search = "" } = ctx.query as Record<string, string>;
+    const service = strapi.service("api::dashboard.dashboard");
+    ctx.body = await service.findLeagueTablesAdmin({ sort, direction, page, pageSize, search });
+  },
+
+  async getLeagueTableByIdAdmin(ctx: Context) {
+    const { documentId } = ctx.params;
+    const service = strapi.service("api::dashboard.dashboard");
+    const data = await service.findLeagueTableByIdAdmin(documentId);
+    if (!data) return ctx.notFound();
+    ctx.body = { data };
+  },
 });
