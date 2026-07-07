@@ -73,12 +73,19 @@ const CoachCareerStats: React.FC = () => {
 		<section className="space-y-6">
 			<MobileFilterSheet title="Filter record">
 				<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
-					<SegmentedToggle value={role} onValueChange={setRole} options={roleOptions} ariaLabel="Coach role filter" />
+					<SegmentedToggle
+						value={role}
+						onValueChange={setRole}
+						options={roleOptions}
+						ariaLabel="Coach role filter"
+						itemClassName="border border-court data-[state=on]:border-transparent"
+					/>
 					<SegmentedToggle
 						value={location}
 						onValueChange={setLocation}
 						options={locationOptions}
 						ariaLabel="Location filter"
+						itemClassName="border border-court data-[state=on]:border-transparent"
 					/>
 				</div>
 			</MobileFilterSheet>

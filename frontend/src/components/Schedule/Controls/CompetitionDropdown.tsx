@@ -10,9 +10,10 @@ type CompetitionDropdownProps = {
 	/** Either ALL_COMPETITIONS or a league_id. */
 	selected: string;
 	onChange: (value: string) => void;
+	height?: string;
 };
 
-const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({ competitions, selected, onChange }) => {
+const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({ competitions, selected, onChange, height }) => {
 	const options: OptionType[] = useMemo(() => {
 		const base: OptionType[] = [{ value: ALL_COMPETITIONS, label: 'All competitions' }];
 		for (const c of competitions ?? []) {
@@ -26,7 +27,7 @@ const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({ competitions,
 			value={options.find((o) => o.value === selected) ?? options[0]}
 			options={options}
 			onChange={(opt) => opt && onChange(String(opt.value))}
-			styles={selectStyle('240px')}
+			styles={selectStyle('240px', height)}
 			isSearchable={false}
 			placeholder="Competition"
 			menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
