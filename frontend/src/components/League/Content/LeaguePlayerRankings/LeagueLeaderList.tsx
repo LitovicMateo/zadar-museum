@@ -1,16 +1,9 @@
-import { Link } from 'react-router-dom';
-
+import NoContent from '@/components/NoContent/NoContent';
+import { Podium } from '@/components/UI/Podium';
+import { RankingsList } from '@/components/UI/RankingsList';
 import { APP_ROUTES } from '@/constants/Routes';
 import { useLeaguePlayerRankings } from '@/hooks/queries/league/UseLeaguePlayerRankings';
 import { PlayerAllTimeStats } from '@/types/api/Player';
-
-import styles from './LeagueLeaderList.module.css';
-
-const MEDAL_CLASS: Record<number, string> = {
-	0: styles.gold,
-	1: styles.silver,
-	2: styles.bronze
-};
 
 const LeagueLeaderList: React.FC<{
 	stat: keyof PlayerAllTimeStats;
@@ -19,32 +12,24 @@ const LeagueLeaderList: React.FC<{
 	const { data: playerRankings } = useLeaguePlayerRankings(leagueSlug!, stat);
 
 	if (playerRankings && playerRankings.length === 0) {
-		return <div className={styles.empty}>No ranking data available for this league.</div>;
+		return <NoContent type="info" description="No ranking data available for this league." />;
 	}
 
+	const items = (playerRankings ?? []).slice(0, 20).map((p) => ({
+		id: p.player_id,
+		name: `${p.first_name} ${p.last_name}`,
+		to: APP_ROUTES.player(p.player_id),
+		value: p[stat]
+	}));
+
+	const top3 = items.slice(0, 3);
+	const rest = items.slice(3);
+
 	return (
-		<section>
-			<ul className={styles.list}>
-				<li className={styles.header}>
-					<span>#</span>
-					<span>Player</span>
-					<span>Record</span>
-				</li>
-				{playerRankings?.map((p, index) => (
-					<li key={p.player_id} className={`${styles.item} ${MEDAL_CLASS[index] ?? ''}`}>
-						<div className={styles.itemInner}>
-							<span className={styles.rank}>{index + 1}</span>
-							<span className={styles.name}>
-								<Link to={APP_ROUTES.player(p.player_id)}>
-									{p.first_name} {p.last_name}
-								</Link>
-							</span>
-							<span className={styles.statValue}>{p[stat]}</span>
-						</div>
-					</li>
-				))}
-			</ul>
-		</section>
+		<div className="space-y-4">
+			<Podium items={top3} eyebrow="All-time leader" ariaLabel="Top player rankings" />
+			{rest.length > 0 && <RankingsList items={rest} startRank={4} />}
+		</div>
 	);
 };
 

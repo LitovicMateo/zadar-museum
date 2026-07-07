@@ -82,7 +82,7 @@ export default factories.createCoreService(
                 team_slug,
                 league_id,
                 league_slug,
-                venue,
+                COALESCE(venue, 'total') AS venue,
                 COUNT(*) AS games,
                 SUM(CASE
                   WHEN forfeited AND forfeited_by = 'home' AND venue = 'away' THEN 1
@@ -101,7 +101,10 @@ export default factories.createCoreService(
                 ROUND(AVG(points_scored - points_allowed) FILTER (WHERE forfeited IS NOT TRUE), 1) AS points_diff,
                 ROUND(AVG(NULLIF(attendance::text, '')::numeric), 0) AS attendance
               FROM all_games
-              GROUP BY team_id, team_slug, league_id, league_slug, venue
+              GROUP BY GROUPING SETS (
+                (team_id, team_slug, league_id, league_slug, venue),
+                (team_id, team_slug, league_id, league_slug)
+              )
             )
             SELECT
               team_id,
@@ -148,27 +151,6 @@ export default factories.createCoreService(
             attendance: r?.attendance ?? 0,
           });
 
-          // Compute total across all venues
-          const allGames = rows.reduce((s, r) => s + Number(r.games), 0);
-          const allWins = rows.reduce((s, r) => s + Number(r.wins), 0);
-          const allLosses = rows.reduce((s, r) => s + Number(r.losses), 0);
-          const totalEntry = {
-            key: "Total",
-            league_id: firstRow.league_id,
-            league_slug: firstRow.league_slug,
-            games: allGames,
-            wins: allWins,
-            losses: allLosses,
-            win_percentage:
-              allGames > 0
-                ? Math.round((allWins / allGames) * 1000) / 10
-                : 0,
-            points_scored: null,
-            points_received: null,
-            points_diff: null,
-            attendance: null,
-          };
-
           return {
             teamId: firstRow.team_id,
             teamSlug: firstRow.team_slug,
@@ -177,7 +159,7 @@ export default factories.createCoreService(
             stats: [
               makeEntry("Home", byVenue["home"]),
               makeEntry("Away", byVenue["away"]),
-              totalEntry,
+              makeEntry("Total", byVenue["total"]),
             ],
           };
         },
@@ -393,7 +375,7 @@ export default factories.createCoreService(
               league_id,
               league_slug,
               season,
-              venue,
+              COALESCE(venue, 'total') AS venue,
               COUNT(*) AS games,
               SUM(CASE
                 WHEN forfeited AND forfeited_by <> 'none' AND forfeited_by <> side THEN 1
@@ -410,7 +392,10 @@ export default factories.createCoreService(
               ROUND(AVG(points_scored - points_allowed) FILTER (WHERE forfeited IS NOT TRUE), 1) AS points_diff,
               ROUND(AVG(NULLIF(attendance::text, '')::numeric), 0) AS attendance
             FROM all_games
-            GROUP BY team_id, team_slug, league_id, league_slug, season, venue
+            GROUP BY GROUPING SETS (
+              (team_id, team_slug, league_id, league_slug, season, venue),
+              (team_id, team_slug, league_id, league_slug, season)
+            )
           `;
 
           const sqlBindings = { league: leagueSlug, season, teamSlug: mainSlug };
@@ -444,18 +429,12 @@ export default factories.createCoreService(
               attendance: r?.attendance ?? 0,
             });
 
-            const totalGames = rows.reduce((s, r) => s + Number(r.games), 0);
+            const totalRow = byVenue["total"];
             return {
               firstRow,
-              totalGames,
+              totalGames: Number(totalRow?.games ?? 0),
               stats: {
-                total: makeEntry("Total", {
-                  league_id: firstRow.league_id,
-                  league_slug: firstRow.league_slug,
-                  games: totalGames,
-                  wins: rows.reduce((s, r) => s + Number(r.wins), 0),
-                  losses: rows.reduce((s, r) => s + Number(r.losses), 0),
-                }),
+                total: makeEntry("Total", totalRow),
                 home: makeEntry("Home", byVenue["home"]),
                 away: makeEntry("Away", byVenue["away"]),
               },
@@ -575,6 +554,149 @@ export default factories.createCoreService(
             { mainSlug, league: leagueSlug, season },
           );
           return result.rows;
+        },
+      );
+    },
+
+    async findSeasonPlayerLeaders(leagueSlug, season) {
+      return getCached(
+        `${CACHE_PREFIX}competition:season-leaders:${leagueSlug}:${season}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
+          const mainSlug = await getMainTeamSlug();
+
+          // Per-player season totals AND averages for the main team, joined to
+          // players/files for the profile picture. The frontend sorts by the
+          // chosen category + mode and slices the top 5.
+          return knex("player_boxscore as b")
+            .leftJoin("players as p", "p.document_id", "b.player_id")
+            .leftJoin("files_related_mph as m", function () {
+              this.on("m.related_id", "=", "p.id")
+                .andOnVal("m.related_type", "=", "api::player.player")
+                .andOnVal("m.field", "=", "image");
+            })
+            .leftJoin("files as f", "f.id", "m.file_id")
+            .select(
+              knex.raw(`b.player_id as player_id`),
+              "b.first_name",
+              "b.last_name",
+              knex.raw(`MAX(f.url) as image_url`),
+              knex.raw(`COUNT(b.game_id) as games`),
+              knex.raw(`SUM(b.minutes + (b.seconds / 60.0)) as minutes_total`),
+              knex.raw(`ROUND(AVG(b.minutes + (b.seconds / 60.0)), 1) as minutes_avg`),
+              knex.raw(`SUM(b.points) as points_total`),
+              knex.raw(`ROUND(AVG(b.points), 1) as points_avg`),
+              knex.raw(`SUM(b.rebounds) as rebounds_total`),
+              knex.raw(`ROUND(AVG(b.rebounds), 1) as rebounds_avg`),
+              knex.raw(`SUM(b.assists) as assists_total`),
+              knex.raw(`ROUND(AVG(b.assists), 1) as assists_avg`),
+              knex.raw(`SUM(b.three_pointers_made) as three_pointers_made_total`),
+              knex.raw(`ROUND(AVG(b.three_pointers_made), 1) as three_pointers_made_avg`),
+            )
+            .where("b.team_slug", mainSlug)
+            .where("b.league_slug", leagueSlug)
+            .where("b.season", season)
+            .where("b.is_nulled", false)
+            .whereRaw(`b.status::text <> 'dnp-cd'::text`)
+            .groupBy("b.player_id", "b.first_name", "b.last_name")
+            .orderByRaw(`COUNT(b.game_id) DESC`);
+        },
+      );
+    },
+
+    async findSeasonTeamRecords(leagueSlug, season) {
+      return getCached(
+        `${CACHE_PREFIX}competition:season-team-records:${leagueSlug}:${season}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
+          const mainSlug = await getMainTeamSlug();
+
+          // One row per main-team game in this competition/season, carrying the
+          // main team's points scored/allowed, attendance, win margin, and 3PM.
+          const result = await knex.raw(
+            `
+            WITH main_games AS (
+              SELECT
+                s.game_document_id AS game_id,
+                s.season,
+                s.away_team_name AS opponent_name,
+                s.away_team_slug AS opponent_slug,
+                s.home_score AS points_scored,
+                s.away_score AS points_allowed,
+                NULLIF(s.attendance, '')::numeric AS attendance
+              FROM schedule s
+              WHERE s.is_nulled IS NOT TRUE
+                AND s.home_score IS NOT NULL AND s.away_score IS NOT NULL
+                AND s.league_slug = :league AND s.season = :season
+                AND s.home_team_slug = :mainSlug
+
+              UNION ALL
+
+              SELECT
+                s.game_document_id AS game_id,
+                s.season,
+                s.home_team_name AS opponent_name,
+                s.home_team_slug AS opponent_slug,
+                s.away_score AS points_scored,
+                s.home_score AS points_allowed,
+                NULLIF(s.attendance, '')::numeric AS attendance
+              FROM schedule s
+              WHERE s.is_nulled IS NOT TRUE
+                AND s.home_score IS NOT NULL AND s.away_score IS NOT NULL
+                AND s.league_slug = :league AND s.season = :season
+                AND s.away_team_slug = :mainSlug
+            )
+            SELECT
+              mg.game_id,
+              mg.season,
+              mg.opponent_name,
+              mg.opponent_slug,
+              mg.points_scored,
+              mg.points_allowed,
+              mg.attendance,
+              (mg.points_scored - mg.points_allowed) AS score_diff,
+              tb.three_pointers_made
+            FROM main_games mg
+            LEFT JOIN team_boxscore tb
+              ON tb.game_id = mg.game_id
+              AND tb.team_slug = :mainSlug
+              AND tb.is_nulled IS NOT TRUE
+            `,
+            { mainSlug, league: leagueSlug, season },
+          );
+
+          const rows: any[] = result.rows;
+
+          const toItem = (r: any, statField: string) => ({
+            game_id: r.game_id,
+            opponent_name: r.opponent_name,
+            opponent_slug: r.opponent_slug,
+            season: r.season,
+            stat_value: Number(r[statField]),
+          });
+
+          const topBy = (
+            field: string,
+            dir: "desc" | "asc",
+            filterFn?: (r: any) => boolean,
+          ) =>
+            rows
+              .filter((r) => r[field] != null && (filterFn ? filterFn(r) : true))
+              .sort((a, b) =>
+                dir === "desc" ? b[field] - a[field] : a[field] - b[field],
+              )
+              .slice(0, 5)
+              .map((r) => toItem(r, field));
+
+          return {
+            most_points: topBy("points_scored", "desc"),
+            least_points_allowed: topBy("points_allowed", "asc"),
+            most_threes: topBy("three_pointers_made", "desc"),
+            largest_win: topBy("score_diff", "desc", (r) => r.score_diff > 0),
+            highest_attendance: topBy("attendance", "desc"),
+          };
         },
       );
     },

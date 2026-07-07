@@ -116,7 +116,9 @@ export const API_ROUTES = {
 		coachRankings: (slug: string, stat: string) => `${root}/league/coach-rankings/${slug}/${stat}`,
 		teamRecord: (slug: string) => `${root}/league/team-record/${slug}`,
 		playerSeasonStats: (slug: string, season: string) => `${root}/league/player-stats/${slug}/${season}`,
-		teamSeasonStats: (slug: string, season: string) => `${root}/league/team-stats/${slug}/${season}`
+		teamSeasonStats: (slug: string, season: string) => `${root}/league/team-stats/${slug}/${season}`,
+		seasonLeaders: (slug: string, season: string) => `${root}/league/season-leaders/${slug}/${season}`,
+		seasonTeamRecords: (slug: string, season: string) => `${root}/league/season-team-records/${slug}/${season}`
 	},
 	referee: {
 		details: (id: string) => `${root}/referees/${id}?populate=*`,

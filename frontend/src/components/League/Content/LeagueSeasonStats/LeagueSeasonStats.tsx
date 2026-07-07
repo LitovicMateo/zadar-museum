@@ -8,6 +8,9 @@ import { useLeagueSeasons } from '@/hooks/queries/league/UseLeagueSeasons';
 import { useTeamLeagueSeasonStats } from '@/hooks/queries/league/UseTeamLeagueStats';
 import { TeamStats } from '@/types/api/Team';
 
+import SeasonLeaders from './SeasonLeaders';
+import SeasonTeamRecords from './SeasonTeamRecords';
+
 const fmt = (v: number | string | null | undefined): string => (v == null ? '–' : `${v}`);
 
 const leagueSeasonColumns: StatsColumn<TeamStats>[] = [
@@ -99,30 +102,33 @@ const LeagueSeasonStats: React.FC = () => {
 
 	if (!seasons) return null;
 
-	if (isLoading) {
-		return (
-			<section className="space-y-4">
-				<Skeleton className="h-9 w-48 rounded-lg" />
-				<Skeleton className="h-32 rounded-xl" />
-			</section>
-		);
-	}
-
 	return (
-		<section className="space-y-4">
+		<div className="space-y-8">
 			<SeasonSelect
 				compact
 				seasons={seasons}
 				selectedSeason={selectedSeason}
 				onSeasonChange={setSelectedSeason}
 			/>
-			<StatsTable
-				columns={leagueSeasonColumns}
-				groups={groups}
-				footer={{ rows: footerRows, variant: 'light' }}
-				initialSort={{ columnId: 'games', dir: 'desc' }}
-			/>
-		</section>
+
+			{isLoading ? (
+				<Skeleton className="h-32 rounded-xl" />
+			) : (
+				<StatsTable
+					columns={leagueSeasonColumns}
+					groups={groups}
+					footer={{ rows: footerRows, variant: 'light' }}
+					initialSort={{ columnId: 'games', dir: 'desc' }}
+				/>
+			)}
+
+			{selectedSeason && (
+				<>
+					<SeasonLeaders leagueSlug={leagueSlug!} season={selectedSeason} />
+					<SeasonTeamRecords leagueSlug={leagueSlug!} season={selectedSeason} />
+				</>
+			)}
+		</div>
 	);
 };
 

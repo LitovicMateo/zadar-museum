@@ -70,5 +70,19 @@ export default factories.createCoreController(
       );
       ctx.body = data;
     },
+
+    async getSeasonPlayerLeaders(ctx) {
+      const { leagueSlug, season } = ctx.params;
+      const service = strapi.service("api::competition.competition");
+      const data = await service.findSeasonPlayerLeaders(leagueSlug, season);
+      ctx.body = data;
+    },
+
+    async getSeasonTeamRecords(ctx) {
+      const { leagueSlug, season } = ctx.params;
+      const service = strapi.service("api::competition.competition");
+      const data = await service.findSeasonTeamRecords(leagueSlug, season);
+      ctx.body = data;
+    },
   }),
 );
