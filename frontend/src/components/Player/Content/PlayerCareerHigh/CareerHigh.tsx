@@ -5,6 +5,7 @@ import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import { Skeleton } from '@/components/UI/Skeleton';
 import { useBoxscore } from '@/hooks/context/UseBoxscore';
 import { usePlayerCareerHigh } from '@/hooks/queries/player/UsePlayerCareerHigh';
+import { useTeamLogos } from '@/hooks/queries/team/UseTeamLogos';
 import { PlayerCareerHighResponse } from '@/types/api/Player';
 import { usePlayerHasAppearances } from '@/utils/PlayerHasAppearances';
 
@@ -33,6 +34,7 @@ const CareerHigh: React.FC = React.memo(() => {
 
 	const { data: careerHigh, isLoading } = usePlayerCareerHigh(playerId!, selectedDatabase);
 	const hasAppearances = usePlayerHasAppearances(playerId!, selectedDatabase);
+	const logos = useTeamLogos();
 
 	if (!hasAppearances) return null;
 
@@ -52,7 +54,15 @@ const CareerHigh: React.FC = React.memo(() => {
 				{careerHighData.map((stat) => {
 					const value = careerHigh[stat.key];
 					if (typeof value === 'string' || value == null) return null;
-					return <CareerHighRow key={stat.key} label={stat.label} stat={value} />;
+					return (
+						<CareerHighRow
+							key={stat.key}
+							label={stat.label}
+							stat={value}
+							image={logos.get(value.opponent_team_slug)}
+							featured={stat.key === 'points'}
+						/>
+					);
 				})}
 			</div>
 		</DynamicContentWrapper>

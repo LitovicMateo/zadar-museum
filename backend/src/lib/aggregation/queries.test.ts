@@ -1,4 +1,8 @@
-import { aggregatePlayerStats, phaseClause } from "./queries";
+import {
+  aggregatePlayerStats,
+  aggregatePlayerRecords,
+  phaseClause,
+} from "./queries";
 
 jest.mock("../mainTeam", () => ({
   getMainTeamSlug: jest.fn().mockResolvedValue("zadar"),
@@ -73,5 +77,80 @@ describe("aggregatePlayerStats — aggregate-line support", () => {
     expect(sql).toContain("SUM(b.points)::numeric / NULLIF(SUM(b.games), 0)");
     expect(sql).not.toMatch(/AVG\(b\.points\)/);
     expect(sql).not.toMatch(/AVG\(b\.rebounds\)/);
+  });
+});
+
+describe("aggregatePlayerStats — team scoping", () => {
+  function fakeKnex() {
+    const calls: { sql: string; bindings: Record<string, unknown> }[] = [];
+    const knex = {
+      raw: jest.fn((sql: string, bindings: Record<string, unknown>) => {
+        calls.push({ sql, bindings });
+        return Promise.resolve({ rows: [] });
+      }),
+    } as unknown as import("knex").Knex;
+    return { knex, calls };
+  }
+
+  it("filters by the given teamSlug instead of the main/non-main database split", async () => {
+    const { knex, calls } = fakeKnex();
+    await aggregatePlayerStats(knex, {
+      stats: "total",
+      location: "all",
+      teamSlug: "cibona",
+    });
+    const { sql, bindings } = calls[0];
+    expect(sql).toContain("b.team_slug = :teamSlug");
+    expect(sql).not.toContain("b.team_slug != :mainSlug");
+    expect(sql).not.toContain("b.team_slug = :mainSlug");
+    expect(bindings.teamSlug).toBe("cibona");
+    // no opponent scoping -> keep reading the unified view (aggregate lines)
+    expect(sql).toContain("FROM player_boxscore_unified b");
+  });
+
+  it("scopes to opponent games from the per-game view when opponentSlug is set", async () => {
+    const { knex, calls } = fakeKnex();
+    await aggregatePlayerStats(knex, {
+      stats: "average",
+      location: "all",
+      teamSlug: "zadar",
+      opponentSlug: "cibona",
+    });
+    const { sql, bindings } = calls[0];
+    expect(sql).toContain("b.team_slug = :teamSlug");
+    expect(sql).toContain("b.opponent_team_slug = :opponentSlug");
+    expect(bindings.teamSlug).toBe("zadar");
+    expect(bindings.opponentSlug).toBe("cibona");
+    // opponent scoping needs per-game rows (unified aggregate lines have no opponent)
+    expect(sql).toContain("FROM (SELECT *, 1 AS games FROM player_boxscore) b");
+    expect(sql).not.toContain("FROM player_boxscore_unified b");
+  });
+});
+
+describe("aggregatePlayerRecords — team scoping", () => {
+  function fakeKnex() {
+    const calls: { sql: string; bindings: Record<string, unknown> }[] = [];
+    const knex = {
+      raw: jest.fn((sql: string, bindings: Record<string, unknown>) => {
+        calls.push({ sql, bindings });
+        return Promise.resolve({ rows: [] });
+      }),
+    } as unknown as import("knex").Knex;
+    return { knex, calls };
+  }
+
+  it("filters by teamSlug and opponentSlug instead of the database split", async () => {
+    const { knex, calls } = fakeKnex();
+    await aggregatePlayerRecords(knex, {
+      location: "all",
+      teamSlug: "zadar",
+      opponentSlug: "cibona",
+    });
+    const { sql, bindings } = calls[0];
+    expect(sql).toContain("b.team_slug = :teamSlug");
+    expect(sql).toContain("b.opponent_team_slug = :opponentSlug");
+    expect(sql).not.toContain("b.team_slug = :mainSlug");
+    expect(bindings.teamSlug).toBe("zadar");
+    expect(bindings.opponentSlug).toBe("cibona");
   });
 });

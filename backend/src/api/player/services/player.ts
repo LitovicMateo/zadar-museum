@@ -7,6 +7,7 @@ import {
   validateWhitelist,
   validateSeason,
   ALLOWED_DATABASES,
+  ALLOWED_PLAYER_RECORD_STATS,
 } from "../../../validation";
 import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
 import {
@@ -309,10 +310,16 @@ export default factories.createCoreService(
         TTL_24H,
         async () => {
           const knex = strapi.db.connection;
+          // Rank over the whole database-scoped ladder (all main-team players, or
+          // all non-main players pooled together), then pick this player's row.
+          // Passing playerId into aggregatePlayerStats would collapse the
+          // RANK() population to a single row, making every rank 1.
           const baseParams = {
             database: validatedDb as "main" | "opponent",
-            playerId,
           };
+
+          const findPlayer = (rows: any[]) =>
+            rows.find((r) => r.player_id === playerId) ?? null;
 
           const [totalRecord, avgRecord] = await Promise.all([
             buildRecord(async (location) => {
@@ -321,7 +328,7 @@ export default factories.createCoreService(
                 stats: "total",
                 location,
               });
-              return rows[0] ?? null;
+              return findPlayer(rows);
             }),
             buildRecord(async (location) => {
               const rows = await aggregatePlayerStats(knex, {
@@ -329,7 +336,7 @@ export default factories.createCoreService(
                 stats: "average",
                 location,
               });
-              return rows[0] ?? null;
+              return findPlayer(rows);
             }),
           ]);
 
@@ -696,6 +703,127 @@ export default factories.createCoreService(
               hasPhaseSplit: regularGames > 0 && playoffGames > 0,
             };
           });
+        },
+      );
+    },
+
+    // Per-season single-game records: top-5 games per stat category for the
+    // given season, keyed by statKey. Opponent columns come straight off
+    // player_boxscore (no schedule join needed). Mirrors the venue analogue
+    // findVenueSeasonPlayerRecords.
+    async findPlayerSeasonRecords(playerId, season, database) {
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      const validatedSeason = validateSeason(season);
+      const validatedDatabase = validateWhitelist(
+        database,
+        ALLOWED_DATABASES,
+        "database",
+      );
+
+      return getCached(
+        `${CACHE_PREFIX}player:season-records:${playerId}:${validatedSeason}:${validatedDatabase}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
+          const mainSlug = await getMainTeamSlug();
+
+          const recordsForStat = (statKey: string) =>
+            knex("player_boxscore as pb")
+              .select(
+                "pb.game_id",
+                "pb.season",
+                "pb.game_date",
+                "pb.opponent_team_name",
+                "pb.opponent_team_slug",
+                knex.raw(`pb.?? as stat_value`, [statKey]),
+              )
+              .where("pb.player_id", playerId)
+              .andWhere("pb.season", validatedSeason)
+              .whereNot("pb.is_nulled", true)
+              .whereRaw(`pb.status::text <> 'dnp-cd'::text`)
+              .whereNotNull(`pb.${statKey}`)
+              .modify((qb) => {
+                if (validatedDatabase === "main") {
+                  qb.where("pb.team_slug", mainSlug);
+                } else {
+                  qb.whereNot("pb.team_slug", mainSlug);
+                }
+              })
+              .orderByRaw(`pb.?? desc`, [statKey])
+              .limit(5);
+
+          const entries = await Promise.all(
+            ALLOWED_PLAYER_RECORD_STATS.map(async (statKey) => {
+              const rows = await recordsForStat(statKey);
+              return [statKey, rows] as const;
+            }),
+          );
+          return Object.fromEntries(entries);
+        },
+      );
+    },
+
+    // All-time single-game records for one stat, filterable by competition
+    // (league) and split by location. Returns { total, home, away, neutral },
+    // each a top-20 array. Mirrors team.findTeamPlayerSplitRecords.
+    async findPlayerSplitRecords(
+      playerId: string,
+      statKey: string,
+      opts: { league?: string; database: string },
+    ) {
+      if (!playerId) {
+        throw new Error("Player ID is required");
+      }
+      validateWhitelist(statKey, ALLOWED_PLAYER_RECORD_STATS, "statKey");
+      const validatedDatabase = validateWhitelist(
+        opts.database,
+        ALLOWED_DATABASES,
+        "database",
+      );
+      const { league } = opts;
+
+      return getCached(
+        `${CACHE_PREFIX}player:split-records:${playerId}:${validatedDatabase}:${statKey}:${league || "all"}`,
+        TTL_24H,
+        async () => {
+          const knex = strapi.db.connection;
+          const mainSlug = await getMainTeamSlug();
+
+          const runForLocation = (
+            location: "all" | "home" | "away" | "neutral",
+          ) =>
+            knex("player_boxscore as pb")
+              .select(
+                "pb.game_id",
+                "pb.season",
+                "pb.game_date",
+                "pb.opponent_team_name",
+                "pb.opponent_team_slug",
+                knex.raw(`pb.?? as stat_value`, [statKey]),
+              )
+              .where("pb.player_id", playerId)
+              .whereNot("pb.is_nulled", true)
+              .whereRaw(`pb.status::text <> 'dnp-cd'::text`)
+              .whereNotNull(`pb.${statKey}`)
+              .modify((qb) => {
+                if (validatedDatabase === "main") {
+                  qb.where("pb.team_slug", mainSlug);
+                } else {
+                  qb.whereNot("pb.team_slug", mainSlug);
+                }
+                if (league && league !== "all") {
+                  qb.where("pb.league_slug", league);
+                }
+                if (location !== "all") {
+                  qb.where("pb.is_home_team", location);
+                }
+              })
+              .orderByRaw(`pb.?? desc`, [statKey])
+              .limit(20);
+
+          return buildRecord(async (location) => await runForLocation(location));
         },
       );
     },

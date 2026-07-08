@@ -109,6 +109,7 @@ const AllTimeStats: React.FC = React.memo(() => {
 					onValueChange={setLocation}
 					options={locations}
 					ariaLabel="Location filter"
+					itemClassName="border border-court data-[state=on]:border-transparent"
 				/>
 			</MobileFilterSheet>
 

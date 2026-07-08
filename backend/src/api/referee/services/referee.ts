@@ -12,14 +12,31 @@ import {
 } from "../../../lib/aggregation/queries";
 import type { Knex } from "knex";
 
+// Stamps league identity onto each non-null row of a { total, home, away,
+// neutral } group, since aggregateRefereeStats doesn't select it (it's a
+// shared query also used without a league filter).
+function stampLeague<T extends Record<string, any>>(
+  group: { total: T | null; home: T | null; away: T | null; neutral: T | null },
+  league_id: any,
+  league_slug: string,
+) {
+  const stamp = (row: T | null) => (row ? { ...row, league_id, league_slug } : row);
+  return {
+    total: stamp(group.total),
+    home: stamp(group.home),
+    away: stamp(group.away),
+    neutral: stamp(group.neutral),
+  };
+}
+
 // Computes a referee's { total, home, away, neutral } record for one league +
 // phase, or null when the referee officiated no games in that scope.
 async function refereeLeaguePhase(
   knex: Knex,
-  args: { refereeId: string; league_slug: string; season?: string; phase: Phase },
+  args: { refereeId: string; league_id: any; league_slug: string; season?: string; phase: Phase },
 ) {
-  const { refereeId, league_slug, season, phase } = args;
-  const record = await buildRecord((location) =>
+  const { refereeId, league_id, league_slug, season, phase } = args;
+  const rawRecord = await buildRecord((location) =>
     aggregateRefereeStats(knex, {
       refereeId,
       location,
@@ -28,8 +45,9 @@ async function refereeLeaguePhase(
       phase,
     }).then((r) => r[0] ?? null),
   );
-  const anyRow = record.total ?? record.home ?? record.away ?? record.neutral;
+  const anyRow = rawRecord.total ?? rawRecord.home ?? rawRecord.away ?? rawRecord.neutral;
   if (!anyRow) return null;
+  const record = stampLeague(rawRecord, league_id, league_slug);
   return { record, anyRow };
 }
 
@@ -37,7 +55,7 @@ async function refereeLeaguePhase(
 // the regular/playoff split records, and the hasPhaseSplit flag.
 async function refereeLeaguePhaseSet(
   knex: Knex,
-  args: { refereeId: string; league_slug: string; season?: string },
+  args: { refereeId: string; league_id: any; league_slug: string; season?: string },
 ) {
   const [all, regular, playoff] = await Promise.all([
     refereeLeaguePhase(knex, { ...args, phase: "all" }),
@@ -200,6 +218,7 @@ export default factories.createCoreService(
             leagues.map(async ({ league_id, league_slug }) => {
               const set = await refereeLeaguePhaseSet(knex, {
                 refereeId,
+                league_id,
                 league_slug,
                 season: validatedSeason ?? undefined,
               });
@@ -249,7 +268,7 @@ export default factories.createCoreService(
 
           const leagueResults = await Promise.all(
             leagues.map(async ({ league_id, league_slug }) => {
-              const set = await refereeLeaguePhaseSet(knex, { refereeId, league_slug });
+              const set = await refereeLeaguePhaseSet(knex, { refereeId, league_id, league_slug });
               if (!set) return null;
               const anyRow = set.all.anyRow;
 

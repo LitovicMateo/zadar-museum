@@ -81,12 +81,14 @@ const CoachLeagueStats: React.FC = () => {
 						onValueChange={setCoachRole}
 						options={roleOptions}
 						ariaLabel="Coach role filter"
+						itemClassName="border border-court data-[state=on]:border-transparent"
 					/>
 					<SegmentedToggle
 						value={location}
 						onValueChange={setLocation}
 						options={locationOptions}
 						ariaLabel="Location filter"
+						itemClassName="border border-court data-[state=on]:border-transparent"
 					/>
 				</div>
 			</MobileFilterSheet>

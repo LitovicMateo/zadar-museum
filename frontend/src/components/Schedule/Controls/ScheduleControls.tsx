@@ -38,6 +38,7 @@ const ScheduleControls: React.FC<ScheduleControlsProps> = ({
 			selectedSeason={selectedSeason}
 			onSeasonChange={setSelectedSeason}
 			isPending={isPending}
+			compact
 		/>
 		{showCompetition && (
 			<CompetitionDropdown

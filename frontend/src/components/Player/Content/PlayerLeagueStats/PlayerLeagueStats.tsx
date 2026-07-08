@@ -8,6 +8,7 @@ import { useAllTimeLeagueStats } from '@/hooks/queries/player/UseAllTimeLeagueSt
 import { usePlayerHasAppearances } from '@/utils/PlayerHasAppearances';
 
 import MainTable from './main-table/MainTable';
+import PlayerLeagueRecords from './PlayerLeagueRecords';
 
 type View = 'total' | 'average';
 type Location = 'total' | 'home' | 'away' | 'neutral';
@@ -50,17 +51,26 @@ const PlayerLeagueStats: React.FC = React.memo(() => {
 		<section className="space-y-4">
 			<MobileFilterSheet title="Filter stats">
 				<div className="flex flex-wrap items-center gap-3">
-					<SegmentedToggle value={view} onValueChange={setView} options={viewOptions} ariaLabel="Total or average" />
+					<SegmentedToggle
+						value={view}
+						onValueChange={setView}
+						options={viewOptions}
+						ariaLabel="Total or average"
+						itemClassName="border border-court data-[state=on]:border-transparent"
+					/>
 					<SegmentedToggle
 						value={location}
 						onValueChange={setLocation}
 						options={locations}
 						ariaLabel="Location filter"
+						itemClassName="border border-court data-[state=on]:border-transparent"
 					/>
 				</div>
 			</MobileFilterSheet>
 
 			<MainTable view={view} location={location} />
+
+			<PlayerLeagueRecords />
 		</section>
 	);
 });

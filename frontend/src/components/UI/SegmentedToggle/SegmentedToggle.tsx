@@ -13,6 +13,7 @@ type SegmentedToggleProps<T extends string> = {
 	options: SegmentedOption<T>[];
 	ariaLabel?: string;
 	className?: string;
+	itemClassName?: string;
 };
 
 /**
@@ -24,7 +25,8 @@ function SegmentedToggle<T extends string>({
 	onValueChange,
 	options,
 	ariaLabel,
-	className
+	className,
+	itemClassName
 }: SegmentedToggleProps<T>) {
 	return (
 		<ToggleGroup
@@ -39,7 +41,10 @@ function SegmentedToggle<T extends string>({
 					key={opt.value}
 					value={opt.value}
 					disabled={opt.disabled}
-					className="rounded-md px-3 font-mono text-xs uppercase tracking-[0.08em] data-[state=on]:bg-court data-[state=on]:text-white data-[state=on]:shadow-sm"
+					className={cn(
+						'rounded-md px-3 font-mono text-xs uppercase tracking-[0.08em] data-[state=on]:bg-court data-[state=on]:text-white data-[state=on]:shadow-sm',
+						itemClassName
+					)}
 				>
 					{opt.label}
 				</ToggleGroupItem>

@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "league_tables",
+  "info": {
+    "singularName": "league-table",
+    "pluralName": "league-tables",
+    "displayName": "League Table",
+    "description": "Official final league standings table for a competition/season/stage"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "season": {
+      "type": "string",
+      "regex": "^.{4}$"
+    },
+    "stageNumber": {
+      "type": "integer",
+      "required": true
+    },
+    "stageName": {
+      "type": "string"
+    },
+    "competition": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::competition.competition"
+    },
+    "standings": {
+      "type": "json",
+      "default": []
+    }
+  }
+}

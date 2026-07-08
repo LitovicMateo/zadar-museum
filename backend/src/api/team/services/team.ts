@@ -13,9 +13,11 @@ import {
 import { getCached, TTL_24H, TTL_1H, CACHE_PREFIX } from "../../../utils/cache";
 import {
   aggregateTeamStats,
+  aggregatePlayerStats,
   buildRecord,
   type Phase,
 } from "../../../lib/aggregation/queries";
+import { getMainTeamSlug } from "../../../lib/mainTeam";
 import type { Knex } from "knex";
 
 // Shape a raw aggregateTeamStats row into the TeamStats JSONB-equivalent object
@@ -492,6 +494,94 @@ export default factories.createCoreService("api::team.team", ({ strapi }) => ({
           })
           .orderByRaw(`tb.?? desc`, [statKey])
           .limit(20);
+      },
+    );
+  },
+
+  // Aggregate player roster (total or average) for the League/Season tab player
+  // section. `database: 'team'` scopes to this team's own players; `'main'`
+  // scopes to the main team's players in the games they played against this
+  // team (head-to-head). Returns the { total, home, away, neutral } location
+  // split so the frontend can toggle location client-side.
+  async findTeamPlayerSplitStats(
+    teamSlug: string,
+    opts: {
+      season?: string;
+      league?: string;
+      stats: "total" | "average";
+      database: "team" | "main";
+    },
+  ) {
+    const { season, league, stats, database } = opts;
+    return getCached(
+      `${CACHE_PREFIX}team:player-split-stats:${teamSlug}:${database}:${stats}:${league || "all"}:${season || "all"}`,
+      TTL_24H,
+      async () => {
+        const knex = strapi.db.connection;
+        const scope =
+          database === "main"
+            ? { teamSlug: await getMainTeamSlug(), opponentSlug: teamSlug }
+            : { teamSlug };
+        return buildRecord((location) =>
+          aggregatePlayerStats(knex, { stats, location, league, season, ...scope }),
+        );
+      },
+    );
+  },
+
+  // Per-game player records (single-game highs) for the same player section,
+  // for one stat category. Same team/main scoping as findTeamPlayerSplitStats.
+  async findTeamPlayerSplitRecords(
+    teamSlug: string,
+    statKey: string,
+    opts: { season?: string; league?: string; database: "team" | "main" },
+  ) {
+    validateWhitelist(statKey, ALLOWED_PLAYER_RECORD_STATS, "statKey");
+    const { season, league, database } = opts;
+    return getCached(
+      `${CACHE_PREFIX}team:player-split-records:${teamSlug}:${database}:${statKey}:${league || "all"}:${season || "all"}`,
+      TTL_24H,
+      async () => {
+        const knex = strapi.db.connection;
+        const mainSlug = database === "main" ? await getMainTeamSlug() : null;
+
+        const runForLocation = (location: "all" | "home" | "away" | "neutral") =>
+          knex("player_boxscore as pb")
+            .leftJoin("players as p", "p.document_id", "pb.player_id")
+            .leftJoin("files_related_mph as m", function () {
+              this.on("m.related_id", "=", "p.id")
+                .andOnVal("m.related_type", "=", "api::player.player")
+                .andOnVal("m.field", "=", "image");
+            })
+            .leftJoin("files as f", "f.id", "m.file_id")
+            .select(
+              "pb.game_id",
+              "pb.player_id",
+              "pb.first_name",
+              "pb.last_name",
+              "pb.season",
+              "f.url as image_url",
+              knex.raw(`pb.?? as stat_value`, [statKey]),
+            )
+            .whereNot("pb.is_nulled", true)
+            .whereNotNull(`pb.${statKey}`)
+            .modify((qb) => {
+              if (database === "main") {
+                qb.where("pb.team_slug", mainSlug!).where(
+                  "pb.opponent_team_slug",
+                  teamSlug,
+                );
+              } else {
+                qb.where("pb.team_slug", teamSlug);
+              }
+              if (league && league !== "all") qb.where("pb.league_slug", league);
+              if (season && season !== "all") qb.where("pb.season", season);
+              if (location !== "all") qb.where("pb.is_home_team", location);
+            })
+            .orderByRaw(`pb.?? desc`, [statKey])
+            .limit(20);
+
+        return buildRecord(async (location) => await runForLocation(location));
       },
     );
   },

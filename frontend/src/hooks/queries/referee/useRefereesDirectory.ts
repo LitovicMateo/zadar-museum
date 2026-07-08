@@ -12,7 +12,7 @@ export const useRefereesDirectory = () => {
 	const directory = useMemo<RefereeDirectoryEntry[] | undefined>(() => {
 		if (!referees || isLoadingAllTimeStats) return undefined;
 
-		const statsMap = new Map(allTimeStats ? allTimeStats.map((s) => [String(s.referee_document_id), s]) : []);
+		const statsMap = new Map(allTimeStats ? allTimeStats.map((s) => [String(s.referee_id), s]) : []);
 
 		return referees.map((referee) => {
 			const stats = statsMap.get(referee.documentId);

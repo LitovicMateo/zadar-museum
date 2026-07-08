@@ -12,6 +12,8 @@ import { VenueLeagueStats, VenueSeasonStats as VenueSeasonStatsType } from '@/ty
 
 import { venueLeagueHeading, venueStatsColumns } from '../venueColumns';
 
+import SeasonPlayerRecords from './SeasonPlayerRecords';
+
 const VenueSeasonStats = () => {
 	const { venueSlug } = useParams();
 	const [selectedSeason, setSelectedSeason] = React.useState('');
@@ -78,6 +80,8 @@ const VenueSeasonStats = () => {
 				footer={{ rows: footerRows, variant: 'light' }}
 				initialSort={{ columnId: 'games', dir: 'desc' }}
 			/>
+
+			{selectedSeason && <SeasonPlayerRecords venueSlug={venueSlug!} season={selectedSeason} />}
 		</section>
 	);
 };

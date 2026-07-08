@@ -26,7 +26,15 @@ const DatabaseSelect: React.FC<DatabaseSelectProps> = ({
 		{ value: 'neutral', label: 'Neutral', disabled: neutralDisabled }
 	];
 
-	return <SegmentedToggle value={selected} onValueChange={setSelected} options={options} ariaLabel="Location filter" />;
+	return (
+		<SegmentedToggle
+			value={selected}
+			onValueChange={setSelected}
+			options={options}
+			ariaLabel="Location filter"
+			itemClassName="border border-court data-[state=on]:border-transparent"
+		/>
+	);
 };
 
 export default DatabaseSelect;

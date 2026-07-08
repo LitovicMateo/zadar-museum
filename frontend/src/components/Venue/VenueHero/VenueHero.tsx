@@ -39,9 +39,9 @@ const HeroBanner: React.FC<{ venue: VenueDetailsResponse }> = ({ venue }) => {
 				}}
 			/>
 
-			<div className="relative mx-auto grid max-w-6xl grid-cols-[auto_1fr] items-start gap-x-4 gap-y-5 px-4 pb-6 pt-7 sm:items-end sm:gap-x-7 sm:px-6 sm:pt-9 md:pb-8">
+			<div className="relative mx-auto flex max-w-6xl items-start gap-4 px-4 pb-6 pt-7 sm:items-end sm:gap-7 sm:px-6 sm:pt-9 md:pb-8">
 				{/* Venue image */}
-				<div className="row-span-2 flex h-28 w-24 shrink-0 items-end justify-center overflow-hidden sm:h-44 sm:w-40 sm:self-end md:h-60 md:w-52">
+				<div className="flex h-28 w-24 shrink-0 items-end justify-center overflow-hidden sm:h-44 sm:w-40 md:h-60 md:w-52">
 					{imageUrl ? (
 						<img
 							src={imageUrl}
@@ -56,17 +56,16 @@ const HeroBanner: React.FC<{ venue: VenueDetailsResponse }> = ({ venue }) => {
 				</div>
 
 				{/* Nameplate */}
-				<div className="min-w-0 sm:self-end">
-					<h1 className="font-display font-black uppercase leading-[0.85] tracking-tight text-white [font-size:clamp(1.75rem,7vw,4.5rem)]">
+				<div className="min-w-0">
+					<h1 className="font-display font-black uppercase leading-[1] tracking-tight text-white [font-size:clamp(1.75rem,6.5vw,4.25rem)]">
 						{venue.name}
 					</h1>
 					<div className="mt-2 h-1 w-16 rounded-full bg-record sm:w-24" />
-				</div>
-
-				{/* Meta */}
-				<div className="col-start-2 flex flex-wrap items-center gap-2">
-					{venue.city && <Chip label="City">{venue.city}</Chip>}
-					{venue.country && <Chip label="Country">{venue.country}</Chip>}
+					{/* Meta */}
+					<div className="mt-3 flex flex-wrap items-center gap-2">
+						{venue.city && <Chip label="City">{venue.city}</Chip>}
+						{venue.country && <Chip label="Country">{venue.country}</Chip>}
+					</div>
 				</div>
 			</div>
 		</section>

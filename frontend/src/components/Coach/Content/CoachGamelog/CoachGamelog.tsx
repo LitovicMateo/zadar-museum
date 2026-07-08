@@ -35,18 +35,18 @@ const CoachGamelog: React.FC = () => {
 					onSeasonChange={setSelectedSeason}
 					compact={isMobile}
 				/>
+				<MobileFilterSheet title="Filter games">
+					<CompetitionDropdown
+						competitions={competitions}
+						selected={selectedCompetition}
+						onChange={setSelectedCompetition}
+						height={isMobile ? undefined : '40px'}
+					/>
+				</MobileFilterSheet>
 				<div className="min-w-0 flex-1">
 					<OpponentSearch value={searchTerm} onChange={setSearchTerm} />
 				</div>
 			</div>
-
-			<MobileFilterSheet title="Filter games">
-				<CompetitionDropdown
-					competitions={competitions}
-					selected={selectedCompetition}
-					onChange={setSelectedCompetition}
-				/>
-			</MobileFilterSheet>
 
 			<DynamicContentWrapper>
 				{filteredGames.length === 0 && <NoData>No games match the current filters</NoData>}

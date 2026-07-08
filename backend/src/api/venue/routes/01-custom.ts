@@ -80,6 +80,15 @@ export default {
 
     {
       method: "GET",
+      path: "/venue/season-player-records/:venueSlug/:season",
+      handler: "venue.getVenueSeasonPlayerRecords",
+      config: {
+        auth: false,
+      },
+    },
+
+    {
+      method: "GET",
       path: "/venue/records/players/:venueSlug",
       handler: "venue.getVenuePlayerRecords",
       config: {

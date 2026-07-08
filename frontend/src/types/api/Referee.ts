@@ -82,8 +82,7 @@ export type RefereeStats = {
 };
 
 export type RefereeStatsRanking = {
-	referee_id: number;
-	referee_document_id: string;
+	referee_id: string;
 	first_name: string;
 	last_name: string;
 	games: string;

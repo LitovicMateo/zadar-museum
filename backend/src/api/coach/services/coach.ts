@@ -17,6 +17,23 @@ import {
 import { getMainTeamSlug } from "../../../lib/mainTeam";
 import type { Knex } from "knex";
 
+// Stamps league identity onto each non-null row of a { total, home, away,
+// neutral } group, since aggregateCoachRecord doesn't select it (it's a
+// shared query also used without a league filter).
+function stampLeague<T extends Record<string, any>>(
+  group: { total: T | null; home: T | null; away: T | null; neutral: T | null },
+  league_id: any,
+  league_slug: string,
+) {
+  const stamp = (row: T | null) => (row ? { ...row, league_id, league_slug } : row);
+  return {
+    total: stamp(group.total),
+    home: stamp(group.home),
+    away: stamp(group.away),
+    neutral: stamp(group.neutral),
+  };
+}
+
 // Computes a coach's { total, headCoach, assistantCoach } location records for
 // one league + phase, or null when the coach has no games in that scope.
 async function coachLeaguePhase(
@@ -24,12 +41,13 @@ async function coachLeaguePhase(
   args: {
     coachId: string;
     database: "main" | "opponent";
+    league_id: any;
     league_slug: string;
     season?: string;
     phase: Phase;
   },
 ) {
-  const { coachId, database, league_slug, season, phase } = args;
+  const { coachId, database, league_id, league_slug, season, phase } = args;
   const base = { coachId, database, league: league_slug, season, phase };
   const [total, headCoach, assistantCoach] = await Promise.all([
     buildRecord((location) =>
@@ -44,7 +62,12 @@ async function coachLeaguePhase(
   ]);
   const anyRow = total.total ?? total.home ?? total.away ?? total.neutral;
   if (!anyRow) return null;
-  return { total, headCoach, assistantCoach, anyRow };
+  return {
+    total: stampLeague(total, league_id, league_slug),
+    headCoach: stampLeague(headCoach, league_id, league_slug),
+    assistantCoach: stampLeague(assistantCoach, league_id, league_slug),
+    anyRow,
+  };
 }
 
 // Assembles one per-league coach result with regular/playoff split.

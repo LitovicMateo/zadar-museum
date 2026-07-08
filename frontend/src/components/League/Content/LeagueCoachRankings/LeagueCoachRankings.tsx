@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AppSelect from '@/components/forms/shared/AppSelect';
 
-import DynamicContentWrapper from '@/components/UI/DynamicContentWrapper';
 import { selectStyle } from '@/constants/ReactSelectStyle';
 import { CoachStatsRanking } from '@/types/api/Coach';
 
@@ -26,9 +25,7 @@ const LeagueCoachRankings: React.FC = () => {
 				onChange={(opt) => setSelectedOption(opt?.value ?? 'games')}
 				styles={selectStyle<Option>()}
 			/>
-			<DynamicContentWrapper>
-				<LeagueCoachLeaderList leagueSlug={leagueSlug} stat={selectedOption} />
-			</DynamicContentWrapper>
+			<LeagueCoachLeaderList leagueSlug={leagueSlug} stat={selectedOption} />
 		</section>
 	);
 };

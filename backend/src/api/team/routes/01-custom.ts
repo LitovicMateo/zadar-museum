@@ -9,6 +9,8 @@ import {
   teamRecordParamsSchema,
   teamPlayerRecordsQuerySchema,
   teamTeamRecordsQuerySchema,
+  teamPlayerSplitStatsQuerySchema,
+  teamPlayerSplitRecordsQuerySchema,
 } from "../../../validation/schemas/team";
 
 export default {
@@ -132,6 +134,36 @@ export default {
           validate({
             params: teamSlugParamsSchema,
             query: teamTeamRecordsQuerySchema,
+          }),
+        ],
+      },
+    },
+
+    {
+      method: "GET",
+      path: "/team/player-split-stats/:teamSlug",
+      handler: "team.getTeamPlayerSplitStats",
+      config: {
+        auth: false,
+        middlewares: [
+          validate({
+            params: teamSlugParamsSchema,
+            query: teamPlayerSplitStatsQuerySchema,
+          }),
+        ],
+      },
+    },
+
+    {
+      method: "GET",
+      path: "/team/player-split-records/:teamSlug",
+      handler: "team.getTeamPlayerSplitRecords",
+      config: {
+        auth: false,
+        middlewares: [
+          validate({
+            params: teamSlugParamsSchema,
+            query: teamPlayerSplitRecordsQuerySchema,
           }),
         ],
       },
