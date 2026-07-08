@@ -10,6 +10,9 @@ import {
   playerCareerHighParamsSchema,
   playerSeasonAverageParamsSchema,
   playerAllTimeStatsQuerySchema,
+  playerSeasonRecordsParamsSchema,
+  playerSplitRecordsParamsSchema,
+  playerSplitRecordsQuerySchema,
 } from "../../../validation/schemas/player";
 import { databaseSchema } from "../../../validation/schemas/common";
 
@@ -115,6 +118,29 @@ export default {
       config: {
         auth: false,
         middlewares: [validate({ params: playerSeasonAverageParamsSchema })],
+      },
+    },
+    {
+      method: "GET",
+      path: "/players/season-records/:database/:playerId/:season",
+      handler: "player.getPlayerSeasonRecords",
+      config: {
+        auth: false,
+        middlewares: [validate({ params: playerSeasonRecordsParamsSchema })],
+      },
+    },
+    {
+      method: "GET",
+      path: "/players/split-records/:database/:playerId",
+      handler: "player.getPlayerSplitRecords",
+      config: {
+        auth: false,
+        middlewares: [
+          validate({
+            params: playerSplitRecordsParamsSchema,
+            query: playerSplitRecordsQuerySchema,
+          }),
+        ],
       },
     },
   ],

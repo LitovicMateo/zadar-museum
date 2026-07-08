@@ -27,7 +27,14 @@ export const API_ROUTES = {
 		playerStatsCheckDuplicate: (game: string | number, player: string | number) =>
 			`${root}/player-stats/check-duplicate?game=${game}&player=${player}`,
 		teamStatsCheckDuplicate: (game: string | number, team: string | number) =>
-			`${root}/team-stats/check-duplicate?game=${game}&team=${team}`
+			`${root}/team-stats/check-duplicate?game=${game}&team=${team}`,
+		leagueTable: (params?: string) => `${root}/league-tables?${params}`,
+		leagueTableCheckDuplicate: (
+			competition: string | number,
+			season: string,
+			stageNumber: string | number
+		) =>
+			`${root}/league-tables/check-duplicate?competition=${competition}&season=${season}&stageNumber=${stageNumber}`
 	},
 
 	edit: {
@@ -40,7 +47,13 @@ export const API_ROUTES = {
 		venue: (id: string) => `${root}/venues/${id}`,
 		competition: (id: string) => `${root}/competitions/${id}`,
 		playerStats: (id: string) => `${root}/player-stats/${id}`,
-		teamStats: (id: string) => `${root}/team-stats/${id}`
+		teamStats: (id: string) => `${root}/team-stats/${id}`,
+		leagueTable: (id: string) => `${root}/league-tables/${id}`
+	},
+
+	leagueTable: {
+		byLeague: (leagueSlug: string, season: string) =>
+			`${root}/league-tables/by-league/${leagueSlug}/${season}`
 	},
 
 	// player
@@ -53,7 +66,12 @@ export const API_ROUTES = {
 			seasonAverage: (playerId: string, season: string, db: PlayerDB) =>
 				`${root}/players/stats/${db}/${season}/average/total/${playerId}`,
 			seasonLeagueAverage: (playerId: string, season: string, db: PlayerDB) =>
-				`${root}/players/stats/${db}/${season}/average/league/${playerId}`
+				`${root}/players/stats/${db}/${season}/average/league/${playerId}`,
+			seasonRecords: (db: PlayerDB, playerId: string, season: string) =>
+				`${root}/players/season-records/${db}/${playerId}/${season}`,
+			splitRecords: (db: PlayerDB, playerId: string, opts: { statKey: string; league?: string }) =>
+				`${root}/players/split-records/${db}/${playerId}?statKey=${opts.statKey}` +
+				`${opts.league ? `&league=${opts.league}` : ''}`
 		},
 		profile: {
 			details: (id: string) => `${root}/players/${id}?populate=*`,
@@ -80,7 +98,19 @@ export const API_ROUTES = {
 		playerRecords: (teamSlug: string, statKey: string, season?: string) =>
 			`${root}/team/records/players/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`,
 		teamRecords: (teamSlug: string, statKey: string, season?: string) =>
-			`${root}/team/records/teams/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`
+			`${root}/team/records/teams/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`,
+		playerSplitStats: (
+			teamSlug: string,
+			opts: { stats: 'total' | 'average'; database: 'team' | 'main'; league?: string; season?: string }
+		) =>
+			`${root}/team/player-split-stats/${teamSlug}?stats=${opts.stats}&database=${opts.database}` +
+			`${opts.league ? `&league=${opts.league}` : ''}${opts.season ? `&season=${opts.season}` : ''}`,
+		playerSplitRecords: (
+			teamSlug: string,
+			opts: { statKey: string; database: 'team' | 'main'; league?: string; season?: string }
+		) =>
+			`${root}/team/player-split-records/${teamSlug}?statKey=${opts.statKey}&database=${opts.database}` +
+			`${opts.league ? `&league=${opts.league}` : ''}${opts.season ? `&season=${opts.season}` : ''}`
 	},
 	game: {
 		details: (id: string) =>
@@ -116,7 +146,9 @@ export const API_ROUTES = {
 		coachRankings: (slug: string, stat: string) => `${root}/league/coach-rankings/${slug}/${stat}`,
 		teamRecord: (slug: string) => `${root}/league/team-record/${slug}`,
 		playerSeasonStats: (slug: string, season: string) => `${root}/league/player-stats/${slug}/${season}`,
-		teamSeasonStats: (slug: string, season: string) => `${root}/league/team-stats/${slug}/${season}`
+		teamSeasonStats: (slug: string, season: string) => `${root}/league/team-stats/${slug}/${season}`,
+		seasonLeaders: (slug: string, season: string) => `${root}/league/season-leaders/${slug}/${season}`,
+		seasonTeamRecords: (slug: string, season: string) => `${root}/league/season-team-records/${slug}/${season}`
 	},
 	referee: {
 		details: (id: string) => `${root}/referees/${id}?populate=*`,
@@ -138,6 +170,8 @@ export const API_ROUTES = {
 		seasonStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/total/${venueSlug}`,
 		seasonLeagueStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/league/${venueSlug}`,
 		leagueStats: (venueSlug: string) => `${root}/venue/stats/league/${venueSlug}`,
+		seasonPlayerRecords: (venueSlug: string, season: string) =>
+			`${root}/venue/season-player-records/${venueSlug}/${season}`,
 		playerRecords: (venueSlug: string, statKey: string, season?: string) =>
 			`${root}/venue/records/players/${venueSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`,
 		teamRecords: (venueSlug: string, statKey: string, season?: string) =>
@@ -193,10 +227,12 @@ export const API_ROUTES = {
 		games: (params: string) => `${root}/dashboard/admin/games?${params}`,
 		playerStats: (params: string) => `${root}/dashboard/admin/player-stats?${params}`,
 		teamStats: (params: string) => `${root}/dashboard/admin/team-stats?${params}`,
+		leagueTables: (params: string) => `${root}/dashboard/admin/league-tables?${params}`,
 	},
 	adminById: {
 		playerStats: (documentId: string) => `${root}/dashboard/admin/player-stats/${documentId}`,
 		teamStats: (documentId: string) => `${root}/dashboard/admin/team-stats/${documentId}`,
+		leagueTable: (documentId: string) => `${root}/dashboard/admin/league-tables/${documentId}`,
 	},
 	delete: {
 		player: (id: string) => `${root}/players/${id}`,
@@ -209,6 +245,7 @@ export const API_ROUTES = {
 		competition: (id: string) => `${root}/competitions/${id}`,
 		playerStats: (id: string) => `${root}/player-stats/${id}`,
 		teamStats: (id: string) => `${root}/team-stats/${id}`,
+		leagueTable: (id: string) => `${root}/league-tables/${id}`,
 	},
 };
 
@@ -272,6 +309,11 @@ export const APP_ROUTES = {
 			list: '/dashboard/team-stats/list',
 			create: '/dashboard/team-stats/create',
 			edit: '/dashboard/team-stats/edit/'
+		},
+		leagueTable: {
+			list: '/dashboard/league-table/list',
+			create: '/dashboard/league-table/create',
+			edit: '/dashboard/league-table/edit/'
 		}
 	},
 

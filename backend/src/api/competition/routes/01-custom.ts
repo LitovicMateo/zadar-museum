@@ -66,5 +66,23 @@ export default {
         auth: false,
       },
     },
+
+    {
+      method: "GET",
+      path: "/league/season-leaders/:leagueSlug/:season",
+      handler: "competition.getSeasonPlayerLeaders",
+      config: {
+        auth: false,
+      },
+    },
+
+    {
+      method: "GET",
+      path: "/league/season-team-records/:leagueSlug/:season",
+      handler: "competition.getSeasonTeamRecords",
+      config: {
+        auth: false,
+      },
+    },
   ],
 };

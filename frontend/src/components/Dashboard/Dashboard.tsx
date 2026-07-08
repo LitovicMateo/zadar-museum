@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import {
   UserRound, Users, Scale, Shield, ClipboardList,
-  Trophy, MapPin, Award, BarChart2, PieChart, Menu,
+  Trophy, MapPin, Award, BarChart2, PieChart, Menu, ListOrdered,
 } from 'lucide-react';
 
 import DashboardSidebar from '@/components/Sidebar/DashboardSidebar';
@@ -28,6 +28,7 @@ const navItems: DashboardNavItem[] = [
 const statsItems: DashboardNavItem[] = [
   { label: 'Player Stats', listPath: APP_ROUTES.dashboard.playerStats.list, icon: BarChart2 },
   { label: 'Team Stats', listPath: APP_ROUTES.dashboard.teamStats.list, icon: PieChart },
+  { label: 'League Table', listPath: APP_ROUTES.dashboard.leagueTable.list, icon: ListOrdered },
 ];
 
 const Dashboard: React.FC = () => {

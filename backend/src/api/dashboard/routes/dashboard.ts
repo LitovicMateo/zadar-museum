@@ -194,5 +194,17 @@ export default {
       handler: "dashboard.getTeamStatByIdAdmin",
       config: { auth: false },
     },
+    {
+      method: "GET",
+      path: "/dashboard/admin/league-tables",
+      handler: "dashboard.getLeagueTablesAdmin",
+      config: { auth: false },
+    },
+    {
+      method: "GET",
+      path: "/dashboard/admin/league-tables/:documentId",
+      handler: "dashboard.getLeagueTableByIdAdmin",
+      config: { auth: false },
+    },
   ],
 };

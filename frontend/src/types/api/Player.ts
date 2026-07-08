@@ -208,6 +208,27 @@ export interface PlayerCareerHighResponse {
 	efficiency: Stat;
 }
 
+/** A single-game record row (opponent + game identity + one stat value). */
+export interface PlayerRecordRow {
+	game_id: string;
+	season: string;
+	game_date: string;
+	opponent_team_name: string;
+	opponent_team_slug: string;
+	stat_value: number;
+}
+
+/** Per-season single-game records keyed by stat (top-5 games per stat). */
+export type PlayerSeasonRecords = Record<string, PlayerRecordRow[]>;
+
+/** All-time single-game records for one stat, split by game location. */
+export interface PlayerSplitRecords {
+	total: PlayerRecordRow[];
+	home: PlayerRecordRow[];
+	away: PlayerRecordRow[];
+	neutral: PlayerRecordRow[];
+}
+
 /** A location-keyed record of stat entries for one view (total or average). */
 export interface LocationRecord {
 	total: GameStatsEntry | null;

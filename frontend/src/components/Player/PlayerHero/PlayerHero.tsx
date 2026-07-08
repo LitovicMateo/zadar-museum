@@ -96,9 +96,9 @@ const HeroBanner: React.FC<{
 				</span>
 			)}
 
-			<div className="relative mx-auto grid max-w-6xl grid-cols-[auto_1fr] items-start sm:items-end gap-x-4 gap-y-5 px-4 pb-6 pt-7 sm:gap-x-7 sm:px-6 sm:pt-9 md:pb-8">
+			<div className="relative mx-auto grid max-w-6xl grid-cols-[auto_1fr] items-end gap-x-4 px-4 pb-6 pt-7 sm:gap-x-7 sm:px-6 sm:pt-9 md:pb-8">
 				{/* Photo */}
-				<div className="row-span-2 flex h-28 w-24 shrink-0 items-end justify-center sm:self-end overflow-hidden sm:h-44 sm:w-40 md:h-60 md:w-52">
+				<div className="flex h-28 w-24 shrink-0 items-end justify-center overflow-hidden self-end sm:h-44 sm:w-40 md:h-60 md:w-52">
 					{imageUrl ? (
 						<img
 							src={imageUrl}
@@ -112,8 +112,8 @@ const HeroBanner: React.FC<{
 					)}
 				</div>
 
-				{/* Nameplate */}
-				<div className="min-w-0 sm:self-end">
+				{/* Nameplate + meta pills, stacked under the name and baseline-aligned to the photo */}
+				<div className="min-w-0 self-end">
 					<p className="font-mono text-xs uppercase tracking-[0.3em] text-white/65 sm:text-sm">
 						{player.first_name}
 					</p>
@@ -121,11 +121,8 @@ const HeroBanner: React.FC<{
 						{player.last_name}
 					</h1>
 					<div className="mt-2 h-1 w-16 rounded-full bg-record sm:w-24" />
-				</div>
 
-				{/* Meta + leader story */}
-				<div className="col-start-2 flex flex-col gap-3">
-					<div className="flex flex-wrap items-center gap-2">
+					<div className="mt-3 flex flex-wrap items-center gap-2">
 						{position && <Chip label="Pos">{position}</Chip>}
 						{player.height && <Chip label="Height">{player.height} cm</Chip>}
 						{player.nationality && (
@@ -139,12 +136,15 @@ const HeroBanner: React.FC<{
 								{ageAtDeath !== null ? ` (${ageAtDeath})` : ''}
 							</Chip>
 						) : (
-							age !== null && birthDateStr && <Chip label="Age">{`${age} · ${birthDateStr}`}</Chip>
+							<>
+								{age !== null && <Chip label="Age">{age}</Chip>}
+								{birthDateStr && <Chip label="Born">{birthDateStr}</Chip>}
+							</>
 						)}
 					</div>
 
 					{leaderIn.length > 0 && (
-						<div className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg bg-record/15 px-3 py-2 ring-1 ring-inset ring-record/30">
+						<div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg bg-record/15 px-3 py-2 ring-1 ring-inset ring-record/30">
 							<span className="inline-flex items-center gap-1.5 font-mono text-[0.7rem] font-medium uppercase tracking-[0.12em] text-record">
 								<Crown size={14} className="shrink-0" />
 								Franchise #1

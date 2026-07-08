@@ -136,5 +136,38 @@ export default factories.createCoreController(
         ctx.throw(500, err);
       }
     },
+
+    async getPlayerSeasonRecords(ctx) {
+      const { playerId, database, season } = ctx.params;
+      try {
+        const service = strapi.service("api::player.player");
+        const data = await service.findPlayerSeasonRecords(
+          playerId,
+          season,
+          database
+        );
+        ctx.body = data;
+      } catch (err) {
+        ctx.throw(500, err);
+      }
+    },
+
+    async getPlayerSplitRecords(ctx) {
+      const { playerId, database } = ctx.params;
+      const { statKey, league } = ctx.query as {
+        statKey: string;
+        league?: string;
+      };
+      try {
+        const service = strapi.service("api::player.player");
+        const data = await service.findPlayerSplitRecords(playerId, statKey, {
+          database,
+          league,
+        });
+        ctx.body = data;
+      } catch (err) {
+        ctx.throw(500, err);
+      }
+    },
   })
 );

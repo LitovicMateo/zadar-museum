@@ -9,7 +9,7 @@ import { getImageUrl } from '@/utils/GetImageUrl';
 import { User } from 'lucide-react';
 
 const Chip: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
-	<span className="inline-flex items-baseline gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white ring-1 ring-inset ring-white/15">
+	<span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white ring-1 ring-inset ring-white/15">
 		<span className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-white/55">{label}</span>
 		<span className="text-xs font-medium">{children}</span>
 	</span>
@@ -41,9 +41,9 @@ const HeroBanner: React.FC<{ referee: RefereeDetailsResponse }> = ({ referee }) 
 				}}
 			/>
 
-			<div className="relative mx-auto grid max-w-6xl grid-cols-[auto_1fr] items-start gap-x-4 gap-y-5 px-4 pb-6 pt-7 sm:items-end sm:gap-x-7 sm:px-6 sm:pt-9 md:pb-8">
+			<div className="relative mx-auto grid max-w-6xl grid-cols-[auto_1fr] items-start gap-x-4 px-4 pb-6 pt-7 sm:items-end sm:gap-x-7 sm:px-6 sm:pt-9 md:pb-8">
 				{/* Photo */}
-				<div className="row-span-2 flex h-28 w-24 shrink-0 items-end justify-center overflow-hidden sm:h-44 sm:w-40 sm:self-end md:h-60 md:w-52">
+				<div className="flex h-28 w-24 shrink-0 items-end justify-center overflow-hidden sm:h-44 sm:w-40 sm:self-end md:h-60 md:w-52">
 					{imageUrl ? (
 						<img
 							src={imageUrl}
@@ -57,7 +57,7 @@ const HeroBanner: React.FC<{ referee: RefereeDetailsResponse }> = ({ referee }) 
 					)}
 				</div>
 
-				{/* Nameplate */}
+				{/* Nameplate + Meta */}
 				<div className="min-w-0 sm:self-end">
 					<p className="font-mono text-xs uppercase tracking-[0.3em] text-white/65 sm:text-sm">
 						{referee.first_name}
@@ -66,14 +66,13 @@ const HeroBanner: React.FC<{ referee: RefereeDetailsResponse }> = ({ referee }) 
 						{referee.last_name}
 					</h1>
 					<div className="mt-2 h-1 w-16 rounded-full bg-record sm:w-24" />
-				</div>
 
-				{/* Meta */}
-				<div className="col-start-2 flex flex-wrap items-center gap-2">
 					{referee.nationality && (
-						<Chip label="Nat">
-							<Flag code={referee.nationality} className="h-3.5 w-5 rounded-[2px] object-cover" />
-						</Chip>
+						<div className="mt-3 flex flex-wrap items-center gap-2">
+							<Chip label="Nat">
+								<Flag code={referee.nationality} className="h-3.5 w-5 rounded-[2px] object-cover" />
+							</Chip>
+						</div>
 					)}
 				</div>
 			</div>

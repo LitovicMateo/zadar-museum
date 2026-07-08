@@ -250,11 +250,19 @@ export default factories.createCoreService(
           const mainSlug = await getMainTeamSlug();
           return knex("player_boxscore as pb")
             .join("schedule as s", "pb.game_id", "s.game_document_id")
+            .leftJoin("players as p", "p.document_id", "pb.player_id")
+            .leftJoin("files_related_mph as m", function () {
+              this.on("m.related_id", "=", "p.id")
+                .andOnVal("m.related_type", "=", "api::player.player")
+                .andOnVal("m.field", "=", "image");
+            })
+            .leftJoin("files as f", "f.id", "m.file_id")
             .select(
               "pb.game_id",
               "pb.first_name",
               "pb.last_name",
               "pb.season",
+              "f.url as image_url",
               knex.raw(`pb.?? as stat_value`, [statKey]),
             )
             .where("s.venue_slug", venueSlug)
@@ -266,6 +274,27 @@ export default factories.createCoreService(
             })
             .orderByRaw(`pb.?? desc`, [statKey])
             .limit(20);
+        },
+      );
+    },
+
+    async findVenueSeasonPlayerRecords(venueSlug: string, season: string) {
+      return getCached(
+        `${CACHE_PREFIX}venue:season-player-records:${venueSlug}:${season}`,
+        TTL_24H,
+        async () => {
+          const service = strapi.service("api::venue.venue");
+          const entries = await Promise.all(
+            ALLOWED_PLAYER_RECORD_STATS.map(async (statKey) => {
+              const rows = await service.findVenuePlayerRecords(
+                venueSlug,
+                statKey,
+                season,
+              );
+              return [statKey, rows.slice(0, 5)] as const;
+            }),
+          );
+          return Object.fromEntries(entries);
         },
       );
     },

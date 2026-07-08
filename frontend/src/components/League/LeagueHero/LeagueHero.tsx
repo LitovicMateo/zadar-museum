@@ -7,13 +7,6 @@ import { CompetitionDetailsResponse } from '@/types/api/Competition';
 import { getImageUrl } from '@/utils/GetImageUrl';
 import { Trophy } from 'lucide-react';
 
-const Chip: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
-	<span className="inline-flex items-baseline gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white ring-1 ring-inset ring-white/15">
-		<span className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-white/55">{label}</span>
-		<span className="text-xs font-medium">{children}</span>
-	</span>
-);
-
 const LeagueHero: React.FC = React.memo(() => {
 	const { leagueSlug } = useParams();
 	const { data: league, isLoading } = useLeagueDetails(leagueSlug!);
@@ -28,6 +21,7 @@ LeagueHero.displayName = 'LeagueHero';
 const HeroBanner: React.FC<{ league: CompetitionDetailsResponse }> = ({ league }) => {
 	const imageUrl = getImageUrl(league.image?.url);
 	const hasTrophies = league.trophies && league.trophies.length > 0;
+	const sortedTrophies = hasTrophies ? [...league.trophies].sort((a, b) => Number(a) - Number(b)) : [];
 
 	return (
 		<section className="relative overflow-hidden bg-court text-white" aria-label={`${league.name} profile`}>
@@ -83,19 +77,13 @@ const HeroBanner: React.FC<{ league: CompetitionDetailsResponse }> = ({ league }
 
 				{/* Meta */}
 				<div className="col-start-2 flex flex-col gap-3">
-					<div className="flex flex-wrap items-center gap-2">
-						{league.short_name && <Chip label="Short">{league.short_name}</Chip>}
-					</div>
-
 					{hasTrophies && (
 						<div className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg bg-record/15 px-3 py-2 ring-1 ring-inset ring-record/30">
 							<span className="inline-flex items-center gap-1.5 font-mono text-[0.7rem] font-medium uppercase tracking-[0.12em] text-record">
 								<Trophy size={14} className="shrink-0" />
 								Trophies
 							</span>
-							<span className="text-sm font-medium text-white/90">
-								{league.trophies.length} {league.trophies.length === 1 ? 'trophy' : 'trophies'}
-							</span>
+							<span className="text-sm font-medium text-white/90">{sortedTrophies.join(', ')}</span>
 						</div>
 					)}
 				</div>

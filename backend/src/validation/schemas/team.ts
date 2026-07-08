@@ -10,6 +10,7 @@ import {
   statKeySchema,
   teamIdSchema,
   entitySchema,
+  leagueSlugSchema,
 } from "./common";
 import {
   ALLOWED_PLAYER_RECORD_STATS,
@@ -125,5 +126,36 @@ export const teamTeamRecordsQuerySchema = z.object({
   statKey: z.enum(
     ALLOWED_TEAM_RECORD_STATS as unknown as [string, ...string[]],
   ),
+  season: seasonSchema,
+});
+
+/**
+ * Team-vs-main scope for the League/Season tab player section.
+ * 'team'  -> this team's own players
+ * 'main'  -> the main team's players in games against this team (head-to-head)
+ */
+const teamScopeSchema = z.enum(["team", "main"]);
+
+/**
+ * GET /team/player-split-stats/:teamSlug
+ * Query params: stats (total|average), database (team|main), league?, season?
+ */
+export const teamPlayerSplitStatsQuerySchema = z.object({
+  stats: z.enum(["total", "average"]),
+  database: teamScopeSchema,
+  league: leagueSlugSchema,
+  season: seasonSchema,
+});
+
+/**
+ * GET /team/player-split-records/:teamSlug
+ * Query params: statKey, database (team|main), league?, season?
+ */
+export const teamPlayerSplitRecordsQuerySchema = z.object({
+  statKey: z.enum(
+    ALLOWED_PLAYER_RECORD_STATS as unknown as [string, ...string[]],
+  ),
+  database: teamScopeSchema,
+  league: leagueSlugSchema,
   season: seasonSchema,
 });

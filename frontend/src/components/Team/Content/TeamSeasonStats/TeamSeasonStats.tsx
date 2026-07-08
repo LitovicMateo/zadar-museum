@@ -11,6 +11,7 @@ import { useTeamSeasonLeagueStats } from '@/hooks/queries/team/UseTeamSeasonLeag
 import { useTeamSeasonStats } from '@/hooks/queries/team/UseTeamSeasonStats';
 import { TeamStats, TeamStatsResponse } from '@/types/api/Team';
 
+import TeamPlayerSplits from '../TeamPlayerSplits/TeamPlayerSplits';
 import { TeamLeagueCell, teamStatsColumns } from '../teamColumns';
 
 type View = 'total' | 'home' | 'away' | 'neutral';
@@ -83,6 +84,7 @@ const TeamSeasonStats: React.FC = () => {
 						onValueChange={setSelected}
 						options={locationOptions}
 						ariaLabel="Location filter"
+						itemClassName="border border-court data-[state=on]:border-transparent"
 					/>
 				</div>
 			</MobileFilterSheet>
@@ -93,6 +95,8 @@ const TeamSeasonStats: React.FC = () => {
 				footer={{ rows: footerRows, variant: 'default' }}
 				initialSort={{ columnId: 'games', dir: 'desc' }}
 			/>
+
+			<TeamPlayerSplits teamSlug={teamSlug!} season={selectedSeason ?? undefined} />
 		</section>
 	);
 };

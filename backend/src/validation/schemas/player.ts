@@ -2,7 +2,13 @@
  * Validation schemas for Player API endpoints
  */
 import { z } from "zod";
-import { numericIdSchema, seasonSchema, databaseSchema } from "./common";
+import {
+  numericIdSchema,
+  seasonSchema,
+  databaseSchema,
+  leagueSlugSchema,
+} from "./common";
+import { ALLOWED_PLAYER_RECORD_STATS } from "../whitelists";
 
 /**
  * GET /api/player/boxscore
@@ -101,4 +107,31 @@ export const playerLeagueTotalsParamsSchema = z.object({
   playerId: numericIdSchema,
   database: databaseSchema,
   season: seasonSchema,
+});
+
+/**
+ * GET /players/season-records/:database/:playerId/:season
+ * Params: database, playerId, season
+ */
+export const playerSeasonRecordsParamsSchema = z.object({
+  database: databaseSchema,
+  playerId: numericIdSchema,
+  season: seasonSchema,
+});
+
+/**
+ * GET /players/split-records/:database/:playerId
+ * Params: database, playerId
+ * Query params: statKey (player stat, required), league (optional)
+ */
+export const playerSplitRecordsParamsSchema = z.object({
+  database: databaseSchema,
+  playerId: numericIdSchema,
+});
+
+export const playerSplitRecordsQuerySchema = z.object({
+  statKey: z.enum(
+    ALLOWED_PLAYER_RECORD_STATS as unknown as [string, ...string[]],
+  ),
+  league: leagueSlugSchema,
 });
