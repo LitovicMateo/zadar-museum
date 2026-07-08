@@ -40,7 +40,7 @@ export const useRefereeStatsTable = (
 				meta: { sticky: 'left', stickyOffset: '4ch' },
 				cell: (info) => (
 					<div className="whitespace-nowrap !text-left">
-						<Link to={APP_ROUTES.referee(info.row.original.referee_document_id)}>{info.getValue()}</Link>
+						<Link to={APP_ROUTES.referee(info.row.original.referee_id)}>{info.getValue()}</Link>
 					</div>
 				),
 				enableSorting: false

@@ -74,6 +74,7 @@ const RefereeCareerStats: React.FC = () => {
 					onValueChange={setLocation}
 					options={locationOptions}
 					ariaLabel="Location filter"
+					itemClassName="border border-court data-[state=on]:border-transparent"
 				/>
 			</MobileFilterSheet>
 

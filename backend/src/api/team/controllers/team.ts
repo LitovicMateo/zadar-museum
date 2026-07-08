@@ -159,5 +159,48 @@ export default factories.createCoreController(
         ctx.throw(500, err);
       }
     },
+
+    async getTeamPlayerSplitStats(ctx) {
+      const { teamSlug } = ctx.params;
+      const { stats, database, league, season } = ctx.query as {
+        stats: "total" | "average";
+        database: "team" | "main";
+        league?: string;
+        season?: string;
+      };
+      try {
+        const service = strapi.service("api::team.team");
+        const data = await service.findTeamPlayerSplitStats(teamSlug, {
+          stats,
+          database,
+          league,
+          season,
+        });
+        ctx.body = data;
+      } catch (err) {
+        ctx.throw(500, err);
+      }
+    },
+
+    async getTeamPlayerSplitRecords(ctx) {
+      const { teamSlug } = ctx.params;
+      const { statKey, database, league, season } = ctx.query as {
+        statKey: string;
+        database: "team" | "main";
+        league?: string;
+        season?: string;
+      };
+      try {
+        const service = strapi.service("api::team.team");
+        const data = await service.findTeamPlayerSplitRecords(
+          teamSlug,
+          statKey,
+          { database, league, season },
+        );
+        ctx.body = data;
+      } catch (err) {
+        ctx.throw(500, err);
+      }
+    },
   }),
 );

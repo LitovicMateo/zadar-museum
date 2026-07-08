@@ -78,6 +78,7 @@ const RefereeLeagueStats: React.FC = () => {
 					onValueChange={setSelected}
 					options={locationOptions}
 					ariaLabel="Location filter"
+					itemClassName="border border-court data-[state=on]:border-transparent"
 				/>
 			</MobileFilterSheet>
 			<StatsTable

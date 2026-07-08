@@ -260,6 +260,49 @@ export interface TeamTeamRecord {
 	stat_value: number;
 }
 
+/** The { total, home, away, neutral } location split returned by the player-section endpoints. */
+export interface LocationSplit<T> {
+	total: T[];
+	home: T[];
+	away: T[];
+	neutral: T[];
+}
+
+/**
+ * A single player's aggregated line (total or per-game average — same shape for
+ * both) from the League/Season tab player section. Numeric columns arrive as
+ * strings from Postgres SUM/ROUND, so values are widened to string | number.
+ */
+export interface TeamPlayerAggStat {
+	player_id: string;
+	first_name: string;
+	last_name: string;
+	is_active_player: boolean;
+	games: string | number | null;
+	games_started: string | number | null;
+	minutes: string | number | null;
+	points: string | number | null;
+	assists: string | number | null;
+	off_rebounds: string | number | null;
+	def_rebounds: string | number | null;
+	rebounds: string | number | null;
+	steals: string | number | null;
+	blocks: string | number | null;
+	field_goals_made: string | number | null;
+	field_goals_attempted: string | number | null;
+	field_goal_percentage: string | number | null;
+	three_pointers_made: string | number | null;
+	three_pointers_attempted: string | number | null;
+	three_point_percentage: string | number | null;
+	free_throws_made: string | number | null;
+	free_throws_attempted: string | number | null;
+	free_throw_percentage: string | number | null;
+	efficiency: string | number | null;
+}
+
+export type TeamPlayerAggStatsResponse = LocationSplit<TeamPlayerAggStat>;
+export type TeamPlayerSplitRecordsResponse = LocationSplit<TeamPlayerRecord>;
+
 export interface TeamDirectoryEntry {
 	id: number;
 	documentId: string;

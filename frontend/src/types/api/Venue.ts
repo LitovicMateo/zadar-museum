@@ -55,7 +55,10 @@ export interface VenuePlayerRecord {
 	last_name: string;
 	season: string;
 	stat_value: number;
+	image_url: string | null;
 }
+
+export type VenueSeasonPlayerRecords = Record<string, VenuePlayerRecord[]>;
 
 export interface VenueTeamRecord {
 	game_id: string;

@@ -9,6 +9,7 @@ import { useTeamTotalStats } from '@/hooks/queries/team/UseTeamTotalStats';
 import { TeamStats, TeamStatsResponse } from '@/types/api/Team';
 
 import DatabaseSelect from './DatabaseSelect';
+import TeamPlayerSplits from '../TeamPlayerSplits/TeamPlayerSplits';
 import { TeamLeagueCell, teamStatsColumns } from '../teamColumns';
 
 const TeamLeagueStats: React.FC = () => {
@@ -67,6 +68,8 @@ const TeamLeagueStats: React.FC = () => {
 				footer={{ rows: footerRows, variant: 'default' }}
 				initialSort={{ columnId: 'games', dir: 'desc' }}
 			/>
+
+			<TeamPlayerSplits teamSlug={teamSlug!} />
 		</section>
 	);
 };

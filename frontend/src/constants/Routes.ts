@@ -66,7 +66,12 @@ export const API_ROUTES = {
 			seasonAverage: (playerId: string, season: string, db: PlayerDB) =>
 				`${root}/players/stats/${db}/${season}/average/total/${playerId}`,
 			seasonLeagueAverage: (playerId: string, season: string, db: PlayerDB) =>
-				`${root}/players/stats/${db}/${season}/average/league/${playerId}`
+				`${root}/players/stats/${db}/${season}/average/league/${playerId}`,
+			seasonRecords: (db: PlayerDB, playerId: string, season: string) =>
+				`${root}/players/season-records/${db}/${playerId}/${season}`,
+			splitRecords: (db: PlayerDB, playerId: string, opts: { statKey: string; league?: string }) =>
+				`${root}/players/split-records/${db}/${playerId}?statKey=${opts.statKey}` +
+				`${opts.league ? `&league=${opts.league}` : ''}`
 		},
 		profile: {
 			details: (id: string) => `${root}/players/${id}?populate=*`,
@@ -93,7 +98,19 @@ export const API_ROUTES = {
 		playerRecords: (teamSlug: string, statKey: string, season?: string) =>
 			`${root}/team/records/players/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`,
 		teamRecords: (teamSlug: string, statKey: string, season?: string) =>
-			`${root}/team/records/teams/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`
+			`${root}/team/records/teams/${teamSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`,
+		playerSplitStats: (
+			teamSlug: string,
+			opts: { stats: 'total' | 'average'; database: 'team' | 'main'; league?: string; season?: string }
+		) =>
+			`${root}/team/player-split-stats/${teamSlug}?stats=${opts.stats}&database=${opts.database}` +
+			`${opts.league ? `&league=${opts.league}` : ''}${opts.season ? `&season=${opts.season}` : ''}`,
+		playerSplitRecords: (
+			teamSlug: string,
+			opts: { statKey: string; database: 'team' | 'main'; league?: string; season?: string }
+		) =>
+			`${root}/team/player-split-records/${teamSlug}?statKey=${opts.statKey}&database=${opts.database}` +
+			`${opts.league ? `&league=${opts.league}` : ''}${opts.season ? `&season=${opts.season}` : ''}`
 	},
 	game: {
 		details: (id: string) =>
@@ -153,6 +170,8 @@ export const API_ROUTES = {
 		seasonStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/total/${venueSlug}`,
 		seasonLeagueStats: (venueSlug: string, season: string) => `${root}/venue/stats/${season}/league/${venueSlug}`,
 		leagueStats: (venueSlug: string) => `${root}/venue/stats/league/${venueSlug}`,
+		seasonPlayerRecords: (venueSlug: string, season: string) =>
+			`${root}/venue/season-player-records/${venueSlug}/${season}`,
 		playerRecords: (venueSlug: string, statKey: string, season?: string) =>
 			`${root}/venue/records/players/${venueSlug}?statKey=${statKey}${season ? `&season=${season}` : ''}`,
 		teamRecords: (venueSlug: string, statKey: string, season?: string) =>

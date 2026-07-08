@@ -10,9 +10,9 @@ import { getImageUrl } from '@/utils/GetImageUrl';
 import { Shield, Trophy } from 'lucide-react';
 
 const Chip: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
-	<span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-sm text-white ring-1 ring-inset ring-white/15">
-		<span className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-white/55">{label}</span>
-		<span className="font-medium">{children}</span>
+	<span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white ring-1 ring-inset ring-white/15">
+		<span className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-white/55">{label}</span>
+		<span className="text-xs font-medium">{children}</span>
 	</span>
 );
 
@@ -78,7 +78,7 @@ const HeroBanner: React.FC<{ team: TeamDetailsResponse }> = ({ team }) => {
 
 			<div className="relative mx-auto grid max-w-6xl grid-cols-[auto_1fr] items-end gap-x-4 gap-y-5 px-4 pb-6 pt-7 sm:gap-x-7 sm:px-6 sm:pt-9 md:pb-8">
 				{/* Logo tile */}
-				<div className="row-span-2 flex h-24 w-24 shrink-0 items-center justify-center self-start overflow-hidden rounded-2xl bg-white p-3 shadow-lg sm:h-36 sm:w-36 md:h-44 md:w-44">
+				<div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-3 shadow-lg sm:h-36 sm:w-36 md:h-44 md:w-44">
 					{imageUrl ? (
 						<img src={imageUrl} alt={team.name} className="h-full w-full object-contain" />
 					) : (
@@ -87,10 +87,7 @@ const HeroBanner: React.FC<{ team: TeamDetailsResponse }> = ({ team }) => {
 				</div>
 
 				{/* Nameplate */}
-				<div className="min-w-0 self-start">
-					{team.city && (
-						<p className="font-mono text-xs uppercase tracking-[0.3em] text-white/65 sm:text-sm">{team.city}</p>
-					)}
+				<div className="min-w-0">
 					<h1 className="font-display font-black uppercase leading-[0.9] tracking-tight text-white [font-size:clamp(1.75rem,7vw,4.5rem)]">
 						{team.name}
 					</h1>
@@ -101,11 +98,8 @@ const HeroBanner: React.FC<{ team: TeamDetailsResponse }> = ({ team }) => {
 							<TitlesStrip />
 						</div>
 					)}
-				</div>
-
-				{/* City/Country chips — desktop only (hidden on mobile to shorten the hero; city still shows as eyebrow) */}
-				<div className="col-span-2 hidden flex-col gap-3 sm:col-span-1 sm:col-start-2 sm:flex">
-					<div className="flex flex-wrap items-center gap-2">
+					{/* City/Country pills sit right under the name */}
+					<div className="mt-3 flex flex-wrap items-center gap-2">
 						{team.city && <Chip label="City">{team.city}</Chip>}
 						{team.country && (
 							<Chip label="Country">

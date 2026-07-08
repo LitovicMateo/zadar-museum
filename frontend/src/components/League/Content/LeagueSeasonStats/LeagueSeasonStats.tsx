@@ -8,7 +8,7 @@ import { useLeagueSeasons } from '@/hooks/queries/league/UseLeagueSeasons';
 import { useTeamLeagueSeasonStats } from '@/hooks/queries/league/UseTeamLeagueStats';
 import { TeamStats } from '@/types/api/Team';
 
-import LeagueFinalStandings from './LeagueFinalStandings';
+import SeasonStandings from './SeasonStandings';
 import SeasonLeaders from './SeasonLeaders';
 import SeasonTeamRecords from './SeasonTeamRecords';
 
@@ -125,7 +125,7 @@ const LeagueSeasonStats: React.FC = () => {
 
 			{selectedSeason && (
 				<>
-					<LeagueFinalStandings leagueSlug={leagueSlug!} season={selectedSeason} />
+					<SeasonStandings leagueSlug={leagueSlug!} season={selectedSeason} />
 					<SeasonLeaders leagueSlug={leagueSlug!} season={selectedSeason} />
 					<SeasonTeamRecords leagueSlug={leagueSlug!} season={selectedSeason} />
 				</>

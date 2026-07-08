@@ -51,7 +51,7 @@ export function phaseClause(col: string, phase?: Phase): string | null {
 // ---------------------------------------------------------------------------
 
 export interface PlayerStatsParams {
-  database: 'main' | 'opponent';
+  database?: 'main' | 'opponent';
   stats: 'average' | 'total';
   location: 'all' | 'home' | 'away' | 'neutral';
   league?: string;
@@ -59,15 +59,23 @@ export interface PlayerStatsParams {
   playerId?: string;
   prev?: boolean;
   phase?: Phase;
+  // When set, scopes to this exact team's players instead of the main/non-main
+  // database split. Combine with opponentSlug to get one team's players in the
+  // games they played against another team (head-to-head).
+  teamSlug?: string;
+  opponentSlug?: string;
 }
 
 export interface PlayerRecordsParams {
-  database: 'main' | 'opponent';
+  database?: 'main' | 'opponent';
   location: 'all' | 'home' | 'away' | 'neutral';
   league?: string;
   season?: string;
   playerId?: string;
   phase?: Phase;
+  // See PlayerStatsParams — same team/opponent scoping semantics.
+  teamSlug?: string;
+  opponentSlug?: string;
 }
 
 export interface TeamStatsParams {
@@ -179,8 +187,17 @@ export async function aggregatePlayerStats(
     `b.is_nulled = false`,
   ];
 
-  // database filter
-  if (params.database === 'main') {
+  // scoping filter: an explicit teamSlug takes precedence over the main/non-main
+  // database split and scopes to exactly that team's players (optionally in the
+  // games they played against opponentSlug).
+  if (params.teamSlug) {
+    whereClauses.push(`b.team_slug = :teamSlug`);
+    bindings.teamSlug = params.teamSlug;
+    if (params.opponentSlug) {
+      whereClauses.push(`b.opponent_team_slug = :opponentSlug`);
+      bindings.opponentSlug = params.opponentSlug;
+    }
+  } else if (params.database === 'main') {
     whereClauses.push(`b.team_slug = :mainSlug`);
   } else {
     whereClauses.push(`b.team_slug != :mainSlug`);
@@ -223,6 +240,13 @@ export async function aggregatePlayerStats(
   }
 
   const whereSQL = whereClauses.join(' AND ');
+
+  // Opponent scoping (head-to-head) needs per-game rows: player_boxscore_unified
+  // folds in game-less "aggregate lines" that have no opponent, so read the raw
+  // per-game view instead (each row weighs 1 game, matching the unified `games`).
+  const fromSource = params.opponentSlug
+    ? `(SELECT *, 1 AS games FROM player_boxscore) b`
+    : `player_boxscore_unified b`;
 
   // -- stat columns differ by stats mode
   const isAvg = params.stats === 'average';
@@ -337,7 +361,7 @@ export async function aggregatePlayerStats(
       ${statCol('efficiency')} AS efficiency,
       ${rankCol('efficiency')} AS efficiency_rank
 
-    FROM player_boxscore_unified b
+    FROM ${fromSource}
     WHERE ${whereSQL}
     GROUP BY b.player_id, b.first_name, b.last_name
   `;
@@ -371,7 +395,16 @@ export async function aggregatePlayerRecords(
     `b.forfeited = false`,
   ];
 
-  if (params.database === 'main') {
+  // scoping filter — see aggregatePlayerStats. player_boxscore already exposes
+  // opponent_team_slug, so no source swap is needed here.
+  if (params.teamSlug) {
+    whereClauses.push(`b.team_slug = :teamSlug`);
+    bindings.teamSlug = params.teamSlug;
+    if (params.opponentSlug) {
+      whereClauses.push(`b.opponent_team_slug = :opponentSlug`);
+      bindings.opponentSlug = params.opponentSlug;
+    }
+  } else if (params.database === 'main') {
     whereClauses.push(`b.team_slug = :mainSlug`);
   } else {
     whereClauses.push(`b.team_slug != :mainSlug`);
