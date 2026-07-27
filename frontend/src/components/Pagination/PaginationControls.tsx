@@ -1,7 +1,8 @@
 import React from 'react';
 
 import Button from '@/components/UI/Button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/UI/Select';
+import AppSelect from '@/components/forms/shared/AppSelect';
+import { selectStyle } from '@/constants/ReactSelectStyle';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import styles from '@/components/Pagination/PaginationControls.module.css';
@@ -29,47 +30,28 @@ const PaginationControls: React.FC<Props> = ({
 
 	return (
 		<div className={`${styles.wrapper} ${className}`}>
-			{/* Left: count + per-page selector */}
+			{/* Left: per-page selector */}
 			<div className={styles.left}>
-				{total > 0 ? (
-					<span>
-						Showing{' '}
-						<span className="font-medium text-foreground">
-							{(page - 1) * pageSize + 1}–{Math.min(page * pageSize, total)}
-						</span>{' '}
-						of <span className="font-medium text-foreground">{total}</span>
-					</span>
-				) : (
-					<span>No items to show</span>
-				)}
-
 				<div className={styles.perPage}>
 					<span className="text-muted-foreground">Per page:</span>
-					<Select
-						value={String(pageSize)}
-						onValueChange={(v) => {
-							onPageSizeChange(Number(v) || pageSizeOptions[0]);
+					<AppSelect
+						options={pageSizeOptions.map((opt) => ({ value: opt, label: String(opt) }))}
+						value={{ value: pageSize, label: String(pageSize) }}
+						onChange={(opt) => {
+							onPageSizeChange(Number(opt?.value) || pageSizeOptions[0]);
 							onPageChange(1);
 						}}
-					>
-						<SelectTrigger size="sm" className="w-[70px]">
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent>
-							{pageSizeOptions.map((opt) => (
-								<SelectItem key={opt} value={String(opt)}>
-									{opt}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+						styles={selectStyle('76px')}
+						isSearchable={false}
+						aria-label="Items per page"
+					/>
 				</div>
 			</div>
 
 			{/* Right: prev / page input / total / next */}
 			<div className={styles.right}>
 				<Button
-					variant="outline"
+					variant="brand"
 					size="sm"
 					onClick={() => onPageChange(Math.max(1, page - 1))}
 					disabled={page <= 1}
@@ -86,7 +68,7 @@ const PaginationControls: React.FC<Props> = ({
 				</span>
 
 				<Button
-					variant="outline"
+					variant="brand"
 					size="sm"
 					onClick={() => onPageChange(Math.min(totalPages, page + 1))}
 					disabled={page >= totalPages}

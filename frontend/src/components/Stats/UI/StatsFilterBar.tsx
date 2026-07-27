@@ -22,7 +22,7 @@ type StatsFilterBarProps = {
  */
 const StatsFilterBar: React.FC<StatsFilterBarProps> = ({ leading, searchInput, sheetTitle = 'Filters', children }) => {
 	return (
-		<div className="sticky top-0 z-10 mb-3 flex flex-wrap items-end gap-3 bg-chalk py-2">
+		<div className="sticky top-0 z-10 mb-3 flex flex-wrap items-center gap-3 bg-chalk py-2">
 			{leading}
 			{searchInput && (
 				<div className="relative flex min-w-[200px] max-w-[280px] flex-1 items-center [&_input]:pl-7">

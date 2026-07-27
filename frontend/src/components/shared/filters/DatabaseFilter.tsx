@@ -19,7 +19,7 @@ const DatabaseFilter: React.FC<DatabaseFilterProps> = ({ database, setDatabase }
 	];
 
 	return (
-		<FilterField label="Database">
+		<FilterField>
 			<SegmentedToggle
 				value={database}
 				onValueChange={setDatabase}

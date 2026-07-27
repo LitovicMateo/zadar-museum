@@ -18,7 +18,7 @@ const roleOptions: { value: Role; label: string }[] = [
 
 const RoleFilter: React.FC<RoleFilterProps> = ({ role, setRole }) => {
 	return (
-		<FilterField label="Role">
+		<FilterField>
 			<SegmentedToggle value={role} onValueChange={setRole} options={roleOptions} ariaLabel="Coach role filter" />
 		</FilterField>
 	);

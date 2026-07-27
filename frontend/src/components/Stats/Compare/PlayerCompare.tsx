@@ -72,7 +72,7 @@ const PlayerCompare: React.FC<{ leading?: React.ReactNode }> = ({ leading }) => 
 							value={player1Id}
 							onChange={setPlayer1Id}
 							excludeValue={player2Id}
-							placeholder="Select a player"
+							placeholder="Select player A"
 						/>
 						<EntityPicker
 							label="Player B"
@@ -80,7 +80,7 @@ const PlayerCompare: React.FC<{ leading?: React.ReactNode }> = ({ leading }) => 
 							value={player2Id}
 							onChange={setPlayer2Id}
 							excludeValue={player1Id}
-							placeholder="Select a player"
+							placeholder="Select player B"
 						/>
 					</>
 				}
