@@ -91,7 +91,7 @@ const LeagueSeasonStats: React.FC = () => {
 		const rows: StatsDataRow<TeamStats>[] = [];
 		if ((stats.home?.games ?? 0) > 0) rows.push({ key: 'home', data: stats.home });
 		if ((stats.away?.games ?? 0) > 0) rows.push({ key: 'away', data: stats.away });
-		if ((stats.neutral?.games ?? 0) > 0) rows.push({ key: 'neutral', data: stats.neutral });
+		if (stats.neutral && stats.neutral.games > 0) rows.push({ key: 'neutral', data: stats.neutral });
 		return [{ key: 'season', rows }];
 	}, [teamStats]);
 
