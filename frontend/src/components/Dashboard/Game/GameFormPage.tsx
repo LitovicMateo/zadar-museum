@@ -48,6 +48,7 @@ const GameFormPage: React.FC = () => {
 				away_team_name: game.away_team_name,
 				away_team_short_name: game.away_team_short_name || game.away_team.short_name,
 				stage: game.stage,
+				period_format: game.period_format ?? 'quarters',
 				competition: game.competition.id.toString(),
 				league_name: game.competition.name,
 				league_short_name: game.competition.short_name,

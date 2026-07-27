@@ -23,6 +23,9 @@ const PlayerStatsFormPage: React.FC = () => {
 			documentId ? updatePlayerStats({ ...data, id: documentId }) : createPlayerStats(data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['player-stats', 'admin-list'] });
+			if (documentId) {
+				queryClient.invalidateQueries({ queryKey: ['player-stat', documentId] });
+			}
 			toast.success(
 				mode === 'create' ? 'Player stat created successfully' : 'Player stat updated successfully'
 			);

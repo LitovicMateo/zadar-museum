@@ -17,10 +17,10 @@ export const gameListConfig: EntityListConfig<GameDetailsResponse> = {
       cell: (row) => <span className="font-medium">{row.home_team_name} vs {row.away_team_name}</span>,
     },
     { header: 'Season', cell: (row) => row.season, className: 'text-muted-foreground' },
-    { header: 'Round', cell: (row) => row.round ?? '—', className: 'text-muted-foreground' },
+    { header: 'Round', cell: (row) => row.round ?? '-', className: 'text-muted-foreground' },
     {
       header: 'Date',
-      cell: (row) => row.date ? new Date(row.date).toLocaleDateString() : '—',
+      cell: (row) => row.date ? new Date(row.date).toLocaleDateString() : '-',
       className: 'text-muted-foreground text-sm',
     },
   ],

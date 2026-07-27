@@ -12,12 +12,12 @@ type SeasonFilterProps = {
 
 const SeasonFilter: React.FC<SeasonFilterProps> = ({ seasons, season, onSeasonChange }) => {
 	const seasonOptions: { label: string; value: string }[] = [
-		{ label: 'All', value: 'all' },
+		{ label: 'All Seasons', value: 'all' },
 		...seasons.map((s) => ({ label: s, value: s }))
 	];
 
 	return (
-		<FilterField label="Season">
+		<FilterField>
 			<AppSelect
 				styles={selectStyle()}
 				value={seasonOptions.find((opt) => opt.value === season) ?? null}
@@ -26,6 +26,8 @@ const SeasonFilter: React.FC<SeasonFilterProps> = ({ seasons, season, onSeasonCh
 				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
 				menuPosition="fixed"
 				menuPlacement="auto"
+				placeholder="Season"
+				aria-label="Season"
 			/>
 		</FilterField>
 	);

@@ -105,6 +105,17 @@ export const useTeamRecordsTable = (
 				header: 'OT',
 				accessorKey: 'overtime'
 			},
+			// Derived for every game in team_boxscore (quarter games contribute
+			// Q1+Q2 / Q3+Q4), so half records rank across the whole history while
+			// the quarter columns stay empty for pre-2000 games.
+			{
+				header: '1H',
+				accessorKey: 'first_half'
+			},
+			{
+				header: '2H',
+				accessorKey: 'second_half'
+			},
 			{
 				header: 'AST',
 				accessorKey: 'assists',

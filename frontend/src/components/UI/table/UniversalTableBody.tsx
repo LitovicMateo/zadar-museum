@@ -28,7 +28,7 @@ export const UniversalTableBody = <TData,>({ table, rowVariant }: Props<TData>) 
 				const variant = rowVariant?.(row);
 				const variantClass = variant ? styles[variant] : undefined;
 				return (
-					<tr key={row.id} className={[styles.trBody, variantClass].filter(Boolean).join(' ')}>
+					<tr key={row.id} className={[styles.trBody, variantClass, 'group'].filter(Boolean).join(' ')}>
 						{row.getVisibleCells().map((cell) => {
 							const meta = cell.column.columnDef.meta;
 							const isSticky = meta?.sticky === 'left';

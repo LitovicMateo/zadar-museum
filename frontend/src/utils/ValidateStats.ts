@@ -76,6 +76,8 @@ export const validateStats = (data: unknown, options: ValidateOptions = {}) => {
 			{ name: 'Second quarter', value: form.secondQuarter },
 			{ name: 'Third quarter', value: form.thirdQuarter },
 			{ name: 'Fourth quarter', value: form.fourthQuarter },
+			{ name: 'First half', value: form.firstHalf },
+			{ name: 'Second half', value: form.secondHalf },
 			{ name: 'Overtime', value: form.overtime }
 		];
 

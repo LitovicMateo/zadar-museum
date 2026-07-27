@@ -11,6 +11,8 @@ export type TeamStatsFormData = {
 	secondQuarter: string;
 	thirdQuarter: string;
 	fourthQuarter: string;
+	firstHalf: string;
+	secondHalf: string;
 	overtime?: string;
 	fieldGoalsMade: string;
 	fieldGoalsAttempted: string;
@@ -44,6 +46,8 @@ export type TeamStatsResponse = {
 	secondQuarter: string;
 	thirdQuarter: string;
 	fourthQuarter: string;
+	firstHalf: string;
+	secondHalf: string;
 	overtime?: string;
 	fieldGoalsMade: string;
 	fieldGoalsAttempted: string;
@@ -105,6 +109,10 @@ export interface TeamRecord {
 	third_quarter_rank: string | null;
 	fourth_quarter: number | null;
 	fourth_quarter_rank: string | null;
+	first_half: number | null;
+	first_half_rank: string | null;
+	second_half: number | null;
+	second_half_rank: string | null;
 	overtime: number | null;
 	overtime_rank: string | null;
 

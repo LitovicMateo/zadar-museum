@@ -665,13 +665,13 @@ export async function aggregateTeamStats(
     ranks AS (
       SELECT
         team_id,
-        RANK() OVER (ORDER BY games DESC)           AS games_rank,
-        RANK() OVER (ORDER BY wins DESC)            AS wins_rank,
-        RANK() OVER (ORDER BY losses DESC)          AS losses_rank,
-        RANK() OVER (ORDER BY points_scored DESC)   AS points_scored_rank,
-        RANK() OVER (ORDER BY points_received DESC) AS points_received_rank,
-        RANK() OVER (ORDER BY points_diff DESC)     AS points_diff_rank,
-        RANK() OVER (ORDER BY attendance DESC)      AS attendance_rank
+        RANK() OVER (ORDER BY games DESC NULLS LAST)           AS games_rank,
+        RANK() OVER (ORDER BY wins DESC NULLS LAST)            AS wins_rank,
+        RANK() OVER (ORDER BY losses DESC NULLS LAST)          AS losses_rank,
+        RANK() OVER (ORDER BY points_scored DESC NULLS LAST)   AS points_scored_rank,
+        RANK() OVER (ORDER BY points_received DESC NULLS LAST) AS points_received_rank,
+        RANK() OVER (ORDER BY points_diff DESC NULLS LAST)     AS points_diff_rank,
+        RANK() OVER (ORDER BY attendance DESC NULLS LAST)      AS attendance_rank
       FROM ${mainTeamExclude ? 'agg_no_main' : 'agg'}
     )
     SELECT
@@ -785,6 +785,10 @@ export async function aggregateTeamRecords(
       RANK() OVER (ORDER BY tb.third_quarter DESC NULLS LAST) AS third_quarter_rank,
       tb.fourth_quarter,
       RANK() OVER (ORDER BY tb.fourth_quarter DESC NULLS LAST) AS fourth_quarter_rank,
+      tb.first_half,
+      RANK() OVER (ORDER BY tb.first_half DESC NULLS LAST) AS first_half_rank,
+      tb.second_half,
+      RANK() OVER (ORDER BY tb.second_half DESC NULLS LAST) AS second_half_rank,
       tb.overtime,
       RANK() OVER (ORDER BY tb.overtime DESC NULLS LAST) AS overtime_rank,
       tb.score,

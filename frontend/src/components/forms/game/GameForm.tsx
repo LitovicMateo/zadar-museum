@@ -27,6 +27,7 @@ const emptyDefaults: GameFormData = {
 	away_team_name: '',
 	away_team_short_name: '',
 	stage: null,
+	period_format: 'quarters',
 	competition: '',
 	league_name: '',
 	league_short_name: '',
@@ -46,7 +47,7 @@ const GameForm: React.FC<GameFormProps> = ({ onSubmit, defaultValues = emptyDefa
 	return (
 		<FormWrapper>
 			<GameFormProvider onSubmit={onSubmit} defaultValues={defaultValues} game={game} isSuccess={isSuccess}>
-				<GameFormContent mode={mode} />
+				<GameFormContent mode={mode} game={game} />
 			</GameFormProvider>
 		</FormWrapper>
 	);

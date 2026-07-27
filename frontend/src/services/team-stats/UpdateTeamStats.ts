@@ -3,6 +3,8 @@ import apiClient from '@/lib/ApiClient';
 import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
 import { validateStats } from '@/utils/ValidateStats';
 
+import { buildPeriodScores } from './PeriodScores';
+
 export const updateTeamStats = async ({ id, ...data }: { id: string } & TeamStatsFormData) => {
 	// 🔍 Validation: use shared validator for team-specific checks
 	validateStats(data, { checkTeam: true });
@@ -18,11 +20,7 @@ export const updateTeamStats = async ({ id, ...data }: { id: string } & TeamStat
 			assistantCoach: data.assistantCoachId ? +data.assistantCoachId : undefined,
 
 			// score
-			firstQuarter: data.firstQuarter !== null ? +data.firstQuarter : null,
-			secondQuarter: data.secondQuarter !== null ? +data.secondQuarter : null,
-			thirdQuarter: data.thirdQuarter !== null ? +data.thirdQuarter : null,
-			fourthQuarter: data.fourthQuarter !== null ? +data.fourthQuarter : null,
-			overtime: data.overtime !== null ? +data.overtime! : null,
+			...buildPeriodScores(data),
 
 			// shooting
 			fieldGoalsMade: data.fieldGoalsMade ? +data.fieldGoalsMade : undefined,

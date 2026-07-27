@@ -11,6 +11,7 @@ const variantClass: Record<string, string> = {
 	default: styles.variantDefault,
 	destructive: styles.variantDestructive,
 	outline: styles.variantOutline,
+	brand: styles.variantBrand,
 	secondary: styles.variantSecondary,
 	ghost: styles.variantGhost,
 	link: styles.variantLink,

@@ -91,7 +91,7 @@ export const useCoachStatsTable = (
 				header: '+/-',
 				accessorKey: 'points_difference',
 				cell: (info) => <Cell info={info} />,
-				sortingFn: 'alphanumeric',
+				sortingFn: 'basic',
 				sortDescFirst: true
 			}
 		],

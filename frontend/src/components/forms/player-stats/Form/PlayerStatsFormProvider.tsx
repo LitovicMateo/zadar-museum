@@ -14,6 +14,7 @@ type PlayerStatsFormProviderProps = {
 	defaultValues: PlayerStatsFormData;
 	playerStats?: PlayerStatsResponse;
 	isSuccess?: boolean;
+	mode: 'create' | 'edit';
 };
 
 const PlayerStatsFormProvider: React.FC<PlayerStatsFormProviderProps> = ({
@@ -21,7 +22,8 @@ const PlayerStatsFormProvider: React.FC<PlayerStatsFormProviderProps> = ({
 	onSubmit,
 	defaultValues,
 	playerStats,
-	isSuccess
+	isSuccess,
+	mode
 }) => {
 	const methods = useForm<PlayerStatsFormData>({
 		resolver: zodResolver(playerStatsSchema),
@@ -44,7 +46,10 @@ const PlayerStatsFormProvider: React.FC<PlayerStatsFormProviderProps> = ({
 	}, [playerStats, methods]);
 
 	React.useEffect(() => {
-		if (isSuccess) {
+		// Only the create flow (rapid multi-player entry for one game) clears the
+		// form after a save; editing an existing row should keep showing what was
+		// just submitted, not snap back to the stale pre-edit defaultValues.
+		if (isSuccess && mode === 'create') {
 			const currentValues = methods.getValues();
 
 			methods.reset({
@@ -58,7 +63,7 @@ const PlayerStatsFormProvider: React.FC<PlayerStatsFormProviderProps> = ({
 
 			methods.setFocus('playerId');
 		}
-	}, [isSuccess, methods, defaultValues]);
+	}, [isSuccess, mode, methods, defaultValues]);
 
 	return (
 		<FormProvider {...methods}>

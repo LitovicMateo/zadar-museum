@@ -91,7 +91,7 @@ export const useTeamStatsTable = (
 				accessorKey: 'points_diff',
 				cell: (info) => <Cell info={info} />,
 				sortDescFirst: true,
-				sortingFn: 'alphanumeric'
+				sortingFn: 'basic'
 			}
 		],
 		getCoreRowModel: getCoreRowModel(),

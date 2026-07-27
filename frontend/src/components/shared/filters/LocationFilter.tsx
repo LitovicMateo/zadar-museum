@@ -18,7 +18,7 @@ const locationOptions: { value: LocationValue; label: string }[] = [
 
 const LocationFilter: React.FC<LocationFilterProps> = ({ location, setLocation }) => {
 	return (
-		<FilterField label="Home / Away">
+		<FilterField>
 			<SegmentedToggle
 				value={location}
 				onValueChange={setLocation}
