@@ -19,7 +19,7 @@ const EntityPicker: React.FC<EntityPickerProps> = ({ label, options, value, onCh
 	const availableOptions = excludeValue ? options.filter((opt) => opt.value !== excludeValue) : options;
 
 	return (
-		<FilterField label={label}>
+		<FilterField>
 			<AppSelect
 				styles={selectStyle('190px')}
 				options={availableOptions}
@@ -30,6 +30,7 @@ const EntityPicker: React.FC<EntityPickerProps> = ({ label, options, value, onCh
 				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
 				menuPosition="fixed"
 				menuPlacement="auto"
+				aria-label={label}
 			/>
 		</FilterField>
 	);

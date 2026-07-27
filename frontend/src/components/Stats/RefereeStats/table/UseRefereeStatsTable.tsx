@@ -100,7 +100,7 @@ export const useRefereeStatsTable = (
 				accessorKey: 'foul_difference',
 				sortDescFirst: true,
 				cell: (info) => <Cell info={info} />,
-				sortingFn: 'alphanumeric'
+				sortingFn: 'basic'
 			}
 		],
 		getCoreRowModel: getCoreRowModel(),

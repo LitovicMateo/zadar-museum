@@ -8,10 +8,15 @@ export const teamStatsSchema = z
 		teamId: z.string(),
 		coachId: z.string(),
 		assistantCoachId: z.string(),
+		// Quarter and half fields are mutually exclusive per game: the form renders
+		// only the set matching the game's period_format, and the create/update
+		// services write the other set as null.
 		firstQuarter: z.string(),
 		secondQuarter: z.string(),
 		thirdQuarter: z.string(),
 		fourthQuarter: z.string(),
+		firstHalf: z.string(),
+		secondHalf: z.string(),
 		overtime: z.string().nullable(),
 		fieldGoalsMade: z.string(),
 		fieldGoalsAttempted: z.string(),

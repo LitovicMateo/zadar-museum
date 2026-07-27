@@ -1,6 +1,7 @@
 import { API_ROUTES } from '@/constants/Routes';
 import apiClient from '@/lib/ApiClient';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
+import { num } from '@/utils/ParseStatValue';
 
 /**
  * Creates a game-less "aggregate line" — a season/tournament summary for historic
@@ -9,7 +10,6 @@ import { PlayerStatsFormData } from '@/schemas/PlayerStats';
  * sent, everything blank is left NULL (never fabricated as 0). `league` holds the
  * selected competition's numeric id (see AggregateCompetition field).
  */
-const num = (v?: string) => (v && v.trim() !== '' ? +v : undefined);
 
 export const createAggregatePlayerStats = async (data: PlayerStatsFormData) => {
 	const payload = {

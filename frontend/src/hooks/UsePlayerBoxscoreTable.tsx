@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import '@/components/UI/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
 import { PlayerBoxscoreResponse } from '@/types/api/Player';
-import { formatMakeAttempt, mmss, pct } from '@/utils/TableFormatters';
+import { displayStat, formatMakeAttempt, mmss, pct } from '@/utils/TableFormatters';
 import { getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import { Pencil } from 'lucide-react';
 
 const statusOrder = (status: PlayerBoxscoreResponse['status']): number => {
 	if (status === 'starter') return 0;
@@ -47,9 +48,18 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 				meta: { sticky: 'left', stickyOffset: '40px', width: '200px' },
 				cell: (info) => {
 					return (
-						<Link className=" whitespace-nowrap" to={APP_ROUTES.player(info.row.original.player_id)}>
-							{info.getValue()}
-						</Link>
+						<div className="relative flex items-center pr-4">
+							<Link className="whitespace-nowrap" to={APP_ROUTES.player(info.row.original.player_id)}>
+								{info.getValue()}
+							</Link>
+							<Link
+								to={`${APP_ROUTES.dashboard.playerStats.edit}${info.row.original.document_id}`}
+								className="absolute right-0 top-1/2 hidden -translate-x-1 -translate-y-1/2 text-muted-foreground opacity-0 transition-opacity hover:text-court group-hover:opacity-100 md:inline-flex"
+								aria-label="Edit player stats"
+							>
+								<Pencil size={14} />
+							</Link>
+						</div>
 					);
 				}
 			},
@@ -88,7 +98,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -194,7 +204,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -206,7 +216,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -218,7 +228,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -230,7 +240,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -242,7 +252,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -254,7 +264,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -266,7 +276,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -278,7 +288,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -290,7 +300,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -302,7 +312,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			},
@@ -314,7 +324,7 @@ export const usePlayerBoxscoreTable = (data: PlayerBoxscoreResponse[]) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return <p className="text-gray-600">-</p>;
 					}
-					return <p>{info.getValue<number | null>()}</p>;
+					return <p>{displayStat(info.getValue<number | null>())}</p>;
 				},
 				sortingFn: 'alphanumeric'
 			}

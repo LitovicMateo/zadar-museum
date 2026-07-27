@@ -23,8 +23,8 @@ export const teamListConfig: EntityListConfig<TeamDetailsResponse> = {
         </div>
       ),
     },
-    { header: 'Short', cell: (row) => row.short_name ?? '—', className: 'text-muted-foreground' },
-    { header: 'City', cell: (row) => row.city ?? '—', className: 'text-muted-foreground' },
+    { header: 'Short', cell: (row) => row.short_name ?? '-', className: 'text-muted-foreground' },
+    { header: 'City', cell: (row) => row.city ?? '-', className: 'text-muted-foreground' },
     {
       header: 'Main team',
       cell: (row) => row.isMainTeam

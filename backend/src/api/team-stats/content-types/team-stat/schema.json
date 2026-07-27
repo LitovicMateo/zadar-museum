@@ -46,6 +46,12 @@
     "fourthQuarter": {
       "type": "integer"
     },
+    "firstHalf": {
+      "type": "integer"
+    },
+    "secondHalf": {
+      "type": "integer"
+    },
     "overtime": {
       "type": "integer"
     },

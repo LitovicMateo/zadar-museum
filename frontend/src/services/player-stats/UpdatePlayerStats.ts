@@ -1,6 +1,7 @@
 import { API_ROUTES } from '@/constants/Routes';
 import apiClient from '@/lib/ApiClient';
 import { PlayerStatsFormData } from '@/schemas/PlayerStats';
+import { num } from '@/utils/ParseStatValue';
 import { validateStats } from '@/utils/ValidateStats';
 
 export const updatePlayerStats = async ({ id, ...data }: { id: string } & PlayerStatsFormData) => {
@@ -15,27 +16,31 @@ export const updatePlayerStats = async ({ id, ...data }: { id: string } & Player
 			status: data.status,
 			isCaptain: data.isCaptain,
 			playerNumber: data.playerNumber,
-			minutes: +data.minutes,
-			seconds: +data.seconds,
-			points: +data.points,
-			fieldGoalsMade: +data.fieldGoalsMade,
-			fieldGoalsAttempted: +data.fieldGoalsAttempted,
-			threePointersMade: +data.threePointersMade,
-			threePointersAttempted: +data.threePointersAttempted,
-			freeThrowsMade: +data.freeThrowsMade,
-			freeThrowsAttempted: +data.freeThrowsAttempted,
-			rebounds: data.rebounds ? +data.rebounds : +data.offensiveRebounds + +data.defensiveRebounds,
-			offensiveRebounds: data.rebounds ? undefined : +data.offensiveRebounds,
-			defensiveRebounds: data.rebounds ? undefined : +data.defensiveRebounds,
-			assists: data.assists ? +data.assists : undefined,
-			steals: data.steals ? +data.steals : undefined,
-			blocks: data.blocks ? +data.blocks : undefined,
-			turnovers: data.turnovers ? +data.turnovers : undefined,
-			fouls: data.fouls ? +data.fouls : undefined,
-			foulsOn: data.foulsOn ? +data.foulsOn : undefined,
-			blocksReceived: data.blocksReceived ? +data.blocksReceived : undefined,
-			efficiency: data.efficiency ? +data.efficiency : undefined,
-			plusMinus: data.plusMinus ? +data.plusMinus : undefined
+			minutes: num(data.minutes),
+			seconds: num(data.seconds),
+			points: num(data.points),
+			fieldGoalsMade: num(data.fieldGoalsMade),
+			fieldGoalsAttempted: num(data.fieldGoalsAttempted),
+			threePointersMade: num(data.threePointersMade),
+			threePointersAttempted: num(data.threePointersAttempted),
+			freeThrowsMade: num(data.freeThrowsMade),
+			freeThrowsAttempted: num(data.freeThrowsAttempted),
+			rebounds: data.rebounds
+				? +data.rebounds
+				: data.offensiveRebounds || data.defensiveRebounds
+					? (num(data.offensiveRebounds) ?? 0) + (num(data.defensiveRebounds) ?? 0)
+					: null,
+			offensiveRebounds: data.rebounds ? null : num(data.offensiveRebounds),
+			defensiveRebounds: data.rebounds ? null : num(data.defensiveRebounds),
+			assists: num(data.assists),
+			steals: num(data.steals),
+			blocks: num(data.blocks),
+			turnovers: num(data.turnovers),
+			fouls: num(data.fouls),
+			foulsOn: num(data.foulsOn),
+			blocksReceived: num(data.blocksReceived),
+			efficiency: num(data.efficiency),
+			plusMinus: num(data.plusMinus)
 		}
 	});
 

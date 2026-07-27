@@ -13,15 +13,15 @@ export const teamStatsListConfig: EntityListConfig<TeamStatsResponse> = {
   deleteLabel: (row) =>
     `${row.team?.name ?? 'Team'} — ${row.game?.home_team_name ?? ''} vs ${row.game?.away_team_name ?? ''}`,
   columns: [
-    { header: 'Team', cell: (row) => <span className="font-medium">{row.team?.name ?? '—'}</span> },
+    { header: 'Team', cell: (row) => <span className="font-medium">{row.team?.name ?? '-'}</span> },
     {
       header: 'Game',
-      cell: (row) => row.game ? `${row.game.home_team_name} vs ${row.game.away_team_name}` : '—',
+      cell: (row) => row.game ? `${row.game.home_team_name} vs ${row.game.away_team_name}` : '-',
       className: 'text-muted-foreground text-sm',
     },
     {
       header: 'Coach',
-      cell: (row) => row.coach ? `${row.coach.first_name} ${row.coach.last_name}` : '—',
+      cell: (row) => row.coach ? `${row.coach.first_name} ${row.coach.last_name}` : '-',
       className: 'text-muted-foreground',
     },
   ],

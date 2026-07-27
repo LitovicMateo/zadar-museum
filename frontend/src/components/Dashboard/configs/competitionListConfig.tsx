@@ -13,7 +13,7 @@ export const competitionListConfig: EntityListConfig<CompetitionDetailsResponse>
   deleteLabel: (row) => row.name,
   columns: [
     { header: 'Name', cell: (row) => <span className="font-medium">{row.name}</span> },
-    { header: 'Short', cell: (row) => row.short_name ?? '—', className: 'text-muted-foreground' },
+    { header: 'Short', cell: (row) => row.short_name ?? '-', className: 'text-muted-foreground' },
     { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-muted-foreground text-sm' },
   ],
 };

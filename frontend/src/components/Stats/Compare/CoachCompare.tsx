@@ -57,7 +57,7 @@ const CoachCompare: React.FC<{ leading?: React.ReactNode }> = ({ leading }) => {
 							value={coach1Id}
 							onChange={setCoach1Id}
 							excludeValue={coach2Id}
-							placeholder="Select a coach"
+							placeholder="Select coach A"
 						/>
 						<EntityPicker
 							label="Coach B"
@@ -65,7 +65,7 @@ const CoachCompare: React.FC<{ leading?: React.ReactNode }> = ({ leading }) => {
 							value={coach2Id}
 							onChange={setCoach2Id}
 							excludeValue={coach1Id}
-							placeholder="Select a coach"
+							placeholder="Select coach B"
 						/>
 					</>
 				}

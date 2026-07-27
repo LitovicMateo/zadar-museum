@@ -105,7 +105,20 @@ export const selectStyle = <Option extends OptionType = OptionType>(
 		background: 'var(--popover)',
 		overflow: 'hidden',
 		fontSize: '14px',
-		zIndex: 2147483647
+		zIndex: 2147483647,
+		width: '100%'
 	}),
-	menuPortal: (base) => ({ ...base, zIndex: 2147483647 })
+	menuPortal: (provided) => {
+		const zIndex = { zIndex: 2147483647 };
+		if (typeof window === 'undefined' || typeof provided.left !== 'number' || typeof provided.width !== 'number') {
+			return { ...provided, ...zIndex };
+		}
+		// Widen the menu so long option labels aren't clipped, but never past
+		// however much room is actually left to the right of the control — this
+		// keeps it within the viewport instead of overflowing off-screen.
+		const maxMenuWidth = 320;
+		const available = window.innerWidth - provided.left - 8;
+		const width = Math.max(provided.width, Math.min(maxMenuWidth, available));
+		return { ...provided, width, ...zIndex };
+	}
 });

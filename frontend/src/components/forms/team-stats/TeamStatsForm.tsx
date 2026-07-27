@@ -26,6 +26,8 @@ const emptyDefaults: TeamStatsFormData = {
 	secondQuarter: '',
 	thirdQuarter: '',
 	fourthQuarter: '',
+	firstHalf: '',
+	secondHalf: '',
 	overtime: '',
 	fieldGoalsMade: '',
 	fieldGoalsAttempted: '',
@@ -63,7 +65,7 @@ const TeamStatsForm: React.FC<GameFormProps> = ({
 				teamStats={teamStats}
 				isSuccess={isSuccess}
 			>
-				<TeamStatsFormContent mode={mode} />
+				<TeamStatsFormContent mode={mode} teamStats={teamStats} />
 			</TeamStatsFormProvider>
 		</FormWrapper>
 	);

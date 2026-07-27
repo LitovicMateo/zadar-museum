@@ -43,8 +43,8 @@ const LeagueFinalStandings: React.FC<LeagueFinalStandingsProps> = ({ leagueSlug,
 						className="h-5 w-5"
 					/>
 					<span className="font-medium">
-						<span className="hidden sm:inline">{r.teamName ?? '—'}</span>
-						<span className="sm:hidden">{r.teamShortName ?? r.teamName ?? '—'}</span>
+						<span className="hidden sm:inline">{r.teamName ?? '-'}</span>
+						<span className="sm:hidden">{r.teamShortName ?? r.teamName ?? '-'}</span>
 					</span>
 				</span>
 			),

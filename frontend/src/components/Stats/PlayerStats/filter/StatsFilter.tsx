@@ -17,7 +17,7 @@ const statsOptions: { value: StatScope; label: string }[] = [
 
 const StatsFilter: React.FC<StatsFilterProps> = ({ stats = 'total', setStats }) => {
 	return (
-		<FilterField label="Stats">
+		<FilterField>
 			<SegmentedToggle
 				value={stats}
 				onValueChange={(v) => setStats?.(v)}

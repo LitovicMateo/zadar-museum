@@ -12,6 +12,13 @@ export type GalleryMedia = {
 	mime?: string; // e.g. "image/jpeg", "video/mp4"
 };
 
+/**
+ * Whether a game was played in four quarters or two halves. Croatian basketball
+ * used two 20-minute halves until FIBA switched to 4x10 quarters for the 2000-01
+ * season, so historical games carry 'halves'.
+ */
+export type PeriodFormat = 'quarters' | 'halves';
+
 export type GameDetailsResponse = {
 	documentId: string;
 	id: number;
@@ -19,6 +26,7 @@ export type GameDetailsResponse = {
 	round: string;
 	group_name?: string;
 	stage: 'league' | 'group' | 'playoff' | null;
+	period_format: PeriodFormat;
 	home_team: TeamDetailsResponse;
 	home_team_name: string;
 	home_team_short_name: string;

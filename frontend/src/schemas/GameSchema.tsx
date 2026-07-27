@@ -13,6 +13,7 @@ export const gameSchema = z
 		away_team_short_name: z.string().length(3),
 		date: z.string(),
 		stage: z.enum(['league', 'group', 'playoff']).nullable(),
+		period_format: z.enum(['quarters', 'halves']),
 		competition: z.string().nullable(),
 		league_name: z.string().min(1),
 		league_short_name: z.string().max(3),

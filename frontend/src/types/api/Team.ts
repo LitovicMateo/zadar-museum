@@ -1,3 +1,4 @@
+import { PeriodFormat } from './Game';
 import { StrapiImage } from './Strapi';
 
 export interface TeamDetailsResponse {
@@ -133,6 +134,7 @@ export interface TeamLeagueStatsRow extends LeagueStats {
 
 export interface TeamBoxscoreResponse {
 	id: number;
+	document_id: string;
 	game_id: string;
 	season: string;
 	stage: string;
@@ -144,10 +146,17 @@ export interface TeamBoxscoreResponse {
 	team_name: string;
 	team_short_name: string;
 	team_slug: string;
-	first_quarter: number;
-	second_quarter: number;
-	third_quarter: number;
-	fourth_quarter: number;
+	period_format: PeriodFormat;
+	// Null for the format the game was not played in: quarter games have no
+	// stored halves, half games have no quarters.
+	first_quarter: number | null;
+	second_quarter: number | null;
+	third_quarter: number | null;
+	fourth_quarter: number | null;
+	// Derived in team_boxscore for every game, so these are populated regardless
+	// of format (quarter games contribute Q1+Q2 / Q3+Q4).
+	first_half: number | null;
+	second_half: number | null;
 	overtime: number | null;
 	field_goals_made: number | null;
 	field_goals_attempted: number | null;

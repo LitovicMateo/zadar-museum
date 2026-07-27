@@ -16,9 +16,9 @@ export const leagueTableListConfig: EntityListConfig<LeagueTableRecord> = {
     { header: 'ID', cell: (row) => row.id, className: 'text-muted-foreground text-sm' },
     {
       header: 'Competition',
-      cell: (row) => <span className="font-medium">{row.competition?.name ?? '—'}</span>,
+      cell: (row) => <span className="font-medium">{row.competition?.name ?? '-'}</span>,
     },
-    { header: 'Season', cell: (row) => row.season ?? '—', className: 'text-muted-foreground' },
-    { header: 'Stage', cell: (row) => row.stageName ?? '—', className: 'text-muted-foreground' },
+    { header: 'Season', cell: (row) => row.season ?? '-', className: 'text-muted-foreground' },
+    { header: 'Stage', cell: (row) => row.stageName ?? '-', className: 'text-muted-foreground' },
   ],
 };

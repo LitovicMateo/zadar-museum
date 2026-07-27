@@ -13,12 +13,12 @@ type LeagueFilterProps = {
 
 const LeagueFilter: React.FC<LeagueFilterProps> = ({ league, setLeague, competitions }) => {
 	const leagueOptions: { label: string; value: string }[] = [
-		{ label: 'All', value: 'all' },
+		{ label: 'All Leagues', value: 'all' },
 		...competitions.map((comp) => ({ label: comp.name, value: comp.slug }))
 	];
 
 	return (
-		<FilterField label="League">
+		<FilterField>
 			<AppSelect
 				styles={selectStyle()}
 				options={leagueOptions}
@@ -27,6 +27,8 @@ const LeagueFilter: React.FC<LeagueFilterProps> = ({ league, setLeague, competit
 				menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
 				menuPosition="fixed"
 				menuPlacement="auto"
+				placeholder="League"
+				aria-label="League"
 			/>
 		</FilterField>
 	);

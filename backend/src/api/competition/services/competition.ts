@@ -437,6 +437,7 @@ export default factories.createCoreService(
                 total: makeEntry("Total", totalRow),
                 home: makeEntry("Home", byVenue["home"]),
                 away: makeEntry("Away", byVenue["away"]),
+                neutral: makeEntry("Neutral", byVenue["neutral"]),
               },
             };
           };

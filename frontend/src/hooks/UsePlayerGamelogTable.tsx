@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '@/components/UI/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
 import { PlayerBoxscoreResponse } from '@/types/api/Player';
+import { displayStat, formatMakeAttempt, mmss, pct } from '@/utils/TableFormatters';
 import { getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
 export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefined) => {
@@ -50,16 +51,13 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 			},
 			{
 				header: 'MIN',
-				accessorFn: (row) => {
-					const paddedSeconds = String(row.seconds).padStart(2, '0');
-					return `${row.minutes}:${paddedSeconds}`;
-				},
+				accessorFn: (row) => row.minutes,
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return 'DNP';
 					}
 
-					return info.getValue();
+					return mmss(info.row.original.minutes, info.row.original.seconds);
 				},
 				invertSorting: true
 			},
@@ -70,17 +68,20 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return displayStat(info.getValue<number | null>());
 				}
 			},
 			{
 				header: 'FG',
-				accessorFn: (row) => row.field_goals_made + '/' + row.field_goals_attempted,
+				accessorFn: (row) => row.field_goals_made,
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return formatMakeAttempt(
+						info.row.original.field_goals_made,
+						info.row.original.field_goals_attempted
+					);
 				},
 				invertSorting: true
 			},
@@ -91,17 +92,20 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return pct(info.getValue<number | null>());
 				}
 			},
 			{
 				header: '3P',
-				accessorFn: (row) => row.three_pointers_made + '/' + row.three_pointers_attempted,
+				accessorFn: (row) => row.three_pointers_made,
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return formatMakeAttempt(
+						info.row.original.three_pointers_made,
+						info.row.original.three_pointers_attempted
+					);
 				},
 				invertSorting: true
 			},
@@ -112,17 +116,20 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return pct(info.getValue<number | null>());
 				}
 			},
 			{
 				header: 'FT',
-				accessorFn: (row) => row.free_throws_made + '/' + row.free_throws_attempted,
+				accessorFn: (row) => row.free_throws_made,
 				cell: (info) => {
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return formatMakeAttempt(
+						info.row.original.free_throws_made,
+						info.row.original.free_throws_attempted
+					);
 				},
 				invertSorting: true
 			},
@@ -133,7 +140,7 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return pct(info.getValue<number | null>());
 				}
 			},
 			{
@@ -173,7 +180,7 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return displayStat(info.getValue<number | null>());
 				}
 			},
 			{
@@ -183,7 +190,7 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return displayStat(info.getValue<number | null>());
 				}
 			},
 			{
@@ -193,7 +200,7 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return displayStat(info.getValue<number | null>());
 				}
 			},
 			{
@@ -203,7 +210,7 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return displayStat(info.getValue<number | null>());
 				}
 			},
 			{
@@ -213,7 +220,7 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return displayStat(info.getValue<number | null>());
 				}
 			},
 			{
@@ -223,7 +230,7 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return displayStat(info.getValue<number | null>());
 				}
 			},
 			{
@@ -233,7 +240,7 @@ export const usePlayerGamelogTable = (games: PlayerBoxscoreResponse[] | undefine
 					if (info.row.original.status === 'dnp-cd') {
 						return '-';
 					}
-					return info.getValue();
+					return displayStat(info.getValue<number | null>());
 				}
 			}
 		],

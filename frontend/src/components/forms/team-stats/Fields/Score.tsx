@@ -2,13 +2,29 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
+import { PeriodFormat } from '@/types/api/Game';
 import FormGrid from '@/components/forms/shared/FormGrid';
 import StatField from '@/components/forms/shared/StatField';
 
-const Score: React.FC = () => {
+type ScoreProps = {
+	/** Format of the game these stats belong to; decides which fields are shown. */
+	periodFormat: PeriodFormat;
+};
+
+const Score: React.FC<ScoreProps> = ({ periodFormat }) => {
 	const { register, watch } = useFormContext<TeamStatsFormData>();
 
 	const game = watch('gameId');
+
+	if (periodFormat === 'halves') {
+		return (
+			<FormGrid cols={3}>
+				<StatField label="1H" {...register('firstHalf')} disabled={!game} />
+				<StatField label="2H" {...register('secondHalf')} disabled={!game} />
+				<StatField label="OT" {...register('overtime')} disabled={!game} />
+			</FormGrid>
+		);
+	}
 
 	return (
 		<FormGrid cols={5}>

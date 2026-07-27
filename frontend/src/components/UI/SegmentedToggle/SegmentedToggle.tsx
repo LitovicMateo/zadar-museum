@@ -31,10 +31,11 @@ function SegmentedToggle<T extends string>({
 	return (
 		<ToggleGroup
 			type="single"
+			size="sm"
 			value={value}
 			onValueChange={(v) => v && onValueChange(v as T)}
 			aria-label={ariaLabel}
-			className={cn('rounded-lg bg-muted p-1', className)}
+			className={cn('rounded-lg border border-gray-400 bg-muted p-0.5', className)}
 		>
 			{options.map((opt) => (
 				<ToggleGroupItem

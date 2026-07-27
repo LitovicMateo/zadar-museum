@@ -17,7 +17,10 @@ export const buildTeamStatsDefaults = (teamStat: TeamStatsResponse): TeamStatsFo
 	secondQuarter: teamStat.secondQuarter?.toString() ?? '',
 	thirdQuarter: teamStat.thirdQuarter?.toString() ?? '',
 	fourthQuarter: teamStat.fourthQuarter?.toString() ?? '',
-	overtime: teamStat.overtime ? teamStat.overtime.toString() : null,
+	firstHalf: teamStat.firstHalf?.toString() ?? '',
+	secondHalf: teamStat.secondHalf?.toString() ?? '',
+	// `?? ''` rather than a truthiness check, so a real overtime of 0 survives.
+	overtime: teamStat.overtime?.toString() ?? '',
 	fieldGoalsMade: teamStat.fieldGoalsMade?.toString() ?? '',
 	fieldGoalsAttempted: teamStat.fieldGoalsAttempted?.toString() ?? '',
 	threePointersMade: teamStat.threePointersMade?.toString() ?? '',
