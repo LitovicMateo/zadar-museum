@@ -23,7 +23,7 @@ export const staffListConfig: EntityListConfig<StaffDetailsResponse> = {
         </div>
       ),
     },
-    { header: 'Role', cell: (row) => row.role ?? '—', className: 'text-muted-foreground' },
+    { header: 'Role', cell: (row) => row.role ?? '-', className: 'text-muted-foreground' },
     { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-muted-foreground text-sm' },
   ],
 };

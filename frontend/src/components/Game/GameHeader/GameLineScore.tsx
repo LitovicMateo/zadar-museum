@@ -33,15 +33,14 @@ const GameLineScore: React.FC = () => {
 
 	if (ordered.length === 0) return null;
 
-	// Detect halves vs quarters from the first row.
-	const sample = ordered[0];
-	const isHalves = sample.third_quarter == null && sample.fourth_quarter == null;
+	// The game declares its own format — never infer it from which columns are null.
+	const isHalves = (game?.period_format ?? ordered[0].period_format) === 'halves';
 	const hasOvertime = ordered.some((row) => row.overtime != null);
 
 	const periods: { key: keyof (typeof ordered)[number]; label: string }[] = isHalves
 		? [
-				{ key: 'first_quarter', label: '1H' },
-				{ key: 'second_quarter', label: '2H' }
+				{ key: 'first_half', label: '1H' },
+				{ key: 'second_half', label: '2H' }
 			]
 		: [
 				{ key: 'first_quarter', label: '1Q' },

@@ -23,7 +23,7 @@ export const venueListConfig: EntityListConfig<VenueDetailsResponse> = {
         </div>
       ),
     },
-    { header: 'City', cell: (row) => row.city ?? '—', className: 'text-muted-foreground' },
+    { header: 'City', cell: (row) => row.city ?? '-', className: 'text-muted-foreground' },
     { header: 'Created', cell: (row) => new Date(row.createdAt).toLocaleDateString(), className: 'text-muted-foreground text-sm' },
   ],
 };

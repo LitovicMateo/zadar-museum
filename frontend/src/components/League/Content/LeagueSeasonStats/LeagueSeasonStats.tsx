@@ -88,11 +88,10 @@ const LeagueSeasonStats: React.FC = () => {
 	const groups = useMemo<StatsGroup<TeamStats>[]>(() => {
 		if (!teamStats || teamStats.length === 0) return [];
 		const stats = teamStats[0].stats;
-		const rows: StatsDataRow<TeamStats>[] = [
-			{ key: 'home', data: stats.home },
-			{ key: 'away', data: stats.away }
-		];
-		if (stats.neutral) rows.push({ key: 'neutral', data: stats.neutral });
+		const rows: StatsDataRow<TeamStats>[] = [];
+		if ((stats.home?.games ?? 0) > 0) rows.push({ key: 'home', data: stats.home });
+		if ((stats.away?.games ?? 0) > 0) rows.push({ key: 'away', data: stats.away });
+		if ((stats.neutral?.games ?? 0) > 0) rows.push({ key: 'neutral', data: stats.neutral });
 		return [{ key: 'season', rows }];
 	}, [teamStats]);
 

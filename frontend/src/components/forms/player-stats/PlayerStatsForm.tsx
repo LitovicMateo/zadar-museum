@@ -61,6 +61,7 @@ const PlayerStatsForm: React.FC<GameFormProps> = ({
 				defaultValues={defaultValues}
 				playerStats={playerStats}
 				isSuccess={isSuccess}
+				mode={mode}
 			>
 				<PlayerStatsFormContent mode={mode} />
 			</PlayerStatsFormProvider>

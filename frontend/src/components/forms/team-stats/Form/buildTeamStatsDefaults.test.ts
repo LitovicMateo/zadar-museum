@@ -46,6 +46,31 @@ describe('buildTeamStatsDefaults', () => {
 		expect(typeof result.rebounds).toBe('string');
 	});
 
+	it('keeps an overtime of 0 instead of dropping it', () => {
+		const withZeroOvertime = { ...baseTeamStat, overtime: 0 } as unknown as TeamStatsResponse;
+
+		expect(buildTeamStatsDefaults(withZeroOvertime).overtime).toBe('0');
+	});
+
+	it('maps half fields and leaves the unused period family blank', () => {
+		const halvesGame = {
+			...baseTeamStat,
+			firstQuarter: null,
+			secondQuarter: null,
+			thirdQuarter: null,
+			fourthQuarter: null,
+			firstHalf: 31,
+			secondHalf: 28
+		} as unknown as TeamStatsResponse;
+
+		const result = buildTeamStatsDefaults(halvesGame);
+
+		expect(result.firstHalf).toBe('31');
+		expect(result.secondHalf).toBe('28');
+		expect(result.firstQuarter).toBe('');
+		expect(result.thirdQuarter).toBe('');
+	});
+
 	it('does not throw when coach/assistantCoach/competition are null', () => {
 		const sparse = {
 			...baseTeamStat,

@@ -40,6 +40,12 @@
     "round": {
       "type": "string"
     },
+    "period_format": {
+      "type": "enumeration",
+      "enum": ["quarters", "halves"],
+      "default": "quarters",
+      "required": true
+    },
     "group_name": {
       "type": "string"
     },

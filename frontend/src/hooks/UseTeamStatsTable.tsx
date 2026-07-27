@@ -4,9 +4,55 @@ import '@/components/UI/table/Types';
 import { APP_ROUTES } from '@/constants/Routes';
 import { TeamBoxscoreResponse } from '@/types/api/Team';
 import { formatMakeAttempt, pct } from '@/utils/TableFormatters';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { Pencil } from 'lucide-react';
 
 export const useTeamStatsTable = (data: TeamBoxscoreResponse[]) => {
+	// The rows all belong to one game, so its declared format drives the columns.
+	const isHalves = (data ?? [])[0]?.period_format === 'halves';
+
+	const periodColumns: ColumnDef<TeamBoxscoreResponse>[] = isHalves
+		? [
+				{
+					id: 'first_half',
+					accessorKey: 'first_half',
+					header: '1H',
+					cell: (info) => <p>{info.getValue<number | null>()}</p>
+				},
+				{
+					id: 'second_half',
+					accessorKey: 'second_half',
+					header: '2H',
+					cell: (info) => <p>{info.getValue<number | null>()}</p>
+				}
+			]
+		: [
+				{
+					id: 'first_quarter',
+					accessorKey: 'first_quarter',
+					header: '1Q',
+					cell: (info) => <p>{info.getValue<number | null>()}</p>
+				},
+				{
+					id: 'second_quarter',
+					accessorKey: 'second_quarter',
+					header: '2Q',
+					cell: (info) => <p>{info.getValue<number | null>()}</p>
+				},
+				{
+					id: 'third_quarter',
+					accessorKey: 'third_quarter',
+					header: '3Q',
+					cell: (info) => <p>{info.getValue<number | null>()}</p>
+				},
+				{
+					id: 'fourth_quarter',
+					accessorKey: 'fourth_quarter',
+					header: '4Q',
+					cell: (info) => <p>{info.getValue<number | null>()}</p>
+				}
+			];
+
 	const table = useReactTable<TeamBoxscoreResponse>({
 		getCoreRowModel: getCoreRowModel(),
 		data: data ?? [],
@@ -17,54 +63,24 @@ export const useTeamStatsTable = (data: TeamBoxscoreResponse[]) => {
 				header: 'team',
 				meta: { sticky: 'left', stickyOffset: '0', width: '150px' },
 				cell: (info) => (
-					<Link
-						className=" min-w-[100px] whitespace-nowrap"
-						to={APP_ROUTES.team(info.row.original.team_slug)}
-					>
-						{info.getValue()}
-					</Link>
+					<div className="relative flex items-center pr-4">
+						<Link
+							className="min-w-[100px] whitespace-nowrap"
+							to={APP_ROUTES.team(info.row.original.team_slug)}
+						>
+							{info.getValue()}
+						</Link>
+						<Link
+							to={`${APP_ROUTES.dashboard.teamStats.edit}${info.row.original.document_id}`}
+							className="absolute right-0 top-1/2 hidden -translate-x-1 -translate-y-1/2 text-muted-foreground opacity-0 transition-opacity hover:text-court group-hover:opacity-100 md:inline-flex"
+							aria-label="Edit team stats"
+						>
+							<Pencil size={14} />
+						</Link>
+					</div>
 				)
 			},
-			{
-				id: 'first_quarter',
-				accessorKey: 'first_quarter',
-				header: ({ table }) => {
-					// Look at first row to decide if it's halves or quarters
-					const sample = table.getRowModel().rows[0]?.original;
-
-					if (sample?.third_quarter == null && sample?.fourth_quarter == null) {
-						return '1H'; // halves
-					}
-					return '1Q'; // quarters
-				},
-				cell: (info) => <p>{info.getValue<number | null>()}</p>
-			},
-			{
-				id: 'second_quarter',
-				accessorKey: 'second_quarter',
-				header: ({ table }) => {
-					// Look at first row to decide if it's halves or quarters
-					const sample = table.getRowModel().rows[0]?.original;
-
-					if (sample?.third_quarter == null && sample?.fourth_quarter == null) {
-						return '2H'; // halves
-					}
-					return '2Q'; // quarters
-				},
-				cell: (info) => <p>{info.getValue<number | null>()}</p>
-			},
-			{
-				id: 'third_quarter',
-				accessorKey: 'third_quarter',
-				header: '3Q',
-				cell: (info) => <p>{info.getValue<number | null>()}</p>
-			},
-			{
-				id: 'fourth_quarter',
-				accessorKey: 'fourth_quarter',
-				header: '4Q',
-				cell: (info) => <p>{info.getValue<number | null>()}</p>
-			},
+			...periodColumns,
 			{
 				id: 'fg',
 				accessorFn: (row) => formatMakeAttempt(row.field_goals_made, row.field_goals_attempted),

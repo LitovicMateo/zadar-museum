@@ -1,7 +1,8 @@
 CREATE MATERIALIZED VIEW public.team_boxscore AS
  
- SELECT 
+ SELECT
     ts.id,
+    ts.document_id,
     g.document_id AS game_id,
 
     -- game data
@@ -48,15 +49,30 @@ CREATE MATERIALIZED VIEW public.team_boxscore AS
 
 
     -- score
+    g.period_format,
     ts.first_quarter,
     ts.second_quarter,
     ts.third_quarter,
     ts.fourth_quarter,
     ts.overtime,
-    COALESCE(ts.first_quarter, 0) 
-    + COALESCE(ts.second_quarter, 0) 
-    + COALESCE(ts.third_quarter, 0) 
-    + COALESCE(ts.fourth_quarter, 0) 
+
+    -- Unified half columns: quarter-era games contribute Q1+Q2 / Q3+Q4, so half
+    -- records rank across the whole history instead of only the pre-2000 seasons.
+    CASE WHEN g.period_format = 'halves' THEN ts.first_half
+         ELSE COALESCE(ts.first_quarter, 0) + COALESCE(ts.second_quarter, 0)
+    END AS first_half,
+    CASE WHEN g.period_format = 'halves' THEN ts.second_half
+         ELSE COALESCE(ts.third_quarter, 0) + COALESCE(ts.fourth_quarter, 0)
+    END AS second_half,
+
+    -- The quarter and half column families are mutually exclusive per row, so
+    -- summing both is safe and keeps the total identical across formats.
+    COALESCE(ts.first_quarter, 0)
+    + COALESCE(ts.second_quarter, 0)
+    + COALESCE(ts.third_quarter, 0)
+    + COALESCE(ts.fourth_quarter, 0)
+    + COALESCE(ts.first_half, 0)
+    + COALESCE(ts.second_half, 0)
     + COALESCE(ts.overtime, 0) AS score,
 
     -- stats

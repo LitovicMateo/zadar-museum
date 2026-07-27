@@ -3,7 +3,10 @@ import { useFormContext } from 'react-hook-form';
 
 import FormCard from '@/components/forms/shared/FormCard';
 import SubmitButton from '@/components/UI/SubmitButton';
+import { useCompetitionGames } from '@/hooks/queries/dasboard/UseCompetitionGames';
 import { TeamStatsFormData } from '@/schemas/TeamStatsSchema';
+import { PeriodFormat } from '@/types/api/Game';
+import { TeamStatsResponse } from '@/types/api/TeamStats';
 
 import AssistantCoach from '../Fields/AssistantCoach';
 import Competition from '../Fields/Competition';
@@ -20,10 +23,27 @@ import Team from '../Fields/Team';
 
 type TeamStatsFormContentProps = {
 	mode: 'create' | 'edit';
+	teamStats?: TeamStatsResponse;
 };
 
-const TeamStatsFormContent: React.FC<TeamStatsFormContentProps> = ({ mode }) => {
-	const { formState } = useFormContext<TeamStatsFormData>();
+const TeamStatsFormContent: React.FC<TeamStatsFormContentProps> = ({ mode, teamStats }) => {
+	const { formState, watch } = useFormContext<TeamStatsFormData>();
+
+	// Which period fields to show is a property of the game, not a choice made here.
+	// Editing reads it off the loaded record; creating reads it off the picked game.
+	// Passing empty filters while editing keeps the games query from firing.
+	const isEdit = mode === 'edit';
+	const season = watch('season');
+	const league = watch('league');
+	const gameId = watch('gameId');
+
+	const { data: games } = useCompetitionGames(isEdit ? '' : season, isEdit ? '' : league?.toString() || '');
+
+	const periodFormat: PeriodFormat =
+		(isEdit
+			? teamStats?.game?.period_format
+			: games?.find((g) => g.id.toString() === gameId)?.period_format) ?? 'quarters';
+
 	return (
 		<div className="flex flex-col gap-2 w-full max-w-4xl mx-auto">
 			{mode === 'create' && (
@@ -39,8 +59,7 @@ const TeamStatsFormContent: React.FC<TeamStatsFormContentProps> = ({ mode }) => 
 				<AssistantCoach />
 			</FormCard>
 			<FormCard label="Team Score">
-				<Score />
-				<span className="text-sm text-muted-foreground">* If game was played in two halfs, use Q1 and Q2 field</span>
+				<Score periodFormat={periodFormat} />
 			</FormCard>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-start">
 				<FormCard label="Shooting">

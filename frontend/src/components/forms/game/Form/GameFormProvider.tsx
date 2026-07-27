@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 
 import { GameFormData, gameSchema } from '@/schemas/GameSchema';
 import { GameDetailsResponse } from '@/types/api/Game';
+import { periodFormatForSeason } from '@/utils/PeriodFormat';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type GameFormProviderProps = {
@@ -43,6 +44,7 @@ const GameFormProvider: React.FC<GameFormProviderProps> = ({ children, onSubmit,
 				away_team_name: game.away_team_name,
 				away_team_short_name: game.away_team_short_name || game.away_team.short_name,
 				stage: game.stage,
+				period_format: game.period_format ?? 'quarters',
 				competition: game.competition.id.toString(),
 				league_name: game.competition.name,
 				league_short_name: game.competition.short_name,
@@ -71,7 +73,8 @@ const GameFormProvider: React.FC<GameFormProviderProps> = ({ children, onSubmit,
 				competition: currentValues.competition,
 				league_name: currentValues.league_name,
 				league_short_name: currentValues.league_short_name,
-				group_name: currentValues.group_name
+				group_name: currentValues.group_name,
+				period_format: currentValues.period_format
 			});
 
 			methods.setFocus('date');
@@ -85,6 +88,17 @@ const GameFormProvider: React.FC<GameFormProviderProps> = ({ children, onSubmit,
 			methods.setValue('group_name', '');
 		}
 	}, [stage, methods]);
+
+	// Seed the period format from the season so historical games default to halves.
+	// Only while creating and only until the user touches the toggle themselves —
+	// an explicit choice must never be overwritten by a later season edit.
+	const season = methods.watch('season');
+	React.useEffect(() => {
+		if (game) return;
+		if (methods.formState.dirtyFields.period_format) return;
+
+		methods.setValue('period_format', periodFormatForSeason(season));
+	}, [season, game, methods]);
 
 	return (
 		<FormProvider {...methods}>
