@@ -1,3 +1,4 @@
+import { GalleryMedia } from './Game';
 import { StrapiImage } from './Strapi';
 
 export type PlayerFormData = {
@@ -29,6 +30,7 @@ export type PlayerResponse = {
 	updatedAt: string;
 	publishedAt: string;
 	image: StrapiImage;
+	gallery?: GalleryMedia[];
 };
 
 export interface PlayerNumberResponse {

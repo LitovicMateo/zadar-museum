@@ -53,7 +53,7 @@ export const updateGame = async ({ id, ...data }: { id: string } & GameFormData)
 			secondReferee: data.secondReferee ? +data.secondReferee : null,
 			thirdReferee: data.thirdReferee ? +data.thirdReferee : null,
 			staffers: data.staffers && data.staffers.length > 0 ? data.staffers.map((s) => +s) : [],
-			gallery: galleryIds.length > 0 ? galleryIds : []
+			gallery: galleryIds
 		}
 	});
 

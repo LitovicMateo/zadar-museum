@@ -55,6 +55,9 @@
     "overtime": {
       "type": "integer"
     },
+    "final_score": {
+      "type": "integer"
+    },
     "fieldGoalsMade": {
       "type": "integer"
     },

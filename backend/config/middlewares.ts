@@ -27,8 +27,8 @@ export default ({ env }) => {
     {
       name: "strapi::body",
       config: {
-        formLimit: "21mb",
-        formidable: { maxFileSize: 20 * 1024 * 1024 },
+        formLimit: "101mb",
+        formidable: { maxFileSize: 100 * 1024 * 1024 },
       },
     },
     "strapi::session",

@@ -7,10 +7,12 @@ import AllTimeStats from '@/components/Player/Content/PlayerCareerStats/AllTimeS
 import AllTimeLeagueStats from '@/components/Player/Content/PlayerLeagueStats/PlayerLeagueStats';
 import DatabaseToggle from '@/components/Player/menu/DatabaseToggle';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/radix-tabs';
+import { usePlayerDetails } from '@/hooks/queries/player/UsePlayerDetails';
 import { usePlayerProfileDatabase } from '@/hooks/queries/player/UsePlayerProfileDatabase';
 import { usePlayerTeams } from '@/hooks/queries/player/UsePlayerTeams';
 
 import GamelogTab from './PlayerGamelog';
+import PlayerMedia from './PlayerMedia';
 import SeasonTab from './PlayerSeasonStats/PlayerSeasonStats';
 
 const TABS = [
@@ -18,7 +20,8 @@ const TABS = [
 	{ value: 'season', label: 'Season' },
 	{ value: 'league', label: 'League' },
 	{ value: 'gamelog', label: 'Gamelog' },
-	{ value: 'career-highs', label: 'Career Highs' }
+	{ value: 'career-highs', label: 'Career Highs' },
+	{ value: 'media', label: 'Media' }
 ] as const;
 
 type TabValue = (typeof TABS)[number]['value'];
@@ -28,7 +31,8 @@ const TAB_PANELS: { value: TabValue; content: React.ReactNode }[] = [
 	{ value: 'season', content: <SeasonTab /> },
 	{ value: 'league', content: <AllTimeLeagueStats /> },
 	{ value: 'gamelog', content: <GamelogTab /> },
-	{ value: 'career-highs', content: <CareerHigh /> }
+	{ value: 'career-highs', content: <CareerHigh /> },
+	{ value: 'media', content: <PlayerMedia /> }
 ];
 
 const PlayerContent: React.FC = React.memo(() => {
@@ -37,6 +41,9 @@ const PlayerContent: React.FC = React.memo(() => {
 
 	const { enableSwitch } = usePlayerProfileDatabase(playerId!);
 	const { data: teams } = usePlayerTeams(playerId!);
+	const { data: player } = usePlayerDetails(playerId!);
+	const hasMedia = (player?.gallery?.length ?? 0) > 0;
+	const visibleTabs = TABS.filter((tab) => tab.value !== 'media' || hasMedia);
 
 	if (teams?.length === 0) {
 		return <NoContent type="info" description={<p>This player did not participate in any games.</p>} />;
@@ -50,7 +57,7 @@ const PlayerContent: React.FC = React.memo(() => {
 						aria-label="Player statistics sections"
 						className="h-auto max-w-full justify-start gap-1 overflow-x-auto rounded-lg bg-muted p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 					>
-						{TABS.map((tab) => (
+						{visibleTabs.map((tab) => (
 							<TabsTrigger
 								key={tab.value}
 								value={tab.value}

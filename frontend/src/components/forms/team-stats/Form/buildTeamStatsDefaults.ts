@@ -21,6 +21,7 @@ export const buildTeamStatsDefaults = (teamStat: TeamStatsResponse): TeamStatsFo
 	secondHalf: teamStat.secondHalf?.toString() ?? '',
 	// `?? ''` rather than a truthiness check, so a real overtime of 0 survives.
 	overtime: teamStat.overtime?.toString() ?? '',
+	final_score: teamStat.final_score?.toString() ?? '',
 	fieldGoalsMade: teamStat.fieldGoalsMade?.toString() ?? '',
 	fieldGoalsAttempted: teamStat.fieldGoalsAttempted?.toString() ?? '',
 	threePointersMade: teamStat.threePointersMade?.toString() ?? '',

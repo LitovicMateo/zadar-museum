@@ -2,6 +2,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import FormCard from '@/components/forms/shared/FormCard';
+import MediaGalleryField from '@/components/forms/shared/MediaGalleryField';
 import SubmitButton from '@/components/UI/SubmitButton';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
 
@@ -54,6 +55,9 @@ const PlayerFormContent: React.FC<PlayerFormContentProps> = ({ mode }) => {
 					</FormCard>
 				</div>
 			</div>
+			<FormCard label="Gallery">
+				<MediaGalleryField />
+			</FormCard>
 			<div className="flex justify-center">
 				<SubmitButton
 					isSubmitting={formState.isSubmitting}
