@@ -62,7 +62,7 @@ const GameFormPage: React.FC = () => {
 				secondReferee: game.secondReferee ? game.secondReferee.id.toString() : undefined,
 				thirdReferee: game.thirdReferee ? game.thirdReferee.id.toString() : undefined,
 				staffers: game.staffers?.map((st) => st.id.toString()),
-				gallery: game.gallery
+				gallery: { existing: game.gallery ?? [], files: [] }
 			}
 		: undefined;
 

@@ -24,6 +24,7 @@ const emptydefaults: PlayerFormData = {
 	primary_position: null,
 	secondary_position: null,
 	image: null,
+	gallery: null,
 	nationality: null
 };
 

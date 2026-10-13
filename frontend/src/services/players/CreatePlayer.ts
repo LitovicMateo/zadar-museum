@@ -1,10 +1,12 @@
 import { API_ROUTES } from '@/constants/Routes';
 import apiClient from '@/lib/ApiClient';
 import { PlayerFormData } from '@/schemas/PlayerSchema';
+import { uploadGallery } from '@/utils/UploadGallery';
 import { uploadSingleImage } from '@/utils/UploadSingleImage';
 
 export const createPlayer = async (data: PlayerFormData) => {
 	const uploadedImageId = await uploadSingleImage(data.image);
+	const galleryIds = await uploadGallery(data.gallery);
 
 	const params = new URLSearchParams({
 		'filters[first_name][$eq]': data.first_name,
@@ -27,6 +29,7 @@ export const createPlayer = async (data: PlayerFormData) => {
 		secondary_position: data.secondary_position || null,
 		height: data.height || null,
 		image: uploadedImageId,
+		gallery: galleryIds,
 		nationality: data.nationality ?? null
 	};
 

@@ -11,7 +11,8 @@ export const playerSchema = z.object({
 	primary_position: z.string().nullable().optional(),
 	secondary_position: z.string().nullable(),
 	height: z.string().optional(),
-	image: z.any().nullable()
+	image: z.any().nullable(),
+	gallery: z.any().nullable().optional()
 }).superRefine((data, ctx) => {
 	const { date_of_birth: dob, date_of_death: dod } = data;
 	if (dob && dod) {

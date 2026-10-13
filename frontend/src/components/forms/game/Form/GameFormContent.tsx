@@ -6,6 +6,8 @@ import SubmitButton from '@/components/UI/SubmitButton';
 import { GameFormData } from '@/schemas/GameSchema';
 import { GameDetailsResponse } from '@/types/api/Game';
 
+import MediaGalleryField from '@/components/forms/shared/MediaGalleryField';
+
 import EditGameWarning from './EditGameWarning';
 import Attendance from '../Fields/Attendance';
 import AwayTeam from '../Fields/AwayTeam';
@@ -15,8 +17,6 @@ import CompetitionName from '../Fields/CompetitionName';
 import Date from '../Fields/Date';
 import Forfieted from '../Fields/Forfeited';
 import ForfeitedBy from '../Fields/ForfeitedBy';
-import Gallery from '../Fields/Gallery';
-import GalleryPreview from '../Fields/GalleryPreview';
 import GroupName from '../Fields/GroupName';
 import HomeTeam from '../Fields/HomeTeam';
 import HomeTeamName from '../Fields/HomeTeamName';
@@ -39,10 +39,6 @@ type GameFormContentProps = {
 
 const GameFormContent: React.FC<GameFormContentProps> = ({ mode, game }) => {
 	const { formState, watch } = useFormContext<GameFormData>();
-
-	const [previews, setPreviews] = React.useState<string[]>([]);
-
-	const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	// Warn before saving a format change on a game that already has scores, since
 	// the two directions are not symmetric — see the game lifecycle hook.
@@ -100,10 +96,7 @@ const GameFormContent: React.FC<GameFormContentProps> = ({ mode, game }) => {
 				<Staffers />
 			</FormCard>
 			<FormCard label="Gallery">
-				<Gallery ref={fileInputRef} previews={previews} setPreviews={setPreviews} />
-			</FormCard>
-			<FormCard label="Gallery Preview">
-				<GalleryPreview previews={previews} setPreviews={setPreviews} ref={fileInputRef} />
+				<MediaGalleryField />
 			</FormCard>
 			<div className="w-full flex justify-center">
 				<SubmitButton

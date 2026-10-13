@@ -44,6 +44,7 @@ const PlayerFormProvider: React.FC<PlayerFormProviderProps> = ({
 				date_of_death: player.date_of_death || undefined,
 				active_player: player.is_active_player,
 				image: player.image || null,
+				gallery: { existing: player.gallery ?? [], files: [] },
 				nationality: player.nationality,
 				primary_position: player.primary_position,
 				secondary_position: player.secondary_position

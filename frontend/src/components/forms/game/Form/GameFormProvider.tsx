@@ -58,7 +58,8 @@ const GameFormProvider: React.FC<GameFormProviderProps> = ({ children, onSubmit,
 				secondReferee: game.secondReferee ? game.secondReferee.id.toString() : undefined,
 				thirdReferee: game.thirdReferee ? game.thirdReferee.id.toString() : undefined,
 				// map backend staff objects to form values (string ids)
-				staffers: game.staffers ? game.staffers.map((s) => s.id.toString()) : undefined
+				staffers: game.staffers ? game.staffers.map((s) => s.id.toString()) : undefined,
+				gallery: { existing: game.gallery ?? [], files: [] }
 			});
 		}
 	}, [game, methods]);
