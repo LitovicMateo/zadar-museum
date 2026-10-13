@@ -59,6 +59,11 @@
       "type": "string",
       "required": false,
       "default": null
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images", "videos"]
     }
   }
 }

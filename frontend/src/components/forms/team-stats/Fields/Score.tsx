@@ -16,24 +16,28 @@ const Score: React.FC<ScoreProps> = ({ periodFormat }) => {
 
 	const game = watch('gameId');
 
-	if (periodFormat === 'halves') {
-		return (
-			<FormGrid cols={3}>
-				<StatField label="1H" {...register('firstHalf')} disabled={!game} />
-				<StatField label="2H" {...register('secondHalf')} disabled={!game} />
-				<StatField label="OT" {...register('overtime')} disabled={!game} />
-			</FormGrid>
-		);
-	}
-
 	return (
-		<FormGrid cols={5}>
-			<StatField label="Q1" {...register('firstQuarter')} disabled={!game} />
-			<StatField label="Q2" {...register('secondQuarter')} disabled={!game} />
-			<StatField label="Q3" {...register('thirdQuarter')} disabled={!game} />
-			<StatField label="Q4" {...register('fourthQuarter')} disabled={!game} />
-			<StatField label="OT" {...register('overtime')} disabled={!game} />
-		</FormGrid>
+		<div className="flex flex-col gap-3">
+			{periodFormat === 'halves' ? (
+				<FormGrid cols={3}>
+					<StatField label="1H" {...register('firstHalf')} disabled={!game} />
+					<StatField label="2H" {...register('secondHalf')} disabled={!game} />
+					<StatField label="OT" {...register('overtime')} disabled={!game} />
+				</FormGrid>
+			) : (
+				<FormGrid cols={5}>
+					<StatField label="Q1" {...register('firstQuarter')} disabled={!game} />
+					<StatField label="Q2" {...register('secondQuarter')} disabled={!game} />
+					<StatField label="Q3" {...register('thirdQuarter')} disabled={!game} />
+					<StatField label="Q4" {...register('fourthQuarter')} disabled={!game} />
+					<StatField label="OT" {...register('overtime')} disabled={!game} />
+				</FormGrid>
+			)}
+			<FormGrid cols={2}>
+				<StatField label="Final score" {...register('final_score')} disabled={!game} />
+			</FormGrid>
+			<p className="text-xs text-gray-500">Fill only if the period scores are unknown.</p>
+		</div>
 	);
 };
 

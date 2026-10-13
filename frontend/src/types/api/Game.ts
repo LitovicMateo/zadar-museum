@@ -5,6 +5,7 @@ import { TeamDetailsResponse } from './Team';
 import { VenueDetailsResponse } from './Venue';
 
 export type GalleryMedia = {
+	id?: number;
 	url: string;
 	width: number;
 	height: number;

@@ -41,6 +41,7 @@ const PlayerFormPage: React.FC = () => {
 				date_of_death: player.date_of_death || undefined,
 				active_player: player.is_active_player,
 				image: player.image ? player.image.id : null,
+				gallery: { existing: player.gallery ?? [], files: [] },
 				nationality: player.nationality,
 				primary_position: player.primary_position,
 				secondary_position: player.secondary_position

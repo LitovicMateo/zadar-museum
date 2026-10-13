@@ -14,6 +14,7 @@ export type TeamStatsFormData = {
 	firstHalf: string;
 	secondHalf: string;
 	overtime?: string;
+	final_score?: string;
 	fieldGoalsMade: string;
 	fieldGoalsAttempted: string;
 	threePointersMade: string;
@@ -49,6 +50,7 @@ export type TeamStatsResponse = {
 	firstHalf: string;
 	secondHalf: string;
 	overtime?: string;
+	final_score?: number | null;
 	fieldGoalsMade: string;
 	fieldGoalsAttempted: string;
 	threePointersMade: string;

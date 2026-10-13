@@ -58,22 +58,31 @@ CREATE MATERIALIZED VIEW public.team_boxscore AS
 
     -- Unified half columns: quarter-era games contribute Q1+Q2 / Q3+Q4, so half
     -- records rank across the whole history instead of only the pre-2000 seasons.
+    -- Games with only a final score have no quarters at all: those stay NULL
+    -- instead of becoming 0, so they don't rank as real half scores.
     CASE WHEN g.period_format = 'halves' THEN ts.first_half
+         WHEN ts.first_quarter IS NULL AND ts.second_quarter IS NULL THEN NULL
          ELSE COALESCE(ts.first_quarter, 0) + COALESCE(ts.second_quarter, 0)
     END AS first_half,
     CASE WHEN g.period_format = 'halves' THEN ts.second_half
+         WHEN ts.third_quarter IS NULL AND ts.fourth_quarter IS NULL THEN NULL
          ELSE COALESCE(ts.third_quarter, 0) + COALESCE(ts.fourth_quarter, 0)
     END AS second_half,
 
-    -- The quarter and half column families are mutually exclusive per row, so
-    -- summing both is safe and keeps the total identical across formats.
-    COALESCE(ts.first_quarter, 0)
-    + COALESCE(ts.second_quarter, 0)
-    + COALESCE(ts.third_quarter, 0)
-    + COALESCE(ts.fourth_quarter, 0)
-    + COALESCE(ts.first_half, 0)
-    + COALESCE(ts.second_half, 0)
-    + COALESCE(ts.overtime, 0) AS score,
+    -- final_score is entered only for games where the period scoring is unknown,
+    -- and takes precedence when present. Otherwise the quarter and half column
+    -- families are mutually exclusive per row, so summing both is safe and keeps
+    -- the total identical across formats.
+    COALESCE(
+        ts.final_score,
+        COALESCE(ts.first_quarter, 0)
+        + COALESCE(ts.second_quarter, 0)
+        + COALESCE(ts.third_quarter, 0)
+        + COALESCE(ts.fourth_quarter, 0)
+        + COALESCE(ts.first_half, 0)
+        + COALESCE(ts.second_half, 0)
+        + COALESCE(ts.overtime, 0)
+    ) AS score,
 
     -- stats
     ts.field_goals_made,

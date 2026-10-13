@@ -29,6 +29,7 @@ const emptyDefaults: TeamStatsFormData = {
 	firstHalf: '',
 	secondHalf: '',
 	overtime: '',
+	final_score: '',
 	fieldGoalsMade: '',
 	fieldGoalsAttempted: '',
 	threePointersMade: '',
