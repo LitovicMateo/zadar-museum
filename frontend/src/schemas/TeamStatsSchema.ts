@@ -18,6 +18,8 @@ export const teamStatsSchema = z
 		firstHalf: z.string(),
 		secondHalf: z.string(),
 		overtime: z.string().nullable(),
+		// Only for games where the period scoring is unknown.
+		final_score: z.string(),
 		fieldGoalsMade: z.string(),
 		fieldGoalsAttempted: z.string(),
 		threePointersMade: z.string(),
@@ -51,6 +53,35 @@ export const teamStatsSchema = z
 				});
 			}
 		};
+
+		const periodKeys = [
+			'firstQuarter',
+			'secondQuarter',
+			'thirdQuarter',
+			'fourthQuarter',
+			'firstHalf',
+			'secondHalf',
+			'overtime'
+		] as const;
+		const periodValues = periodKeys.map((k) => data[k]).filter((v) => v != null && v.trim() !== '');
+		const hasFinal = data.final_score.trim() !== '';
+
+		if (periodValues.length === 0 && !hasFinal) {
+			ctx.addIssue({
+				code: 'custom',
+				path: ['final_score'],
+				message: 'Enter the period scores or the final score.'
+			});
+		} else if (periodValues.length > 0 && hasFinal) {
+			const sum = periodValues.reduce((acc, v) => acc + Number(v), 0);
+			if (sum !== Number(data.final_score)) {
+				ctx.addIssue({
+					code: 'custom',
+					path: ['final_score'],
+					message: `Final score (${data.final_score}) does not match the period total (${sum}).`
+				});
+			}
+		}
 
 		checkRatio('fieldGoalsMade', 'fieldGoalsAttempted', 'Field goals');
 		checkRatio('threePointersMade', 'threePointersAttempted', 'Three-pointers');

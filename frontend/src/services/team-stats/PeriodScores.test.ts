@@ -13,6 +13,7 @@ const form = (overrides: Partial<TeamStatsFormData>) =>
 		firstHalf: '',
 		secondHalf: '',
 		overtime: '',
+		final_score: '',
 		...overrides
 	}) as TeamStatsFormData;
 
@@ -52,5 +53,10 @@ describe('buildPeriodScores', () => {
 
 		expect(result.firstQuarter).toBe(0);
 		expect(result.overtime).toBeNull();
+	});
+
+	it('sends final_score as a number, or null when blank', () => {
+		expect(buildPeriodScores(form({ final_score: '87' })).final_score).toBe(87);
+		expect(buildPeriodScores(form({})).final_score).toBeNull();
 	});
 });

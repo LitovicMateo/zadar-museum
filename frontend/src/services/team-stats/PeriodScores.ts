@@ -20,5 +20,6 @@ export const buildPeriodScores = (data: TeamStatsFormData) => ({
 	fourthQuarter: toNullableInt(data.fourthQuarter),
 	firstHalf: toNullableInt(data.firstHalf),
 	secondHalf: toNullableInt(data.secondHalf),
-	overtime: toNullableInt(data.overtime)
+	overtime: toNullableInt(data.overtime),
+	final_score: toNullableInt(data.final_score)
 });
