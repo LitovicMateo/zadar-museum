@@ -128,7 +128,7 @@ If you want, I can create a `backend/README.deploy.md` with these exact commands
 
 ## Backups (production)
 
-Backups write timestamped files to `backups/prod/` (a DB dump + an uploads archive) and keep the most recent 15 of each.
+Backups write timestamped files to `backups/prod/` (a DB dump + an uploads archive) and keep the most recent 5 of each.
 
 Manual full backup:
 

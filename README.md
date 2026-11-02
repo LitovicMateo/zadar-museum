@@ -155,7 +155,7 @@ Run `make help` for the full list. The main targets:
 | Target | Action |
 |--------|--------|
 | `make backup-dev` / `backup-staging` / `backup-prod` | Quick single-file `pg_dump` → `zadar-backup.sql` (ad-hoc, overwrites) |
-| `make backup-prod-full` | **Timestamped DB + uploads** → `backups/prod/`, keeps last 15 |
+| `make backup-prod-full` | **Timestamped DB + uploads** → `backups/prod/`, keeps last 5 |
 | `make restore-prod` | Restore the latest `backups/prod/` pair into running prod |
 | `make restore-dev-from-vps` | Restore the latest `backups/vps/` pair into dev |
 | `make install-backup-timer` | Install the systemd timer (backups every 2 days) on the VPS |
@@ -190,7 +190,7 @@ Full deployment notes — including the temporary Node-container MV runner and S
 
 ## Backups & restore
 
-Backups write **timestamped** files to `backups/prod/` (a DB dump + an uploads archive) and keep the most recent 15 of each.
+Backups write **timestamped** files to `backups/prod/` (a DB dump + an uploads archive) and keep the most recent 5 of each.
 
 ```bash
 make backup-prod-full    # manual full backup (DB + uploads)

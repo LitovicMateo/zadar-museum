@@ -18,7 +18,7 @@ make dev-mv           # apply/refresh materialized views against running dev DB
 make backup-dev       # dump dev DB to zadar-backup.sql
 make load-dev-backup  # copy zadar-backup.sql into the postgres container
 make import-dev-backup # import the copied dump
-make backup-prod-full   # timestamped prod DB + uploads backup (-> backups/prod/, keeps last 15)
+make backup-prod-full   # timestamped prod DB + uploads backup (-> backups/prod/, keeps last 5)
 make restore-prod       # restore latest backups/prod/ pair into running prod stack
 make install-backup-timer # install systemd timer for backups every 2 days (run on VPS)
 ```
