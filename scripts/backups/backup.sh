@@ -11,7 +11,7 @@ BACKEND_SERVICE="backend"
 DB_USER=""
 DB_NAME=""
 OUTPUT_DIR="backups/prod"
-RETENTION=15
+RETENTION=5
 UPLOADS_PATH="/app/public/uploads"
 
 usage(){
@@ -23,7 +23,7 @@ Defaults:
   --compose-file docker-compose.prod.yml
   --env-file .env.prod
   --output-dir backups/prod
-  --retention 15
+  --retention 5
   --db-user strapi
   --db-name strapi
 EOF
